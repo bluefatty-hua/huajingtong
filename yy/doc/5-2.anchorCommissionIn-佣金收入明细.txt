@@ -1,0 +1,48 @@
+URL	https://www.yy.com/zone/income/anchorCommissionIn.json?pageNo=1&year=2019&month=10&anchorYy=2250653603&pageSize=20
+
+:method: GET
+:authority: www.yy.com
+:scheme: https
+:path: /zone/income/anchorCommissionIn.json?pageNo=1&year=2019&month=10&anchorYy=2250653603&pageSize=20
+accept: application/json, text/plain, */*
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://www.yy.com/i/anchorIncome/goldRecord?yy=2250653603&nick=%E3%80%90%E5%A8%B1%2B277%E3%80%91%E8%8B%93%E8%8B%93%20%E6%BB%A1%E6%BB%A1%E7%9A%84%E6%B4%BB%E5%8A%9B%E9%B8%AD~&month=10&uid=2249618072&year=2019
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: hiido_ui=0.052544901636532027
+cookie: hd_newui=0.17976276550460102
+cookie: hdjs_session_id=0.29497294544889696
+cookie: hdjs_session_time=1576825056838
+cookie: udboauthtmptoken=undefined
+cookie: udboauthtmptokensec=EDFACAB381B0DE82C7B239EFA614D07CE7101E99FBFD944861373D82611DAD3A7538EE34431D364A953D66852D8AEAEB
+cookie: yyuid=1386277716
+cookie: username=yujia_wwy5
+cookie: password=4D784FD49F2A93C72D528B589E62ADD5491AA30E
+cookie: osinfo=D2136E3652BD9BD15C4FFA6CF23FDB4B00E41A6D
+cookie: udb_l=CgB5dWppYV93d3k1B3H8XQdyABLmsHFkUgwy1-QeuUMpNPkdkcsFit1fNmAdgaenfTCK8SJ4mSjDy_t_dhZd4-pBe63nwb71vUb4rqw4-1_Kg25Rsye6lqdoJfuLVZzCSLgn9NYjRpc1bbNw_ZXVJ99h6vPLLNkJYSFIN3B3orwahXNtjAAAAAADAAAAAAAAAA0ANDcuMTA3LjE2My44OAQANTcxOQ==
+cookie: udb_n=ba65d51c6ca9d81ef1f2ac3919ac89dbecd9378df7b193b196ae898771ccd69fd732827aaa4f8f6e860d6ca6bf9abb4d
+cookie: udb_c=AMCDJFBqAAJgAExhOQptnSq1F1YjKSx7-mA3Mkf_2-HpUyAJj8CFkILt-0t4c_xgbl2O-1Xyk8o-06TTtJsBjAfRNmD6d3rxkotB63T2s_w3rTMR4ystOyEDLJkToPDmoYWQvd5OdllWEw==
+cookie: udb_oar=54A696B400D984CF0670A4797A3239043435D063CA58122B758ED79754D4B2B4AE3AF34608EC3F4FA395BA37D7EFB8D81F45E1E9B2699F363DCC8379152A352D556F97B6A71D9B9C14437D159DBF38AAEBBB9939840967E76136B8FC370D5DA9D62D041EA4AB9E43F62368879BDF521C68CFACB4B2B59E85EF7783E4552F6E356B70AB19CBBC0EF7AC961DEDC769D2B9D73C1C0FFCDE8E52CEC4630B00E2C6ABA5335575FD0846B35453FF889F1D1FDF6CB9BFFDED853FF4DE41006180DDE92C1ECA048DD1A4ABE742F396AA20133CC648DE28DEFAFBEF58FF58E9564F3AB8261FE70EF98498E3F1DBB414D64C1EDAC91748D1188980704D10F82C9A842778C228BA5B9FCD59C770CEE4203B8C2BB5BB721950568CD2AD3A49FEAE1D8490775814AA4FC57A72C8A800F8BFA003EB21DA1C0206F1DEA42879CE8AB97E0B4C916B
+
+pageNo	1
+year	2019
+month	10
+anchorYy	2250653603
+pageSize	20
+
+{
+	"total": 1,
+	"data": [{
+		"usrMoney": "300000",           // 主播分成
+		"frmNick": "435756 【暗夜冷】夜空中的伊万三",
+		"time": "2019-10-29 15:44:20",      //时间
+		"inType": "守护者",        // 佣金收入类型
+		"nick": "【娱+277】苓苓 满满的活力鸭~",        //用户昵称
+		"frmYY": "2019159518",
+		"yy": "2250653603",     //用户YY号
+		"owMoney": "400000"     //公会分成
+	}],
+	"code": 0
+}

@@ -1,0 +1,78 @@
+URL	https://www.yy.com/zone/tranSign/guildQueryTranSignList.action?anchorYyNum=&tranSignType=0&pageNo=1&pageSize=20
+:method: GET
+:authority: www.yy.com
+:scheme: https
+:path: /zone/tranSign/guildQueryTranSignList.action?anchorYyNum=&tranSignType=0&pageNo=1&pageSize=20
+accept: application/json, text/plain, */*
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://www.yy.com/i/anchorManage/transfer
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: hiido_ui=0.882626791378275
+cookie: hd_newui=0.7572550528873518
+cookie: hdjs_session_id=0.7446939491436584
+cookie: hdjs_session_time=1576770139878
+cookie: udboauthtmptoken=undefined
+cookie: udboauthtmptokensec=D67F657534395B932D478DBA6CB24F82E92B7004587650570D3221E5D5C96E3D7538EE34431D364A953D66852D8AEAEB
+cookie: yyuid=1386277716
+cookie: username=yujia_wwy5
+cookie: password=4D784FD49F2A93C72D528B589E62ADD5491AA30E
+cookie: osinfo=D2136E3652BD9BD15C4FFA6CF23FDB4B00E41A6D
+cookie: udb_l=CgB5dWppYV93d3k1dpr7XQhyAOChY1qsTiRk7IG3VxhcqFixNuFE-bPtIrwt_OtCo2lS5FSRqGIK0P498bFmK-lmzqAs8_PWVmNdv05tiWAqoWgHANn51qydK4H13-qQQC843Wjx2KR_75r1fIcvd-iyzUVZJQd3XfutgFiGwJJLuZUuzQAAAAADAAAAAAAAAA0ANDcuMTA3LjE2My44OAQANTcxOQ==
+cookie: udb_n=f5004bbe91a29f610ef07b838b4e3f7b167eded8ded2bc9a3e32a8c18a67563a1f3e0ad693522da3a04c14b0d84f04e0
+cookie: udb_c=AECLJFBqAAJgAK1PZQgrK1xq9lAWo2-EisYyo3w-VxQe7AWZEx_jdlX8OBiEhr831G10MX2kH8xlT1uOscW_AbNHdlBiba5WpY0LhLFwtpuX9qPNChJiyfE5p5OXAF0jvJZSjJLKqDIUOw==
+cookie: udb_oar=23BB81ADA3929891E571D9519B1D8013CD420E2AE39DD9A55C8D1715C281595698808B2C141336C7629FBDC67A12AFD058B7ABEA19A76BB4350A49B7926A97B2697F9ECC71DACB0C76D037909901F1F70FE52559A471D12D6672CD7598F79A1128465353E9F36F434D5FC612906D61D266925B27BB0C42309D166E99792B26523B4C7724A35390D98ECE20EAB2B8FF01E134BFA45E088FC97CFA8987A84A50F4A933067881C7D9A572B1EFE93C9F663E2F6892FB4D014FA628A96F3840D08E63734EC393B0834EE0DE99A28E3983922C1B6078347C48725AAA64BFEBE7992406F31F0DC26BEA132426EF5FC80BE736C9A15E5D6ED208BBC1F627CFEE0782350774336B2720AB5A413C0EAC692682295DAA82B85FA00DCCAA6AF0F2ED754C8F2D8725A8980200335F38286268D37AFD18FD857314B4F4552B84A23A777435E8A5
+
+anchorYyNum
+tranSignType	0
+pageNo	1
+pageSize	20
+
+{
+	"success": true,
+	"code": 0,
+	"message": "",
+	"data": {
+		"total": 1,
+		"list": [{
+			"createTime": 1574944742000,        // 申请签约时间
+			"anchorOpTime": 1574944832000,
+			"lastUpdateTime": 1574945006000,
+			"state": 5,                 //[-1, "全部类型"], [1, "已撤销"], [0, "待主播审核"], [2, "主播审核不通过"], [3, "待转入公会审核"], [4, "转入公会审核不通过"], [6, "申请失效"], [5, "转签成功"]]
+			"newContractMonth": 0,
+			"newContractETime": 1626364800000,  // 合约结束时间
+			"anchorOpReason": "",
+			"id": 5429,
+			"newOwLogo": "http://downhdlogo.yy.com/hdlogo/6060/60/60/58/1357581649/u1357581649ShHYOan.png",
+			"oldOwYy": "98362277",          // 旧公会yy号
+			"newOwYy": "7038",              // 新公会yy号
+			"newShareAnchorRate": "70",     // 主播新分成比例
+			"artistType": "7",      //NORMAL_GUILD: 1, STAR_GUILD: 2,GOLD_GUILD: 3,NORMAL_USER: 4,NORMAL_ANCHOR: 5,STAR_ANCNOR: 6, GOLD_ANCHOR: 7
+			"newOwOpTime": 1574945006000,
+			"status": 1,    //[1, void 0], [2, "审批不通过无效"], [3, "主播三天未审核，申请失效"], [4, "主播身份变成了普通艺人，申请失效"], [5, "主播已与转出公会解约，申请失效"], [6, "主播/公会身份发生变动，导致所选分成方式错误，申请失效"], [7, "金牌艺人授权约已过期，申请失效"], [8, "主播成为组合成员，申请失效"], [9, "转入公会三天未审核，申请失效"], [10, "转出公会未关联金牌授权YY号，申请失效"], [11, "转入公会未关联金牌授权YY号，申请失效"], [12, "转出和转入公会非关联至同一个金牌授权YY号，申请失效"], [13, "转出和转入公会关联的金牌授权YY号的金牌公会合约到期，申请失效"], [14, "转入公会冻结对公结算权限，申请失效"], [15, "主播/公会身份发生变动，导致所选分成方式错误，申请失效"], [16, "公会主动或被动关闭导致的对公权限被关闭，转签流程失效"]]
+			"tranSignType": 2,    //[0, "全部类型"], [1, "转入"], [2, "转出"]]
+			"newOwUid": 1357581649,     // 新公会uid
+			"oldOpReason": null,
+			"anchorLogo": "http://downhdlogo.yy.com/hdlogo/6060/60/60/83/1781839382/u17818393827IQhIH1.gif",
+			"newContractBTime": 1574870400000,  // 合约开始时间
+			"oldOwNick": "【娱＋277】大七：招收优质主播",
+			"newShareType": 2,      //TO_PUB: 1 TO_PRI: 2
+			"newShareOwRate": 30,       // 新公会分成比例
+			"oldContractId": 3778843913,        // 旧合约id
+			"oldOwUid": 1386277716,        // 旧公会uid
+			"newOwOpReason": "",
+			"anchorNick": "２０４６✦７００９.钟无艳",      // 主播昵称
+			"userDefinedExtend02": null,
+			"userDefinedExtend03": null,
+			"userDefinedExtend01": "70",
+			"anchorYy": "9667009",          // 主播yy号
+			"oldOwOpTime": null,
+			"companyId": 969304599,         //公司id
+			"newOwNick": "娱+7038欢迎到期主播到期工会",        // 新公会名称
+			"oldOwLogo": "http://downhdlogo.yy.com/hdlogo/6060/60/60/27/1386277716/u1386277716IX8XPsL.png",
+			"anchorUid": 1781839382         // 主播uid
+		}]
+	}
+}

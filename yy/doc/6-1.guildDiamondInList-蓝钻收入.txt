@@ -1,0 +1,218 @@
+URL	https://www.yy.com/zone/income/guildDiamondInList.json?queryType=0&pageNo=1&pageSize=20&anchorYy=&year=2019&month=9
+
+:method: GET
+:authority: www.yy.com
+:scheme: https
+:path: /zone/income/guildDiamondInList.json?queryType=0&pageNo=1&pageSize=20&anchorYy=&year=2019&month=9
+accept: application/json, text/plain, */*
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://www.yy.com/i/guildIncome/diamondIncome?year=2019&month=09
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: hiido_ui=0.882626791378275
+cookie: hd_newui=0.7572550528873518
+cookie: hdjs_session_id=0.7446939491436584
+cookie: hdjs_session_time=1576770139878
+cookie: yyuid=1386277716
+cookie: username=yujia_wwy5
+cookie: password=4D784FD49F2A93C72D528B589E62ADD5491AA30E
+cookie: osinfo=D2136E3652BD9BD15C4FFA6CF23FDB4B00E41A6D
+cookie: udb_l=CgB5dWppYV93d3k1dpr7XQhyAOChY1qsTiRk7IG3VxhcqFixNuFE-bPtIrwt_OtCo2lS5FSRqGIK0P498bFmK-lmzqAs8_PWVmNdv05tiWAqoWgHANn51qydK4H13-qQQC843Wjx2KR_75r1fIcvd-iyzUVZJQd3XfutgFiGwJJLuZUuzQAAAAADAAAAAAAAAA0ANDcuMTA3LjE2My44OAQANTcxOQ==
+cookie: udb_n=f5004bbe91a29f610ef07b838b4e3f7b167eded8ded2bc9a3e32a8c18a67563a1f3e0ad693522da3a04c14b0d84f04e0
+cookie: udb_c=AECLJFBqAAJgAK1PZQgrK1xq9lAWo2-EisYyo3w-VxQe7AWZEx_jdlX8OBiEhr831G10MX2kH8xlT1uOscW_AbNHdlBiba5WpY0LhLFwtpuX9qPNChJiyfE5p5OXAF0jvJZSjJLKqDIUOw==
+cookie: udb_oar=23BB81ADA3929891E571D9519B1D8013CD420E2AE39DD9A55C8D1715C281595698808B2C141336C7629FBDC67A12AFD058B7ABEA19A76BB4350A49B7926A97B2697F9ECC71DACB0C76D037909901F1F70FE52559A471D12D6672CD7598F79A1128465353E9F36F434D5FC612906D61D266925B27BB0C42309D166E99792B26523B4C7724A35390D98ECE20EAB2B8FF01E134BFA45E088FC97CFA8987A84A50F4A933067881C7D9A572B1EFE93C9F663E2F6892FB4D014FA628A96F3840D08E63734EC393B0834EE0DE99A28E3983922C1B6078347C48725AAA64BFEBE7992406F31F0DC26BEA132426EF5FC80BE736C9A15E5D6ED208BBC1F627CFEE0782350774336B2720AB5A413C0EAC692682295DAA82B85FA00DCCAA6AF0F2ED754C8F2D8725A8980200335F38286268D37AFD18FD857314B4F4552B84A23A777435E8A5
+
+queryType	0
+pageNo	1
+pageSize	20
+anchorYy
+year	2019
+month	9
+
+{
+	"total": 25,
+	"data": [{
+		"rate": "30",
+		"nick": "【娱+277】丹丹 新主播求 关注",
+		"totalDiam": "48490",    // 主播蓝钻
+		"settType": "2",        // 1对公分成 2对私分成
+		"money": "14547",      // 公会分成蓝钻
+		"yy": "2437255944",
+		"payTime": "2019-09-30 23:59:27",   // 支付时间
+		"goodsType": "100003"       // 0: "全部", 100001: "蓝钻兑换红钻", 100027: "修改分成方式月中结算", 100003: "月末结算", 100019: "即时提现", 100011: "强制解约", 100010: "协议解约"
+	}, {
+		"rate": "30",
+		"nick": "【娱+277】雅雅，新主播求关注！",
+		"totalDiam": "549450",
+		"settType": "2",
+		"money": "164835",
+		"yy": "2432654071",
+		"payTime": "2019-09-30 23:59:24",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "【娱+277】优优，新主播求关注！",
+		"totalDiam": "328170",
+		"settType": "2",
+		"money": "98451",
+		"yy": "2432518467",
+		"payTime": "2019-09-30 23:59:24",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "【娱+277】爱瑶，新主播求关注！",
+		"totalDiam": "178180",
+		"settType": "2",
+		"money": "53454",
+		"yy": "2431024481",
+		"payTime": "2019-09-30 23:59:23",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "【娱+277】曼曼，新主播求关注！",
+		"totalDiam": "57400",
+		"settType": "2",
+		"money": "17220",
+		"yy": "2430022537",
+		"payTime": "2019-09-30 23:59:23",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】可馨",
+		"totalDiam": "1778250",
+		"settType": "1",
+		"money": "1778250",
+		"yy": "2424853457",
+		"payTime": "2019-09-30 23:59:19",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】云朵，新主播求关注！",
+		"totalDiam": "1963590",
+		"settType": "1",
+		"money": "1963590",
+		"yy": "2424781337",
+		"payTime": "2019-09-30 23:59:19",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "【娱+277】希瑞：新主播请多多关照",
+		"totalDiam": "505560",
+		"settType": "2",
+		"money": "151668",
+		"yy": "2416059648",
+		"payTime": "2019-09-30 23:59:14",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "娱+277-夢兒",
+		"totalDiam": "1560380",
+		"settType": "1",
+		"money": "1560380",
+		"yy": "2414300364",
+		"payTime": "2019-09-30 23:59:13",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】猫猫，脸过敏了啊呜",
+		"totalDiam": "0",
+		"settType": "1",
+		"money": "0",
+		"yy": "2413368324",
+		"payTime": "2019-09-30 23:59:13",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】黛濛：新主播求关注",
+		"totalDiam": "7600",
+		"settType": "1",
+		"money": "7600",
+		"yy": "2409787046",
+		"payTime": "2019-09-30 23:59:12",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "我啷个晓得",
+		"totalDiam": "7500",
+		"settType": "2",
+		"money": "2250",
+		"yy": "2323880267",
+		"payTime": "2019-09-30 23:59:59",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】苓苓 满满的活力鸭~",
+		"totalDiam": "5128140",
+		"settType": "1",
+		"money": "5128140",
+		"yy": "2250653603",
+		"payTime": "2019-09-30 23:59:54",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】橘子:求大哥保护",
+		"totalDiam": "4339640",
+		"settType": "1",
+		"money": "4339640",
+		"yy": "2228095576",
+		"payTime": "2019-09-30 23:59:52",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "２０４６✦７００９.钟无艳",
+		"totalDiam": "4272330",
+		"settType": "2",
+		"money": "1281699",
+		"yy": "9667009",
+		"payTime": "2019-09-30 23:59:43",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】大丽：加油冲吖！",
+		"totalDiam": "4447570",
+		"settType": "1",
+		"money": "4447570",
+		"yy": "1682399572",
+		"payTime": "2019-09-30 23:59:32",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "男神",
+		"totalDiam": "200",
+		"settType": "2",
+		"money": "60",
+		"yy": "881613656",
+		"payTime": "2019-09-30 23:59:19",
+		"goodsType": "100003"
+	}, {
+		"rate": "30",
+		"nick": "【娱+277】曦儿，新主播求大哥守护",
+		"totalDiam": "2880",
+		"settType": "2",
+		"money": "864",
+		"yy": "801688852",
+		"payTime": "2019-09-30 23:59:18",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】雪儿",
+		"totalDiam": "3837380",
+		"settType": "1",
+		"money": "3837380",
+		"yy": "750516038",
+		"payTime": "2019-09-30 23:59:17",
+		"goodsType": "100003"
+	}, {
+		"rate": "100",
+		"nick": "【娱+277】可馨",
+		"totalDiam": "1516460",
+		"settType": "1",
+		"money": "1516460",
+		"yy": "2424853457",
+		"payTime": "2019-09-08 10:01:10",
+		"goodsType": "100027"
+	}],
+	"code": 0
+}
