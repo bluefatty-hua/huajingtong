@@ -1,111 +1,103 @@
--- yy主播每日蓝钻流水
-SELECT * 
-FROM spider_yy_backend.anchor_bluediamond
-;
--- ALTER TABLE spider_yy_backend.anchor_bluediamond COMMENT '主播每日蓝钻流水（https://www.yy.com/i/anchorIncome）'
+-- 一、计算主播上月直播数据
+-- 时间控制  dt&m-1
+-- 统计字段：live_days: 直播天数 duration: 直播时长 last_mon_amt: 主播上月总流水
+-- 数据来源：(spider_yy_backend) anchor_duration
 
-SELECT backend_account_id AS guild_id,
-       yynum AS anchor_no,
-	   diamond as virtual_coin,
-       dt
-FROM spider_yy_backend.anchor_bluediamond
-;
 
-SELECT COUNT(yynum),
-       COUNT(DISTINCT yynum),
-       COUNT(CONCAT(yynum, dt)),
-       COUNT(DISTINCT CONCAT(yynum, dt))
-FROM spider_yy_backend.anchor_bluediamond
-;
--- 1908 30 1908 1908
-
--- --------------------------------------------------------------------------------------------------------------------------
--- yy主播每日直播时长
-SELECT * 
+-- anchor_duration直播时长格式化
+DROP TABLE IF EXISTS tmp.anchor_duration_time_format;
+CREATE TABLE tmp.anchor_duration_time_format AS
+SELECT backend_account_id,
+       uid,
+       dt,
+       yynum,
+       CASE WHEN duration RLIKE '小时' THEN SUBSTRING_INDEX(duration, '小时', 1) ELSE 0 END AS duration_h,
+       CASE WHEN duration RLIKE '分' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(duration, '小时', -1), '分', 1) ELSE 0 END AS duration_m,
+       SUBSTRING_INDEX(SUBSTRING_INDEX(duration, '分', -1), '秒', 1) AS duration_s,
+       duration as duration,
+       livedays,
+       nick,
+       chaid,
+       CASE WHEN mobduration RLIKE '小时' THEN SUBSTRING_INDEX(mobduration, '小时', 1) ELSE 0 END AS mobduration_h,
+       CASE WHEN mobduration RLIKE '分' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(mobduration, '小时', -1), '分', 1) ELSE 0 END AS mobduration_m,
+       SUBSTRING_INDEX(SUBSTRING_INDEX(mobduration, '分', -1), '秒', 1) AS mobduration_s,
+       mobduration,
+       CASE WHEN pcduration RLIKE '小时' THEN SUBSTRING_INDEX(pcduration, '小时', 1) ELSE 0 END AS pcduration_h,
+       CASE WHEN pcduration RLIKE '分' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(pcduration, '小时', -1), '分', 1) ELSE 0 END AS pcduration_m,
+       SUBSTRING_INDEX(SUBSTRING_INDEX(pcduration, '分', -1), '秒', 1) AS pcduration_s,
+       pcduration,
+       timestamp
 FROM spider_yy_backend.anchor_duration
 ;
 
-SELECT COUNT(yynum),
-       COUNT(DISTINCT yynum) 
-FROM spider_yy_backend.anchor_duration
+
+DROP TABLE IF EXISTS tmp.anchor_duration_time_format_sum;
+CREATE TABLE tmp.anchor_duration_time_format_sum AS
+SELECT ad.yynum,
+       ad.uid,
+       SUM(ad.livedays) AS live_days,
+       SUM(ad.duration_h) AS live_hs,
+       ROUND(SUM(((CASE WHEN ac.usrMoney IS NULL OR ac.usrMoney = '' THEN 0 ELSE ac.owMoney END) + (CASE WHEN ac.owMoney IS NULL OR ac.owMoney = '' THEN 0 ELSE ac.owMoney END) + (CASE WHEN ab.diamond IS NULL OR ab.diamond = '' THEN 0 ELSE ab.diamond END)) * 2 / 1000), 2) AS anchor_totla_amt_m1,
+       MAX(CASE WHEN ad.livedays = 1 THEN ad.dt ELSE '' END) AS final_live_date
+FROM tmp.anchor_duration_time_format ad
+LEFT JOIN spider_yy_backend.anchor_commission ac ON ad.yynum = ac.yynum AND ad.dt = DATE(ac.dtime)
+LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ad.yynum = ab.yynum AND ab.dt = ad.dt
+WHERE YEAR(ad.dt) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY))
+  AND MONTH(ad.dt) = MONTH(DATE_SUB(DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY), INTERVAL 1 MONTH))
+GROUP BY ad.yynum,
+         ad.uid
 ;
--- 13604 38
+
+
+DROP TABLE IF EXISTS tmp.anchor_duration_time_format_t1;
+CREATE TABLE tmp.anchor_duration_time_format_t1 AS
 SELECT *
-FROM (SELECT DISTINCT yynum FROM spider_yy_backend.anchor_bluediamond) anbd
-RIGHT JOIN (SELECT DISTINCT yynum FROM spider_yy_backend.anchor_duration) andu ON anbd.yynum = andu.yynum;
-
-
-SELECT COUNT(DISTINCT dt)
-FROM spider_yy_backend.anchor_bluediamond
-;
--- --------------------------------------------------------------------------------------------------------------------------
-
--- select date_add('2019-01-01',interval @i:=@i+1 day) as date, tmp.* 
--- from spider_yy_backend.anchor_bluediamond tmp,
---  (select @i:= -1) t
--- ;
- 
-
- 
--- ====================================================
--- 提取yy号, 得到所有主播
-SELECT 
-    uid AS anchor_uid,
-    yynum AS anchor_no
-FROM
-    spider_yy_backend.anchor_bluediamond 
-UNION SELECT 
-    uid AS anchor_uid,
-    yynum AS anchor_no
-FROM
-    spider_yy_backend.anchor_duration
-;
-
-SELECT count(distinct dt) from 
-(SELECT 
-    dt AS dt
-FROM
-    spider_yy_backend.anchor_bluediamond 
-UNION SELECT 
-    dt AS dt
-FROM
-    spider_yy_backend.anchor_duration) t
+FROM tmp.anchor_duration_time_format ad
+WHERE ad.dt = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
 ;
 
 
+-- 构建warehouse.an_anchor_info数据
+DROP TABLE IF EXISTS tmp.an_anchor_info_20191226_tmp;
+CREATE TABLE tmp.an_anchor_info_20191226_tmp AS
+SELECT ga.uid AS anchor_uid,
+       ga.yynum AS anchor_no,
+       '' AS name,
+       ga.nick AS nick_name,
+       1000 AS platform_id,
+       'YY' AS platform_name,
+       ga.backend_account_id AS guild_id,
+       '' AS guild_name,
+       t1.chaid AS channel_id,
+       0 AS anchor_status,  -- 暂通过运营获取
+       CASE WHEN t1.livedays = 1 THEN 1 ELSE 0 END AS live_status,
+       1 AS trail_live_grade,  -- 通过首播开始12天开播情况判断
+       ga.anchortype AS type,
+       CASE WHEN ads.live_days >= 20 AND ads.live_hs >= 60 THEN 1 ELSE 0 END AS active_status,
+       1 AS n_o_status,  -- 通过主播首播日期计算播龄 > 6m
+       ads.anchor_totla_amt_m1 AS last_mon_amt,
+       CASE WHEN ads.anchor_totla_amt_m1 >= 500000 THEN 50
+            WHEN ads.anchor_totla_amt_m1 >= 100000 THEN 10
+            WHEN ads.anchor_totla_amt_m1 >= 30000 THEN 3
+			ELSE 0 END AS amt_level,
+       '' AS first_live_date,  -- 主播首播日期(注册日期)
+       ads.final_live_date AS final_live_date,
+       ga.contype AS settle_method,  -- set
+       ga.anchorRate AS settle_rate,
+       '' AS join_operation,
+       '' AS source,
+       '' AS recruiter,
+       '' AS operator
+FROM spider_yy_backend.guild_anchor ga
+LEFT JOIN tmp.anchor_duration_time_format_sum ads ON ga.yynum = ads.yynum AND ga.uid = ads.uid
+LEFT JOIN tmp.anchor_duration_time_format_t1 t1 ON ga.yynum = t1.yynum AND ga.uid = t1.uid
+;
 
--- 构建an_anchor_day会员基础信息
--- INSERT INTO warehouse.an_anchor_day (anchor_uid, anchor_no, nick_name, platform_id, platform_name, guild_id, channel_id, live_status, dt)
-SELECT 
-    yn.anchor_uid,
-    yn.anchor_no,
-    ad.nick AS nick_name,
-    1000 AS platform_id,
-    'YY' AS plat_name,
-    ad.chaid AS channel_id
-    
-FROM
-    (SELECT 
-        uid AS anchor_uid, yynum AS anchor_no
-    FROM
-        spider_yy_backend.anchor_bluediamond UNION SELECT 
-        uid AS anchor_uid, yynum AS anchor_no
-    FROM
-        spider_yy_backend.anchor_duration) yn
-LEFT JOIN
-    spider_yy_backend.anchor_duration ad ON yn.anchor_uid = ad.uid AND yn.anchor_no = ad.yynum
-; 
 
--- 构建an_live_day数据g
-
-
-
-
-
-
-
-
-
+-- 删除临时表
+DROP TABLE IF EXISTS tmp.anchor_duration_time_format;
+DROP TABLE IF EXISTS tmp.anchor_duration_time_format_sum;
+DROP TABLE IF EXISTS tmp.anchor_duration_time_format_t1;
 
 
 
