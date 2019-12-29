@@ -11,7 +11,7 @@ GROUP BY ad.g_id,
 ;
 
 
-DROP TABLE IF EXISTS tmp.ods_anchor_bb_info;
+DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
 CREATE TABLE warehouse.ods_anchor_bb_info AS
 SELECT 1001 AS platform_id,
        'B站' AS platform_name,
@@ -38,7 +38,7 @@ LEFT JOIN spider_bb_backend.anchor_detail ad ON rec.g_id = ad.g_id AND rec.uid =
 ;
 
 -- 主播直播
-DROP TABLE IF EXISTS tmp.ods_anchor_bb_live;
+DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live;
 CREATE TABLE warehouse.ods_anchor_bb_live AS
 SELECT ai.platform_id,
        ai.platform_name,
@@ -60,7 +60,7 @@ LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anc
 ;
 
 -- 主播收入
-DROP TABLE IF EXISTS tmp.ods_anchor_bb_virtual_coin;
+DROP TABLE IF EXISTS warehouse.ods_anchor_bb_virtual_coin;
 CREATE TABLE warehouse.ods_anchor_bb_virtual_coin AS 
 SELECT ai.platform_id,
        ai.platform_name,
