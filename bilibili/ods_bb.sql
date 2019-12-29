@@ -85,25 +85,3 @@ SELECT ai.platform_id,
 FROM warehouse.ods_anchor_bb_info ai
 LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
 ;
-
-
-
-
-
-
-
-
-SHOW CREATE TABLE warehouse.platform;
-
-
-
-
-
-
-
-
-
-
-
-
-
