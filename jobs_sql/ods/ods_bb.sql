@@ -33,7 +33,7 @@ SELECT 1001 AS platform_id,
        an.ctime,
        rec.recent_date
 FROM spider_bb_backend.normal_list an
-LEFT JOIN stage.anchor_detail_recent_day rec ON an.uid = rec.uid
+LEFT JOIN stage.bb_anchor_detail_recent_day rec ON an.uid = rec.uid
 LEFT JOIN spider_bb_backend.anchor_detail ad ON rec.g_id = ad.g_id AND rec.uid = ad.uid AND rec.recent_date = ad.dt
 ;
 
