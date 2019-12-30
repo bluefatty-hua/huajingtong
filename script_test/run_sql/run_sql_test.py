@@ -1,10 +1,17 @@
+# -*- coding: utf8 -*-
+
 import pymysql
 import sys
 from datetime import date
 from datetime import date
 from datetime import timedelta
+import io
+import sys
 
-conn = pymysql.Connect(host='127.0.0.1', user='root', password='123456')
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+conn = pymysql.Connect(host='127.0.0.1', user='wh_user', password='Nd^93)9f@445Fv')
 cursor = conn.cursor()
 
 
@@ -12,11 +19,10 @@ cursor = conn.cursor()
 
 
 def run_sql(sql_param):
-    with open(r'.\rs_test_sql.sql', 'r',
-              encoding='utf8') as fr:
+    with io.open(r'.\rs_test_sql.sql', 'r', encoding='utf8') as fr:
         for sql in fr.read().split(';'):
             if len(sql) > 10:
-                sql = (sql + ';').replace('/n', '').format_map(sql_param)
+                sql = (sql + ';').replace('/n', '').format(**sql_param)
                 print(sql)
                 cursor.execute(sql)
 
