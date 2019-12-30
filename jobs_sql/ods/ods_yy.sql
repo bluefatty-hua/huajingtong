@@ -57,7 +57,7 @@ SELECT ai.platform_id,
        ad.timestamp
 FROM warehouse.ods_anchor_info_tmp ai
 LEFT JOIN spider_yy_backend.anchor_duration ad ON ai.guild_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum
-WHERE ad.dt BETWEEN {start_date} AND {end_date}
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -84,7 +84,7 @@ SELECT ai.platform_id,
 FROM warehouse.ods_anchor_info_tmp ai
 LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.anchor_uid = ac.uid AND ai.anchor_no = ac.yynum
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-WHERE DATE(ac.dtime) BETWEEN {start_date} AND {end_date}
+WHERE DATE(ac.dtime) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -106,6 +106,7 @@ SELECT ai.platform_id,
        ab.dt
 FROM warehouse.ods_anchor_info_tmp ai
 LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.guild_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
