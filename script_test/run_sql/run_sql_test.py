@@ -19,7 +19,7 @@ cursor = conn.cursor()
 
 
 def run_sql(sql_param):
-    with io.open(r'.\rs_test_sql.sql', 'r', encoding='utf8') as fr:
+    with io.open('./rs_test_sql.sql', 'r', encoding='utf8') as fr:
         for sql in fr.read().split(';'):
             if len(sql) > 10:
                 sql = (sql + ';').replace('/n', '').format(**sql_param)
