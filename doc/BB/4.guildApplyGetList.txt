@@ -1,0 +1,219 @@
+URL	http://api.live.bilibili.com/live_user/v1/GuildApply/getList?type=0&status=0&page=1
+
+GET http://api.live.bilibili.com/live_user/v1/GuildApply/getList?type=0&status=0&page=1 HTTP/1.1
+Host: api.live.bilibili.com
+Accept: application/json, text/plain, */*
+Origin: http://link.bilibili.com
+User-Agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+Referer: http://link.bilibili.com/p/center/index
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: sid=cs683thy; _uuid=A2BEEE42-66F3-3776-74AB-B7F0467A1BF488860infoc; buvid3=44475F74-C849-455D-9B0D-0ACCCBE1D49253924infoc; DedeUserID=348039495; DedeUserID__ckMd5=04756a7723594aa0; SESSDATA=feceb845%2C1579611501%2C4c332dc1; bili_jct=92e91a9c38a3126711eac77596097ab9; INTVER=1; LIVE_BUVID=AUTO7915770195065623; _dfcaptcha=dc84a3cc2480cec46f852ff3333aa36c
+Proxy-Connection: keep-alive
+
+type	0       // 资源位类型
+status	0       // 进度
+page	1
+
+{
+	"code": 0,
+	"msg": "success",
+	"message": "success",
+	"data": {
+		"page_info": {
+			"page": 1,
+			"total_page": 35
+		},
+		"list": [{
+			"id": "30388",
+			"apply_time": "2019-12-16 14:45:14",        // 申请日期
+			"type": "1",        // 资源位类型 1.推荐资源位 2.banner
+			"sub_type": "2",        // 1.大电视 2.正在直播 3.移动端推荐直播"
+			"schedule_time": "2019-12-19 13:00-14:00",      // 排期
+			"cost": 20,         // 虚拟金
+			"account_name": "网游/手游/单机",     // 分区账户
+			"status": "2",      // 进度 1.待上传 2.已通过 3.待审核
+ 			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "68514",          // 房间号
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "29192",
+			"apply_time": "2019-12-16 11:01:43",
+			"type": "1",
+			"sub_type": "1",
+			"schedule_time": "2019-12-20 16:00-17:00",
+			"cost": 50,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "21475224",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28947",
+			"apply_time": "2019-12-16 11:01:14",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-21 14:00-15:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "109237",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28948",
+			"apply_time": "2019-12-16 11:01:14",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-21 14:00-15:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "65993",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28949",
+			"apply_time": "2019-12-16 11:01:14",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-21 14:00-15:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "1040340",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28950",
+			"apply_time": "2019-12-16 11:01:14",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-21 14:00-15:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "3265999",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28895",
+			"apply_time": "2019-12-16 11:01:08",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-20 19:00-20:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "21702653",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28896",
+			"apply_time": "2019-12-16 11:01:08",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-20 19:00-20:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "21282441",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28897",
+			"apply_time": "2019-12-16 11:01:08",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-20 19:00-20:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "21703491",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}, {
+			"id": "28898",
+			"apply_time": "2019-12-16 11:01:08",
+			"type": "1",
+			"sub_type": "2",
+			"schedule_time": "2019-12-20 20:00-21:00",
+			"cost": 20,
+			"account_name": "网游/手游/单机",
+			"status": "2",
+			"area_id": "0",
+			"sub_area_id": "0",
+			"reason": "",
+			"roomid": "355407",
+			"can_edit": true,
+			"imgs": {
+				"app_img": "",
+				"web_img": "",
+				"hover_img": ""
+			}
+		}]
+	}
+}
