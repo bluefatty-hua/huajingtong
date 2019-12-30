@@ -13,7 +13,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-conn = pymysql.Connect(host='127.0.0.1', user='root', password='123456')
+conn = pymysql.Connect(host='127.0.0.1', user='wh_user', password='Nd^93)9f@445Fv')
 cursor = conn.cursor()
 
 
