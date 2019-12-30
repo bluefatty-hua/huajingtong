@@ -57,7 +57,7 @@ SELECT ai.platform_id,
        ad.timestamp
 FROM warehouse.ods_anchor_bb_info ai
 LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
-WHERE ad.dt BETWEEN {start_date} AND {end_date}
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 -- 主播收入
@@ -85,5 +85,5 @@ SELECT ai.platform_id,
        ad.timestamp
 FROM warehouse.ods_anchor_bb_info ai
 LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
-WHERE ad.dt BETWEEN {start_date} AND {end_date}
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
