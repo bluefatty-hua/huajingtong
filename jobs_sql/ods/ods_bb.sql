@@ -1,7 +1,7 @@
 -- 主播信息
 -- 从normal_detail中抽取主播最新信息补充到ods_anchor_bb_info
-DROP TABLE IF EXISTS tmp.anchor_detail_recent_day;
-CREATE TABLE tmp.anchor_detail_recent_day AS
+DROP TABLE IF EXISTS stage.bb_anchor_detail_recent_day;
+CREATE TABLE stage.bb_anchor_detail_recent_day AS
 SELECT ad.g_id,
        ad.uid,
        MAX(ad.dt) AS recent_date
@@ -33,7 +33,7 @@ SELECT 1001 AS platform_id,
        an.ctime,
        rec.recent_date
 FROM spider_bb_backend.normal_list an
-LEFT JOIN tmp.anchor_detail_recent_day rec ON an.uid = rec.uid
+LEFT JOIN stage.anchor_detail_recent_day rec ON an.uid = rec.uid
 LEFT JOIN spider_bb_backend.anchor_detail ad ON rec.g_id = ad.g_id AND rec.uid = ad.uid AND rec.recent_date = ad.dt
 ;
 
@@ -57,6 +57,7 @@ SELECT ai.platform_id,
        ad.timestamp
 FROM warehouse.ods_anchor_bb_info ai
 LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
+WHERE ad.dt BETWEEN {start_date} AND {end_date}
 ;
 
 -- 主播收入
@@ -84,4 +85,5 @@ SELECT ai.platform_id,
        ad.timestamp
 FROM warehouse.ods_anchor_bb_info ai
 LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
+WHERE ad.dt BETWEEN {start_date} AND {end_date}
 ;
