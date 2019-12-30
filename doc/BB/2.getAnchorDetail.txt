@@ -1,0 +1,343 @@
+URL	http://api.live.bilibili.com/live_user/v1/GuildMaster/getAnchorDetail?start_date=20191201&end_date=20191222&page=1&page_size=10&sort_by=&order=
+
+GET http://api.live.bilibili.com/live_user/v1/GuildMaster/getAnchorDetail?start_date=20191201&end_date=20191222&page=1&page_size=10&sort_by=&order= HTTP/1.1
+Host: api.live.bilibili.com
+Accept: application/json, text/plain, */*
+Origin: http://link.bilibili.com
+User-Agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+Referer: http://link.bilibili.com/p/center/index
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: sid=cs683thy; _uuid=A2BEEE42-66F3-3776-74AB-B7F0467A1BF488860infoc; buvid3=44475F74-C849-455D-9B0D-0ACCCBE1D49253924infoc; DedeUserID=348039495; DedeUserID__ckMd5=04756a7723594aa0; SESSDATA=feceb845%2C1579611501%2C4c332dc1; bili_jct=92e91a9c38a3126711eac77596097ab9; INTVER=1; LIVE_BUVID=AUTO7915770195065623
+Proxy-Connection: keep-alive
+
+start_date	20191201
+end_date	20191222
+page	1
+page_size	10
+sort_by
+order
+
+// NEXT PAGE
+start_date	20191201
+end_date	20191222
+page	26
+page_size	10
+sort_by
+order
+
+{
+	"code": 0,
+	"msg": "",
+	"message": "",
+	"data": {
+		"page_info": {
+			"page": 1,
+			"page_size": 10,
+			"total_page": 26,
+			"total_count": 253
+		},
+		"items": [{
+			"uid": 4728147,         //主播UID
+			"date": "20191201~20191222",    // 日期
+			"roomid": 3734974,          // 主播房间号
+			"g_id": 41,         // 公会id
+			"g_name": "娱加游戏",   // 公会昵称
+			"guild_type": 1,        // 公会类型
+			"ios_coin": 538100,     // 直播收益iOS(金瓜子)
+			"android_coin": 18512731,       // 直播收益Android（金瓜子）
+			"special_coin": 8715000,        // 特殊账户收益（金瓜子）
+			"send_coin": 0,                 // 运营奖惩（金瓜子）
+			"total_income": 88214922,       // 直播收益（金仓鼠
+			"total_coin": 176698897,        // 全部直播收益（金瓜子）
+			"live_day": 18,         // 直播天数
+			"live_hour": 113,       // 直播时长（小时）
+			"valid_live_hour": 111,     // 有效分区时长
+			"valid_live_day": 17,       // 有效天数
+			"base_salary": 0,          // 底薪（元）
+			"dau": 74130,           // DAU
+			"max_ppl": 1070428,     // 人气峰值
+			"uname": "SaoM1ng",     // 主播昵称
+			"fc": 38140,        // 粉丝数（人）
+			"start_date": 20190901,  // 签约开始时间
+			"end_date": 20210430,      // 签约结束时间
+			"pc_coin": 157648066        // 直播收益Web（金瓜子）
+		}, {
+			"uid": 36075561,
+			"date": "20191201~20191222",
+			"roomid": 3265999,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 1628030,
+			"android_coin": 27907353,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 16613525,
+			"total_coin": 34041083,
+			"live_day": 21,
+			"live_hour": 219,
+			"valid_live_hour": 207,
+			"valid_live_day": 21,
+			"base_salary": 0,
+			"dau": 102556,
+			"max_ppl": 41629,
+			"uname": "冷酷无情菠萝",
+			"fc": 3271,
+			"start_date": 20190801,
+			"end_date": 20191031,
+			"pc_coin": 4505700
+		}, {
+			"uid": 360824768,
+			"date": "20191201~20191222",
+			"roomid": 13518671,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 6771674,
+			"android_coin": 24985999,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 15116746,
+			"total_coin": 33619573,
+			"live_day": 20,
+			"live_hour": 135,
+			"valid_live_hour": 133,
+			"valid_live_day": 20,
+			"base_salary": 0,
+			"dau": 163333,
+			"max_ppl": 96913,
+			"uname": "赤瞳Luna",
+			"fc": 18078,
+			"start_date": 20190901,
+			"end_date": 20210430,
+			"pc_coin": 1861900
+		}, {
+			"uid": 454115883,
+			"date": "20191201~20191222",
+			"roomid": 21551988,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 2190899,
+			"android_coin": 18920826,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 12882647,
+			"total_coin": 26860785,
+			"live_day": 21,
+			"live_hour": 258,
+			"valid_live_hour": 257,
+			"valid_live_day": 21,
+			"base_salary": 0,
+			"dau": 170678,
+			"max_ppl": 54067,
+			"uname": "献祭流英俊",
+			"fc": 3811,
+			"start_date": 20191001,
+			"end_date": 20210430,
+			"pc_coin": 5749060
+		}, {
+			"uid": 67831139,
+			"date": "20191201~20191222",
+			"roomid": 2901876,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 2014498,
+			"android_coin": 20501553,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 11417562,
+			"total_coin": 23842383,
+			"live_day": 21,
+			"live_hour": 224,
+			"valid_live_hour": 223,
+			"valid_live_day": 20,
+			"base_salary": 0,
+			"dau": 148994,
+			"max_ppl": 222734,
+			"uname": "June寒",
+			"fc": 11539,
+			"start_date": 20191001,
+			"end_date": 20210430,
+			"pc_coin": 1326332
+		}, {
+			"uid": 349168956,
+			"date": "20191201~20191222",
+			"roomid": 13724075,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 0,
+			"android_coin": 273631,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 11902813,
+			"total_coin": 23805631,
+			"live_day": 21,
+			"live_hour": 149,
+			"valid_live_hour": 148,
+			"valid_live_day": 21,
+			"base_salary": 0,
+			"dau": 99889,
+			"max_ppl": 163658,
+			"uname": "上古玩家肉肉",
+			"fc": 26759,
+			"start_date": 20191101,
+			"end_date": 20200131,
+			"pc_coin": 23532000
+		}, {
+			"uid": 342624,
+			"date": "20191201~20191222",
+			"roomid": 952785,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 363866,
+			"android_coin": 6910800,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 10142332,
+			"total_coin": 20466599,
+			"live_day": 16,
+			"live_hour": 84,
+			"valid_live_hour": 71,
+			"valid_live_day": 13,
+			"base_salary": 0,
+			"dau": 95282,
+			"max_ppl": 23088,
+			"uname": "解说小米",
+			"fc": 59042,
+			"start_date": 20190901,
+			"end_date": 20210430,
+			"pc_coin": 13191933
+		}, {
+			"uid": 32234914,
+			"date": "20191201~20191222",
+			"roomid": 21282441,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 15700,
+			"android_coin": 15570429,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 9790183,
+			"total_coin": 19588289,
+			"live_day": 21,
+			"live_hour": 164,
+			"valid_live_hour": 118,
+			"valid_live_day": 15,
+			"base_salary": 0,
+			"dau": 33598,
+			"max_ppl": 91275,
+			"uname": "蝶依呀",
+			"fc": 1657,
+			"start_date": 20191001,
+			"end_date": 20191231,
+			"pc_coin": 4002160
+		}, {
+			"uid": 28663492,
+			"date": "20191201~20191222",
+			"roomid": 21412908,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 742300,
+			"android_coin": 16533525,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 9049501,
+			"total_coin": 18470158,
+			"live_day": 20,
+			"live_hour": 116,
+			"valid_live_hour": 116,
+			"valid_live_day": 20,
+			"base_salary": 0,
+			"dau": 108658,
+			"max_ppl": 30103,
+			"uname": "颜啾啾啾",
+			"fc": 5705,
+			"start_date": 20190901,
+			"end_date": 20210430,
+			"pc_coin": 1194333
+		}, {
+			"uid": 5963844,
+			"date": "20191201~20191222",
+			"roomid": 8112629,
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1,
+			"ios_coin": 234000,
+			"android_coin": 17025800,
+			"special_coin": 0,
+			"send_coin": 0,
+			"total_income": 8986450,
+			"total_coin": 18089900,
+			"live_day": 19,
+			"live_hour": 181,
+			"valid_live_hour": 172,
+			"valid_live_day": 19,
+			"base_salary": 0,
+			"dau": 17944,
+			"max_ppl": 78274,
+			"uname": "苏了个妹",
+			"fc": 1883,
+			"start_date": 20190901,
+			"end_date": 20191130,
+			"pc_coin": 830100
+		}],
+		"guild_info": {
+			"g_id": 41,
+			"g_name": "娱加游戏",
+			"guild_type": 1
+		},
+		"headers": [{
+			"field": "live_day",
+			"text": "直播天数"
+		}, {
+			"field": "live_hour",
+			"text": "直播时长"
+		}, {
+			"field": "valid_live_hour",
+			"text": "有效直播时长"
+		}, {
+			"field": "dau",
+			"text": "DAU"
+		}, {
+			"field": "total_coin",
+			"text": "全部直播收益（金瓜子）"
+		}, {
+			"field": "ios_coin",
+			"text": "直播收益iOS（金瓜子）"
+		}, {
+			"field": "android_coin",
+			"text": "直播收益Android（金瓜子）"
+		}, {
+			"field": "pc_coin",
+			"text": "直播收益web（金瓜子）"
+		}, {
+			"field": "max_ppl",
+			"text": "人气峰值"
+		}, {
+			"field": "fc",
+			"text": "粉丝数"
+		}, {
+			"field": "base_salary",
+			"text": "底薪"
+		}, {
+			"field": "special_coin",
+			"text": "特殊账户收益（金瓜子）"
+		}, {
+			"field": "send_coin",
+			"text": "运营奖惩（金瓜子）"
+		}, {
+			"field": "valid_live_day",
+			"text": "分区直播天数"
+		}, {
+			"field": "total_income",
+			"text": "直播收益（金仓鼠）"
+		}]
+	}
+}

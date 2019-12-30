@@ -1,0 +1,378 @@
+URL	http://api.live.bilibili.com/live_user/v1/GuildMaster/getNormalList?status=-1&page=1&type=-1&page_size=20
+
+GET http://api.live.bilibili.com/live_user/v1/GuildMaster/getNormalList?status=-1&page=1&type=-1&page_size=20 HTTP/1.1
+Host: api.live.bilibili.com
+Accept: application/json, text/plain, */*
+Origin: http://link.bilibili.com
+User-Agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+Referer: http://link.bilibili.com/p/center/index
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: sid=cs683thy; _uuid=A2BEEE42-66F3-3776-74AB-B7F0467A1BF488860infoc; buvid3=44475F74-C849-455D-9B0D-0ACCCBE1D49253924infoc; DedeUserID=348039495; DedeUserID__ckMd5=04756a7723594aa0; SESSDATA=feceb845%2C1579611501%2C4c332dc1; bili_jct=92e91a9c38a3126711eac77596097ab9; INTVER=1; LIVE_BUVID=AUTO7915770195065623; _dfcaptcha=a76301a3d0f9e74760800eed39632b6a
+Proxy-Connection: keep-alive
+
+status	-1
+page	1
+type	-1
+page_size	20
+
+// NEXT PAGE
+status	-1
+page	2
+type	-1
+page_size	20
+
+{
+	"code": 0,
+	"msg": "",
+	"message": "",
+	"data": {
+		"page_info": {
+			"page": 1,
+			"page_size": 20,
+			"total_page": 12,
+			"total_count": 221
+		},
+		"items": [{
+			"id": 17065,
+			"uid": 74350574,            //主播UID
+			"roomid": 2982247,          //主播房间号
+			"uname": "二狗子大佬",       // 主播昵称
+			"start_date": "20191201",   // 合约开始时间
+			"end_date": "20200229",     // 合约结束时间
+			"status": 0,               // 0: "正常", 1: "留存", 2: "解约"
+			"status_text": "正常",    // 签约状态
+			"type": 0,                  //  0: "试用",1: "正式"
+			"type_text": "试用",      // 类型
+			"entry_time": "2019-12-21 07:09:14",        // 加入时间？
+			"ctime": "2019-12-21 07:09:14",             // 创建时间？
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 17060,
+			"uid": 12332796,
+			"roomid": 69004,
+			"uname": "温尔文雅狐玖玖",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-21 00:28:04",
+			"ctime": "2019-12-21 00:28:04",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 17055,
+			"uid": 11387706,
+			"roomid": 1728507,
+			"uname": "刀刀家的空白",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-20 20:32:46",
+			"ctime": "2019-12-20 20:32:46",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 17049,
+			"uid": 428168891,
+			"roomid": 21476176,
+			"uname": "睿逍遥-",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-20 19:39:49",
+			"ctime": "2019-12-20 19:39:49",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16950,
+			"uid": 479392563,
+			"roomid": 21669029,
+			"uname": "绵绵WEI",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-19 14:25:17",
+			"ctime": "2019-12-19 14:25:17",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16949,
+			"uid": 347440799,
+			"roomid": 13522215,
+			"uname": "M-a-m-a",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-19 14:19:06",
+			"ctime": "2019-12-19 14:19:06",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16936,
+			"uid": 475116519,
+			"roomid": 21628435,
+			"uname": "全能选手无情丶",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-19 00:49:57",
+			"ctime": "2019-12-19 00:49:57",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16845,
+			"uid": 23485245,
+			"roomid": 1969267,
+			"uname": "青叔阿",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-17 17:56:57",
+			"ctime": "2019-12-17 17:56:57",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16808,
+			"uid": 4809935,
+			"roomid": 532492,
+			"uname": "DeMoN-呆呆",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-16 19:33:18",
+			"ctime": "2019-12-16 19:33:18",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16790,
+			"uid": 808880,
+			"roomid": 1374283,
+			"uname": "芙兰呆",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-16 16:11:10",
+			"ctime": "2019-12-16 16:11:10",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16721,
+			"uid": 391333528,
+			"roomid": 21437582,
+			"uname": "凌凯_",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-13 15:56:42",
+			"ctime": "2019-12-13 15:56:42",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16676,
+			"uid": 9524763,
+			"roomid": 3248046,
+			"uname": "媛气少年兮尔薇",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-12 18:33:36",
+			"ctime": "2019-12-12 18:33:36",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16631,
+			"uid": 484078256,
+			"roomid": 21717914,
+			"uname": "您的玛郦老公",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-11 22:40:24",
+			"ctime": "2019-12-11 22:40:24",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16551,
+			"uid": 37723,
+			"roomid": 718593,
+			"uname": "守夜秃头的小可爱",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-10 20:44:57",
+			"ctime": "2019-12-10 20:44:57",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16509,
+			"uid": 424763549,
+			"roomid": 21397937,
+			"uname": "猫哥哥め",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-10 14:09:25",
+			"ctime": "2019-12-10 14:09:25",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16506,
+			"uid": 19239799,
+			"roomid": 1985029,
+			"uname": "木D色",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-10 12:55:05",
+			"ctime": "2019-12-10 12:55:05",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16322,
+			"uid": 13144533,
+			"roomid": 1730448,
+			"uname": "大魔王流星星",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-06 14:32:15",
+			"ctime": "2019-12-06 14:32:15",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16321,
+			"uid": 26673876,
+			"roomid": 10274647,
+			"uname": "萱萱小朋友あ",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-06 14:20:28",
+			"ctime": "2019-12-06 14:20:28",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16319,
+			"uid": 11060538,
+			"roomid": 21703491,
+			"uname": "暴躁陆依萍",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-06 14:07:43",
+			"ctime": "2019-12-06 14:07:43",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}, {
+			"id": 16306,
+			"uid": 38383034,
+			"roomid": 1117290,
+			"uname": "假的阿羊",
+			"start_date": "20191201",
+			"end_date": "20200229",
+			"status": 0,
+			"status_text": "正常",
+			"type": 0,
+			"type_text": "试用",
+			"entry_time": "2019-12-06 12:20:44",
+			"ctime": "2019-12-06 12:20:44",
+			"can_be_reinvite": false,
+			"op_list": [2],
+			"can_break_off": false,
+			"apply_reason": ""
+		}]
+	}
+}
