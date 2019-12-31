@@ -13,7 +13,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-conn = pymysql.Connect(host='127.0.0.1', user='wh_user', password='Nd^93)9f@445Fv')
+conn = pymysql.Connect(host='127.0.0.1', user='root', password='123456')
 cursor = conn.cursor()
 
 
@@ -38,8 +38,8 @@ def format_param_dict(param_lst):
     # 设置默认终止日期 前一天
     end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 
-    if len(param_lst) > 1:
-        param = eval(param_lst[1])
+    if len(param_lst) > 2:
+        param = eval(param_lst[2])
         print(type(param), '/n', param)
         param['start_date'] = param['start_date'] if param.get('start_date') else '2000-01-01'
         param['end_date'] = param['end_date'] if param.get('end_date') else end_date
@@ -58,3 +58,5 @@ if __name__ == '__main__':
     param_dic = format_param_dict(sys.argv)
     print(param_dic)
     run_sql(param_dic)
+    cursor.close()
+    conn.close()

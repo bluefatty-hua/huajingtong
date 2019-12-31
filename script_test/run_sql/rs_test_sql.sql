@@ -1,3 +1,4 @@
+
 Drop TABLE IF EXISTS stage.rs_test_tmp0_20191229;
 CREATE TABLE stage.rs_test_tmp0_20191229 AS
 SELECT *
