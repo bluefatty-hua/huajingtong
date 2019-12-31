@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# 注意传参格式 eg: "{'start_date':'2019-01-01','end_date':'2019-12-31','platform_id':'1004,1005,1000'}"
+# 注意传参格式 eg: slq_file_path ["{'start_date':'2019-01-01','end_date':'2019-12-31','platform_id':'1004,1005,1000'}"]
 
 import pymysql
 import sys
@@ -13,15 +13,12 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-conn = pymysql.Connect(host='127.0.0.1', user='root', password='123456')
+conn = pymysql.Connect(host='127.0.0.1', user='wh_user', password='Nd^93)9f@445Fv')
 cursor = conn.cursor()
 
 
-# format path Todo
-
-
-def run_sql(sql_param):
-    with io.open('./rs_test_sql.sql', 'r', encoding='utf8') as fr:
+def run_sql(sql_param, file):
+    with io.open(file, 'r', encoding='utf8') as fr:
         for sql in fr.read().split(';'):
             if len(sql) > 10:
                 sql = (sql + ';').replace('/n', '').format(**sql_param)
@@ -54,9 +51,11 @@ def format_param_dict(param_lst):
 
 
 if __name__ == '__main__':
-    print(sys.argv)
+    # 部署项目路径
+    project_path = '/home/rockie/xjl_etl/'  # 项目跟目录
+    sql_file = project_path + sys.argv[1]
     param_dic = format_param_dict(sys.argv)
     print(param_dic)
-    run_sql(param_dic)
+    run_sql(param_dic, sql_file)
     cursor.close()
     conn.close()
