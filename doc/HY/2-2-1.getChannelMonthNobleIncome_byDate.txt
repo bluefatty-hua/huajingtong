@@ -1,0 +1,275 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelMonthNobleIncome
+
+:method: POST
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelMonthNobleIncome
+content-length: 265
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryhKhT1jZGN2SPmUOR
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQBDrMLZfiGBFNINywhtw2WyUZabUaZFYLyUCenvsSNYUa4KckFaob6rprf_dCVYqodtpOCHXGqFoYvH_NZNWamgQzgiVdlkHrowzut-k2ie3tL7y1ItYAR0EWePyUnl_x6AQ8MJW4Vb-qTcKy4UEcv7piVkCWmhyis2WPPSBofMCf2_IC-9DgZ9riEWI4i2N5CALUx4FC-ykgTeHcsbl5GpsHR8xNnU12ZTQg0nmnF0YXftu-4KgPoxRzRAxf1IZlMhWeOWvogKzf10wt29GcX17V0z8E_zU78rJSXvk1h8ZP_IDf7RAojFjXD1ZTFDg1HJkFLOdU-gTZUIzSpJpapA
+
+------WebKitFormBoundaryhKhT1jZGN2SPmUOR
+Content-Disposition: form-data; name="data_lChannelId"
+
+28493601
+------WebKitFormBoundaryhKhT1jZGN2SPmUOR
+Content-Disposition: form-data; name="data_iDateTime"
+
+1572566400
+------WebKitFormBoundaryhKhT1jZGN2SPmUOR--
+
+service	thrift_p_c_datastat
+iface	datastat_getChannelMonthNobleIncome
+
+data_lChannelId	28493601
+data_iDateTime	1572566400
+
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": {
+		"lIncomeSum": 100000,
+		"setLIncomeSum": true,
+		"setVChannelIncomeList": true,
+		"vChannelIncomeList": [{
+			"sXData": "2019-11-03",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-04",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-05",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-06",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-07",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-08",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-09",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-10",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-11",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-12",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-13",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-14",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-15",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-16",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-17",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-18",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-19",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-20",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-21",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-22",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-23",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-24",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-25",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-26",
+			"sYData": "100000",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-27",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-28",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-29",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-11-30",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-12-01",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}, {
+			"sXData": "2019-12-02",
+			"sYData": "0",
+			"setSXData": true,
+			"setSYData": true
+		}],
+		"vChannelIncomeListIterator": [{
+			"$ref": "$.vChannelIncomeList[0]"
+		}, {
+			"$ref": "$.vChannelIncomeList[1]"
+		}, {
+			"$ref": "$.vChannelIncomeList[2]"
+		}, {
+			"$ref": "$.vChannelIncomeList[3]"
+		}, {
+			"$ref": "$.vChannelIncomeList[4]"
+		}, {
+			"$ref": "$.vChannelIncomeList[5]"
+		}, {
+			"$ref": "$.vChannelIncomeList[6]"
+		}, {
+			"$ref": "$.vChannelIncomeList[7]"
+		}, {
+			"$ref": "$.vChannelIncomeList[8]"
+		}, {
+			"$ref": "$.vChannelIncomeList[9]"
+		}, {
+			"$ref": "$.vChannelIncomeList[10]"
+		}, {
+			"$ref": "$.vChannelIncomeList[11]"
+		}, {
+			"$ref": "$.vChannelIncomeList[12]"
+		}, {
+			"$ref": "$.vChannelIncomeList[13]"
+		}, {
+			"$ref": "$.vChannelIncomeList[14]"
+		}, {
+			"$ref": "$.vChannelIncomeList[15]"
+		}, {
+			"$ref": "$.vChannelIncomeList[16]"
+		}, {
+			"$ref": "$.vChannelIncomeList[17]"
+		}, {
+			"$ref": "$.vChannelIncomeList[18]"
+		}, {
+			"$ref": "$.vChannelIncomeList[19]"
+		}, {
+			"$ref": "$.vChannelIncomeList[20]"
+		}, {
+			"$ref": "$.vChannelIncomeList[21]"
+		}, {
+			"$ref": "$.vChannelIncomeList[22]"
+		}, {
+			"$ref": "$.vChannelIncomeList[23]"
+		}, {
+			"$ref": "$.vChannelIncomeList[24]"
+		}, {
+			"$ref": "$.vChannelIncomeList[25]"
+		}, {
+			"$ref": "$.vChannelIncomeList[26]"
+		}, {
+			"$ref": "$.vChannelIncomeList[27]"
+		}, {
+			"$ref": "$.vChannelIncomeList[28]"
+		}, {
+			"$ref": "$.vChannelIncomeList[29]"
+		}],
+		"vChannelIncomeListSize": 30
+	}
+}

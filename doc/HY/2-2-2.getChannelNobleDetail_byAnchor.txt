@@ -1,0 +1,113 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelNobleDetail
+
+:method: POST
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelNobleDetail
+content-length: 562
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryPAFFctH09B1VSgLv
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQAPJcDzbbolKO5yKW6mWYIfsQbHoU7F3eCm9wyw9_T3Ja6jrsGC3c114slNGavxHDgHBg90eLrVwOH60vF6yOYwcs5V3W7SoMUHf2WNtD4rLun-OjfueF8-FePgTJa8PmnmWNPovUzbyelRSo6e4XzmnXbV0e-mLwCuMgQseqGkDcRIAbR7RB-xoWR5Ts1SwQ5Bknzy-Y8NBeKbAmbvJtwgFcGWuTB54Kk6jnlyTQXyYQJvn8n2yS0BHqP_VSvoER--u64pllwqQWhS-NHQ_3I3pkwtnVHhzb9Dn2lMiTVcl7tHytD4qs2Y-ktpiqm7SCpyOX-WxFu9a3qI1QGVn52S
+
+------WebKitFormBoundaryPAFFctH09B1VSgLv
+Content-Disposition: form-data; name="data_lChannelId"
+
+28493601
+------WebKitFormBoundaryPAFFctH09B1VSgLv
+Content-Disposition: form-data; name="data_iDateTime"
+
+1572566400
+------WebKitFormBoundaryPAFFctH09B1VSgLv
+Content-Disposition: form-data; name="data_iPage"
+
+1
+------WebKitFormBoundaryPAFFctH09B1VSgLv
+Content-Disposition: form-data; name="data_iPageSize"
+
+20
+------WebKitFormBoundaryPAFFctH09B1VSgLv
+Content-Disposition: form-data; name="data_nick"
+
+
+------WebKitFormBoundaryPAFFctH09B1VSgLv--
+
+query string
+service	thrift_p_c_datastat
+iface	datastat_getChannelNobleDetail
+
+multipart
+data_lChannelId	28493601
+data_iDateTime	1572566400
+data_iPage	1
+data_iPageSize	20
+data_nick
+
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": {
+		"iCount": 1,
+		"lNobleIncomeSum": 100000,
+		"setICount": true,
+		"setLNobleIncomeSum": true,
+		"setVChannelNobleDetailList": true,
+		"vChannelNobleDetailList": [{
+			"iNobleLevel": 3,           // 贵族层级
+			"iPayTime": 1574771777,             // 购买时间
+			"lOwIncomeGoldbean": 100000,        // 公会提成(金元宝)
+			"sNobleName": "领主",      // 贵族称号
+			"setINobleLevel": true,
+			"setIPayTime": true,
+			"setLOwIncomeGoldbean": true,
+			"setSNobleName": true,
+			"setTNobleUserInfo": true,
+			"setTProfileUserInfo": true,
+			"tNobleUserInfo": {     // 贵族用户信息
+				"lUid": 1633825035,
+				"lYY": 1852565245,
+				"sNick": "走马",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			},
+			"tProfileUserInfo": {       // 主播信息
+				"lUid": 1279515548700,
+				"lYY": 35184396990255,
+				"sNick": "娱加Lily玫儿",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}],
+		"vChannelNobleDetailListIterator": [{
+			"$ref": "$.vChannelNobleDetailList[0]"
+		}],
+		"vChannelNobleDetailListSize": 1
+	}
+}

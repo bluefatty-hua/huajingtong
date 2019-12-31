@@ -1,0 +1,553 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getProfileTimePCUList
+
+:method: POST
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getProfileTimePCUList
+content-length: 763
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryOy3AOadUkI1d5TMt
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQBDrMLZfiGBFNINywhtw2WyUZabUaZFYLyUCenvsSNYUa4KckFaob6rprf_dCVYqodtpOCHXGqFoYvH_NZNWamgQzgiVdlkHrowzut-k2ie3tL7y1ItYAR0EWePyUnl_x6AQ8MJW4Vb-qTcKy4UEcv7piVkCWmhyis2WPPSBofMCf2_IC-9DgZ9riEWI4i2N5CALUx4FC-ykgTeHcsbl5GpsHR8xNnU12ZTQg0nmnF0YXftu-4KgPoxRzRAxf1IZlMhWeOWvogKzf10wt29GcX17V0z8E_zU78rJSXvk1h8ZP_IDf7RAojFjXD1ZTFDg1HJkFLOdU-gTZUIzSpJpapA
+
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_lChannelId"
+
+28493601
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_iDayType"
+
+3
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_iOrderBy"
+
+3
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_iOrderType"
+
+1
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_iPage"
+
+1
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_iPageSize"
+
+20
+------WebKitFormBoundaryOy3AOadUkI1d5TMt
+Content-Disposition: form-data; name="data_sSearchNick"
+
+
+------WebKitFormBoundaryOy3AOadUkI1d5TMt--
+
+query string
+service	thrift_p_c_datastat
+iface	datastat_getProfileTimePCUList
+
+
+multipart
+data_lChannelId	28493601
+data_iDayType	3               // 1-近7天统计 2-近30天统计 3-本月统计
+data_iOrderBy	3
+data_iOrderType	1
+data_iPage	1
+data_iPageSize	20
+data_sSearchNick
+
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": {
+		"iCount": 312,
+		"setICount": true,
+		"setVDataList": true,
+		"vDataList": [{
+			"dAvgPcuRatio": 0.798,
+			"dLiveTimeRatio": 146.28,
+			"dLiveTimeSumRatio": 293.56,
+			"iAvgLiveTime": 7364,
+			"iAvgPcu": 23642,
+			"iLiveTimeSum": 14728,
+			"lUid": 2328270062,
+			"lYY": 2329937505,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1093/b3/938e5231844e81e3d1c848b8305eb1_180_135.jpg?15776257",
+			"sNick": "雷冬",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.952,
+			"dLiveTimeRatio": 15.738,
+			"dLiveTimeSumRatio": 225.061,
+			"iAvgLiveTime": 17089,
+			"iAvgPcu": 38316,
+			"iLiveTimeSum": 461390,
+			"lUid": 1199525786977,
+			"lYY": 35184429723176,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1050/7e/b3c76667b32af11a1f49fbbc786136_180_135.jpg?15776257",
+			"sNick": "娱加-黄九九",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": -0.11,
+			"dLiveTimeRatio": 0.597,
+			"dLiveTimeSumRatio": 8.584,
+			"iAvgLiveTime": 21074,
+			"iAvgPcu": 31743,
+			"iLiveTimeSum": 126442,
+			"lUid": 2203752878,
+			"lYY": 2204031132,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1003/47/0dfdb7e7a8831b3e41f28328c8af39_180_135.jpg?15776257",
+			"sNick": "正恒、回忆哟",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.143,
+			"dLiveTimeRatio": 0.292,
+			"dLiveTimeSumRatio": 2.877,
+			"iAvgLiveTime": 14556,
+			"iAvgPcu": 38148,
+			"iLiveTimeSum": 131003,
+			"lUid": 1199526059002,
+			"lYY": 35184430943640,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1024/64/78db06151aa7b572789e9dd1a90355_180_135.jpg?15776257",
+			"sNick": "娱加太阳",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 1.275,
+			"dLiveTimeRatio": 2.915,
+			"dLiveTimeSumRatio": 2.455,
+			"iAvgLiveTime": 4948,
+			"iAvgPcu": 55589,
+			"iLiveTimeSum": 74226,
+			"lUid": 1861089020,
+			"lYY": 2113734446,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1029/67/757b1843c4747467b2b9369966a133_180_135.jpg?15776257",
+			"sNick": "娱加-萌汤圆",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": -0.24,
+			"dLiveTimeRatio": 0.529,
+			"dLiveTimeSumRatio": 2.364,
+			"iAvgLiveTime": 14341,
+			"iAvgPcu": 37462,
+			"iLiveTimeSum": 315493,
+			"lUid": 1279520772113,
+			"lYY": 35184426925300,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1098/57/2f94687988082c32d70a088bcc941d_180_135.jpg?15776257",
+			"sNick": "娱加-一只小锤子",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": -0.073,
+			"dLiveTimeRatio": -0.072,
+			"dLiveTimeSumRatio": 1.971,
+			"iAvgLiveTime": 12562,
+			"iAvgPcu": 31923,
+			"iLiveTimeSum": 200998,
+			"lUid": 121656530,
+			"lYY": 98031471,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1021/f4/76c4dfcbce15d4f9ca7c7c7380de93_180_135.jpg?15776257",
+			"sNick": "名阳",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": -0.182,
+			"dLiveTimeRatio": -0.092,
+			"dLiveTimeSumRatio": 0.816,
+			"iAvgLiveTime": 11019,
+			"iAvgPcu": 35519,
+			"iLiveTimeSum": 220382,
+			"lUid": 2358785100,
+			"lYY": 2360827145,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1042/08/60b02885fbaeba585f2e8dba5b9c47_180_135.jpg?15776257",
+			"sNick": "宝",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.287,
+			"dLiveTimeRatio": 0.403,
+			"dLiveTimeSumRatio": 0.578,
+			"iAvgLiveTime": 14105,
+			"iAvgPcu": 62268,
+			"iLiveTimeSum": 380837,
+			"lUid": 1199524746108,
+			"lYY": 35184424532048,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1083/2c/4839f542f9f6202f0d1e384d13e07a_180_135.jpg?15776257",
+			"sNick": "唐十一",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.176,
+			"dLiveTimeRatio": 0.403,
+			"dLiveTimeSumRatio": 0.473,
+			"iAvgLiveTime": 8755,
+			"iAvgPcu": 52400,
+			"iLiveTimeSum": 183845,
+			"lUid": 2242112455,
+			"lYY": 2243483539,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1094/3e/b024aa38fc63090d20dceb1d89b8b6_180_135.jpg?15776257",
+			"sNick": "娱加-玧儿宝宝",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.2,
+			"dLiveTimeRatio": 0.895,
+			"dLiveTimeSumRatio": 0.391,
+			"iAvgLiveTime": 1141,
+			"iAvgPcu": 19106,
+			"iLiveTimeSum": 25111,
+			"lUid": 1048126541,
+			"lYY": 1105016165,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1064/bf/7cfccad8d45a390cfe672017f581cc_180_135.jpg?15776257",
+			"sNick": "娱加-小点新",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": -0.067,
+			"dLiveTimeRatio": 0.094,
+			"dLiveTimeSumRatio": 0.136,
+			"iAvgLiveTime": 15425,
+			"iAvgPcu": 83524,
+			"iLiveTimeSum": 416468,
+			"lUid": 70101777,
+			"lYY": 20050973,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1098/42/72ab2aea3dcbe77d69f584a117eb57_180_135.jpg?15776257",
+			"sNick": "娱加-大東【风弟】",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 2388359770,
+			"lYY": 2389782168,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1038/fc/59a52b711452742ddf4c0bbabff57b_180_135.jpg?15776257",
+			"sNick": "娱加嘤嘤",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 934719410,
+			"lYY": 2313745,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1030/84/263524fd959e355a0248f6eecf909b_180_135.jpg?15776257",
+			"sNick": "卷毛",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 2318856243,
+			"lYY": 2320558970,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1015/46/c2df34a78e63a9cad026c894e7b41c_180_135.jpg?15776257",
+			"sNick": "娱加-瞳瞳",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 2279227869,
+			"lYY": 2279143188,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1014/a3/0f88aeb8b6184d809968e8ddb91aab_180_135.jpg?15776257",
+			"sNick": "绾崽ou",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 2311517633,
+			"lYY": 2311886808,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1008/2e/27d284ab189945c2da114eba8b3c6c_180_135.jpg?15776257",
+			"sNick": "娱加一梦悦儿",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 1199514484658,
+			"lYY": 35184378747873,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1044/3d/d6accd7537520d5d46b23df66e1c7a_180_135.jpg?15776257",
+			"sNick": "咪哟哟",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 1259520831590,
+			"lYY": 35184415019375,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1011/5a/eaceb26029df9b8fbd787f5a0e0842_180_135.jpg?15776257",
+			"sNick": "大陆诗人",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}, {
+			"dAvgPcuRatio": 0.0,
+			"dLiveTimeRatio": 0.0,
+			"dLiveTimeSumRatio": 0.0,
+			"iAvgLiveTime": 0,
+			"iAvgPcu": 0,
+			"iLiveTimeSum": 0,
+			"lUid": 2338809194,
+			"lYY": 2340708531,
+			"sAvatar": "https://huyaimg.msstatic.com/avatar/1094/44/4651afc1d806ced39ab1be7d232020_180_135.jpg?15776257",
+			"sNick": "小乞丐",
+			"setDAvgPcuRatio": true,
+			"setDLiveTimeRatio": true,
+			"setDLiveTimeSumRatio": true,
+			"setIAvgLiveTime": true,
+			"setIAvgPcu": true,
+			"setILiveTimeSum": true,
+			"setLUid": true,
+			"setLYY": true,
+			"setSAvatar": true,
+			"setSNick": true
+		}],
+		"vDataListIterator": [{
+			"$ref": "$.vDataList[0]"
+		}, {
+			"$ref": "$.vDataList[1]"
+		}, {
+			"$ref": "$.vDataList[2]"
+		}, {
+			"$ref": "$.vDataList[3]"
+		}, {
+			"$ref": "$.vDataList[4]"
+		}, {
+			"$ref": "$.vDataList[5]"
+		}, {
+			"$ref": "$.vDataList[6]"
+		}, {
+			"$ref": "$.vDataList[7]"
+		}, {
+			"$ref": "$.vDataList[8]"
+		}, {
+			"$ref": "$.vDataList[9]"
+		}, {
+			"$ref": "$.vDataList[10]"
+		}, {
+			"$ref": "$.vDataList[11]"
+		}, {
+			"$ref": "$.vDataList[12]"
+		}, {
+			"$ref": "$.vDataList[13]"
+		}, {
+			"$ref": "$.vDataList[14]"
+		}, {
+			"$ref": "$.vDataList[15]"
+		}, {
+			"$ref": "$.vDataList[16]"
+		}, {
+			"$ref": "$.vDataList[17]"
+		}, {
+			"$ref": "$.vDataList[18]"
+		}, {
+			"$ref": "$.vDataList[19]"
+		}],
+		"vDataListSize": 20
+	}
+}

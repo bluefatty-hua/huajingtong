@@ -1,0 +1,79 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getProfileDetail
+
+:method: POST
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getProfileDetail
+content-length: 270
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryKki7MCLqbSBpuPfN
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQBr3Pi2spw9Ob3zntYMf0SK4xIi6eDypmx5Bf6sIq_it7rq_s-XdoCAk0oF-wRfrXir23QkCE2dYDWBalCnw25oemd6HW0von5yPENR4kODqKbxVvxKBGcsxAEIurD1rD9F-s4b7qU0HImEu9MRVxEvbi3sDLS5pB_AY89Ol6jjSRviuxKpya9sV-EcdhNlATjTPAUsY34lY3da2ErQNa8wNZIJSF_ifFIm66cW6H0SqBFVoGbsEL6LLXs1KE55oeHQPg_6MQHt-rt2j8Q_gw8WljMjR8YkRuShx_aAsyrKMfdHxtGQLyBHhQeQrkpzqkVRwFHULR5eEC1md6ubljN0
+
+------WebKitFormBoundaryKki7MCLqbSBpuPfN
+Content-Disposition: form-data; name="data_lChannelId"
+
+28493601
+------WebKitFormBoundaryKki7MCLqbSBpuPfN
+Content-Disposition: form-data; name="data_lProfileUid"
+
+1199525786977
+------WebKitFormBoundaryKki7MCLqbSBpuPfN--
+
+query string
+service	thrift_p_c_datastat
+iface	datastat_getProfileDetail
+
+multipart
+data_lChannelId	28493601
+data_lProfileUid	1199525786977
+
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": {
+		"iActivityDays": 27,        // 本月开播天数
+		"iMonths": 12,      // 月份
+		"iOwPercent": 30,       // ow提成
+		"iSignTime": 1574139911,    //签约时间
+		"iSurplusDays": 326,    // 签约剩余
+		"lUid": 1199525786977,  // uid
+		"lYY": 35184429723176,  // 虎牙号
+		"sAvatar": "https://huyaimg.msstatic.com/avatar/1050/7e/b3c76667b32af11a1f49fbbc786136_180_135.jpg?15776263", //头像url
+		"sNick": "娱加-黄九九",      // 昵称
+		"setIActivityDays": true,
+		"setIMonths": true,
+		"setIOwPercent": true,
+		"setISignTime": true,
+		"setISurplusDays": true,
+		"setLUid": true,
+		"setLYY": true,
+		"setSAvatar": true,
+		"setSNick": true
+	}
+}
