@@ -50,7 +50,7 @@ WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- 主播收入（佣金）
 DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission;
-CREATE TABLE stage.ods_anchor_yy_commission AS
+CREATE TABLE warehouse.ods_anchor_yy_commission AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.guild_id,
@@ -76,7 +76,7 @@ WHERE DATE(ac.dtime) BETWEEN '{start_date}' AND '{end_date}'
 
 -- 主播收入（蓝钻）
 DROP TABLE IF EXISTS warehouse.ods_anchor_yy_virtual_coin;
-CREATE TABLE stage.ods_anchor_yy_virtual_coin AS
+CREATE TABLE warehouse.ods_anchor_yy_virtual_coin AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.guild_id,
