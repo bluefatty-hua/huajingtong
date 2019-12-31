@@ -1,6 +1,6 @@
 -- 主播信息
-DROP TABLE IF EXISTS warehouse.ods_anchor_info_tmp;
-CREATE TABLE warehouse.ods_anchor_info AS
+DROP TABLE IF EXISTS warehouse.ods_anchor_yy_info;
+CREATE TABLE warehouse.ods_anchor_yy_info AS
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        backend_account_id as guild_id,
@@ -24,8 +24,8 @@ FROM spider_yy_backend.guild_anchor ga
 
 
 -- 主播直播
-DROP TABLE IF EXISTS warehouse.ods_anchor_live;
-CREATE TABLE warehouse.ods_anchor_live AS
+DROP TABLE IF EXISTS warehouse.ods_anchor_yy_live;
+CREATE TABLE warehouse.ods_anchor_yy_live AS
 SELECT ai.platform_id,
 	   ai.platform_name,
        ai.guild_id,
@@ -42,15 +42,15 @@ SELECT ai.platform_id,
        DURATION_CH(ad.mobduration) AS mobduration_sec,
        ad.dt,
        ad.timestamp
-FROM warehouse.ods_anchor_info_tmp ai
+FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_duration ad ON ai.guild_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum
 WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- 主播收入（佣金）
-DROP TABLE IF EXISTS warehouse.ods_anchor_commission_tmp;
-CREATE TABLE stage.ods_anchor_commission AS
+DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission;
+CREATE TABLE stage.ods_anchor_yy_commission AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.guild_id,
@@ -67,8 +67,7 @@ SELECT ai.platform_id,
        ac.frmYY AS from_visitor_no,
        ac.frmNick AS from_visitor_name,
        ac.dtime
--- SELECT *
-FROM warehouse.ods_anchor_info_tmp ai
+FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.anchor_uid = ac.uid AND ai.anchor_no = ac.yynum
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE DATE(ac.dtime) BETWEEN '{start_date}' AND '{end_date}'
@@ -76,8 +75,8 @@ WHERE DATE(ac.dtime) BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 主播收入（蓝钻）
-DROP TABLE IF EXISTS warehouse.ods_anchor_bluediamond_tmp;
-CREATE TABLE stage.ods_anchor_bluediamond AS
+DROP TABLE IF EXISTS warehouse.ods_anchor_yy_virtual_coin;
+CREATE TABLE stage.ods_anchor_yy_virtual_coin AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.guild_id,
@@ -91,7 +90,7 @@ SELECT ai.platform_id,
        ab.diamond,
        ab.timestamp,
        ab.dt
-FROM warehouse.ods_anchor_info_tmp ai
+FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.guild_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no
 WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
