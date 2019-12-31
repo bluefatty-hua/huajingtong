@@ -92,7 +92,7 @@ SELECT ai.platform_id,
        ab.dt
 FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.guild_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no
-WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ab.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
