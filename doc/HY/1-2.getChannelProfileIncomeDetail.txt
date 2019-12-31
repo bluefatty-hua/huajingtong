@@ -1,0 +1,390 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelProfileIncomeDetail
+:method: POST
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelProfileIncomeDetail
+content-length: 562
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+content-type: multipart/form-data; boundary=----WebKitFormBoundarytNz9rzxejJ7toA1P
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQBZLm0V7rnfr3piKq-rQllXY_KI3xy1ysXhVFwOKNNtWqF8DrDFwuGQSGKq55spNcpcTNYjBxOFsuF29xuxa9HKeGbLKom-9GCvIAwEYS6jizQJVXLJTtHPC2Bqzw-fU3ZmimLyU30HARq1eR4KSvhe38wqI3wHTtAWLiXEh3Z-X5t0WnMdxXS445mbuOc1uhohIGDx2H6SKckXSKcsOr6D64PJVenIWMT8IKUzdMZFS9HFcgkgxk2e7xFoLgIF4CPF0d4H2DDz0sB18O9EgH-CSThRUtriyRLUTTBfjr4hkd8fGcxHI04Dz_LJ4QRHPoxHLlFonQr3Bz61iePMeOO5
+
+------WebKitFormBoundarytNz9rzxejJ7toA1P
+Content-Disposition: form-data; name="data_lChannelId"
+
+28493601
+------WebKitFormBoundarytNz9rzxejJ7toA1P
+Content-Disposition: form-data; name="data_iDateTime"
+
+1575158400
+------WebKitFormBoundarytNz9rzxejJ7toA1P
+Content-Disposition: form-data; name="data_iPage"
+
+1
+------WebKitFormBoundarytNz9rzxejJ7toA1P
+Content-Disposition: form-data; name="data_iPageSize"
+
+20
+------WebKitFormBoundarytNz9rzxejJ7toA1P
+Content-Disposition: form-data; name="data_nick"
+
+
+------WebKitFormBoundarytNz9rzxejJ7toA1P--
+
+query string
+service	thrift_p_c_datastat
+iface	datastat_getChannelProfileIncomeDetail
+
+multipart
+// 1st page
+data_lChannelId	28493601
+data_iDateTime	1575158400
+data_iPage	1
+data_iPageSize	20
+data_nick
+// next page
+data_lChannelId	28493601
+data_iDateTime	1575158400
+data_iPage	2
+data_iPageSize	20
+data_nick
+
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": {
+		"dIncomeSum": 361707.5, // 合计收入
+		"iCount": 31,       // 主播合计
+		"setDIncomeSum": false,
+		"setICount": true,
+		"setVChannelProfileIncomeList": true,
+		"vChannelProfileIncomeList": [{
+			"dIncome": 226804.1,        // 流水收入
+			"iRank": 0,
+			"lUid": 1641670810,         // uid
+			"lYYid": 1862470579,        // 虎牙号
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1093/f8/838793ce1bcbb527cb257944187dff_180_135.jpg?15776199", // 头像url
+			"sNick": "小琳琳吖、",       // 签约主播
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 35924.4,
+			"iRank": 0,
+			"lUid": 2326733242,
+			"lYYid": 2328276490,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1073/ad/f2bb15465cdf1d0f5c375c65187648_180_135.jpg?15776199",
+			"sNick": "娱加-湘湘",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 17506.1,
+			"iRank": 0,
+			"lUid": 70101777,
+			"lYYid": 20050973,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1098/42/72ab2aea3dcbe77d69f584a117eb57_180_135.jpg?15776199",
+			"sNick": "娱加-大東【风弟】",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 16823.3,
+			"iRank": 0,
+			"lUid": 2288642111,
+			"lYYid": 2288666574,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1078/57/0d58ae56096df572648ab75dfb6656_180_135.jpg?15776199",
+			"sNick": "娱加-福气哩",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 13412.8,
+			"iRank": 0,
+			"lUid": 1199524746108,
+			"lYYid": 35184424532048,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1083/2c/4839f542f9f6202f0d1e384d13e07a_180_135.jpg?15776199",
+			"sNick": "唐十一",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 11593.1,
+			"iRank": 0,
+			"lUid": 1199525101466,
+			"lYYid": 35184426392682,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1066/a3/174f6f6d321703bb76ea7d80957501_180_135.jpg?15776199",
+			"sNick": "娱加-大落落【866】",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 11499.4,
+			"iRank": 0,
+			"lUid": 1279515548700,
+			"lYYid": 35184396990255,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1074/31/a73fa958614509c5c45ea37f430196_180_135.jpg?15776199",
+			"sNick": "娱加Lily玫儿",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 9359.0,
+			"iRank": 0,
+			"lUid": 2329052516,
+			"lYYid": 2330886651,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1016/df/fe5cc8765d719c38c92b1490b3c2ae_180_135.jpg?15776199",
+			"sNick": "娱加-文一多",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 6528.0,
+			"iRank": 0,
+			"lUid": 1830411103,
+			"lYYid": 2083044673,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1028/f3/da91cb72d5c333e528296751c61060_180_135.jpg?15776199",
+			"sNick": "娱加-烨z",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 3193.2,
+			"iRank": 0,
+			"lUid": 2242112455,
+			"lYYid": 2243483539,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1094/3e/b024aa38fc63090d20dceb1d89b8b6_180_135.jpg?15776199",
+			"sNick": "娱加-玧儿宝宝",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 3088.1,
+			"iRank": 0,
+			"lUid": 1861089020,
+			"lYYid": 2113734446,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1029/67/757b1843c4747467b2b9369966a133_180_135.jpg?15776199",
+			"sNick": "娱加-萌汤圆",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 2085.2,
+			"iRank": 0,
+			"lUid": 1048126541,
+			"lYYid": 1105016165,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1064/bf/7cfccad8d45a390cfe672017f581cc_180_135.jpg?15776199",
+			"sNick": "娱加-小点新",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 1325.5,
+			"iRank": 0,
+			"lUid": 1279522449043,
+			"lYYid": 35184433547604,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1073/aa/12f5589c9cc87f29afbd9213291663_180_135.jpg?15776199",
+			"sNick": "娱加-沛沛君",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 943.0,
+			"iRank": 0,
+			"lUid": 1199525786977,
+			"lYYid": 35184429723176,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1050/7e/b3c76667b32af11a1f49fbbc786136_180_135.jpg?15776199",
+			"sNick": "娱加-黄九九",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 677.5,
+			"iRank": 0,
+			"lUid": 1279520772113,
+			"lYYid": 35184426925300,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1098/57/2f94687988082c32d70a088bcc941d_180_135.jpg?15776199",
+			"sNick": "娱加-一只小锤子",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 236.1,
+			"iRank": 0,
+			"lUid": 1642341156,
+			"lYYid": 1863276385,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1001/69/fa529735a67db7f17a04aecdc872b0_180_135.jpg?15776199",
+			"sNick": "娱加-小团圆吖",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 187.1,
+			"iRank": 0,
+			"lUid": 1199526059002,
+			"lYYid": 35184430943640,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1024/64/78db06151aa7b572789e9dd1a90355_180_135.jpg?15776199",
+			"sNick": "娱加太阳",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 161.0,
+			"iRank": 0,
+			"lUid": 2358785100,
+			"lYYid": 2360827145,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1042/08/60b02885fbaeba585f2e8dba5b9c47_180_135.jpg?15776199",
+			"sNick": "宝",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 128.5,
+			"iRank": 0,
+			"lUid": 1279522719513,
+			"lYYid": 35184434448678,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1017/70/a3291a7d152a8a5385d778873afc6f_180_135.jpg?15776199",
+			"sNick": "藤井树",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}, {
+			"dIncome": 99.9,
+			"iRank": 0,
+			"lUid": 121656530,
+			"lYYid": 98031471,
+			"sLogo": "https://huyaimg.msstatic.com/avatar/1021/f4/76c4dfcbce15d4f9ca7c7c7380de93_180_135.jpg?15776199",
+			"sNick": "名阳",
+			"setDIncome": true,
+			"setIRank": true,
+			"setLUid": true,
+			"setLYYid": true,
+			"setSLogo": true,
+			"setSNick": true
+		}],
+		"vChannelProfileIncomeListIterator": [{
+			"$ref": "$.vChannelProfileIncomeList[0]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[1]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[2]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[3]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[4]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[5]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[6]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[7]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[8]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[9]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[10]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[11]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[12]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[13]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[14]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[15]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[16]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[17]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[18]"
+		}, {
+			"$ref": "$.vChannelProfileIncomeList[19]"
+		}],
+		"vChannelProfileIncomeListSize": 20
+	}
+}

@@ -1,0 +1,444 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelGiftDetail
+
+:method: POST
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getChannelGiftDetail
+content-length: 562
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryz2nGqtdBUO9845Pj
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQAPJcDzbbolKO5yKW6mWYIfsQbHoU7F3eCm9wyw9_T3Ja6jrsGC3c114slNGavxHDgHBg90eLrVwOH60vF6yOYwcs5V3W7SoMUHf2WNtD4rLun-OjfueF8-FePgTJa8PmnmWNPovUzbyelRSo6e4XzmnXbV0e-mLwCuMgQseqGkDcRIAbR7RB-xoWR5Ts1SwQ5Bknzy-Y8NBeKbAmbvJtwgFcGWuTB54Kk6jnlyTQXyYQJvn8n2yS0BHqP_VSvoER--u64pllwqQWhS-NHQ_3I3pkwtnVHhzb9Dn2lMiTVcl7tHytD4qs2Y-ktpiqm7SCpyOX-WxFu9a3qI1QGVn52S
+
+------WebKitFormBoundaryz2nGqtdBUO9845Pj
+Content-Disposition: form-data; name="data_lChannelId"
+
+28493601
+------WebKitFormBoundaryz2nGqtdBUO9845Pj
+Content-Disposition: form-data; name="data_iDateTime"
+
+1572566400
+------WebKitFormBoundaryz2nGqtdBUO9845Pj
+Content-Disposition: form-data; name="data_iPage"
+
+1
+------WebKitFormBoundaryz2nGqtdBUO9845Pj
+Content-Disposition: form-data; name="data_iPageSize"
+
+20
+------WebKitFormBoundaryz2nGqtdBUO9845Pj
+Content-Disposition: form-data; name="data_nick"
+
+
+------WebKitFormBoundaryz2nGqtdBUO9845Pj--
+
+query string
+service	thrift_p_c_datastat
+iface	datastat_getChannelGiftDetail
+
+multipart
+data_lChannelId	28493601
+data_iDateTime	1572566400
+data_iPage	1
+data_iPageSize	20
+data_nick
+
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": {
+		"iCount": 23,
+		"lGiftIncomeSum": 42543051,     //公会提成合计（金元宝）
+		"setICount": false,
+		"setLGiftIncomeSum": false,
+		"setVChannelGiftDetailList": true,
+		"vChannelGiftDetailList": [{
+			"lOwIncomeGoldbean": 4279121,       /公会提成（金元宝）
+			"sDate": "2019-11",         // 月结周期
+			"sProfileIncomeLevel": "B", // 月结等级
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 70101777,       // uid
+				"lYY": 20050973,        // 虎牙号
+				"sNick": "娱加-大東【风弟】",   // 主播昵称
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 1558023,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1048126541,
+				"lYY": 1105016165,
+				"sNick": "娱加-小点新",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 23551189,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "A",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1641670810,
+				"lYY": 1862470579,
+				"sNick": "小琳琳吖、",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 1003707,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1830411103,
+				"lYY": 2083044673,
+				"sNick": "娱加-烨z",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 194515,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "C",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1861089020,
+				"lYY": 2113734446,
+				"sNick": "娱加-萌汤圆",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 510871,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2242112455,
+				"lYY": 2243483539,
+				"sNick": "娱加-玧儿宝宝",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 5545,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2279227869,
+				"lYY": 2279143188,
+				"sNick": "绾崽ou",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 4494419,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2288642111,
+				"lYY": 2288666574,
+				"sNick": "娱加-福气哩",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 2938061,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2326733242,
+				"lYY": 2328276490,
+				"sNick": "娱加-湘湘",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 683204,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2329052516,
+				"lYY": 2330886651,
+				"sNick": "娱加-文一多",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 314790,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2333947053,
+				"lYY": 2336002692,
+				"sNick": "娱加-林任性",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 93826,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "C",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2358785100,
+				"lYY": 2360827145,
+				"sNick": "宝",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 13189,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2377844090,
+				"lYY": 2379946845,
+				"sNick": "娱加-小十四",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 16059,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 2384622933,
+				"lYY": 2386594772,
+				"sNick": "娱加-沐公子",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 16214,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1199512673839,
+				"lYY": 35184376514315,
+				"sNick": "娱加-007",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 39020,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1199524651608,
+				"lYY": 35184423532326,
+				"sNick": "虎牙一秋",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 59086,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "C",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1199524689190,
+				"lYY": 35184423641655,
+				"sNick": "娱加-野格",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 400560,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "B",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1199524746108,
+				"lYY": 35184424532048,
+				"sNick": "唐十一",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 7603,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1199525197561,
+				"lYY": 35184426682709,
+				"sNick": "娱加-恩宠",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}, {
+			"lOwIncomeGoldbean": 12154,
+			"sDate": "2019-11",
+			"sProfileIncomeLevel": "D",
+			"setLOwIncomeGoldbean": true,
+			"setSDate": true,
+			"setSProfileIncomeLevel": true,
+			"setTProfileUserInfo": true,
+			"tProfileUserInfo": {
+				"lUid": 1199525373575,
+				"lYY": 35184428677998,
+				"sNick": "吃个罐头叭",
+				"setLUid": true,
+				"setLYY": true,
+				"setSNick": true
+			}
+		}],
+		"vChannelGiftDetailListIterator": [{
+			"$ref": "$.vChannelGiftDetailList[0]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[1]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[2]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[3]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[4]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[5]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[6]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[7]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[8]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[9]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[10]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[11]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[12]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[13]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[14]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[15]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[16]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[17]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[18]"
+		}, {
+			"$ref": "$.vChannelGiftDetailList[19]"
+		}],
+		"vChannelGiftDetailListSize": 20
+	}
+}

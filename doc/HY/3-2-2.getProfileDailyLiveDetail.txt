@@ -1,0 +1,350 @@
+URL	https://chgate.huya.com/proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getProfileDailyLiveDetail&data_channelId=28493601&data_type=3&data_profileUid=1199525786977
+
+:method: GET
+:authority: chgate.huya.com
+:scheme: https
+:path: /proxy/lgapi?service=thrift_p_c_datastat&iface=datastat_getProfileDailyLiveDetail&data_channelId=28493601&data_type=3&data_profileUid=1199525786977
+accept: application/json, text/plain, */*
+origin: https://ow.huya.com
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+sec-fetch-site: same-site
+sec-fetch-mode: cors
+referer: https://ow.huya.com/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: _yasids=__rootsid%3DC8BB84CB713000013CB51030C9527460
+cookie: __yamid_tt1=0.627303745155178
+cookie: __yasmid=0.627303745155178
+cookie: udb_guiddata=b6a183f5912e41048483a6fb739a9097
+cookie: udb_passport=yujia_yanzhi
+cookie: udb_version=1.0
+cookie: udb_accdata=13709655081
+cookie: udb_uid=2211362008
+cookie: udb_origin=3
+cookie: Hm_lvt_51700b6c722f5bb4cf39906a596ea41f=1577588431
+cookie: __yamid_new=C8BB84BF86F000016F5EA5CC15B01227
+cookie: __yaoldyyuid=2211362008
+cookie: yyuid=2211362008
+cookie: udb_passdata=3
+cookie: username=yujia_yanzhi
+cookie: udb_other=%7B%22lt%22%3A%221577588479273%22%2C%22isRem%22%3A%221%22%7D
+cookie: udb_status=1
+cookie: Hm_lpvt_51700b6c722f5bb4cf39906a596ea41f=1577619859
+cookie: h_unt=1577619859
+cookie: udb_biztoken=AQBr3Pi2spw9Ob3zntYMf0SK4xIi6eDypmx5Bf6sIq_it7rq_s-XdoCAk0oF-wRfrXir23QkCE2dYDWBalCnw25oemd6HW0von5yPENR4kODqKbxVvxKBGcsxAEIurD1rD9F-s4b7qU0HImEu9MRVxEvbi3sDLS5pB_AY89Ol6jjSRviuxKpya9sV-EcdhNlATjTPAUsY34lY3da2ErQNa8wNZIJSF_ifFIm66cW6H0SqBFVoGbsEL6LLXs1KE55oeHQPg_6MQHt-rt2j8Q_gw8WljMjR8YkRuShx_aAsyrKMfdHxtGQLyBHhQeQrkpzqkVRwFHULR5eEC1md6ubljN0
+
+query string
+service	thrift_p_c_datastat
+iface	datastat_getProfileDailyLiveDetail
+data_channelId	28493601
+data_type	3           //1-最近7天 2-最近30天 3-本月 4-上月
+data_profileUid	1199525786977
+
+{
+	"code": 200,
+	"message": null,
+	"data": {
+		"dataList": [{
+			"date": "2019-12-01",       // 日期
+			"income": "43.20",          // 直播收入
+			"liveTime": 30947,          // 直播时长汇总（秒）
+			"gameList": [{
+				"gameId": 2165,         // 开播品类id
+				"gameName": "户外",      // 开播品类名称
+				"liveTime": 29599      // 直播时长（秒）
+			}, {
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 1348
+			}],
+			"peakPCU": "48266"          // 人气峰值
+		}, {
+			"date": "2019-12-02",
+			"income": "1.00",
+			"liveTime": 23387,
+			"gameList": [{
+				"gameId": 2165,
+				"gameName": "户外",
+				"liveTime": 23387
+			}],
+			"peakPCU": "45890"
+		}, {
+			"date": "2019-12-03",
+			"income": "11.70",
+			"liveTime": 15057,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 15057
+			}],
+			"peakPCU": "46317"
+		}, {
+			"date": "2019-12-04",
+			"income": "0.10",
+			"liveTime": 16253,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 16253
+			}],
+			"peakPCU": "47038"
+		}, {
+			"date": "2019-12-05",
+			"income": "26.00",
+			"liveTime": 17879,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 17879
+			}],
+			"peakPCU": "50587"
+		}, {
+			"date": "2019-12-06",
+			"income": "10.80",
+			"liveTime": 16452,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 16452
+			}],
+			"peakPCU": "48394"
+		}, {
+			"date": "2019-12-07",
+			"income": "1.10",
+			"liveTime": 19166,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 19166
+			}],
+			"peakPCU": "48011"
+		}, {
+			"date": "2019-12-08",
+			"income": "0.50",
+			"liveTime": 10887,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 10887
+			}],
+			"peakPCU": "49157"
+		}, {
+			"date": "2019-12-09",
+			"income": "100.00",
+			"liveTime": 19733,
+			"gameList": [{
+				"gameId": 2165,
+				"gameName": "户外",
+				"liveTime": 19733
+			}],
+			"peakPCU": "60545"
+		}, {
+			"date": "2019-12-10",
+			"income": "0.90",
+			"liveTime": 16378,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 16378
+			}],
+			"peakPCU": "48002"
+		}, {
+			"date": "2019-12-11",
+			"income": "7.40",
+			"liveTime": 15027,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 15027
+			}],
+			"peakPCU": "49808"
+		}, {
+			"date": "2019-12-12",
+			"income": "0",
+			"liveTime": 14580,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 14580
+			}],
+			"peakPCU": "46265"
+		}, {
+			"date": "2019-12-13",
+			"income": "0",
+			"liveTime": 0,
+			"gameList": [],
+			"peakPCU": "0"
+		}, {
+			"date": "2019-12-14",
+			"income": "27.50",
+			"liveTime": 14816,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 14816
+			}],
+			"peakPCU": "52918"
+		}, {
+			"date": "2019-12-15",
+			"income": "29.90",
+			"liveTime": 27150,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 27150
+			}],
+			"peakPCU": "53571"
+		}, {
+			"date": "2019-12-16",
+			"income": "15.70",
+			"liveTime": 17243,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 17243
+			}],
+			"peakPCU": "50914"
+		}, {
+			"date": "2019-12-17",
+			"income": "42.50",
+			"liveTime": 14441,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 14441
+			}],
+			"peakPCU": "58923"
+		}, {
+			"date": "2019-12-18",
+			"income": "56.40",
+			"liveTime": 15618,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 15618
+			}],
+			"peakPCU": "56814"
+		}, {
+			"date": "2019-12-19",
+			"income": "1.30",
+			"liveTime": 13104,
+			"gameList": [{
+				"gameId": 2165,
+				"gameName": "户外",
+				"liveTime": 13104
+			}],
+			"peakPCU": "45124"
+		}, {
+			"date": "2019-12-20",
+			"income": "52.80",
+			"liveTime": 18834,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 18834
+			}],
+			"peakPCU": "58401"
+		}, {
+			"date": "2019-12-21",
+			"income": "10.00",
+			"liveTime": 17810,
+			"gameList": [{
+				"gameId": 2165,
+				"gameName": "户外",
+				"liveTime": 11763
+			}, {
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 6047
+			}],
+			"peakPCU": "46309"
+		}, {
+			"date": "2019-12-22",
+			"income": "6.00",
+			"liveTime": 15622,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 15622
+			}],
+			"peakPCU": "46682"
+		}, {
+			"date": "2019-12-23",
+			"income": "71.30",
+			"liveTime": 15914,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 11636
+			}, {
+				"gameId": 2165,
+				"gameName": "户外",
+				"liveTime": 4278
+			}],
+			"peakPCU": "59130"
+		}, {
+			"date": "2019-12-24",
+			"income": "84.90",
+			"liveTime": 16925,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 16925
+			}],
+			"peakPCU": "56724"
+		}, {
+			"date": "2019-12-25",
+			"income": "11.40",
+			"liveTime": 14426,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 14426
+			}],
+			"peakPCU": "48766"
+		}, {
+			"date": "2019-12-26",
+			"income": "138.60",
+			"liveTime": 14427,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 14427
+			}],
+			"peakPCU": "73236"
+		}, {
+			"date": "2019-12-27",
+			"income": "162.70",
+			"liveTime": 12730,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 8403
+			}, {
+				"gameId": 2165,
+				"gameName": "户外",
+				"liveTime": 4327
+			}],
+			"peakPCU": "69367"
+		}, {
+			"date": "2019-12-28",
+			"income": "29.30",
+			"liveTime": 16584,
+			"gameList": [{
+				"gameId": 2168,
+				"gameName": "颜值",
+				"liveTime": 16584
+			}],
+			"peakPCU": "68573"
+		}],
+		"gameList": [{
+			"gameId": 2165,
+			"gameName": "户外",
+			"liveTime": 106191
+		}, {
+			"gameId": 2168,
+			"gameName": "颜值",
+			"liveTime": 355199
+		}]
+	}
+}
