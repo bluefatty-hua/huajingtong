@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_info;
 CREATE TABLE warehouse.ods_anchor_yy_info AS
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
-       backend_account_id as guild_id,
+       backend_account_id,
        uid AS anchor_uid,
        yynum AS anchor_no,
        nick AS anchor_nick_name,
@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_live;
 CREATE TABLE warehouse.ods_anchor_yy_live AS
 SELECT ai.platform_id,
 	   ai.platform_name,
-       ai.guild_id,
+       ai.backend_account_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -45,7 +45,7 @@ SELECT ai.platform_id,
        ad.dt,
        ad.timestamp
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_duration ad ON ai.guild_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum
+LEFT JOIN spider_yy_backend.anchor_duration ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum
 WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission;
 CREATE TABLE warehouse.ods_anchor_yy_commission AS
 SELECT ai.platform_id,
        ai.platform_name,
-       ai.guild_id,
+       ai.backend_account_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_virtual_coin;
 CREATE TABLE warehouse.ods_anchor_yy_virtual_coin AS
 SELECT ai.platform_id,
        ai.platform_name,
-       ai.guild_id,
+       ai.backend_account_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -93,7 +93,7 @@ SELECT ai.platform_id,
        ab.timestamp,
        ab.dt
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.guild_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no
+LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no
 WHERE ab.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
