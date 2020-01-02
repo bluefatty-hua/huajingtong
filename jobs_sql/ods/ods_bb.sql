@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
 CREATE TABLE warehouse.ods_anchor_bb_info AS
 SELECT 1001 AS platform_id,
        'B站' AS platform_name,
+       an.backend_account_id,
        ad.g_id AS guild_id,
        ad.g_name AS guild_name,
        ad.guild_type,
@@ -39,6 +40,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live;
 CREATE TABLE warehouse.ods_anchor_bb_live AS
 SELECT ai.platform_id,
        ai.platform_name,
+       ai.backend_account_id,
        ai.guild_id,
        ai.guild_name,
        ai.guild_type,
@@ -63,6 +65,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_bb_virtual_coin;
 CREATE TABLE warehouse.ods_anchor_bb_virtual_coin AS 
 SELECT ai.platform_id,
        ai.platform_name,
+       ai.backend_account_id,
        ai.guild_id,
        ai.guild_name,
        ai.guild_type,
