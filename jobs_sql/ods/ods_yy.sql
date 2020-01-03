@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_info;
 CREATE TABLE warehouse.ods_anchor_yy_info AS
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
-       backend_account_id as guild_id,
+       backend_account_id,
        uid AS anchor_uid,
        yynum AS anchor_no,
        nick AS anchor_nick_name,
@@ -17,20 +17,34 @@ SELECT 1000 AS platform_id,
        signtime AS contract_signtime,
        endtime AS contract_endtime,
        contype AS settle_method_code,
-       CASE WHEN contype = 1 THEN '对公分成' 
+       CASE WHEN contype = 1 THEN '对公分成'
             WHEN contype = 2 then '对私分成' END AS settle_method_text,
        anchorRate / 100 AS anchor_settle_rate,
-       logo AS logo
+       logo AS logo,
+       ga.dt
 FROM spider_yy_backend.guild_anchor ga
+WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- 主播直播
+DROP TABLE IF EXISTS stage.union_yy_anchor_duration;
+CREATE TABLE stage.union_yy_anchor_duration AS
+SELECT *
+FROM spider_yy_backend.anchor_duration
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+UNION
+SELECT *
+FROM spider_yy_backend.anchor_duration_history
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
 DROP TABLE IF EXISTS warehouse.ods_anchor_yy_live;
 CREATE TABLE warehouse.ods_anchor_yy_live AS
 SELECT ai.platform_id,
 	   ai.platform_name,
-       ai.guild_id,
+       ai.backend_account_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -42,11 +56,10 @@ SELECT ai.platform_id,
        warehouse.DURATION_CH(ad.pcduration) AS pcduration_sec,
        ad.mobduration,
        warehouse.DURATION_CH(ad.mobduration) AS mobduration_sec,
-       ad.dt,
+       ai.dt,
        ad.timestamp
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_duration ad ON ai.guild_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum
-WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
+LEFT JOIN stage.union_yy_anchor_duration ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum AND ai.dt = ad.dt
 ;
 
 
@@ -55,7 +68,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission;
 CREATE TABLE warehouse.ods_anchor_yy_commission AS
 SELECT ai.platform_id,
        ai.platform_name,
-       ai.guild_id,
+       ai.backend_account_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -68,11 +81,11 @@ SELECT ai.platform_id,
        ac.inType,
        ac.frmYY AS from_visitor_no,
        ac.frmNick AS from_visitor_name,
-       ac.dtime
+       ac.dtime,
+       DATE(ac.dtime) AS dt
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.anchor_uid = ac.uid AND ai.anchor_no = ac.yynum
+LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND ai.anchor_no = ac.yynum AND ai.dt = DATE(ac.dtime)
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-WHERE DATE(ac.dtime) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -81,7 +94,7 @@ DROP TABLE IF EXISTS warehouse.ods_anchor_yy_virtual_coin;
 CREATE TABLE warehouse.ods_anchor_yy_virtual_coin AS
 SELECT ai.platform_id,
        ai.platform_name,
-       ai.guild_id,
+       ai.backend_account_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -93,10 +106,5 @@ SELECT ai.platform_id,
        ab.timestamp,
        ab.dt
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.guild_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no
-WHERE ab.dt BETWEEN '{start_date}' AND '{end_date}'
+LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no AND ai.dt = ab.dt
 ;
-
-
-
-
