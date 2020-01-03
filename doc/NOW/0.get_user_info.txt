@@ -1,0 +1,73 @@
+URL	https://now.qq.com/cgi-bin/admin/sign/new/common/get_user_info?bkn=1811881511
+
+:method: GET
+:authority: now.qq.com
+:scheme: https
+:path: /cgi-bin/admin/sign/new/common/get_user_info?bkn=1811881511
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://now.qq.com/operation/
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: RK=98y13DUYMX
+cookie: original_key_type=37
+cookie: pgv_si=s7532991488
+cookie: ilive_tinyid=144115215223404524
+cookie: ilive_uin=1306918643
+cookie: ptcz=abb7ed17b09889f0c932ac1c3aa1c5306446d91ab4825cd3cd067e76a1526339
+cookie: openid=8EB5B169AF39C827F0811212AC5B8410
+cookie: ilive_a2=22c47918ca0d53b7742f68bc47d85f59b867042b6d163c3b139de41030b73b945ef7c248bcf868555ed496f694021e5d6ecfa719dead5dddd00f33efa662bf91b700c523a7fa9ede
+cookie: ptisp=os
+cookie: original_id_type=1
+cookie: pgv_pvi=4976760832
+cookie: _supWebp=1
+cookie: ilive_type=1
+cookie: original_id=8EB5B169AF39C827F0811212AC5B8410
+cookie: original_key=6452EE53228F860BB414BBFAEFA7BC0E
+
+bkn	1811881511
+
+{
+	"retcode": 0,
+	"errmsg": "",
+	"result": {
+		"state": 0,
+		"retcode": 0,
+		"guild_type": 7,
+		"is_register": 2,
+		"has_submit_right": 0,
+		"extern_contract_status": 2,
+		"extern_contract_id": 0,
+		"extern_anchor_im_id": "",
+		"platform_guild_type": 1,
+		"platform_is_register": 2,
+		"is_show_contract": 0,
+		"is_show_weishi_menu": 1,
+		"is_supplier": 1,
+		"super_admin": {
+			"has_set_account": 0,
+			"is_super_admin": 0
+		},
+		"anchor_status": {
+			"IsAnchor": 0,
+			"CanSignNow": 0,
+			"PgcUgcType": 0,
+			"InUnionPlatformType": 0
+		},
+		"platform_actor": {
+			"status": 0
+		},
+		"union": {
+			"login_type": 10,
+			"is_contract_feeprotocol": 1,
+			"union_level": 10,
+			"union_uin": 407082000
+		},
+		"huayang_extra_info": {
+			"should_force_sign_append_contract": false
+		},
+		"is_vertical_supplier_apply": 0
+	}
+}

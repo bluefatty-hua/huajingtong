@@ -1,0 +1,263 @@
+URL	https://now.qq.com/cgi-bin/admin/sign/new/getAnchorDetailList?sort=&search=&start=0&limit=7&isNew=false&isTalented=false&isHuayang=false&bkn=1811881511
+
+:method: GET
+:authority: now.qq.com
+:scheme: https
+:path: /cgi-bin/admin/sign/new/getAnchorDetailList?sort=&search=&start=0&limit=7&isNew=false&isTalented=false&isHuayang=false&bkn=1811881511
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://now.qq.com/operation/mgr/artistlist
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: RK=98y13DUYMX
+cookie: original_key_type=37
+cookie: pgv_si=s7532991488
+cookie: ilive_tinyid=144115215223404524
+cookie: ilive_uin=1306918643
+cookie: ptcz=abb7ed17b09889f0c932ac1c3aa1c5306446d91ab4825cd3cd067e76a1526339
+cookie: openid=8EB5B169AF39C827F0811212AC5B8410
+cookie: ilive_a2=22c47918ca0d53b7742f68bc47d85f59b867042b6d163c3b139de41030b73b945ef7c248bcf868555ed496f694021e5d6ecfa719dead5dddd00f33efa662bf91b700c523a7fa9ede
+cookie: ptisp=os
+cookie: original_id_type=1
+cookie: pgv_pvi=4976760832
+cookie: _supWebp=1
+cookie: ilive_type=1
+cookie: original_id=8EB5B169AF39C827F0811212AC5B8410
+cookie: original_key=6452EE53228F860BB414BBFAEFA7BC0E
+
+sort
+search
+start	0
+limit	7
+isNew	false
+isTalented	false
+isHuayang	false
+bkn	1811881511
+
+{
+	"retcode": 0,
+	"errmsg": "",
+	"result": {
+		"total": 1652,
+		"anchor_details": [{
+			"uin": 322025,  // 主播QQ
+			"avatar": "https://nowpic.gtimg.com/hy_personal/20d93826f59f7bc5b548c52acb21b19208fc8f4736a047f57199accb1ca71644/",
+			"nickname": "二姐姐有小酒窝丶",   // 昵称
+			"nowid": 127621473,
+			"talent": "",
+			"is_new": false,
+			"name": "王亚婷",      // 名称
+			"enter_time": 1518086542,   //入驻时间
+			"level": 22,        // 等级
+			"income_status_msg": "对公", // 结算状态
+			"current_month_live_effective_days": 0,  //本月有效开播天数
+			"current_month_journal": 0,   //本月流水
+			"current_month_live_time": 0,  //本月开播时长（小时）
+			"current_month_fans_num": 0,  //本月粉丝
+			"current_month_watch_time": 0,   //本月用户观看时长（小时）
+			"current_month_fans_group_num": 0,   //本月粉丝团数
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 0,
+			"total_journal": 30417.8,   // 历史累计流水
+			"fans_num": 2613,  // 粉丝数
+			"fans_group_num": 2, // 粉丝团数
+			"uid": 322025,
+			"now_v_status": 0,
+			"huayang_anchor": 0,
+			"month_msg_pv": 0,  // 本月弹幕数
+			"month_avg_watch_time": 0   // 本月人均观看时长（min）
+		}, {
+			"uin": 633486,
+			"avatar": "https://nowpic.gtimg.com/hy_personal/20d93826f59f7bc52d2dac3bef768b02c7c284392c43a8a6ea864854e20135d5/",
+			"nickname": "嘎嘎",
+			"nowid": 257761716,
+			"talent": "",
+			"is_new": false,
+			"name": "孙磊",
+			"enter_time": 1542436703,
+			"level": 14,
+			"income_status_msg": "对公",
+			"current_month_live_effective_days": 0,
+			"current_month_journal": 0,
+			"current_month_live_time": 0,
+			"current_month_fans_num": 0,
+			"current_month_watch_time": 0,
+			"current_month_fans_group_num": 0,
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 0,
+			"total_journal": 1304.8,
+			"fans_num": 73,
+			"fans_group_num": 0,
+			"uid": 633486,
+			"now_v_status": 0,
+			"huayang_anchor": 0,
+			"month_msg_pv": 0,
+			"month_avg_watch_time": 0
+		}, {
+			"uin": 3764407,
+			"avatar": "https://nowpic.gtimg.com/hy_personal/0729cdbb5fa63163e22b91ab47a870c814440b3e2d0e9a7d7b494efe94e29df7/",
+			"nickname": "♛ 雨辰",
+			"nowid": 273791331,
+			"talent": "",
+			"is_new": false,
+			"name": "王伟震",
+			"enter_time": 1542638187,
+			"level": 8,
+			"income_status_msg": "对公",
+			"current_month_live_effective_days": 0,
+			"current_month_journal": 0,
+			"current_month_live_time": 0,
+			"current_month_fans_num": 0,
+			"current_month_watch_time": 0,
+			"current_month_fans_group_num": 0,
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 0,
+			"total_journal": 52.3,
+			"fans_num": 9,
+			"fans_group_num": 0,
+			"uid": 3764407,
+			"now_v_status": 0,
+			"huayang_anchor": 0,
+			"month_msg_pv": 0,
+			"month_avg_watch_time": 0
+		}, {
+			"uin": 5919511,
+			"avatar": "https://nowpic.gtimg.com/hy_personal/0729cdbb5fa63163eae952c94882dca49efa97007c85aeda72d33fe200c7e493/",
+			"nickname": "永退",
+			"nowid": 117790223,
+			"talent": "新人",
+			"is_new": false,
+			"name": "苗婉莹",
+			"enter_time": 1535020785,
+			"level": 30,
+			"income_status_msg": "对公",
+			"current_month_live_effective_days": 0,
+			"current_month_journal": 0,
+			"current_month_live_time": 0,
+			"current_month_fans_num": 0,
+			"current_month_watch_time": 0,
+			"current_month_fans_group_num": 0,
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 0,
+			"total_journal": 1058.3,
+			"fans_num": 7580,
+			"fans_group_num": 1,
+			"uid": 5919511,
+			"now_v_status": 0,
+			"huayang_anchor": 0,
+			"month_msg_pv": 0,
+			"month_avg_watch_time": 0
+		}, {
+			"uin": 7014763,
+			"avatar": "https://nowpic.gtimg.com/hy_personal/0729cdbb5fa63163a2d72f1f7841e9e2c8f2d27f1155bdf88f4fcda65aa93f5d/",
+			"nickname": "東北兄弟",
+			"nowid": 11497156,
+			"talent": "游戏",
+			"is_new": false,
+			"name": "赵秋云",
+			"enter_time": 1543487724,
+			"level": 29,
+			"income_status_msg": "对公",
+			"current_month_live_effective_days": 0,
+			"current_month_journal": 0,
+			"current_month_live_time": 0,
+			"current_month_fans_num": 0,
+			"current_month_watch_time": 0,
+			"current_month_fans_group_num": 0,
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 0,
+			"total_journal": 145419.3,
+			"fans_num": 15159,
+			"fans_group_num": 111,
+			"uid": 7014763,
+			"now_v_status": 1,
+			"huayang_anchor": 0,
+			"month_msg_pv": 65973,
+			"month_avg_watch_time": 0.3
+		}, {
+			"uin": 7337368,
+			"avatar": "https://nowpic.gtimg.com/hy_personal/0729cdbb5fa63163a9070120e0da64892fa282de226f90f8e07c077bbe3ac707/",
+			"nickname": "差不多姑娘❤️紫瑞",
+			"nowid": 287303638,
+			"talent": "",
+			"is_new": false,
+			"name": "孙阳",
+			"enter_time": 1561119475,
+			"level": 16,
+			"income_status_msg": "对公",
+			"current_month_live_effective_days": 0,
+			"current_month_journal": 0,
+			"current_month_live_time": 0,
+			"current_month_fans_num": 0,
+			"current_month_watch_time": 0,
+			"current_month_fans_group_num": 4,
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 4,
+			"total_journal": 3535.4,
+			"fans_num": 54,
+			"fans_group_num": 4,
+			"uid": 7337368,
+			"now_v_status": 0,
+			"huayang_anchor": 0,
+			"month_msg_pv": 0,
+			"month_avg_watch_time": 0
+		}, {
+			"uin": 8361535,
+			"avatar": "https://nowpic.gtimg.com/hy_personal/0729cdbb5fa63163628deb2cf83107c22bffe1ba1de20464e2cba1e2c9622668/",
+			"nickname": "东哥",
+			"nowid": 198801594,
+			"talent": "",
+			"is_new": false,
+			"name": "邵魁耀",
+			"enter_time": 1544950863,
+			"level": 8,
+			"income_status_msg": "对公",
+			"current_month_live_effective_days": 0,
+			"current_month_journal": 0,
+			"current_month_live_time": 0,
+			"current_month_fans_num": 0,
+			"current_month_watch_time": 0,
+			"current_month_fans_group_num": 0,
+			"month_live_effective_days": 0,
+			"month_journa": 0,
+			"month_live_time": 0,
+			"month_fans_num": 0,
+			"month_watch_time": 0,
+			"month_fans_group_num": 0,
+			"total_journal": 33.4,
+			"fans_num": 359,
+			"fans_group_num": 0,
+			"uid": 8361535,
+			"now_v_status": 0,
+			"huayang_anchor": 0,
+			"month_msg_pv": 0,
+			"month_avg_watch_time": 0
+		}]
+	}
+}

@@ -1,0 +1,176 @@
+URL	https://now.qq.com/cgi-bin/admin/sign/new/punish/get_punish_record?ts_begin=1575303297&ts_end=1577895297&start=0&num=10&qq=&nowid=&state=3&bkn=1811881511
+
+:method: GET
+:authority: now.qq.com
+:scheme: https
+:path: /cgi-bin/admin/sign/new/punish/get_punish_record?ts_begin=1575303297&ts_end=1577895297&start=0&num=10&qq=&nowid=&state=3&bkn=1811881511
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://now.qq.com/operation/mgr/violation
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: RK=98y13DUYMX
+cookie: original_key_type=37
+cookie: pgv_si=s7532991488
+cookie: ilive_tinyid=144115215223404524
+cookie: ilive_uin=1306918643
+cookie: ptcz=abb7ed17b09889f0c932ac1c3aa1c5306446d91ab4825cd3cd067e76a1526339
+cookie: openid=8EB5B169AF39C827F0811212AC5B8410
+cookie: ilive_a2=22c47918ca0d53b7742f68bc47d85f59b867042b6d163c3b139de41030b73b945ef7c248bcf868555ed496f694021e5d6ecfa719dead5dddd00f33efa662bf91b700c523a7fa9ede
+cookie: ptisp=os
+cookie: original_id_type=1
+cookie: pgv_pvi=4976760832
+cookie: _supWebp=1
+cookie: ilive_type=1
+cookie: original_id=8EB5B169AF39C827F0811212AC5B8410
+cookie: original_key=6452EE53228F860BB414BBFAEFA7BC0E
+
+ts_begin	1575303297
+ts_end	1577895297
+start	0
+num	10
+qq
+nowid
+state	3
+bkn	1811881511
+
+{
+	"retcode": 0,
+	"errmsg": "",
+	"result": {
+		"record": [{
+			"content": "短视频 内容 低俗 舔肩膀（推荐主播）",   //内容
+			"end_time": 1575644299,     // 结束时间
+			"nickname": "米米",       // 昵称
+			"nowid": "624720514",
+			"regulation": "4012",   // 规定
+			"start_time": 1575556358,
+			"type": 3,       // 处罚类型
+			"room_id": 0,
+			"content_notify": "警告通知：NOW ID:624720514在直播过程中存在低俗或怪诞行为，如：抖胸、播放低俗歌曲、带有人身危险性的互动等，请重视并及时整改，否则将升级处罚力度",  //违规内容
+			"location": "直播过程中",    // 违规位置
+			"punish_time": "无",     // 处罚时长
+			"type_str": "警告"        // 处罚
+		}, {
+			"content": "内容  涉嫌影射HK事件的着装（黑口罩）（PGC推荐主播 VIP）",
+			"end_time": 1577331802,
+			"nickname": "二胡小茹",
+			"nowid": "82368158",
+			"regulation": "4007",
+			"start_time": 1577330479,
+			"type": 10,
+			"room_id": 0,
+			"content_notify": "NOW ID:82368158您在直播过程中 涉嫌影射HK事件的着装（黑口罩），请主播注意，请立即整改，20分钟后可再次开启直播",
+			"location": "直播过程中",
+			"punish_time": "20分钟",
+			"type_str": "20分钟禁播"
+		}, {
+			"content": "内容  低俗  不露脸扭胯（推荐）有语音",
+			"end_time": 1575520415,
+			"nickname": "小、素颜…",
+			"nowid": "707416846",
+			"regulation": "4012",
+			"start_time": 1575433924,
+			"type": 2,
+			"room_id": 0,
+			"content_notify": "NOW ID:707416846在直播过程中存在低俗或怪诞行为，如：抖胸、播放低俗歌曲、带有人身危险性的互动等，已被禁止直播至2019-12-05 12:33",
+			"location": "直播过程中",
+			"punish_time": "1天",
+			"type_str": "禁止直播"
+		}, {
+			"content": "内容 低俗 不露脸扭胯（推荐 ）有语音第二次",
+			"end_time": 1576385612,
+			"nickname": "小、素颜…",
+			"nowid": "707416846",
+			"regulation": "4012",
+			"start_time": 1576126341,
+			"type": 2,
+			"room_id": 0,
+			"content_notify": "NOW ID:707416846在直播过程中存在低俗或怪诞行为，如：抖胸、播放低俗歌曲、带有人身危险性的互动等，已被禁止直播至2019-12-15 12:53",
+			"location": "直播过程中",
+			"punish_time": "3天",
+			"type_str": "禁止直播"
+		}, {
+			"content": "内容 低俗 用鞋子喝水 vip 推荐 有语音",
+			"end_time": 1577291896,
+			"nickname": "陆露",
+			"nowid": "89218276",
+			"regulation": "4012",
+			"start_time": 1577205292,
+			"type": 3,
+			"room_id": 0,
+			"content_notify": "警告通知：NOW ID:89218276在直播过程中存在低俗或怪诞行为，如：抖胸、播放低俗歌曲、带有人身危险性的互动等，请重视并及时整改，否则将升级处罚力度",
+			"location": "直播过程中",
+			"punish_time": "无",
+			"type_str": "警告"
+		}, {
+			"content": "内容低俗骑马伴随呻吟推荐vip有语音",
+			"end_time": 1575392670,
+			"nickname": "  桃花 baby。",
+			"nowid": "540427500",
+			"regulation": "4012",
+			"start_time": 1575391269,
+			"type": 10,
+			"room_id": 0,
+			"content_notify": "NOW ID:540427500在直播过程中存在低俗或怪诞行为，如：抖胸、播放低俗歌曲、带有人身危险性的互动等，请立即整改，20分钟后可再次开启直播",
+			"location": "直播过程中",
+			"punish_time": "20分钟",
+			"type_str": "20分钟禁播"
+		}, {
+			"content": "内容 低俗 骑马娇喘 有语音 vip 推荐",
+			"end_time": 1576518874,
+			"nickname": "  桃花 baby。",
+			"nowid": "540427500",
+			"regulation": "4012",
+			"start_time": 1576517607,
+			"type": 10,
+			"room_id": 0,
+			"content_notify": "NOW ID:540427500在直播过程中存在低俗或怪诞行为，如：抖胸、播放低俗歌曲、带有人身危险性的互动等，请立即整改，20分钟后可再次开启直播",
+			"location": "直播过程中",
+			"punish_time": "20分钟",
+			"type_str": "20分钟禁播"
+		}, {
+			"content": "内容 服装暴露 过度露沟  推荐vip",
+			"end_time": 1577544674,
+			"nickname": "  桃花 baby。",
+			"nowid": "540427500",
+			"regulation": "4011",
+			"start_time": 1577458236,
+			"type": 3,
+			"room_id": 0,
+			"content_notify": "警告通知：NOW ID:540427500在直播过程中存在着装不当等不合规行为，如：透视装、过度露沟、过度暴露、赤膊等，请重视并及时整改，否则将升级处罚力度",
+			"location": "直播过程中",
+			"punish_time": "无",
+			"type_str": "警告"
+		}, {
+			"content": "内容 躺床上直播",
+			"end_time": 1575646824,
+			"nickname": "忘掉过去(^_^)重新开始",
+			"nowid": "16059407",
+			"regulation": "4018",
+			"start_time": 1575560354,
+			"type": 3,
+			"room_id": 0,
+			"content_notify": "警告通知：NOW ID:16059407在直播过程中存在黑屏、画面无人、灯光环境模糊、躺着直播或其他低质量内容，请重视并及时整改，否则将升级处罚力度",
+			"location": "直播过程中",
+			"punish_time": "无",
+			"type_str": "警告"
+		}, {
+			"content": "内容 抽烟直播",
+			"end_time": 1576159031,
+			"nickname": "忘掉过去(^_^)重新开始",
+			"nowid": "16059407",
+			"regulation": "4014",
+			"start_time": 1576072557,
+			"type": 3,
+			"room_id": 0,
+			"content_notify": "警告通知：NOW ID:16059407在直播过程中存在纹身、吸烟、喝酒或其他不符合规范的行为，请重视并及时整改，否则将升级处罚力度",
+			"location": "直播过程中",
+			"punish_time": "无",
+			"type_str": "警告"
+		}],
+		"total": 57
+	}
+}

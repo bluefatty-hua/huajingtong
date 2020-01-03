@@ -1,0 +1,142 @@
+URL	https://now.qq.com/cgi-bin/admin/sign/new/income/getAnchorIncome?nowid=&ts_begin=&ts_end=&start=0&num=7&type=1&bkn=1811881511
+
+:method: GET
+:authority: now.qq.com
+:scheme: https
+:path: /cgi-bin/admin/sign/new/income/getAnchorIncome?nowid=&ts_begin=&ts_end=&start=0&num=7&type=1&bkn=1811881511
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://now.qq.com/operation/mgr/artistincome
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: RK=98y13DUYMX
+cookie: original_key_type=37
+cookie: pgv_si=s7532991488
+cookie: ilive_tinyid=144115215223404524
+cookie: ilive_uin=1306918643
+cookie: ptcz=abb7ed17b09889f0c932ac1c3aa1c5306446d91ab4825cd3cd067e76a1526339
+cookie: openid=8EB5B169AF39C827F0811212AC5B8410
+cookie: ilive_a2=22c47918ca0d53b7742f68bc47d85f59b867042b6d163c3b139de41030b73b945ef7c248bcf868555ed496f694021e5d6ecfa719dead5dddd00f33efa662bf91b700c523a7fa9ede
+cookie: ptisp=os
+cookie: original_id_type=1
+cookie: pgv_pvi=4976760832
+cookie: _supWebp=1
+cookie: ilive_type=1
+cookie: original_id=8EB5B169AF39C827F0811212AC5B8410
+cookie: original_key=6452EE53228F860BB414BBFAEFA7BC0E
+
+nowid
+ts_begin
+ts_end
+start	0
+num	7
+type	1
+bkn	1811881511
+
+nowid
+ts_begin	20191201
+ts_end	20191231
+start	0
+num	7
+type	1
+bkn	1811881511
+
+收入说明
+1、收入每天统计一次，当天收入需要后一天才能查看，例如1号收入2号才能查看。
+2、系统看到的收入为每天分成后的税前收入，实际到手的收入请以到账金额为准。
+
+
+{
+	"retcode": 0,
+	"errmsg": "",
+	"result": {
+		"total": 139507,
+		"income_list": [{
+			"uin": 3404084325,      // 主播QQ
+			"nickname": "biubiu",       // 主播昵称
+			"income": 0,
+			"date": 20191231,
+			"nowid": 546168146,         // NOWID
+			"live_time": 2.118888888888889,     // 直播时长(/h)
+			"yesterday_fans": 3821,     //昨日粉丝量
+			"today_fans": 3822,         // 当日粉丝量
+			"room_id": 0,
+			"origin_money": 124.5,      // 当日流水(/元)
+			"watch_ts": 0
+		}, {
+			"uin": 3404295034,
+			"nickname": "润泽",
+			"income": 0,
+			"date": 20191231,
+			"nowid": 117586652,
+			"live_time": 0.9352777777777778,
+			"yesterday_fans": 99467,
+			"today_fans": 99465,
+			"room_id": 0,
+			"origin_money": 0.2,
+			"watch_ts": 0
+		}, {
+			"uin": 3530982284,
+			"nickname": "包包",
+			"income": 0,
+			"date": 20191231,
+			"nowid": 88329077,
+			"live_time": 3.1172222222222223,
+			"yesterday_fans": 94,
+			"today_fans": 100,
+			"room_id": 0,
+			"origin_money": 31,
+			"watch_ts": 0
+		}, {
+			"uin": 3258381798,
+			"nickname": "户外小樱桃",
+			"income": 0,
+			"date": 20191231,
+			"nowid": 36490648,
+			"live_time": 3.828611111111111,
+			"yesterday_fans": 1313096,
+			"today_fans": 1313073,
+			"room_id": 0,
+			"origin_money": 2081.7,
+			"watch_ts": 0
+		}, {
+			"uin": 3253790028,
+			"nickname": "杨晗允",
+			"income": 0,
+			"date": 20191231,
+			"nowid": 97401049,
+			"live_time": 0,
+			"yesterday_fans": 32,
+			"today_fans": 32,
+			"room_id": 0,
+			"origin_money": 1,
+			"watch_ts": 0
+		}, {
+			"uin": 3253595084,
+			"nickname": "小诺澜新主播只唱歌",
+			"income": 0,
+			"date": 20191231,
+			"nowid": 242195006,
+			"live_time": 3.093888888888889,
+			"yesterday_fans": 748,
+			"today_fans": 772,
+			"room_id": 0,
+			"origin_money": 1424.2,
+			"watch_ts": 0
+		}, {
+			"uin": 3251392445,
+			"nickname": "张靠谱",
+			"income": 0,
+			"date": 20191231,
+			"nowid": 198920053,
+			"live_time": 1.7780555555555555,
+			"yesterday_fans": 1786,
+			"today_fans": 1788,
+			"room_id": 0,
+			"origin_money": 3162.7,
+			"watch_ts": 0
+		}]
+	}
+}

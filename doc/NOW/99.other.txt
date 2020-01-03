@@ -1,0 +1,7 @@
+error
+
+{
+    retcode: 1,
+    errmsg: 参数错误,
+    result: null
+}

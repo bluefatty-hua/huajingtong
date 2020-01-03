@@ -1,0 +1,84 @@
+URL	https://now.qq.com/cgi-bin/admin/sign/new/income/get_union_total_income?ts_begin=&ts_end=&start=0&num=7&bkn=1811881511
+
+:method: GET
+:authority: now.qq.com
+:scheme: https
+:path: /cgi-bin/admin/sign/new/income/get_union_total_income?ts_begin=&ts_end=&start=0&num=7&bkn=1811881511
+user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+referer: https://now.qq.com/operation/mgr/clubincome
+accept-encoding: gzip, deflate, br
+accept-language: zh-CN,zh;q=0.9
+cookie: RK=98y13DUYMX
+cookie: original_key_type=37
+cookie: pgv_si=s7532991488
+cookie: ilive_tinyid=144115215223404524
+cookie: ilive_uin=1306918643
+cookie: ptcz=abb7ed17b09889f0c932ac1c3aa1c5306446d91ab4825cd3cd067e76a1526339
+cookie: openid=8EB5B169AF39C827F0811212AC5B8410
+cookie: ilive_a2=22c47918ca0d53b7742f68bc47d85f59b867042b6d163c3b139de41030b73b945ef7c248bcf868555ed496f694021e5d6ecfa719dead5dddd00f33efa662bf91b700c523a7fa9ede
+cookie: ptisp=os
+cookie: original_id_type=1
+cookie: pgv_pvi=4976760832
+cookie: _supWebp=1
+cookie: ilive_type=1
+cookie: original_id=8EB5B169AF39C827F0811212AC5B8410
+cookie: original_key=6452EE53228F860BB414BBFAEFA7BC0E
+
+ts_begin
+ts_end
+start	0
+num	7
+bkn	1811881511
+
+ts_begin
+ts_end
+start	7
+num	7
+bkn	1811881511
+
+ts_begin	20191201
+ts_end	20191231
+start	0
+num	7
+bkn	1811881511
+
+{
+	"retcode": 0,
+	"errmsg": "",
+	"result": {
+		"income_list": [{
+			"date": 20191231,
+			"income": 6850218.959999999,    //收入(/元)
+			"origin_money": 11417031.6      //公会流水(/元)
+		}, {
+			"date": 20191230,
+			"income": 161184.72,
+			"origin_money": 268641.2
+		}, {
+			"date": 20191229,
+			"income": 675777.0599999999,
+			"origin_money": 1126295.1
+		}, {
+			"date": 20191228,
+			"income": 217319.1,
+			"origin_money": 362198.5
+		}, {
+			"date": 20191227,
+			"income": 285129.18,
+			"origin_money": 475215.3
+		}, {
+			"date": 20191226,
+			"income": 411677.75999999995,
+			"origin_money": 686129.6
+		}, {
+			"date": 20191225,
+			"income": 797019.84,
+			"origin_money": 1328366.4
+		}],
+		"total": 1155,
+		"total_income": 439684359.65384614
+	}
+}
