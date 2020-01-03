@@ -1,39 +1,23 @@
 -- 主播信息
--- 从normal_detail中抽取主播最新信息补充到ods_anchor_bb_info
-DROP TABLE IF EXISTS stage.bb_anchor_detail_recent_day;
-CREATE TABLE stage.bb_anchor_detail_recent_day AS
-SELECT ad.g_id,
-       ad.uid,
-       MAX(ad.dt) AS recent_date
-FROM spider_bb_backend.anchor_detail ad
-GROUP BY ad.g_id,
-         ad.uid
-;
-
-
 DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
 CREATE TABLE warehouse.ods_anchor_bb_info AS
 SELECT 1001 AS platform_id,
        'B站' AS platform_name,
        an.backend_account_id,
-       ad.g_id AS guild_id,
-       ad.g_name AS guild_name,
-       ad.guild_type,
        an.id AS anchor_uid,
        an.uid AS anchor_no,
-       ad.uname AS anchor_nick_name,
+       an.uname AS anchor_nick_name,
        an.type AS anchor_status,
        an.type_text AS anchor_status_text,
-       ad.roomid AS live_room_id,
        an.status AS contract_status,
        an.status_text AS contract_status_text,
-       an.start_date AS contract_signtime,
-       an.end_date AS contract_endtime,
-       rec.recent_date
+	   DATE_FORMAT(an.start_date, '%Y-%m-%d %T') AS contract_signtime,
+       DATE_FORMAT(an.end_date, '%Y-%m-%d %T') AS contract_endtime,
+       an.dt
 FROM spider_bb_backend.normal_list an
-LEFT JOIN stage.bb_anchor_detail_recent_day rec ON an.uid = rec.uid
-LEFT JOIN spider_bb_backend.anchor_detail ad ON rec.g_id = ad.g_id AND rec.uid = ad.uid AND rec.recent_date = ad.dt
+WHERE an.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
+
 
 -- 主播直播
 DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live;
@@ -41,9 +25,9 @@ CREATE TABLE warehouse.ods_anchor_bb_live AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
-       ai.guild_id,
-       ai.guild_name,
-       ai.guild_type,
+       ad.g_id AS guild_id,
+       ad.g_name AS guild_name,
+       ad.guild_type AS guild_type,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -53,22 +37,21 @@ SELECT ai.platform_id,
        ad.valid_live_day AS valid_live_status,
        ad.live_hour,
        ad.valid_live_hour,
-       ad.dt,
+       ai.dt,
        ad.timestamp
 FROM warehouse.ods_anchor_bb_info ai
-LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
-WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
+LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_no = ad.uid AND ai.dt = ad.dt
 ;
 
 -- 主播收入
 DROP TABLE IF EXISTS warehouse.ods_anchor_bb_virtual_coin;
-CREATE TABLE warehouse.ods_anchor_bb_virtual_coin AS 
+CREATE TABLE warehouse.ods_anchor_bb_virtual_coin AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
-       ai.guild_id,
-       ai.guild_name,
-       ai.guild_type,
+       ad.g_id AS guild_id,
+       ad.g_name AS guild_name,
+       ad.guild_type AS guild_type,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -83,9 +66,8 @@ SELECT ai.platform_id,
        ad.DAU,
        ad.max_ppl,
        ad.fc,
-       ad.dt,
+       ai.dt,
        ad.timestamp
 FROM warehouse.ods_anchor_bb_info ai
-LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.guild_id = ad.g_id AND ai.anchor_no = ad.uid
-WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
+LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_no = ad.uid AND ai.dt = ad.dt
 ;
