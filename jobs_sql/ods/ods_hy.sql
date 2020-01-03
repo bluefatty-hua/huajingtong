@@ -52,6 +52,5 @@ SELECT ai.platform_id,
        pdl.timestamp
 FROM warehouse.ods_anchor_hy_info ai
 LEFT JOIN spider_huya_backend.profile_daily_live_detail pdl ON ai.channel_id = pdl.channel_id AND ai.anchor_uid = pdl.uid AND ai.dt = pdl.date
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
