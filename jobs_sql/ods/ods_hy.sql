@@ -18,7 +18,7 @@ SELECT 1002 AS platform_id,
        DATE_ADD(DATE_FORMAT(FROM_UNIXTIME(sign_time), '%Y-%m-%d %T'), INTERVAL months MONTH) AS contract_endtime,
        1 AS settle_method_code,
        '对私分成' AS settle_method_text,
-	   al.percent / 100 AS anchor_settle_rate,
+	   (100 - al.percent) / 100 AS anchor_settle_rate,
        al.avatar AS logo,
        al.dt,
        al.timestamp
