@@ -1,6 +1,8 @@
 -- 主播信息
-DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
-CREATE TABLE warehouse.ods_anchor_bb_info AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
+-- CREATE TABLE warehouse.ods_anchor_bb_info AS
+DELETE FROM warehouse.ods_anchor_bb_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_bb_info
 SELECT 1001 AS platform_id,
        'B站' AS platform_name,
        an.backend_account_id,
@@ -20,8 +22,10 @@ WHERE an.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 主播直播
-DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live;
-CREATE TABLE warehouse.ods_anchor_bb_live AS
+--  DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live;
+--  CREATE TABLE warehouse.ods_anchor_bb_live AS
+DELETE FROM warehouse.ods_anchor_bb_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_bb_live
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -46,8 +50,10 @@ LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.backend_account_id = ad.backe
 ;
 
 -- 主播收入
-DROP TABLE IF EXISTS warehouse.ods_anchor_bb_virtual_coin;
-CREATE TABLE warehouse.ods_anchor_bb_virtual_coin AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_bb_virtual_coin;
+-- CREATE TABLE warehouse.ods_anchor_bb_virtual_coin AS
+DELETE FROM warehouse.ods_anchor_bb_virtual_coin WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_bb_virtual_coin
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -76,8 +82,10 @@ LEFT JOIN spider_bb_backend.anchor_detail ad ON ai.backend_account_id = ad.backe
 
 
 -- Merge
-DROP TABLE IF EXISTS warehouse.ods_bb_anchor_live_detail_daily;
-CREATE TABLE warehouse.ods_bb_anchor_live_detail_daily AS
+-- DROP TABLE IF EXISTS warehouse.ods_bb_anchor_live_detail_daily;
+-- CREATE TABLE warehouse.ods_bb_anchor_live_detail_daily AS
+DELETE FROM warehouse.ods_bb_anchor_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_bb_anchor_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -87,7 +95,6 @@ SELECT ai.platform_id,
        ai.anchor_status,
        ai.anchor_status_text,
        al.guild_id,
-       al.guild_name,
        al.guild_name,
        al.live_status,
        al.valid_live_status,
