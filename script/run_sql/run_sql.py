@@ -52,7 +52,7 @@ def format_param_dict(param_lst):
 
 if __name__ == '__main__':
     # 部署项目路径
-    project_path = '/home/rockie/xjl_etl/'  # 项目跟目录
+    project_path = '/repo/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
     sql_file = project_path + sys.argv[1]
     param_dic = format_param_dict(sys.argv)
     print(param_dic)
