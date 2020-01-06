@@ -25,7 +25,7 @@ SELECT 1002 AS platform_id,
 FROM spider_huya_backend.anchor_list al
 LEFT JOIN spider_huya_backend.anchor_detail ad ON al.channel_id = ad.channel_id AND al.uid = ad.l_uid AND al.dt = ad.dt
 LEFT JOIN spider_huya_backend.channel_list cl ON al.channel_id = cl.channel_id AND al.dt = cl.dt
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+# WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -58,9 +58,33 @@ LEFT JOIN spider_huya_backend.anchor_live_detail_game_list_day alg ON ai.channel
 ;
 
 
+-- 每日主播直播内容可能不同，可能有多条数据，但直播时长与收入一直，故取一条
+DROP TABLE IF EXISTS stage.ods_anchor_hy_live_amt_dis;
+CREATE TABLE stage.ods_anchor_hy_live_amt_dis AS
+SELECT platform_id,
+       platform_name,
+       backend_account_id,
+       guild_id,
+       guild_name,
+       channel_id,
+       anchor_uid,
+       anchor_no,
+       anchor_nick_name,
+       duration,
+       live_status,
+       amt,
+       settle_method_code,
+       settle_method_text,
+       anchor_settle_rate,
+       peak_pcu,
+	   dt
+FROM warehouse.ods_anchor_hy_live_amt
+;
+
+
 -- Merge
-DROP TABLE IF EXISTS warehouse.ods_yy_anchor_live_detail_daily;
-CREATE TABLE warehouse.ods_yy_anchor_live_detail_daily AS
+DROP TABLE IF EXISTS warehouse.ods_hy_anchor_live_detail_daily;
+CREATE TABLE warehouse.ods_hy_anchor_live_detail_daily AS
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -70,8 +94,6 @@ SELECT ai.platform_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
-       al.live_game_id,
-       al.live_game_name,
        al.live_status,
        al.duration,
        al.amt,
@@ -90,7 +112,7 @@ SELECT ai.platform_id,
        ai.logo,
        ai.dt
 FROM warehouse.ods_anchor_hy_info ai
-LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+LEFT JOIN stage.ods_anchor_hy_live_amt_dis al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 ;
 
