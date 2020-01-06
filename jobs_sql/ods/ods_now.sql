@@ -9,6 +9,9 @@ SELECT 1003 AS platform_id,
        ad.nowid AS anchor_no,
        ad.nickname AS anchor_nick_name,
        ad.name AS anchor_name,
+       ad.level,
+       ad.fans_num,
+       ad.fans_group_num,
        DATE_FORMAT(FROM_UNIXTIME(ad.enter_time), '%Y-%m-%d %T') AS contract_sign_time,
        CASE WHEN ad.income_status_msg = '对公' THEN 1
             WHEN ad.income_status_msg = '对私' THEN 2
@@ -43,6 +46,34 @@ SELECT ani.platform_id,
        DATE_FORMAT(ai.date, '%Y-%m-%d') AS dt,
        ai.timestamp
 FROM warehouse.ods_anchor_now_info ani
-LEFT JOIN spider_now_backend.anchor_income ai ON ani.backend_account_id = ai.backend_account_id AND ani.anchor_no = ai.nowid AND ani.dt = DATE_FORMAT(ai.date, '%Y-%m-%d')
+LEFT JOIN spider_now_backend.anchor_income ai ON ani.backend_account_id = ai.backend_account_id AND ani.dt = DATE_FORMAT(ai.date, '%Y-%m-%d')
 ;
 
+
+DROP TABLE IF EXISTS warehouse.ods_now_anchor_live_detail_daily;
+CREATE TABLE warehouse.ods_now_anchor_live_detail_daily AS
+SELECT ai.platform_id,
+       ai.platform_name,
+       ai.backend_account_id,
+       ai.anchor_uid,
+       ai.anchor_qq_no,
+       ai.anchor_no,
+       ai.anchor_nick_name,
+       ai.anchor_name,
+       ai.fans_num,
+       ai.fans_group_num,
+       CASE WHEN al.duration > 0 THEN 1 ELSE 0 END AS live_status,
+       al.duration,
+       al.amt,
+       pf.vir_coin_name,
+       pf.vir_coin_rate,
+       pf.include_pf_amt,
+       pf.pf_amt_rate,
+       ai.contract_sign_time,
+       ai.settle_method_code,
+       ai.settle_method_text,
+       ai.dt
+FROM warehouse.ods_anchor_now_info ai
+LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
+;
