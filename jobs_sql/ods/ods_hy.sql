@@ -1,6 +1,8 @@
 -- 主播信息
-DROP TABLE IF EXISTS warehouse.ods_anchor_hy_info;
-CREATE TABLE warehouse.ods_anchor_hy_info AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_hy_info;
+-- CREATE TABLE warehouse.ods_anchor_hy_info AS
+DELETE FROM warehouse.ods_anchor_hy_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_hy_info
 SELECT 1002 AS platform_id,
        '虎牙' AS platform_name,
        cl.account_id AS backend_account_id,
@@ -10,7 +12,7 @@ SELECT 1002 AS platform_id,
        al.uid AS anchor_uid,
        al.yy_id AS anchor_no,
        al.nick AS anchor_nick_name,
-       al.isOfficialSign AS  contract_type,  -- 是否官签
+       al.isOfficialSign AS  contract_type,
        CASE WHEN al.isOfficialSign = 0 THEN '非官签'
             WHEN al.isOfficialSign = 1 THEN '官签'
 	   ELSE '' END AS contract_type_text,
@@ -25,13 +27,15 @@ SELECT 1002 AS platform_id,
 FROM spider_huya_backend.anchor_list al
 LEFT JOIN spider_huya_backend.anchor_detail ad ON al.channel_id = ad.channel_id AND al.uid = ad.l_uid AND al.dt = ad.dt
 LEFT JOIN spider_huya_backend.channel_list cl ON al.channel_id = cl.channel_id AND al.dt = cl.dt
-# WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- 主播直播和直播收入
-DROP TABLE IF EXISTS warehouse.ods_anchor_hy_live_amt;
-CREATE TABLE warehouse.ods_anchor_hy_live_amt AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_hy_live_amt;
+-- CREATE TABLE warehouse.ods_anchor_hy_live_amt AS
+DELETE FROM warehouse.ods_anchor_hy_live_amt WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_hy_live_amt
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -41,8 +45,6 @@ SELECT ai.platform_id,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
-       alg.game_id AS live_game_id,
-       alg.game_name AS live_game_name,
        al.live_time AS duration,
        CASE WHEN al.live_time > 0 THEN 1 ELSE 0 END AS live_status,
        al.income AS amt,
@@ -54,37 +56,14 @@ SELECT ai.platform_id,
        al.timestamp
 FROM warehouse.ods_anchor_hy_info ai
 LEFT JOIN spider_huya_backend.anchor_live_detail_day al ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.uid AND ai.dt = al.date
-LEFT JOIN spider_huya_backend.anchor_live_detail_game_list_day alg ON ai.channel_id = al.channel_id AND ai.anchor_uid = alg.uid AND ai.dt = alg.date
-;
-
-
--- 每日主播直播内容可能不同，可能有多条数据，但直播时长与收入一直，故取一条
-DROP TABLE IF EXISTS stage.ods_anchor_hy_live_amt_dis;
-CREATE TABLE stage.ods_anchor_hy_live_amt_dis AS
-SELECT platform_id,
-       platform_name,
-       backend_account_id,
-       guild_id,
-       guild_name,
-       channel_id,
-       anchor_uid,
-       anchor_no,
-       anchor_nick_name,
-       duration,
-       live_status,
-       amt,
-       settle_method_code,
-       settle_method_text,
-       anchor_settle_rate,
-       peak_pcu,
-	   dt
-FROM warehouse.ods_anchor_hy_live_amt
 ;
 
 
 -- Merge
-DROP TABLE IF EXISTS warehouse.ods_hy_anchor_live_detail_daily;
-CREATE TABLE warehouse.ods_hy_anchor_live_detail_daily AS
+-- DROP TABLE IF EXISTS warehouse.ods_hy_anchor_live_detail_daily;
+-- CREATE TABLE warehouse.ods_hy_anchor_live_detail_daily AS
+DELETE FROM warehouse.ods_hy_anchor_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_hy_anchor_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -112,7 +91,6 @@ SELECT ai.platform_id,
        ai.logo,
        ai.dt
 FROM warehouse.ods_anchor_hy_info ai
-LEFT JOIN stage.ods_anchor_hy_live_amt_dis al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 ;
-
