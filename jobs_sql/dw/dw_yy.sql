@@ -3,8 +3,8 @@
 -- 汇总数据
 -- 汇总维度 月-主播
 -- 汇总指标 开播天数，开播时长，虚拟币收入，主播佣金，公会佣金
-DROP TABLE IF EXISTS warehouse.dw_sum_yy_mon_pf_an;
-CREATE TABLE warehouse.dw_sum_yy_mon_pf_an AS
+DROP TABLE IF EXISTS warehouse.dw_sum_yy_pf_an_mon;
+CREATE TABLE warehouse.dw_sum_yy_pf_an_mon AS
 SELECT YEAR(t.dt)                                                 AS rpt_year,
        MONTH(t.dt)                                                AS rpt_month,
        t.platform_id,
