@@ -50,6 +50,7 @@ DELETE FROM stage.union_yy_anchor_duration_max_time WHERE dt BETWEEN '{start_dat
 INSERT INTO stage.union_yy_anchor_duration_max_time
 SELECT dt, yynum, MAX(timestamp) AS max_timestamp
 FROM stage.union_yy_anchor_duration
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 group by dt, yynum
 ;
 
@@ -61,6 +62,7 @@ INSERT INTO stage.yy_anchor_duration_distinct
 SELECT uad.*
 FROM stage.union_yy_anchor_duration_max_time mt
 LEFT JOIN stage.union_yy_anchor_duration uad ON mt.dt = uad.dt AND mt.yynum = uad.yynum AND mt.max_timestamp = uad.timestamp
+WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -86,6 +88,7 @@ SELECT ai.platform_id,
        ad.timestamp
 FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN stage.yy_anchor_duration_distinct ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum AND ai.dt = ad.dt
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -114,6 +117,7 @@ SELECT ai.platform_id,
 FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND ai.anchor_no = ac.yynum AND ai.dt = DATE(ac.dtime)
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -130,6 +134,7 @@ SELECT ac.platform_id,
        SUM(ac.anchor_commission) AS anchor_commission,
        SUM(ac.guild_commission) AS guild_commission
 FROM warehouse.ods_anchor_yy_commission ac
+WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY ac.platform_id,
          ac.backend_account_id,
          ac.anchor_uid,
@@ -158,6 +163,7 @@ SELECT ai.platform_id,
        ab.dt
 FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no AND ai.dt = ab.dt
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -200,5 +206,6 @@ LEFT JOIN warehouse.ods_anchor_yy_live al ON ai.backend_account_id = al.backend_
 LEFT JOIN warehouse.ods_anchor_yy_virtual_coin av ON ai.backend_account_id = av.backend_account_id AND ai.anchor_no = av.anchor_no AND ai.dt = av.dt
 LEFT JOIN warehouse.ods_anchor_yy_commission_daily ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_no = ac.anchor_no AND ai.dt = ac.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
