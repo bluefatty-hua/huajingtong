@@ -58,4 +58,5 @@ if __name__ == '__main__':
     print(param_dic)
     run_sql(param_dic, sql_file)
     cursor.close()
+    conn.commit()
     conn.close()
