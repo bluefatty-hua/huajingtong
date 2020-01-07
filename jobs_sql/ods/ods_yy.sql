@@ -48,10 +48,10 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE stage.union_yy_anchor_duration_max_time AS
 DELETE FROM stage.union_yy_anchor_duration_max_time WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO stage.union_yy_anchor_duration_max_time
-SELECT dt, yynum, MAX(timestamp) AS max_timestamp
+SELECT dt, uid, MAX(timestamp) AS max_timestamp
 FROM stage.union_yy_anchor_duration
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-group by dt, yynum
+group by dt, uid
 ;
 
 
@@ -61,7 +61,7 @@ DELETE FROM stage.yy_anchor_duration_distinct WHERE dt BETWEEN '{start_date}' AN
 INSERT INTO stage.yy_anchor_duration_distinct
 SELECT uad.*
 FROM stage.union_yy_anchor_duration_max_time mt
-LEFT JOIN stage.union_yy_anchor_duration uad ON mt.dt = uad.dt AND mt.yynum = uad.yynum AND mt.max_timestamp = uad.timestamp
+LEFT JOIN stage.union_yy_anchor_duration uad ON mt.dt = uad.dt AND mt.uid = uad.uid AND mt.max_timestamp = uad.timestamp
 WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
@@ -87,7 +87,7 @@ SELECT ai.platform_id,
        ai.dt,
        ad.timestamp
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN stage.yy_anchor_duration_distinct ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.anchor_no = ad.yynum AND ai.dt = ad.dt
+LEFT JOIN stage.yy_anchor_duration_distinct ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.dt = ad.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
@@ -115,7 +115,7 @@ SELECT ai.platform_id,
        ac.dtime,
        DATE(ac.dtime) AS dt
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND ai.anchor_no = ac.yynum AND ai.dt = DATE(ac.dtime)
+LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND ai.dt = DATE(ac.dtime)
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
@@ -162,7 +162,7 @@ SELECT ai.platform_id,
        ab.timestamp,
        ab.dt
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ab.yynum = ai.anchor_no AND ai.dt = ab.dt
+LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ai.dt = ab.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
@@ -202,9 +202,9 @@ SELECT ai.platform_id,
        ai.logo,
        ai.dt
 FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN warehouse.ods_anchor_yy_live al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_no = al.anchor_no AND ai.dt = al.dt
-LEFT JOIN warehouse.ods_anchor_yy_virtual_coin av ON ai.backend_account_id = av.backend_account_id AND ai.anchor_no = av.anchor_no AND ai.dt = av.dt
-LEFT JOIN warehouse.ods_anchor_yy_commission_daily ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_no = ac.anchor_no AND ai.dt = ac.dt
+LEFT JOIN warehouse.ods_anchor_yy_live al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+LEFT JOIN warehouse.ods_anchor_yy_virtual_coin av ON ai.backend_account_id = av.backend_account_id AND ai.anchor_uid = av.anchor_uid AND ai.dt = av.dt
+LEFT JOIN warehouse.ods_anchor_yy_commission_daily ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.anchor_uid AND ai.dt = ac.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
