@@ -50,7 +50,7 @@ SELECT ani.platform_id,
        DATE_FORMAT(ai.date, '%Y-%m-%d') AS dt,
        ai.timestamp
 FROM warehouse.ods_anchor_now_info ani
-LEFT JOIN spider_now_backend.anchor_income ai ON ani.dt = DATE_FORMAT(ai.date, '%Y-%m-%d') AND ani.backend_account_id = ai.backend_account_id AND ani.anchor_no = ai.nowid
+LEFT JOIN spider_now_backend.anchor_income ai ON ani.dt = DATE_FORMAT(ai.date, '%Y-%m-%d') AND ani.backend_account_id = ai.backend_account_id AND ani.anchor_qq_no = ai.uin
 WHERE ani.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
