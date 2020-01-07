@@ -1,33 +1,24 @@
 -- 主播信息
 -- DROP TABLE IF EXISTS warehouse.ods_anchor_hy_info;
--- CREATE TABLE warehouse.ods_anchor_hy_info AS
+-- REATE TABLE warehouse.ods_anchor_hy_info AS
 DELETE FROM warehouse.ods_anchor_hy_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_anchor_hy_info
 SELECT 1002 AS platform_id,
        '虎牙' AS platform_name,
-       cl.account_id AS backend_account_id,
-       cl.channel_number AS guild_id,
-       cl.name AS guild_name,
        ad.channel_id,
-       al.uid AS anchor_uid,
-       al.yy_id AS anchor_no,
-       al.nick AS anchor_nick_name,
-       al.isOfficialSign AS  contract_type,
-       CASE WHEN al.isOfficialSign = 0 THEN '非官签'
-            WHEN al.isOfficialSign = 1 THEN '官签'
-	   ELSE '' END AS contract_type_text,
-       DATE_FORMAT(FROM_UNIXTIME(al.sign_time), '%Y-%m-%d %T') AS contract_signtime,
-       DATE_ADD(DATE_FORMAT(FROM_UNIXTIME(sign_time), '%Y-%m-%d %T'), INTERVAL months MONTH) AS contract_endtime,
+       ad.l_uid AS anchor_uid,
+       ad.l_yy AS anchor_no,
+       ad.s_nick AS anchor_nick_name,
+       DATE_FORMAT(FROM_UNIXTIME(ad.i_sign_time), '%Y-%m-%d %T') AS contract_signtime,
+       DATE_ADD(DATE_FORMAT(FROM_UNIXTIME(ad.i_sign_time), '%Y-%m-%d %T'), INTERVAL ad.i_months MONTH) AS contract_endtime,
        1 AS settle_method_code,
        '对私分成' AS settle_method_text,
-	   (100 - al.percent) / 100 AS anchor_settle_rate,
-       al.avatar AS logo,
-       al.dt,
-       al.timestamp
-FROM spider_huya_backend.anchor_list al
-LEFT JOIN spider_huya_backend.anchor_detail ad ON al.channel_id = ad.channel_id AND al.uid = ad.l_uid AND al.dt = ad.dt
-LEFT JOIN spider_huya_backend.channel_list cl ON al.channel_id = cl.channel_id AND al.dt = cl.dt
-WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+	   (100 - ad.i_ow_percent) / 100 AS anchor_settle_rate,
+       ad.s_avatar AS logo,
+       ad.dt,
+       ad.timestamp
+FROM spider_huya_backend.anchor_detail ad
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -38,9 +29,6 @@ DELETE FROM warehouse.ods_anchor_hy_live_amt WHERE dt BETWEEN '{start_date}' AND
 INSERT INTO warehouse.ods_anchor_hy_live_amt
 SELECT ai.platform_id,
        ai.platform_name,
-       ai.backend_account_id,
-       ai.guild_id,
-       ai.guild_name,
        ai.channel_id,
        ai.anchor_uid,
        ai.anchor_no,
@@ -66,9 +54,6 @@ DELETE FROM warehouse.ods_hy_anchor_live_detail_daily WHERE dt BETWEEN '{start_d
 INSERT INTO warehouse.ods_hy_anchor_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
-       ai.backend_account_id,
-       ai.guild_id,
-       ai.guild_name,
        ai.channel_id,
        ai.anchor_uid,
        ai.anchor_no,
@@ -84,13 +69,11 @@ SELECT ai.platform_id,
        pf.vir_coin_rate,
        pf.include_pf_amt,
        pf.pf_amt_rate,
-       ai.contract_type,
-       ai.contract_type_text,
        ai.contract_signtime,
        ai.contract_endtime,
        ai.logo,
        ai.dt
 FROM warehouse.ods_anchor_hy_info ai
-LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 ;
