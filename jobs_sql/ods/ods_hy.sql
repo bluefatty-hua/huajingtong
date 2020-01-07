@@ -32,8 +32,8 @@ WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 主播直播和直播收入
-# DROP TABLE IF EXISTS warehouse.ods_anchor_hy_live_amt;
-# CREATE TABLE warehouse.ods_anchor_hy_live_amt AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_hy_live_amt;
+-- CREATE TABLE warehouse.ods_anchor_hy_live_amt AS
 DELETE FROM warehouse.ods_anchor_hy_live_amt WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_anchor_hy_live_amt
 SELECT ai.platform_id,
@@ -60,8 +60,8 @@ LEFT JOIN spider_huya_backend.anchor_live_detail_day al ON ai.channel_id = al.ch
 
 
 -- Merge
-# DROP TABLE IF EXISTS warehouse.ods_hy_anchor_live_detail_daily;
-# CREATE TABLE warehouse.ods_hy_anchor_live_detail_daily AS
+-- DROP TABLE IF EXISTS warehouse.ods_hy_anchor_live_detail_daily;
+-- CREATE TABLE warehouse.ods_hy_anchor_live_detail_daily AS
 DELETE FROM warehouse.ods_hy_anchor_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_hy_anchor_live_detail_daily
 SELECT ai.platform_id,
