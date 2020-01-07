@@ -24,6 +24,7 @@ def run_sql(sql_param, file):
                 sql = (sql + ';').replace('/n', '').format(**sql_param)
                 print(sql)
                 cursor.execute(sql)
+                conn.commit()
 
 
 def format_param_dict(param_lst):
