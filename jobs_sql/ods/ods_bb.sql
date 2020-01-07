@@ -1,6 +1,6 @@
 -- 主播信息
-# DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
-# CREATE TABLE warehouse.ods_anchor_bb_info AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
+-- CREATE TABLE warehouse.ods_anchor_bb_info AS
 DELETE FROM warehouse.ods_anchor_bb_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_anchor_bb_info
 SELECT 1001 AS platform_id,
@@ -22,8 +22,8 @@ WHERE an.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 主播直播和主播收入
-# DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live_amt;
-# CREATE TABLE warehouse.ods_anchor_bb_live_amt AS
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_bb_live_amt;
+-- CREATE TABLE warehouse.ods_anchor_bb_live_amt AS
 DELETE FROM warehouse.ods_anchor_bb_live_amt WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_anchor_bb_live_amt
 SELECT ai.platform_id,
@@ -61,8 +61,8 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- Merge
-# DROP TABLE IF EXISTS warehouse.ods_bb_anchor_live_detail_daily;
-# CREATE TABLE warehouse.ods_bb_anchor_live_detail_daily AS
+-- DROP TABLE IF EXISTS warehouse.ods_bb_anchor_live_detail_daily;
+-- CREATE TABLE warehouse.ods_bb_anchor_live_detail_daily AS
 DELETE FROM warehouse.ods_bb_anchor_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_bb_anchor_live_detail_daily
 SELECT ai.platform_id,
