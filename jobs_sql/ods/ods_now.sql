@@ -51,6 +51,7 @@ SELECT ani.platform_id,
        ai.timestamp
 FROM warehouse.ods_anchor_now_info ani
 LEFT JOIN spider_now_backend.anchor_income ai ON ani.dt = DATE_FORMAT(ai.date, '%Y-%m-%d') AND ani.backend_account_id = ai.backend_account_id AND ani.anchor_no = ai.nowid
+WHERE ani.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -83,5 +84,6 @@ SELECT ai.platform_id,
 FROM warehouse.ods_anchor_now_info ai
 LEFT JOIN warehouse.ods_anchor_now_live_amt al ON ai.backend_account_id = al.backend_account_id AND ai.dt = al.dt AND ai.anchor_no = al.anchor_no
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 

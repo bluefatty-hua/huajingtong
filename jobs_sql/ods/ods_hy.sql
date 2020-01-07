@@ -44,6 +44,7 @@ SELECT ai.platform_id,
        al.timestamp
 FROM warehouse.ods_anchor_hy_info ai
 LEFT JOIN spider_huya_backend.anchor_live_detail_day al ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.uid AND ai.dt = al.date
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -76,4 +77,5 @@ SELECT ai.platform_id,
 FROM warehouse.ods_anchor_hy_info ai
 LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
