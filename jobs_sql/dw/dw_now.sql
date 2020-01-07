@@ -45,23 +45,3 @@ GROUP BY YEAR(t.dt),
 ;
 
 
--- 汇总数据
--- 汇总维度 月
--- 汇总指标 主播数，开播主播数，主播收入
-DROP TABLE IF EXISTS warehouse.dw_sum_now_mon;
-CREATE TABLE warehouse.dw_sum_now_mon AS
-SELECT YEAR(t.dt)                                                                 AS rpt_year,
-       MONTH(t.dt)                                                                AS rpt_month,
-       t.platform_id,
-       t.platform_name,
-       COUNT(DISTINCT t.anchor_no)                                                AS an_cnt,
-       COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS an_live_cnt,
-       ROUND(SUM(t.amt), 2)                                                       AS sum_amt
-FROM warehouse.ods_now_anchor_live_detail_daily t
-WHERE t.dt < CURRENT_DATE
-GROUP BY YEAR(t.dt),
-         MONTH(t.dt),
-         t.platform_id,
-         t.platform_name
-;
-
