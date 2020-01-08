@@ -83,8 +83,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- ===================================================================
 -- 公会收入
-DROP TABLE IF EXISTS warehouse.ods_guild_hy_amt_daily;
-CREATE TABLE warehouse.ods_guild_hy_amt_daily AS
+-- DROP TABLE IF EXISTS warehouse.ods_guild_hy_amt_daily;
+-- CREATE TABLE warehouse.ods_guild_hy_amt_daily AS
+DELETE FROM warehouse.ods_guild_hy_amt_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_guild_hy_amt_daily
 SELECT  1002 AS platform_id,
        '虎牙' AS platform_name,
        cd.channel_id,
@@ -108,4 +110,5 @@ LEFT JOIN spider_huya_backend.channel_revenue_day cr ON cd.dt = cr.dt AND cd.cha
 LEFT JOIN spider_huya_backend.channel_income_gift_day cgi ON cd.dt = cgi.dt AND cd.channel_id = cgi.channel_id
 LEFT JOIN spider_huya_backend.channel_income_guard_day cgu ON cd.dt = cgu.income_date AND cd.channel_id = cgu.channel_id
 LEFT JOIN spider_huya_backend.channel_income_noble_day cn ON cd.dt = cn.dt AND cd.channel_id = cn.channel_id
+WHERE cd.dt BETWEEN '{start_date}' AND '{end_date}'
 ;

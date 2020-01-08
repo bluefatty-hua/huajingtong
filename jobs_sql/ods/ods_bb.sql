@@ -108,8 +108,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- ================================================================================
 -- 公会月收入
-DROP TABLE IF EXISTS warehouse.ods_guild_bb_amt_mon;
-CREATE TABLE warehouse.ods_guild_bb_amt_mon AS
+-- DROP TABLE IF EXISTS warehouse.ods_guild_bb_amt_mon;
+-- CREATE TABLE warehouse.ods_guild_bb_amt_mon AS
+DELETE FROM warehouse.ods_guild_bb_amt_mon WHERE month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+INSERT INTO warehouse.ods_guild_bb_amt_mon
 SELECT gs.backend_account_id,
        gs.month,
        LEFT(gs.month, 4) AS rpt_year,
@@ -130,5 +132,6 @@ SELECT gs.backend_account_id,
        gs.timestamp
 FROM spider_bb_backend.guild_salary gs
 LEFT JOIN spider_bb_backend.guild_salary_detail gd ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
+WHERE gs.month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
 

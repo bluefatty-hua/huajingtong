@@ -219,8 +219,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- =====================================================================
 -- 公会收支明细
 -- 公会蓝钻
-DROP TABLE IF EXISTS warehouse.ods_guild_yy_virtual_coin_an_mon;
-CREATE TABLE warehouse.ods_guild_yy_virtual_coin_an_mon AS
+-- DROP TABLE IF EXISTS warehouse.ods_guild_yy_virtual_coin_an_mon;
+-- CREATE TABLE warehouse.ods_guild_yy_virtual_coin_an_mon AS
+DELETE FROM warehouse.ods_guild_yy_virtual_coin_an_mon WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_guild_yy_virtual_coin_an_mon
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        cl.backend_account_id,
@@ -234,14 +236,19 @@ SELECT 1000 AS platform_id,
        gb.totalDiamond AS an_total_vir_coin,
        gb.money AS g_settle_vir_coin,
        gb.year AS rpt_year,
-       gb.month AS rpt_month
+       gb.month AS rpt_month,
+       DATE(gb.payTime) AS dt
 FROM spider_yy_backend.channel_list cl
 LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
+WHERE DATE(gb.payTime) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+
 -- 公会佣金收入
-DROP TABLE IF EXISTS warehouse.ods_guild_yy_commission_an_mon;
-CREATE TABLE warehouse.ods_guild_yy_commission_an_mon AS
+-- DROP TABLE IF EXISTS warehouse.ods_guild_yy_commission_an_mon;
+-- CREATE TABLE warehouse.ods_guild_yy_commission_an_mon AS
+DELETE FROM warehouse.ods_guild_yy_commission_an_mon WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_guild_yy_commission_an_mon
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        cl.backend_account_id,
@@ -254,4 +261,6 @@ SELECT 1000 AS platform_id,
        DATE(gc.time) AS dt
 FROM spider_yy_backend.channel_list cl
 LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
+WHERE DATE(gc.time) BETWEEN '{start_date}' AND '{end_date}'
+;
 
