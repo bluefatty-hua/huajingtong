@@ -164,7 +164,7 @@ SELECT ai.platform_id,
        ai.anchor_settle_rate,
        ab.diamond AS virtual_coin,
        ab.timestamp,
-       ab.dt
+       ai.dt
 FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ai.dt = ab.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
