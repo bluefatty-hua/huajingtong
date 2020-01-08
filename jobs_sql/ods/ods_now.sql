@@ -87,3 +87,19 @@ LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+
+-- ===================================================================
+-- 公会收入
+DROP TABLE IF EXISTS warehouse.ods_guild_hy_amt_daily;
+CREATE TABLE warehouse.ods_guild_hy_amt_daily AS
+SELECT 1003 AS platform_id,
+       'NOW' AS platform_name,
+       ui.backend_account_id,
+       ui.on_live AS onlive_an_cnt,
+       ut.income AS g_sum_amt,
+       ut.origin_money AS g_final_amt,
+       DATE_FORMAT(ui.day, '%Y-%m-%d') AS dt
+FROM spider_now_backend.union_stat_info_by_day ui
+LEFT JOIN spider_now_backend.union_total_income ut ON ui.backend_account_id = ut.backend_account_id AND ui.day = ut.date
+;
+

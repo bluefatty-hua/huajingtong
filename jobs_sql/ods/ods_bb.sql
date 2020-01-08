@@ -105,3 +105,30 @@ LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+
+-- ================================================================================
+-- 公会月收入
+DROP TABLE IF EXISTS warehouse.ods_guild_bb_amt_mon;
+CREATE TABLE warehouse.ods_guild_bb_amt_mon AS
+SELECT gs.backend_account_id,
+       gs.month,
+       LEFT(gs.month, 4) AS rpt_year,
+       RIGHT(gs.month , 2) AS rpt_month,
+       gs.status,
+       gs.status_text,
+       gs.total AS total_amt,
+       ROUND(gd.income + gd.base + gd.award + gd.send_money + gd.special_income +  gd.admin_change + gd.anchor_admin_change, 2) AS total_vir_coin,
+       gd.type,
+       gd.income AS an_income_vir_coin,
+       gd.base AS an_base_vir_coin,
+       gd.award AS g_award_vir_coin,
+       gd.send_money AS operate_award_punish,
+       gd.special_income AS special_income_vir_coin,
+       gd.admin_change AS g_ch_vir_coin,
+       gd.anchor_admin_change AS an_ch_vir_coin,
+       gd.admin_note AS comment,
+       gs.timestamp
+FROM spider_bb_backend.guild_salary gs
+LEFT JOIN spider_bb_backend.guild_salary_detail gd ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
+;
+

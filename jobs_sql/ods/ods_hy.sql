@@ -79,3 +79,33 @@ LEFT JOIN warehouse.ods_anchor_hy_live_amt al ON ai.channel_id = al.channel_id A
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
+
+
+-- ===================================================================
+-- 公会收入
+DROP TABLE IF EXISTS warehouse.ods_guild_hy_amt_daily;
+CREATE TABLE warehouse.ods_guild_hy_amt_daily AS
+SELECT  1002 AS platform_id,
+       '虎牙' AS platform_name,
+       cd.channel_id,
+       cd.channel_number AS channel_num,
+       cd.uid AS channel_uid,
+       cd.name AS channel_name,
+       cd.is_platinum,
+       cd.sign_count AS sign_an_cnt,
+       cd.sign_limit AS sign_onlive_an_cnt,
+       cr.i_live_profile_cnt AS active_an_cnt,
+       cr.d_daily_income AS total_amt,
+       cgi.income_amt AS g_gift_vir_coin,
+       cgu.income_amt AS g_guard_vir_coin,
+       cn.income_amt AS g_nobel_vir_coin,
+       cd.logo,
+       cd.desc,
+       cd.create_time,
+       cd.dt
+FROM spider_huya_backend.channel_detail cd
+LEFT JOIN spider_huya_backend.channel_revenue_day cr ON cd.dt = cr.dt AND cd.channel_id = cr.channel_id
+LEFT JOIN spider_huya_backend.channel_income_gift_day cgi ON cd.dt = cgi.dt AND cd.channel_id = cgi.channel_id
+LEFT JOIN spider_huya_backend.channel_income_guard_day cgu ON cd.dt = cgu.income_date AND cd.channel_id = cgu.channel_id
+LEFT JOIN spider_huya_backend.channel_income_noble_day cn ON cd.dt = cn.dt AND cd.channel_id = cn.channel_id
+;
