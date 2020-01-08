@@ -5,29 +5,33 @@ DELETE FROM warehouse.ods_anchor_yy_info WHERE dt BETWEEN '{start_date}' AND '{e
 INSERT INTO warehouse.ods_anchor_yy_info
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
-       backend_account_id,
-       uid AS anchor_uid,
-       yynum AS anchor_no,
-       nick AS anchor_nick_name,
-       anchortype AS anchor_type,
-       CASE WHEN anchortype=1 THEN '普通艺人'
-            WHEN anchortype=2 or anchortype=3 THEN '金牌艺人'
+       ga.backend_account_id,
+       cl.channel_num,
+       ga.uid AS anchor_uid,
+       ga.yynum AS anchor_no,
+       ga.nick AS anchor_nick_name,
+       ga.anchortype AS anchor_type,
+       CASE WHEN ga.anchortype=1 THEN '普通艺人'
+            WHEN ga.anchortype=2 or ga.anchortype=3 THEN '金牌艺人'
             ELSE '' END AS anchor_type_text,
-       roomaid AS live_room_id,
-       roomid,
-       conId AS contract_id,
-       signtime AS contract_signtime,
-       endtime AS contract_endtime,
-       contype AS settle_method_code,
-       CASE WHEN contype = 1 THEN '对公分成'
-            WHEN contype = 2 then '对私分成' END AS settle_method_text,
-       anchorRate / 100 AS anchor_settle_rate,
-       logo AS logo,
+       ga.roomaid AS live_room_id,
+       ga.roomid,
+       ga.conId AS contract_id,
+       ga.signtime AS contract_signtime,
+       ga.endtime AS contract_endtime,
+       ga.contype AS settle_method_code,
+       CASE WHEN ga.contype = 1 THEN '对公分成'
+            WHEN ga.contype = 2 then '对私分成' END AS settle_method_text,
+       ga.anchorRate / 100 AS anchor_settle_rate,
+       ga.logo AS logo,
        ga.dt
 FROM spider_yy_backend.guild_anchor ga
+LEFT JOIN spider_yy_backend.channel_list cl ON ga.backend_account_id = cl.backend_account_id
 WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+
+SELECT * FROM spider_yy_backend.channel_list;
 
 -- 主播直播
 -- DROP TABLE IF EXISTS stage.union_yy_anchor_duration;
@@ -175,6 +179,7 @@ INSERT INTO warehouse.ods_yy_anchor_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
+       ai.channel_num,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
