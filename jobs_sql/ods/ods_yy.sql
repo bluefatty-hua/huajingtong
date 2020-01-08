@@ -117,7 +117,7 @@ SELECT ai.platform_id,
        ac.frmYY AS from_visitor_no,
        ac.frmNick AS from_visitor_name,
        ac.dtime,
-       DATE(ac.dtime) AS dt
+       ai.dt
 FROM warehouse.ods_anchor_yy_info ai
 LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND ai.dt = DATE(ac.dtime)
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
@@ -134,7 +134,7 @@ SELECT ac.platform_id,
        ac.backend_account_id,
        ac.anchor_uid,
        ac.anchor_no,
-       DATE(ac.dtime) AS dt,
+       ac.dt,
        ROUND(SUM(ac.anchor_commission / 1000), 2) AS anchor_commission,
        ROUND(SUM(ac.guild_commission / 1000), 2) AS guild_commission
 FROM warehouse.ods_anchor_yy_commission ac
@@ -143,7 +143,7 @@ GROUP BY ac.platform_id,
          ac.backend_account_id,
          ac.anchor_uid,
          ac.anchor_no,
-         DATE(ac.dtime)
+         ac.dt
 ;
 
 
@@ -172,10 +172,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- Merge
--- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_live_detail_daily;
--- CREATE TABLE warehouse.ods_yy_anchor_live_detail_daily AS
-DELETE FROM warehouse.ods_yy_anchor_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_yy_anchor_live_detail_daily
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_live_detail_daily;
+-- CREATE TABLE warehouse.ods_anchor_yy_live_detail_daily AS
+DELETE FROM warehouse.ods_anchor_yy_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_yy_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,

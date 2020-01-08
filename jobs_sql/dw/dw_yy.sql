@@ -15,7 +15,7 @@ SELECT YEAR(t.dt)                                                 AS rpt_year,
        SUM(t.virtual_coin)                                        AS total_vir_coin,
        SUM(t.anchor_commission)                                   AS total_an_commission,
        SUM(t.guild_commission)                                    AS total_g_commission
-FROM warehouse.ods_yy_anchor_live_detail_daily t
+FROM warehouse.ods_anchor_yy_live_detail_daily t
 WHERE t.dt < CURRENT_DATE
 GROUP BY YEAR(t.dt),
          MONTH(t.dt),
@@ -41,7 +41,7 @@ SELECT YEAR(t.dt)                                                               
        ROUND(SUM(t.virtual_coin), 2)                                              AS total_vir_coin,
        SUM(t.anchor_commission)                                                   AS total_an_commission,
        SUM(t.guild_commission)                                                    AS total_g_commission
-FROM warehouse.ods_yy_anchor_live_detail_daily t
+FROM warehouse.ods_anchor_yy_live_detail_daily t
 WHERE t.dt < CURRENT_DATE
 GROUP BY YEAR(t.dt),
          MONTH(t.dt),

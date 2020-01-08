@@ -49,10 +49,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- Merge
--- DROP TABLE IF EXISTS warehouse.ods_hy_anchor_live_detail_daily;
--- CREATE TABLE warehouse.ods_hy_anchor_live_detail_daily AS
-DELETE FROM warehouse.ods_hy_anchor_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_hy_anchor_live_detail_daily
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_hy_live_detail_daily;
+-- CREATE TABLE warehouse.ods_anchor_hy_live_detail_daily AS
+DELETE FROM warehouse.ods_anchor_hy_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_hy_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
        ai.channel_id,
@@ -97,10 +97,10 @@ SELECT  1002 AS platform_id,
        cd.sign_count AS sign_an_cnt,
        cd.sign_limit AS sign_onlive_an_cnt,
        cr.i_live_profile_cnt AS active_an_cnt,
-       cr.d_daily_income AS total_amt,
-       cgi.income_amt AS g_gift_vir_coin,
-       cgu.income_amt AS g_guard_vir_coin,
-       cn.income_amt AS g_nobel_vir_coin,
+       CASE WHEN cr.d_daily_income IS NULL THEN 0 ELSE cr.d_daily_income END AS g_total_amt,
+       CASE WHEN cgi.income_amt IS NULL THEN 0 ELSE cgi.income_amt END AS g_gift_vir_coin,
+       CASE WHEN cgu.income_amt IS NULL THEN 0 ELSE cgu.income_amt END AS g_guard_vir_coin,
+       CASE WHEN cn.income_amt IS NULL THEN 0 ELSE cn.income_amt END AS g_nobel_vir_coin,
        cd.logo,
        cd.desc,
        cd.create_time,
