@@ -111,8 +111,8 @@ SELECT ai.platform_id,
        ai.settle_method_code,
        ai.settle_method_text,
        ai.anchor_settle_rate,
-       ROUND(ac.usrMoney / 1000, 2) AS anchor_commission,
-       ROUND(ac.owMoney / 1000, 2) AS guild_commission,
+       ac.usrMoney AS anchor_commission,
+       ac.owMoney AS guild_commission,
        ac.inType,
        ac.frmYY AS from_visitor_no,
        ac.frmNick AS from_visitor_name,
@@ -126,17 +126,19 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 按日汇总主播佣金收入及工会分成（佣金）
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission_daily;
--- CREATE TABLE warehouse.ods_anchor_yy_commission_daily AS
-DELETE FROM warehouse.ods_anchor_yy_commission_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_commission_daily
+DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission_daily;
+CREATE TABLE warehouse.ods_anchor_yy_commission_daily AS
+-- DELETE FROM warehouse.ods_anchor_yy_commission_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+-- INSERT INTO warehouse.ods_anchor_yy_commission_daily
 SELECT ac.platform_id,
        ac.backend_account_id,
        ac.anchor_uid,
        ac.anchor_no,
        ac.dt,
-       ROUND(SUM(ac.anchor_commission / 1000), 2) AS anchor_commission,
-       ROUND(SUM(ac.guild_commission / 1000), 2) AS guild_commission
+       ac.anchor_commission,
+       ROUND(SUM(ac.anchor_commission / 1000), 2) AS anchor_commission_rmb,
+       ac.guild_commission,
+       ROUND(SUM(ac.guild_commission / 1000), 2) AS guild_commission_rmb
 FROM warehouse.ods_anchor_yy_commission ac
 WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY ac.platform_id,
@@ -193,7 +195,9 @@ SELECT ai.platform_id,
        CASE WHEN al.duration_sec > 0 THEN 1 ELSE 0 END AS live_status,
        av.virtual_coin,
        ac.anchor_commission,
+       ac.anchor_commission_rmb,
        ac.guild_commission,
+       ac.guild_commission_rmb,
        pf.vir_coin_name,
        pf.vir_coin_rate,
        pf.include_pf_amt,
