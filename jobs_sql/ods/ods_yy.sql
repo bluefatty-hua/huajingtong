@@ -135,10 +135,10 @@ SELECT ac.platform_id,
        ac.anchor_uid,
        ac.anchor_no,
        ac.dt,
-       ac.anchor_commission,
-       ROUND(SUM(ac.anchor_commission / 1000), 2) AS anchor_commission_rmb,
-       ac.guild_commission,
-       ROUND(SUM(ac.guild_commission / 1000), 2) AS guild_commission_rmb
+       SUM(ac.anchor_commission) AS anchor_commission,
+       SUM(ac.anchor_commission / 1000) AS anchor_commission_rmb,
+       SUM(ac.guild_commission) AS guild_commission,
+       SUM(ac.guild_commission / 1000) AS guild_commission_rmb
 FROM warehouse.ods_anchor_yy_commission ac
 WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY ac.platform_id,
