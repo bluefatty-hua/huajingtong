@@ -126,10 +126,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 按日汇总主播佣金收入及工会分成（佣金）
-DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission_daily;
-CREATE TABLE warehouse.ods_anchor_yy_commission_daily AS
--- DELETE FROM warehouse.ods_anchor_yy_commission_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
--- INSERT INTO warehouse.ods_anchor_yy_commission_daily
+-- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission_daily;
+-- CREATE TABLE warehouse.ods_anchor_yy_commission_daily AS
+DELETE FROM warehouse.ods_anchor_yy_commission_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_anchor_yy_commission_daily
 SELECT ac.platform_id,
        ac.backend_account_id,
        ac.anchor_uid,
