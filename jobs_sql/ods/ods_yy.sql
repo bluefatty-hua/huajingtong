@@ -101,10 +101,10 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE stage.union_yy_anchor_duration_max_time AS
 DELETE FROM stage.union_yy_anchor_duration_max_time WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO stage.union_yy_anchor_duration_max_time
-SELECT dt, uid, MAX(timestamp) AS max_timestamp
+SELECT backend_account_id, dt, uid, MAX(timestamp) AS max_timestamp
 FROM stage.union_yy_anchor_duration
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-group by dt, uid
+group by backend_account_id, dt, uid
 ;
 
 
@@ -114,7 +114,7 @@ DELETE FROM stage.yy_anchor_duration_distinct WHERE dt BETWEEN '{start_date}' AN
 INSERT INTO stage.yy_anchor_duration_distinct
 SELECT uad.*
 FROM stage.union_yy_anchor_duration_max_time mt
-LEFT JOIN stage.union_yy_anchor_duration uad ON mt.dt = uad.dt AND mt.uid = uad.uid AND mt.max_timestamp = uad.timestamp
+LEFT JOIN stage.union_yy_anchor_duration uad ON mt.backend_account_id = uad.backend_account_id AND mt.dt = uad.dt AND mt.uid = uad.uid AND mt.max_timestamp = uad.timestamp
 WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
