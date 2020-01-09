@@ -269,21 +269,20 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- =====================================================================
 -- 公会收支明细
 -- 公会蓝钻
--- DROP TABLE IF EXISTS warehouse.ods_guild_yy_virtual_coin_an_mon;
--- CREATE TABLE warehouse.ods_guild_yy_virtual_coin_an_mon AS
-DELETE FROM warehouse.ods_guild_yy_virtual_coin_an_mon WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_guild_yy_virtual_coin_an_mon
+DROP TABLE IF EXISTS warehouse.ods_guild_yy_virtual_coin_an_mon;
+CREATE TABLE warehouse.ods_guild_yy_virtual_coin_an_mon AS
+# DELETE FROM warehouse.ods_guild_yy_virtual_coin_an_mon WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+# INSERT INTO warehouse.ods_guild_yy_virtual_coin_an_mon
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        cl.backend_account_id,
        cl.channel_num,
        gb.yynum AS anchor_no,
        gb.nick AS anchor_nick_name,
-       gb.totalDiamond AS total_vir_coin,
+       gb.totalDiamond AS an_total_vir_coin,
        gb.settType AS settle_method_code,
        CASE WHEN gb.settType = 1 THEN '对公分成'
             WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
-       gb.totalDiamond AS an_total_vir_coin,
        gb.money AS g_settle_vir_coin,
        CONCAT(gb.year, '-', gb.month, '-01') AS rpt_month,
        DATE(gb.payTime) AS dt
@@ -293,11 +292,11 @@ WHERE DATE(gb.payTime) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- 公会佣金收入
--- DROP TABLE IF EXISTS warehouse.ods_guild_yy_commission_an_mon;
--- CREATE TABLE warehouse.ods_guild_yy_commission_an_mon AS
-DELETE FROM warehouse.ods_guild_yy_commission_an_mon WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_guild_yy_commission_an_mon
+-- 公会佣金ods_month_yy_guild_an_commission
+DROP TABLE IF EXISTS warehouse.ods_month_yy_guild_an_commission;
+CREATE TABLE warehouse.ods_month_yy_guild_an_commission AS
+# DELETE FROM warehouse.ods_month_yy_guild_an_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+# INSERT INTO warehouse.ods_month_yy_guild_an_commission
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        cl.backend_account_id,
@@ -305,11 +304,20 @@ SELECT 1000 AS platform_id,
        gc.yynum AS anchor_no,
        gc.nick AS anchor_nick_name,
        gc.owMoney AS g_settle_commission,
-       gc.year AS rpt_year,
-       gc.month AS rpt_month,
+       CONCAT(gc.year, '-', gc.month, '-01') AS rpt_month,
        DATE(gc.time) AS dt
 FROM spider_yy_backend.channel_list cl
 LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
 WHERE DATE(gc.time) BETWEEN '{start_date}' AND '{end_date}'
 ;
+
+-- 公会主播月佣金
+# DROP TABLE IF EXISTS warehouse.ods_month_yy_an_commission;
+# CREATE TABLE warehouse.ods_month_yy_an_commission AS
+SELECT platform_id,
+       platform_name,
+       anchor_no,
+FROM warehouse.ods_month_yy_guild_an_commission
+;
+
 
