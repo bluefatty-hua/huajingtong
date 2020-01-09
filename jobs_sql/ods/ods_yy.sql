@@ -33,7 +33,9 @@ WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- 补充spider_yy_backend.guild_anchor中缺失主播
 INSERT IGNORE INTO warehouse.ods_anchor_yy_info (backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
-SELECT backend_account_id,
+SELECT 1000 AS platform_id,
+       'YY' AS platform_name,
+       backend_account_id,
        uid,
        yynum,
        nick,
