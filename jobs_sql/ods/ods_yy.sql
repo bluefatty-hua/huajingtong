@@ -32,7 +32,7 @@ WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 -- 补充spider_yy_backend.guild_anchor中缺失主播
-INSERT IGNORE INTO warehouse.ods_anchor_yy_info (backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+INSERT IGNORE INTO warehouse.ods_anchor_yy_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        backend_account_id,
@@ -44,7 +44,9 @@ SELECT 1000 AS platform_id,
 FROM spider_yy_backend.anchor_commission
 WHERE DATE(dtime) BETWEEN '{start_date}' AND '{end_date}'
 UNION
-SELECT backend_account_id,
+SELECT 1000 AS platform_id,
+       'YY' AS platform_name,
+       backend_account_id,
        uid,
        yynum,
        nick,
@@ -53,7 +55,9 @@ SELECT backend_account_id,
 FROM spider_yy_backend.anchor_duration
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
-SELECT backend_account_id,
+SELECT 1000 AS platform_id,
+       'YY' AS platform_name,
+       backend_account_id,
        uid,
        yynum,
        nick,
@@ -64,8 +68,10 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-INSERT IGNORE INTO warehouse.ods_anchor_yy_info (backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
-SELECT backend_account_id,
+INSERT IGNORE INTO warehouse.ods_anchor_yy_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+SELECT 1000 AS platform_id,
+       'YY' AS platform_name,
+       backend_account_id,
        uid,
        yynum,
        '' AS nick,
