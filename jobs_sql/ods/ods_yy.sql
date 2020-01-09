@@ -285,7 +285,7 @@ SELECT 1000 AS platform_id,
             WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
        gb.totalDiamond AS an_total_vir_coin,
        gb.money AS g_settle_vir_coin,
-       CONCAT(YEAR(gb.year), '-', MONTH(gb.month), '-01') AS rpt_month,
+       CONCAT(gb.year, '-', gb.month, '-01') AS rpt_month,
        DATE(gb.payTime) AS dt
 FROM spider_yy_backend.channel_list cl
 LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
