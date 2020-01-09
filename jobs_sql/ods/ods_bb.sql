@@ -1,41 +1,57 @@
 -- 主播信息
--- DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
--- CREATE TABLE stage.bb_guild_anchor_dt AS
-DELETE FROM stage.bb_guild_anchor_dt WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO stage.bb_guild_anchor_dt
+DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
+CREATE TABLE stage.bb_guild_anchor_dt AS
+# DELETE FROM stage.bb_guild_anchor_dt
+# WHERE dt BETWEEN '2019-12-01' AND '2020-01-08';
+# WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+# INSERT INTO stage.bb_guild_anchor_dt
 SELECT backend_account_id,
        uid,
        dt
 FROM spider_bb_backend.anchor_detail
+# WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT backend_account_id,
        uid,
        dt
 FROM spider_bb_backend.normal_list
+# WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
+
+
+create index bb_anchor_detail_uid_backend_account_id_dt_index
+	on stage.bb_guild_anchor_dt (uid, backend_account_id, dt);
 
 
 DROP TABLE IF EXISTS stage.bb_anchor_detail;
 CREATE TABLE stage.bb_anchor_detail AS
 SELECT *
 FROM spider_bb_backend.anchor_detail
+# WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+create index bb_anchor_detail_uid_backend_account_id_dt_index
+	on stage.bb_anchor_detail (uid, backend_account_id, dt);
 
 DROP TABLE IF EXISTS stage.bb_normal_list;
 CREATE TABLE stage.bb_normal_list AS
 SELECT *
 FROM spider_bb_backend.normal_list
+# WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+create index bb_anchor_detail_uid_backend_account_id_dt_index
+	on stage.bb_normal_list (uid, backend_account_id, dt);
 
 -- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
 -- CREATE TABLE warehouse.ods_day_bb_anchor_live_detail AS
-DELETE FROM warehouse.ods_day_bb_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE FROM warehouse.ods_day_bb_anchor_live_detail
+# WHERE dt BETWEEN '2019-12-01' AND '2020-01-08';
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_day_bb_anchor_live_detail
 SELECT 1001                                                                    AS platform_id,
        'B站'                                                                    AS platform_name,
@@ -81,6 +97,7 @@ FROM stage.bb_guild_anchor_dt gat
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
          LEFT JOIN warehouse.platform pf
                    ON 1001 = pf.id
+# WHERE gat.dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
