@@ -17,6 +17,22 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
+DROP TABLE IF EXISTS stage.bb_anchor_detail;
+CREATE TABLE stage.bb_anchor_detail AS
+SELECT *
+FROM spider_bb_backend.anchor_detail
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+DROP TABLE IF EXISTS stage.bb_normal_list;
+CREATE TABLE stage.bb_normal_list AS
+SELECT *
+FROM spider_bb_backend.normal_list
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
 -- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
 -- CREATE TABLE warehouse.ods_day_bb_anchor_live_detail AS
 DELETE FROM warehouse.ods_day_bb_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -59,14 +75,18 @@ SELECT 1001                                                                    A
        DATE_FORMAT(nl.end_date, '%Y-%m-%d %T')                                 AS contract_endtime,
        gat.dt
 FROM stage.bb_guild_anchor_dt gat
-         LEFT JOIN spider_bb_backend.anchor_detail ad
+         LEFT JOIN stage.bb_anchor_detail ad
                    ON gat.uid = ad.uid AND gat.dt = ad.dt AND gat.backend_account_id = ad.backend_account_id
-         LEFT JOIN spider_bb_backend.normal_list nl
+         LEFT JOIN stage.bb_normal_list nl
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
          LEFT JOIN warehouse.platform pf
                    ON 1001 = pf.id
 WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
+
+
+
+
 -- =====================================================================================================================
 -- -- DROP TABLE IF EXISTS warehouse.ods_anchor_bb_info;
 -- -- CREATE TABLE warehouse.ods_anchor_bb_info AS
