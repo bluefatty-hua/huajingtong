@@ -45,9 +45,7 @@ create index bb_anchor_detail_uid_backend_account_id_dt_index
 
 -- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
 -- CREATE TABLE warehouse.ods_day_bb_anchor_live_detail AS
-DELETE FROM warehouse.ods_day_bb_anchor_live_detail
--- WHERE dt BETWEEN '2019-12-01' AND '2020-01-08';
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE FROM warehouse.ods_day_bb_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_day_bb_anchor_live_detail
 SELECT 1001                                                                    AS platform_id,
        'B站'                                                                    AS platform_name,
