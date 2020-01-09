@@ -1,9 +1,7 @@
 -- 主播信息
 DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
 CREATE TABLE stage.bb_guild_anchor_dt AS
--- DELETE FROM stage.bb_guild_anchor_dt
--- WHERE dt BETWEEN '2019-12-01' AND '2020-01-08';
--- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+-- DELETE FROM stage.bb_guild_anchor_dt WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 -- INSERT INTO stage.bb_guild_anchor_dt
 SELECT backend_account_id,
        uid,
