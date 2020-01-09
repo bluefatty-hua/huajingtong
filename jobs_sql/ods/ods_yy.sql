@@ -228,7 +228,7 @@ INSERT INTO warehouse.ods_anchor_yy_live_detail_daily
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
-       ai.channel_num,
+       cl.channel_num,
        ai.anchor_uid,
        ai.anchor_no,
        ai.anchor_nick_name,
@@ -260,6 +260,7 @@ LEFT JOIN warehouse.ods_anchor_yy_live al ON ai.backend_account_id = al.backend_
 LEFT JOIN warehouse.ods_anchor_yy_virtual_coin av ON ai.backend_account_id = av.backend_account_id AND ai.anchor_uid = av.anchor_uid AND ai.dt = av.dt
 LEFT JOIN warehouse.ods_anchor_yy_commission_daily ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.anchor_uid AND ai.dt = ac.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
+LEFT JOIN spider_yy_backend.channel_list cl ON ai.backend_account_id = cl.backend_account_id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
