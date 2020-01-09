@@ -311,13 +311,4 @@ LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.ba
 WHERE DATE(gc.time) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
--- 公会主播月佣金
-# DROP TABLE IF EXISTS warehouse.ods_month_yy_an_commission;
-# CREATE TABLE warehouse.ods_month_yy_an_commission AS
-SELECT platform_id,
-       platform_name,
-       anchor_no,
-FROM warehouse.ods_month_yy_guild_an_commission
-;
-
 
