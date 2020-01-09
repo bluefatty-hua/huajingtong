@@ -57,7 +57,7 @@ SELECT backend_account_id,
        nick,
        '修复主播缺失插入' AS comment,
        dt
-FROM spider_yy_backend.anchor_duration
+FROM spider_yy_backend.anchor_duration_history
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
