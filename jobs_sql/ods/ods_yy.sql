@@ -136,9 +136,7 @@ SELECT ac.platform_id,
        ac.anchor_no,
        ac.dt,
        SUM(ac.anchor_commission) AS anchor_commission,
-       SUM(ac.anchor_commission / 1000) AS anchor_commission_rmb,
-       SUM(ac.guild_commission) AS guild_commission,
-       SUM(ac.guild_commission / 1000) AS guild_commission_rmb
+       SUM(ac.guild_commission) AS guild_commission
 FROM warehouse.ods_anchor_yy_commission ac
 WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY ac.platform_id,
@@ -195,9 +193,7 @@ SELECT ai.platform_id,
        CASE WHEN al.duration_sec > 0 THEN 1 ELSE 0 END AS live_status,
        av.virtual_coin,
        ac.anchor_commission,
-       ac.anchor_commission_rmb,
        ac.guild_commission,
-       ac.guild_commission_rmb,
        pf.vir_coin_name,
        pf.vir_coin_rate,
        pf.include_pf_amt,
