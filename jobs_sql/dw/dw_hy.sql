@@ -5,8 +5,7 @@
 -- 汇总指标 开播天数，开播时长，虚拟币收入
 DROP TABLE IF EXISTS warehouse.dw_sum_hy_an_mon;
 CREATE TABLE warehouse.dw_sum_hy_an_mon AS
-SELECT YEAR(t.dt)                                                 AS rpt_year,
-       MONTH(t.dt)                                                AS rpt_month,
+SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                AS rpt_month,
        t.platform_id,
        t.platform_name,
        t.anchor_no,
@@ -15,20 +14,18 @@ SELECT YEAR(t.dt)                                                 AS rpt_year,
        ROUND(SUM(t.amt), 2)                                                 AS sum_amt
 FROM warehouse.ods_anchor_hy_live_detail_daily t
 WHERE t.dt < CURRENT_DATE
-GROUP BY YEAR(t.dt),
-         MONTH(t.dt),
+GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
          t.anchor_no
 ;
 
-
+-- 汇总数据源 ods_anchor_hy_live_detail_daily
 -- 汇总维度 月-公会或频道
 -- 汇总指标 主播数，开播主播数，主播收入
 DROP TABLE IF EXISTS warehouse.dw_sum_hy_g_mon;
 CREATE TABLE warehouse.dw_sum_hy_g_mon AS
-SELECT YEAR(t.dt)                                                                 AS rpt_year,
-       MONTH(t.dt)                                                                AS rpt_month,
+SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                                AS rpt_month,
        t.platform_id,
        t.platform_name,
        t.channel_id,
@@ -37,8 +34,7 @@ SELECT YEAR(t.dt)                                                               
        ROUND(SUM(t.amt), 2)                                                       AS sum_amt
 FROM warehouse.ods_anchor_hy_live_detail_daily t
 WHERE t.dt < CURRENT_DATE
-GROUP BY YEAR(t.dt),
-         MONTH(t.dt),
+GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
          t.channel_id
@@ -47,14 +43,14 @@ GROUP BY YEAR(t.dt),
 
 -- ==========================================================================
 -- 公会或频道
+-- 数据来源 ods_guild_hy_amt_daily
 -- 汇总维度 月-公会或频道
 -- 汇总指标 公会流水，公会收入，礼物|贵族|守护公会分成，统计天数
 DROP TABLE IF EXISTS warehouse.dw_sum_hy_g_amt_mon;
 CREATE TABLE warehouse.dw_sum_hy_g_amt_mon AS
 SELECT t.platform_id,
        t.platform_name,
-       YEAR(t.dt) AS rpt_year,
-       MONTH(t.dt) AS rpt_month,
+       DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS rpt_month,
        t.channel_id,
        t.channel_num,
        SUM(total_amt) AS g_total_amt,
@@ -66,8 +62,7 @@ SELECT t.platform_id,
 FROM warehouse.ods_guild_hy_amt_daily t
 GROUP BY t.platform_id,
          t.platform_name,
-         YEAR(t.dt),
-         MONTH(t.dt),
+         DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.channel_id,
          t.channel_num
 ;

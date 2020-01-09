@@ -5,8 +5,7 @@
 -- 汇总指标 开播天数，开播时长，虚拟币收入
 DROP TABLE IF EXISTS warehouse.dw_sum_bb_an_mon;
 CREATE TABLE warehouse.dw_sum_bb_an_mon AS
-SELECT YEAR(t.dt)                                                 AS rpt_year,
-       MONTH(t.dt)                                                AS rpt_month,
+SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                AS rpt_month,
        t.platform_id,
        t.platform_name,
        t.backend_account_id,
@@ -16,8 +15,7 @@ SELECT YEAR(t.dt)                                                 AS rpt_year,
        SUM(t.total_vir_coin)                                      AS total_vir_coin
 FROM warehouse.ods_anchor_bb_live_detail_daily t
 WHERE t.dt < CURRENT_DATE
-GROUP BY YEAR(t.dt),
-         MONTH(t.dt),
+GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
          t.backend_account_id,
@@ -28,8 +26,7 @@ GROUP BY YEAR(t.dt),
 -- 汇总指标 主播数，开播主播数，虚拟币收入
 DROP TABLE IF EXISTS warehouse.dw_sum_bb_g_mon;
 CREATE TABLE warehouse.dw_sum_bb_g_mon AS
-SELECT t.rpt_year,
-       t.rpt_month,
+SELECT t.rpt_month,
        t.platform_id,
        t.platform_name,
        t.backend_account_id,
@@ -38,8 +35,7 @@ SELECT t.rpt_year,
        t1.total_amt AS total_amt_g,
        t.total_vir_coin  AS total_vir_coin_sum,
        t1.total_vir_coin AS total_vir_coin_g
-FROM (SELECT YEAR(t.dt)                                                                 AS rpt_year,
-             MONTH(t.dt)                                                                AS rpt_month,
+FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                                AS rpt_month,
              t.platform_id,
              t.platform_name,
              t.backend_account_id,
@@ -48,12 +44,11 @@ FROM (SELECT YEAR(t.dt)                                                         
              SUM(t.total_vir_coin)                                                      AS total_vir_coin
       FROM warehouse.ods_anchor_bb_live_detail_daily t
       WHERE t.dt < CURRENT_DATE
-      GROUP BY YEAR(t.dt),
-               MONTH(t.dt),
+      GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                t.platform_id,
                t.platform_name,
                t.backend_account_id) t
-LEFT JOIN warehouse.ods_guild_bb_amt_mon t1 ON t.rpt_year = t1.rpt_year AND t.rpt_month = t1.rpt_month AND t.backend_account_id = t1.backend_account_id
+LEFT JOIN warehouse.ods_guild_bb_amt_mon t1 ON t.rpt_month = t1.rpt_month AND t.backend_account_id = t1.backend_account_id
 WHERE t1.type rlike '公会总收益'
 ;
 
