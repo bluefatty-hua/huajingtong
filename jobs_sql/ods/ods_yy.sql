@@ -24,14 +24,55 @@ SELECT 1000 AS platform_id,
             WHEN ga.contype = 2 then '对私分成' END AS settle_method_text,
        ga.anchorRate / 100 AS anchor_settle_rate,
        ga.logo AS logo,
+       '' AS comment,
        ga.dt
 FROM spider_yy_backend.guild_anchor ga
 LEFT JOIN spider_yy_backend.channel_list cl ON ga.backend_account_id = cl.backend_account_id
 WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+-- 补充spider_yy_backend.guild_anchor中缺失主播
+INSERT IGNORE INTO warehouse.ods_anchor_yy_info (backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+SELECT backend_account_id,
+       uid,
+       yynum,
+       nick,
+       '修复主播缺失插入' AS comment,
+       DATE(dtime) AS dt
+FROM spider_yy_backend.anchor_commission
+WHERE DATE(dtime) BETWEEN '{start_date}' AND '{end_date}'
+UNION
+SELECT backend_account_id,
+       uid,
+       yynum,
+       nick,
+       '修复主播缺失插入' AS comment,
+       dt
+FROM spider_yy_backend.anchor_duration
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+UNION
+SELECT backend_account_id,
+       uid,
+       yynum,
+       nick,
+       '修复主播缺失插入' AS comment,
+       dt
+FROM spider_yy_backend.anchor_duration
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+;
 
-SELECT * FROM spider_yy_backend.channel_list;
+
+INSERT IGNORE INTO warehouse.ods_anchor_yy_info (backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+SELECT backend_account_id,
+       uid,
+       yynum,
+       '' AS nick,
+       '修复主播缺失插入' AS comment,
+       dt
+FROM spider_yy_backend.anchor_bluediamond
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
 
 -- 主播直播
 -- DROP TABLE IF EXISTS stage.union_yy_anchor_duration;
