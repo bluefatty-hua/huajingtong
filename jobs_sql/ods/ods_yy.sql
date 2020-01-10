@@ -304,7 +304,7 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_yy_guild_virtual_coin_detail AS
 DELETE
 FROM warehouse.ods_yy_guild_virtual_coin_detail
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
 INSERT INTO warehouse.ods_yy_guild_virtual_coin_detail
 SELECT 1000                                     AS platform_id,
        'YY'                                     AS platform_name,
@@ -317,12 +317,12 @@ SELECT 1000                                     AS platform_id,
        CASE
            WHEN gb.settType = 1 THEN '对公分成'
            WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
-       gb.money                                 AS guild_vir_coin,
+       gb.money                                 AS guild_virtual_coin,
        gb.payTime                               AS pay_time,
        CONCAT(gb.year, '-', gb.month, '-01')    AS dt
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
-WHERE DATE(gb.payTime) BETWEEN '{start_date}' AND '{end_date}'
+WHERE CONCAT(gb.year, '-', gb.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
 ;
 
 
@@ -331,7 +331,7 @@ WHERE DATE(gb.payTime) BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_yy_guild_commission_detail AS
 DELETE
 FROM warehouse.ods_yy_guild_commission_detail
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
 INSERT INTO warehouse.ods_yy_guild_commission_detail
 SELECT 1000                                  AS platform_id,
        'YY'                                  AS platform_name,
@@ -344,7 +344,7 @@ SELECT 1000                                  AS platform_id,
        CONCAT(gc.year, '-', gc.month, '-01') AS dt
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
-WHERE DATE(gc.time) BETWEEN '{start_date}' AND '{end_date}'
+WHERE CONCAT(gc.year, '-', gc.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
 ;
 
 
