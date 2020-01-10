@@ -1,6 +1,6 @@
 -- 主播信息
-# DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
-# CREATE TABLE stage.bb_guild_anchor_dt AS
+-- DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
+-- CREATE TABLE stage.bb_guild_anchor_dt AS
 DELETE
 FROM stage.bb_guild_anchor_dt
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -19,8 +19,8 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-# DROP TABLE IF EXISTS stage.bb_anchor_detail;
-# CREATE TABLE stage.bb_anchor_detail AS
+-- DROP TABLE IF EXISTS stage.bb_anchor_detail;
+-- CREATE TABLE stage.bb_anchor_detail AS
 DELETE
 FROM stage.bb_anchor_detail
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -31,8 +31,8 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-# DROP TABLE IF EXISTS stage.bb_normal_list;
-# CREATE TABLE stage.bb_normal_list AS
+-- DROP TABLE IF EXISTS stage.bb_normal_list;
+-- CREATE TABLE stage.bb_normal_list AS
 DELETE
 FROM stage.bb_normal_list
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -43,8 +43,8 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-# DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
-# CREATE TABLE warehouse.ods_bb_anchor_live_detail AS
+-- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
+-- CREATE TABLE warehouse.ods_bb_anchor_live_detail AS
 DELETE
 FROM warehouse.ods_bb_anchor_live_detail
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -93,7 +93,7 @@ FROM stage.bb_guild_anchor_dt gat
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
          LEFT JOIN warehouse.platform pf
                    ON 1001 = pf.id
-# WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
+-- WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
