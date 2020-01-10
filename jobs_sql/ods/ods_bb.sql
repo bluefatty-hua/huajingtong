@@ -62,7 +62,7 @@ FROM stage.bb_guild_anchor_dt gat
          LEFT JOIN spider_bb_backend.anchor_detail ad
                    ON gat.uid = ad.uid AND gat.dt = ad.dt AND gat.backend_account_id = ad.backend_account_id
          LEFT JOIN spider_bb_backend.normal_list nl
-                   ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
+                   ON gat.uid = nl.uid AND gat.dt = nl.dt AND gat.backend_account_id = nl.backend_account_id
 WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
