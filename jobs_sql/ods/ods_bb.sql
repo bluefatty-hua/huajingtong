@@ -31,7 +31,7 @@ SELECT 1001                                                                    A
        ad.g_id                                                                 AS guild_id,
        ad.g_name                                                               AS guild_name,
        ad.guild_type                                                           AS guild_type,
-       ad.uid                                                                  AS anchor_uid,
+       nl.id                                                                   AS anchor_uid,
        ad.uid                                                                  AS anchor_no,
        ad.uname                                                                AS anchor_nick_name,
        nl.type                                                                 AS anchor_status,
