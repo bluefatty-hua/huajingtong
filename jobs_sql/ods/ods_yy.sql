@@ -284,8 +284,8 @@ SELECT 1000 AS platform_id,
        CASE WHEN gb.settType = 1 THEN '对公分成'
             WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
        gb.money AS guild_vir_coin,
-       CONCAT(gb.year, '-', gb.month, '-01') AS rpt_month,
-       DATE(gb.payTime) AS dt
+       gb.payTime AS pay_time,
+       CONCAT(gb.year, '-', gb.month, '-01') AS dt
 FROM spider_yy_backend.channel_list cl
 LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
 WHERE DATE(gb.payTime) BETWEEN '{start_date}' AND '{end_date}'
@@ -304,8 +304,8 @@ SELECT 1000 AS platform_id,
        gc.yynum AS anchor_no,
        gc.nick AS anchor_nick_name,
        gc.owMoney AS guild_commission,
-       CONCAT(gc.year, '-', gc.month, '-01') AS rpt_month,
-       DATE(gc.time) AS dt
+       gc.time AS get_commission_time,
+       CONCAT(gc.year, '-', gc.month, '-01') AS dt
 FROM spider_yy_backend.channel_list cl
 LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
 WHERE DATE(gc.time) BETWEEN '{start_date}' AND '{end_date}'
