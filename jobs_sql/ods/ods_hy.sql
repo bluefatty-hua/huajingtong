@@ -1,7 +1,7 @@
 -- 主播信息
 -- DROP TABLE IF EXISTS warehouse.ods_huya_anchor_info;
 -- REATE TABLE warehouse.ods_huya_anchor_info AS
-delete from  warehouse.ods_huya_anchor_info  WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE FROM  warehouse.ods_huya_anchor_info  WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_huya_anchor_info
 SELECT
   1002 AS platform_id,
@@ -22,10 +22,13 @@ SELECT
   `s_avatar` AS avatar
 FROM `spider_huya_backend`.`anchor_detail` ad
 LEFT JOIN spider_huya_backend.`channel_detail` ch ON  ad.`channel_id` = ch.`channel_id` AND ad.dt = ch.dt
-where ad.dt  BETWEEN '{start_date}' AND '{end_date}';
+WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
 
 
-
+INSERT IGNORE INTO warehouse.ods_huya_anchor_info
+(anchor_uid, `comment` ,dt)
+SELECT uid,'from anchor_live_detail_day',`date` AS dt FROM `spider_huya_backend`.`anchor_live_detail_day`
+WHERE `date` BETWEEN '{start_date}' AND '{end_date}'
 
 
 
