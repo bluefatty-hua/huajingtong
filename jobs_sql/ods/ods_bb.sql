@@ -70,12 +70,12 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- ================================================================================
 -- 公会月收入
-DROP TABLE IF EXISTS warehouse.ods_month_bb_guild_virtual_coin;
-CREATE TABLE warehouse.ods_month_bb_guild_virtual_coin AS
-# DELETE
-# FROM warehouse.ods_guild_bb_amt_mon
-# WHERE month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-# INSERT INTO warehouse.ods_guild_bb_amt_mon
+# DROP TABLE IF EXISTS warehouse.ods_month_bb_guild_virtual_coin;
+# CREATE TABLE warehouse.ods_month_bb_guild_virtual_coin AS
+DELETE
+FROM warehouse.ods_month_bb_guild_virtual_coin
+WHERE rpt_month BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+INSERT INTO warehouse.ods_month_bb_guild_virtual_coin
 SELECT gs.backend_account_id,
        CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS rpt_month,
        gs.status,
@@ -96,7 +96,7 @@ SELECT gs.backend_account_id,
 FROM spider_bb_backend.guild_salary gs
          LEFT JOIN spider_bb_backend.guild_salary_detail gd
                    ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
-WHERE gs.month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+WHERE gs.month BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
