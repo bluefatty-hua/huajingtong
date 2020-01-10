@@ -1,8 +1,8 @@
 -- 主播信息
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_info;
--- CREATE TABLE warehouse.ods_anchor_yy_info AS
-DELETE FROM warehouse.ods_anchor_yy_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_info
+-- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_info;
+-- CREATE TABLE warehouse.ods_yy_anchor_info AS
+DELETE FROM warehouse.ods_yy_anchor_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_anchor_info
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        ga.backend_account_id,
@@ -32,7 +32,7 @@ WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 -- 补充spider_yy_backend.guild_anchor中缺失主播
-INSERT IGNORE INTO warehouse.ods_anchor_yy_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+INSERT IGNORE INTO warehouse.ods_yy_anchor_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        backend_account_id,
@@ -68,7 +68,7 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-INSERT IGNORE INTO warehouse.ods_anchor_yy_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+INSERT IGNORE INTO warehouse.ods_yy_anchor_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no, anchor_nick_name, comment, dt)
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        backend_account_id,
@@ -108,10 +108,10 @@ group by backend_account_id, dt, uid
 ;
 
 
--- DROP TABLE IF EXISTS stage.yy_anchor_duration_distinct;
--- CREATE TABLE stage.yy_anchor_duration_distinct AS
-DELETE FROM stage.yy_anchor_duration_distinct WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO stage.yy_anchor_duration_distinct
+-- DROP TABLE IF EXISTS stage.distinct_yy_anchor_duration;
+-- CREATE TABLE stage.distinct_yy_anchor_duration AS
+DELETE FROM stage.distinct_yy_anchor_duration WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO stage.distinct_yy_anchor_duration
 SELECT uad.*
 FROM stage.union_yy_anchor_duration_max_time mt
 LEFT JOIN stage.union_yy_anchor_duration uad ON mt.backend_account_id = uad.backend_account_id AND mt.dt = uad.dt AND mt.uid = uad.uid AND mt.max_timestamp = uad.timestamp
@@ -119,10 +119,10 @@ WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_live;
--- CREATE TABLE warehouse.ods_anchor_yy_live AS
-DELETE FROM warehouse.ods_anchor_yy_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_live
+-- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_live;
+-- CREATE TABLE warehouse.ods_yy_anchor_live AS
+DELETE FROM warehouse.ods_yy_anchor_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_anchor_live
 SELECT ai.platform_id,
 	   ai.platform_name,
        ai.backend_account_id,
@@ -139,17 +139,17 @@ SELECT ai.platform_id,
        warehouse.DURATION_CH(ad.mobduration) AS mobduration_sec,
        ai.dt,
        ad.timestamp
-FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN stage.yy_anchor_duration_distinct ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.dt = ad.dt
+FROM warehouse.ods_yy_anchor_info ai
+LEFT JOIN stage.distinct_yy_anchor_duration ad ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.dt = ad.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- 主播收入（佣金）
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission;
--- CREATE TABLE warehouse.ods_anchor_yy_commission AS
-DELETE FROM warehouse.ods_anchor_yy_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_commission
+-- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_commission;
+-- CREATE TABLE warehouse.ods_yy_anchor_commission AS
+DELETE FROM warehouse.ods_yy_anchor_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_anchor_commission
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -167,7 +167,7 @@ SELECT ai.platform_id,
        ac.frmNick AS from_visitor_name,
        ac.dtime,
        ai.dt
-FROM warehouse.ods_anchor_yy_info ai
+FROM warehouse.ods_yy_anchor_info ai
 LEFT JOIN spider_yy_backend.anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND ai.dt = DATE(ac.dtime)
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
@@ -175,10 +175,10 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 按日汇总主播佣金收入及工会分成（佣金）
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_commission_daily;
--- CREATE TABLE warehouse.ods_anchor_yy_commission_daily AS
-DELETE FROM warehouse.ods_anchor_yy_commission_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_commission_daily
+-- DROP TABLE IF EXISTS warehouse.ods_day_yy_anchor_commission;
+-- CREATE TABLE warehouse.ods_day_yy_anchor_commission AS
+DELETE FROM warehouse.ods_day_yy_anchor_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_day_yy_anchor_commission
 SELECT ac.platform_id,
        ac.backend_account_id,
        ac.anchor_uid,
@@ -186,7 +186,7 @@ SELECT ac.platform_id,
        ac.dt,
        SUM(ac.anchor_commission) AS anchor_commission,
        SUM(ac.guild_commission) AS guild_commission
-FROM warehouse.ods_anchor_yy_commission ac
+FROM warehouse.ods_yy_anchor_commission ac
 WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY ac.platform_id,
          ac.backend_account_id,
@@ -197,10 +197,10 @@ GROUP BY ac.platform_id,
 
 
 -- 主播收入（蓝钻）
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_virtual_coin;
--- CREATE TABLE warehouse.ods_anchor_yy_virtual_coin AS
-DELETE FROM warehouse.ods_anchor_yy_virtual_coin WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_virtual_coin
+-- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_virtual_coin;
+-- CREATE TABLE warehouse.ods_yy_anchor_virtual_coin AS
+DELETE FROM warehouse.ods_yy_anchor_virtual_coin WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_anchor_virtual_coin
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -214,17 +214,17 @@ SELECT ai.platform_id,
        ab.diamond AS virtual_coin,
        ab.timestamp,
        ai.dt
-FROM warehouse.ods_anchor_yy_info ai
+FROM warehouse.ods_yy_anchor_info ai
 LEFT JOIN spider_yy_backend.anchor_bluediamond ab ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ai.dt = ab.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- Merge
--- DROP TABLE IF EXISTS warehouse.ods_anchor_yy_live_detail_daily;
--- CREATE TABLE warehouse.ods_anchor_yy_live_detail_daily AS
-DELETE FROM warehouse.ods_anchor_yy_live_detail_daily WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_anchor_yy_live_detail_daily
+-- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_live_detail;
+-- CREATE TABLE warehouse.ods_yy_anchor_live_detail AS
+DELETE FROM warehouse.ods_yy_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_anchor_live_detail
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -255,10 +255,10 @@ SELECT ai.platform_id,
        ai.anchor_settle_rate,
        ai.logo,
        ai.dt
-FROM warehouse.ods_anchor_yy_info ai
-LEFT JOIN warehouse.ods_anchor_yy_live al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
-LEFT JOIN warehouse.ods_anchor_yy_virtual_coin av ON ai.backend_account_id = av.backend_account_id AND ai.anchor_uid = av.anchor_uid AND ai.dt = av.dt
-LEFT JOIN warehouse.ods_anchor_yy_commission_daily ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.anchor_uid AND ai.dt = ac.dt
+FROM warehouse.ods_yy_anchor_info ai
+LEFT JOIN warehouse.ods_yy_anchor_live al ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+LEFT JOIN warehouse.ods_yy_anchor_virtual_coin av ON ai.backend_account_id = av.backend_account_id AND ai.anchor_uid = av.anchor_uid AND ai.dt = av.dt
+LEFT JOIN warehouse.ods_day_yy_anchor_commission ac ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.anchor_uid AND ai.dt = ac.dt
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 LEFT JOIN spider_yy_backend.channel_list cl ON ai.backend_account_id = cl.backend_account_id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
@@ -268,22 +268,22 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- =====================================================================
 -- 公会收支明细
--- 公会蓝钻
-DROP TABLE IF EXISTS warehouse.ods_guild_yy_virtual_coin_an_mon;
-CREATE TABLE warehouse.ods_guild_yy_virtual_coin_an_mon AS
-# DELETE FROM warehouse.ods_guild_yy_virtual_coin_an_mon WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-# INSERT INTO warehouse.ods_guild_yy_virtual_coin_an_mon
+-- 公会每月获得各主播分成蓝钻
+-- DROP TABLE IF EXISTS warehouse.ods_yy_guild_virtual_coin_detail;
+-- CREATE TABLE warehouse.ods_yy_guild_virtual_coin_detail AS
+DELETE FROM warehouse.ods_yy_guild_virtual_coin_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_guild_virtual_coin_detail
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        cl.backend_account_id,
        cl.channel_num,
        gb.yynum AS anchor_no,
        gb.nick AS anchor_nick_name,
-       gb.totalDiamond AS an_total_vir_coin,
+       gb.totalDiamond AS anchor_virtual_coin,
        gb.settType AS settle_method_code,
        CASE WHEN gb.settType = 1 THEN '对公分成'
             WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
-       gb.money AS g_settle_vir_coin,
+       gb.money AS guild_vir_coin,
        CONCAT(gb.year, '-', gb.month, '-01') AS rpt_month,
        DATE(gb.payTime) AS dt
 FROM spider_yy_backend.channel_list cl
@@ -292,18 +292,18 @@ WHERE DATE(gb.payTime) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- 公会佣金ods_month_yy_guild_an_commission
-DROP TABLE IF EXISTS warehouse.ods_month_yy_guild_an_commission;
-CREATE TABLE warehouse.ods_month_yy_guild_an_commission AS
-# DELETE FROM warehouse.ods_month_yy_guild_an_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-# INSERT INTO warehouse.ods_month_yy_guild_an_commission
+-- 公会每月获得各主播分成佣金
+-- DROP TABLE IF EXISTS warehouse.ods_yy_guild_commission_detail;
+-- CREATE TABLE warehouse.ods_yy_guild_commission_detail AS
+DELETE FROM warehouse.ods_yy_guild_commission_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_yy_guild_commission_detail
 SELECT 1000 AS platform_id,
        'YY' AS platform_name,
        cl.backend_account_id,
        cl.channel_num,
        gc.yynum AS anchor_no,
        gc.nick AS anchor_nick_name,
-       gc.owMoney AS g_settle_commission,
+       gc.owMoney AS guild_commission,
        CONCAT(gc.year, '-', gc.month, '-01') AS rpt_month,
        DATE(gc.time) AS dt
 FROM spider_yy_backend.channel_list cl
