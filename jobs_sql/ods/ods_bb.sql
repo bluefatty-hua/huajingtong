@@ -50,13 +50,13 @@ FROM warehouse.ods_bb_anchor_live_detail
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_bb_anchor_live_detail
 SELECT 1001                                                                    AS platform_id,
-       'B站'                                                                    AS platform_name,
-       ad.backend_account_id,
+       'B站'                                                                   AS platform_name,
+       gat.backend_account_id,
        ad.g_id                                                                 AS guild_id,
        ad.g_name                                                               AS guild_name,
        ad.guild_type                                                           AS guild_type,
-       ad.uid                                                                  AS anchor_uid,
-       ad.uid                                                                  AS anchor_no,
+       gat.uid                                                                  AS anchor_uid,
+       gat.uid                                                                  AS anchor_no,
        ad.uname                                                                AS anchor_nick_name,
        nl.type                                                                 AS anchor_status,
        nl.type_text                                                            AS anchor_status_text,
@@ -87,7 +87,7 @@ FROM stage.bb_guild_anchor_dt gat
                    ON gat.uid = ad.uid AND gat.dt = ad.dt AND gat.backend_account_id = ad.backend_account_id
          LEFT JOIN stage.bb_normal_list nl
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
--- WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
