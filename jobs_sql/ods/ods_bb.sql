@@ -74,10 +74,6 @@ SELECT 1001                                                                    A
         CASE WHEN ad.pc_coin >= 0 THEN ad.pc_coin ELSE 0 END)                  AS anchor_total_coin,
        CASE WHEN ad.special_coin >= 0 THEN ad.special_coin ELSE 0 END          AS special_coin,
        CASE WHEN ad.send_coin >= 0 THEN ad.send_coin ELSE 0 END                AS send_coin,
-       pf.vir_coin_name,
-       pf.vir_coin_rate,
-       pf.include_pf_amt,
-       pf.pf_amt_rate,
        ad.DAU,
        ad.max_ppl,
        ad.fc,
@@ -91,8 +87,6 @@ FROM stage.bb_guild_anchor_dt gat
                    ON gat.uid = ad.uid AND gat.dt = ad.dt AND gat.backend_account_id = ad.backend_account_id
          LEFT JOIN stage.bb_normal_list nl
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
-         LEFT JOIN warehouse.platform pf
-                   ON 1001 = pf.id
 -- WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
