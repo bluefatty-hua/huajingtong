@@ -1,52 +1,54 @@
 -- 主播信息
-DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
-CREATE TABLE stage.bb_guild_anchor_dt AS
+# DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
+# CREATE TABLE stage.bb_guild_anchor_dt AS
+DELETE
+FROM stage.bb_guild_anchor_dt
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO stage.bb_guild_anchor_dt
 SELECT backend_account_id,
        uid,
        dt
 FROM spider_bb_backend.anchor_detail
--- WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT backend_account_id,
        uid,
        dt
 FROM spider_bb_backend.normal_list
--- WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-create index bb_anchor_detail_uid_backend_account_id_dt_index
-	on stage.bb_guild_anchor_dt (uid, backend_account_id, dt);
-
-
-DROP TABLE IF EXISTS stage.bb_anchor_detail;
-CREATE TABLE stage.bb_anchor_detail AS
+# DROP TABLE IF EXISTS stage.bb_anchor_detail;
+# CREATE TABLE stage.bb_anchor_detail AS
+DELETE
+FROM stage.bb_anchor_detail
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO stage.bb_anchor_detail
 SELECT *
 FROM spider_bb_backend.anchor_detail
--- WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
-create index bb_anchor_detail_uid_backend_account_id_dt_index
-	on stage.bb_anchor_detail (uid, backend_account_id, dt);
 
-DROP TABLE IF EXISTS stage.bb_normal_list;
-CREATE TABLE stage.bb_normal_list AS
+# DROP TABLE IF EXISTS stage.bb_normal_list;
+# CREATE TABLE stage.bb_normal_list AS
+DELETE
+FROM stage.bb_normal_list
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO stage.bb_normal_list
 SELECT *
 FROM spider_bb_backend.normal_list
--- WHERE dt BETWEEN '2019-12-01' AND '2020-01-08'
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
-create index bb_anchor_detail_uid_backend_account_id_dt_index
-	on stage.bb_normal_list (uid, backend_account_id, dt);
 
--- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
--- CREATE TABLE warehouse.ods_day_bb_anchor_live_detail AS
-DELETE FROM warehouse.ods_day_bb_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_day_bb_anchor_live_detail
+# DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
+# CREATE TABLE warehouse.ods_bb_anchor_live_detail AS
+DELETE
+FROM warehouse.ods_bb_anchor_live_detail
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_bb_anchor_live_detail
 SELECT 1001                                                                    AS platform_id,
        'B站'                                                                    AS platform_name,
        ad.backend_account_id,
@@ -91,10 +93,8 @@ FROM stage.bb_guild_anchor_dt gat
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND ad.backend_account_id = nl.backend_account_id
          LEFT JOIN warehouse.platform pf
                    ON 1001 = pf.id
--- WHERE gat.dt BETWEEN '2019-12-01' AND '2020-01-08'
-WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
+# WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
-
 
 
 
@@ -210,28 +210,32 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 -- 公会月收入
 -- DROP TABLE IF EXISTS warehouse.ods_guild_bb_amt_mon;
 -- CREATE TABLE warehouse.ods_guild_bb_amt_mon AS
-DELETE FROM warehouse.ods_guild_bb_amt_mon WHERE month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+DELETE
+FROM warehouse.ods_guild_bb_amt_mon
+WHERE month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.ods_guild_bb_amt_mon
 SELECT gs.backend_account_id,
        gs.month,
-       LEFT(gs.month, 4) AS rpt_year,
-       RIGHT(gs.month , 2) AS rpt_month,
+       LEFT(gs.month, 4)                AS rpt_year,
+       RIGHT(gs.month, 2)               AS rpt_month,
        gs.status,
        gs.status_text,
-       gs.total AS total_amt,
-       ROUND(gd.income + gd.base + gd.award + gd.send_money + gd.special_income +  gd.admin_change + gd.anchor_admin_change, 2) AS total_vir_coin,
+       gs.total                         AS total_amt,
+       ROUND(gd.income + gd.base + gd.award + gd.send_money + gd.special_income + gd.admin_change +
+             gd.anchor_admin_change, 2) AS total_vir_coin,
        gd.type,
-       gd.income AS an_income_vir_coin,
-       gd.base AS an_base_vir_coin,
-       gd.award AS g_award_vir_coin,
-       gd.send_money AS operate_award_punish,
-       gd.special_income AS special_income_vir_coin,
-       gd.admin_change AS g_ch_vir_coin,
-       gd.anchor_admin_change AS an_ch_vir_coin,
-       gd.admin_note AS comment,
+       gd.income                        AS an_income_vir_coin,
+       gd.base                          AS an_base_vir_coin,
+       gd.award                         AS g_award_vir_coin,
+       gd.send_money                    AS operate_award_punish,
+       gd.special_income                AS special_income_vir_coin,
+       gd.admin_change                  AS g_ch_vir_coin,
+       gd.anchor_admin_change           AS an_ch_vir_coin,
+       gd.admin_note                    AS comment,
        gs.timestamp
 FROM spider_bb_backend.guild_salary gs
-LEFT JOIN spider_bb_backend.guild_salary_detail gd ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
+         LEFT JOIN spider_bb_backend.guild_salary_detail gd
+                   ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
 WHERE gs.month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
 
