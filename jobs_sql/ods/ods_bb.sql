@@ -19,7 +19,7 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
+-- DROP TABLE IF EXISTS warehouse.ods_bb_anchor_live_detail;
 -- CREATE TABLE warehouse.ods_bb_anchor_live_detail AS
 DELETE
 FROM warehouse.ods_bb_anchor_live_detail
@@ -74,17 +74,17 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_month_bb_guild_virtual_coin AS
 DELETE
 FROM warehouse.ods_month_bb_guild_virtual_coin
-WHERE rpt_month BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO warehouse.ods_month_bb_guild_virtual_coin
 SELECT gs.backend_account_id,
-       CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS rpt_month,
+       CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
        gs.status,
        gs.status_text,
        gs.total                         AS guild_salary_rmb,
        ROUND(gd.income + gd.base + gd.award + gd.send_money + gd.special_income + gd.admin_change +
-             gd.anchor_admin_change, 2) AS guild_coin,
+             gd.anchor_admin_change, 2) AS guild_virtual_coin,
        gd.type,
-       gd.income                        AS anchor_coin,
+       gd.income                        AS anchor_virtual_coin,
        gd.base                          AS anchor_base_coin,
        gd.award                         AS guild_award_coin,
        gd.send_money                    AS operate_award_punish_coin,

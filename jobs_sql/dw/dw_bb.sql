@@ -1,20 +1,21 @@
--- 数据源 warehouse.ods_bb_anchor_live_detail_daily
--- ===============================================================
--- 汇总数据
--- 汇总维度 月-主播
+-- 汇总维度 月-公会—主播
 -- 汇总指标 开播天数，开播时长，虚拟币收入
-DROP TABLE IF EXISTS warehouse.dw_sum_bb_an_mon;
-CREATE TABLE warehouse.dw_sum_bb_an_mon AS
-SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                AS rpt_month,
+-- DROP TABLE IF EXISTS warehouse.dw_month_bb_guild_anchor_salary;
+-- CREATE TABLE warehouse.dw_month_bb_guild_anchor_salary AS
+DELETE
+FROM warehouse.dw_month_bb_guild_anchor_salary
+WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
+INSERT INTO warehouse.dw_month_bb_guild_anchor_salary
+SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
        t.platform_id,
        t.platform_name,
        t.backend_account_id,
        t.anchor_no,
-       COUNT(CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END) AS live_days,
-       SUM(t.duration)                                            AS sum_duration,
-       SUM(t.total_vir_coin)                                      AS total_vir_coin
-FROM warehouse.ods_anchor_bb_live_detail_daily t
-WHERE t.dt < CURRENT_DATE
+       COUNT(CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)           AS live_days,
+       SUM(t.duration)                                                      AS duration,
+       SUM(t.anchor_total_coin)                                             AS anchor_virtual_coin
+FROM warehouse.ods_bb_anchor_live_detail t
+WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
@@ -22,34 +23,49 @@ GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.anchor_no
 ;
 
+
 -- 汇总维度 月-公会
 -- 汇总指标 主播数，开播主播数，虚拟币收入
-DROP TABLE IF EXISTS warehouse.dw_sum_bb_g_mon;
-CREATE TABLE warehouse.dw_sum_bb_g_mon AS
-SELECT t.rpt_month,
+-- DROP TABLE IF EXISTS warehouse.dw_month_bb_guild_salary;
+-- CREATE TABLE warehouse.dw_month_bb_guild_salary AS
+DELETE
+FROM warehouse.dw_month_bb_guild_salary
+WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
+INSERT INTO warehouse.dw_month_bb_guild_salary
+SELECT t.dt,
        t.platform_id,
        t.platform_name,
        t.backend_account_id,
-       t.an_cnt,
-       t.an_live_cnt,
-       t1.total_amt AS total_amt_g,
-       t.total_vir_coin  AS total_vir_coin_sum,
-       t1.total_vir_coin AS total_vir_coin_g
-FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                                AS rpt_month,
+       t.anchor_cnt,
+       t.anchor_live_cnt,
+       t.anchor_virtual_coin  AS anchor_virtual_coin,
+       t1.type,
+       t1.guild_salary_rmb    AS guild_salart_rmb_ture,
+       t1.guild_virtual_coin  AS guild_virtual_coin_ture,
+       t1.anchor_virtual_coin AS anchor_vitual_coin_ture,
+       t1.anchor_base_coin AS anchor_base_coin,
+       t1.guild_award_coin AS guild_award_coin,
+       t1.operate_award_punish_coin AS operate_award_punish_coin,
+       t1.special_coin AS special_virtual_coin,
+       t1.anchor_change_vir_coin,
+       t1.guild_change_coin
+FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')       AS dt,
              t.platform_id,
              t.platform_name,
              t.backend_account_id,
-             COUNT(DISTINCT t.anchor_no)                                                AS an_cnt,
-             COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS an_live_cnt,
-             SUM(t.total_vir_coin)                                                      AS total_vir_coin
-      FROM warehouse.ods_anchor_bb_live_detail_daily t
+             COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
+             COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
+             SUM(t.anchor_total_coin)                                                   AS anchor_virtual_coin
+      FROM warehouse.ods_bb_anchor_live_detail t
       WHERE t.dt < CURRENT_DATE
       GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                t.platform_id,
                t.platform_name,
                t.backend_account_id) t
-LEFT JOIN warehouse.ods_guild_bb_amt_mon t1 ON t.rpt_month = t1.rpt_month AND t.backend_account_id = t1.backend_account_id
-WHERE t1.type rlike '公会总收益'
+         LEFT JOIN warehouse.ods_month_bb_guild_virtual_coin t1
+                   ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
+WHERE t1.type = '公会总收益'
+  AND t.dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
 ;
 
 
