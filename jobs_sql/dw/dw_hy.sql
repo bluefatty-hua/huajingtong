@@ -105,7 +105,7 @@ SELECT
   
 FROM `warehouse`.`ods_day_huya_anchor_live` t1
 LEFT JOIN warehouse.dw_month_huya_anchor_info t2
-        ON t1.channel_id = t2.channel_id AND t1.anchor_uid = t2.anchor_uid AND t2.dt = '{month.end}'
+        ON t1.channel_id = t2.channel_id AND t1.anchor_uid = t2.anchor_uid AND t2.dt = '{month.start}'
 WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
 GROUP BY anchor_uid,channel_id;
 
