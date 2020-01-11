@@ -47,7 +47,7 @@ INSERT IGNORE INTO stage.stage_day_huya_anchor_info
 (anchor_uid,channel_id, `comment` ,dt)
 SELECT uid,channel_id,'from anchor_live_detail_day',`date` AS dt 
 FROM `spider_huya_backend`.`anchor_live_detail_day`
-WHERE `date` BETWEEN '{start_date}' AND '{end_date}'
+WHERE `date` BETWEEN '{start_date}' AND '{end_date}';
 
 
 -- DROP TABLE IF EXISTS warehouse.ods_day_huya_anchor_info;
