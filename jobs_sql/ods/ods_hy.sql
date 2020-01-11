@@ -135,8 +135,12 @@ SELECT cd.platform_id,
        cd.logo,
        cd.desc,
        cd.create_time,
-       cd.dt
-FROM spider_huya_backend.channel_detail cd
+       cd.dt,
+       cgi.month as gift_calc_month,
+       cgu.month as guard_calc_month,
+       cn.month as noble_calc_month
+
+FROM warehouse.ods_day_huya_guild_info cd
 LEFT JOIN spider_huya_backend.channel_revenue_day cr ON cd.dt = cr.dt AND cd.channel_id = cr.channel_id
 LEFT JOIN spider_huya_backend.channel_income_gift_day cgi ON cd.dt = cgi.dt AND cd.channel_id = cgi.channel_id
 LEFT JOIN spider_huya_backend.channel_income_guard_day cgu ON cd.dt = cgu.income_date AND cd.channel_id = cgu.channel_id
