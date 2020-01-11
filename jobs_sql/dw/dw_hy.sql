@@ -1,3 +1,82 @@
+-- 数据源 warehouse.dw_month_huya_guild_info、dw_month_huya_anchor_info
+-- ===============================================================
+-- 汇总月guild、anchor info数据
+-- DROP TABLE IF EXISTS stage.stage_month_huya_guild_info;
+-- CREATE TABLE stage.stage_month_huya_guild_info AS
+delete from stage.stage_month_huya_guild_info where dt >='{month.start}' AND dt<='{month.end}'
+insert into stage.stage_month_huya_guild_info
+SELECT channel_id,MAX(dt) AS dt
+FROM warehouse.ods_day_huya_guild_info
+WHERE dt >='{month.start}' AND dt<='{month.end}'
+GROUP BY channel_id
+
+-- DROP TABLE IF EXISTS warehouse.dw_month_huya_guild_info;
+-- CREATE TABLE warehouse.dw_month_huya_guild_info AS
+delete from warehouse.dw_month_huya_guild_info where dt >='{month.start}' AND dt<='{month.end}'
+insert into warehouse.dw_month_huya_guild_info
+select `platform_id`,
+  `platform_name`,
+  t1.`channel_id`,
+  `channel_num`,
+  `ow`,
+  `channel_name`,
+  `logo`,
+  `desc`,
+  `create_time`,
+  `is_platinum`,
+  `sign_count`,
+  `sign_limit`,
+  '{month.start}' as `dt`
+from `warehouse`.`ods_day_huya_guild_info`  t1
+join stage.stage_month_huya_guild_info t2
+on t1.dt= t2.dt and t1.channel_id = t2.channel_id
+where t1.dt >='{month.start}' AND t1.dt<='{month.end}'
+
+
+-- DROP TABLE IF EXISTS stage.stage_month_huya_anchor_info;
+-- CREATE TABLE stage.stage_month_huya_anchor_info AS
+delete from stage.stage_month_huya_anchor_info where dt >='{month.start}' AND dt<='{month.end}'
+insert into stage.stage_month_huya_anchor_info
+SELECT anchor_uid,MAX(dt) AS dt,channel_id
+FROM warehouse.ods_day_huya_anchor_info
+WHERE dt >='{month.start}' AND dt<='{month.end}'
+GROUP BY anchor_uid,channel_id
+
+
+-- DROP TABLE IF EXISTS warehouse.dw_month_huya_anchor_info;
+-- CREATE TABLE warehouse.dw_month_huya_anchor_info AS
+delete from warehouse.dw_month_huya_anchor_info where dt >='{month.start}' AND dt<='{month.end}'
+insert into warehouse.dw_month_huya_anchor_info
+select  `platform_id`,
+  `platform_name`,
+  t1.`channel_id`,
+  `channel_num`,
+  t1.`anchor_uid`,
+  `anchor_no`,
+  `comment`,
+  `nick`,
+  `activity_days`,
+  `months`,
+  `ow_percent`,
+  `sign_time`,
+  `surplus_days`,
+  '{month.start}' as `dt`,
+  `avatar`,
+  t2.dt as last_active_date
+from `warehouse`.`ods_day_huya_anchor_info`  t1
+join stage.stage_month_huya_anchor_info t2
+on t1.dt= t2.dt and t1.anchor_uid = t2.anchor_uid and t1.channel_id= t2.channel_id
+where t1.dt >='{month.start}' AND t1.dt<='{month.end}'
+
+
+
+
+
+
+
+
+
+
 -- 数据源 warehouse.ods_bb_anchor_live_detail_daily
 -- ===============================================================
 -- 汇总数据
@@ -5,7 +84,7 @@
 -- 汇总指标 开播天数，开播时长，虚拟币收入
 DROP TABLE IF EXISTS warehouse.dw_sum_hy_an_mon;
 CREATE TABLE warehouse.dw_sum_hy_an_mon AS
-SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')                                                AS rpt_month,
+SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')        AS rpt_month,
        t.platform_id,
        t.platform_name,
        t.anchor_no,
