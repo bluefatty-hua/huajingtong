@@ -42,8 +42,8 @@ SELECT ai.platform_id,
        ai.anchor_no,
        ai.anchor_nick_name,
        ai.anchor_name,
-       ai.fans_num,
-       ai.fans_group_num,
+       ai.fans_num AS fans_cnt,
+       ai.fans_group_num AS fans_goup_cnt,
        CASE WHEN ain.live_time > 0 THEN 1 ELSE 0 END AS live_status,
        CASE WHEN ain.live_time >= 0 THEN ain.live_time ELSE 0 END AS duration_hour,
        CASE WHEN ain.live_time >= 0 THEN ain.live_time * 60 * 60 ELSE 0 END AS duration,
@@ -59,7 +59,7 @@ LEFT JOIN spider_now_backend.anchor_income ain ON ai.backend_account_id = ain.ba
 
 
 -- ===================================================================
--- 公会每日收入、每日开播主播数
+-- 公会每日流水、收入、每日开播主播数
 -- DROP TABLE IF EXISTS warehouse.ods_day_now_guild_commission;
 -- CREATE TABLE warehouse.ods_day_now_guild_commission AS
 DELETE FROM warehouse.ods_day_now_guild_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
