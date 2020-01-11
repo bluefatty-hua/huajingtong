@@ -70,7 +70,44 @@ where t1.dt >='{month.start}' AND t1.dt<='{month.end}'
 
 
 
+-- DROP TABLE IF EXISTS warehouse.dw_month_huya_anchor_live;
+-- CREATE TABLE warehouse.dw_month_huya_anchor_live AS
+delete from warehouse.dw_month_huya_anchor_live where dt ='{month.start}' 
+insert into warehouse.dw_month_huya_anchor_live
+SELECT
 
+  t2.platform_id,
+  t2.platform_name,
+  t1.channel_id,
+  t2.channel_num,
+  t1.anchor_uid,
+  t2.anchor_no,
+  t2.nick,
+  t2.comment,
+  SUM(IFNULL(t1.`duration`,0)) AS duration,
+  SUM(IFNULL(t1.live_status,0)) AS live_cnt,
+  SUM(IFNULL(t1.income,0)) AS income,
+  AVG(IF(t1.peak_pcu>0,t1.peak_pcu,NULL)) AS peak_pcu_avg,
+  MAX(t1.peak_pcu) AS peak_pcu_max,
+  MIN(t1.peak_pcu) AS peak_pcu_min,
+  '{month.start}' AS dt,
+  t2.activity_days,
+  t2.months,
+  t2.ow_percent,
+  t2.sign_time,
+  t2.surplus_days,
+  t2.`avatar` AS avatar,
+  MAX(t1.vir_coin_name) AS vir_coin_name,
+  MAX(t1.vir_coin_rate) AS vir_coin_rate,
+  MAX(t1.include_pf_amt) AS include_pf_amt,
+  MAX(t1.pf_amt_rate) AS pf_amt_rate
+ 
+  
+FROM `warehouse`.`ods_day_huya_anchor_live` t1
+LEFT JOIN warehouse.dw_month_huya_anchor_info t2
+        ON t1.channel_id = t2.channel_id AND t1.anchor_uid = t2.anchor_uid AND t2.dt = '{month.end}'
+WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
+GROUP BY anchor_uid,channel_id
 
 
 
