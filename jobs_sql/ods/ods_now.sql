@@ -1,8 +1,8 @@
 -- 主播信息
-DROP TABLE IF EXISTS warehouse.ods_now_anchor_info;
-CREATE TABLE warehouse.ods_now_anchor_info AS
--- DELETE FROM warehouse.ods_anchor_now_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
--- INSERT INTO warehouse.ods_anchor_now_info
+-- DROP TABLE IF EXISTS warehouse.ods_day_now_anchor_info;
+-- CREATE TABLE warehouse.ods_day_now_anchor_info AS
+DELETE FROM warehouse.ods_day_now_anchor_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_day_now_anchor_info
 SELECT 1003 AS platform_id,
        'NOW' AS platform_name,
        ad.backend_account_id,
@@ -25,15 +25,15 @@ SELECT 1003 AS platform_id,
        ad.timestamp
 FROM
     spider_now_backend.anchor_detail ad
--- WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- Merge
-DROP TABLE IF EXISTS warehouse.ods_now_anchor_live_detail;
-CREATE TABLE warehouse.ods_now_anchor_live_detail AS
--- DELETE FROM warehouse.ods_now_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
--- INSERT INTO warehouse.ods_now_anchor_live_detail
+-- DROP TABLE IF EXISTS warehouse.ods_day_now_anchor_live_detail;
+-- CREATE TABLE warehouse.ods_day_now_anchor_live_detail AS
+DELETE FROM warehouse.ods_now_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_now_anchor_live_detail
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -52,9 +52,9 @@ SELECT ai.platform_id,
        ai.settle_method_code,
        ai.settle_method_text,
        ai.dt
-FROM warehouse.ods_now_anchor_info ai
+FROM warehouse.ods_day_now_anchor_info ai
 LEFT JOIN spider_now_backend.anchor_income ain ON ai.backend_account_id = ain.backend_account_id AND ai.dt = DATE_FORMAT(ain.date, '%Y-%m-%d') AND ai.anchor_qq_no = ain.uin
--- WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -85,11 +85,11 @@ INSERT INTO warehouse.ods_month_now_guild_commission
 SELECT 1003 AS platform_id,
        'NOW' AS platform_name,
        backend_account_id,
-       DATE_FORMAT(ui.date, '%Y-%m-%d') AS dt,
+       DATE_FORMAT(CONCAT(LEFT(ui.date, 4), '-', right(ui.date, 2), '-01'), '%Y-%m-%d') AS dt,
        ui.anchor_num AS anchor_cnt,
        ui.cur_month_total_journal AS guild_commission_rmb,
        ui.average_journal AS average_anchor_commission_rmb,
        ui.living_rate AS anchor_live_rate
 FROM spider_now_backend.union_stat_info_by_month ui
-WHERE DATE_FORMAT(ui.date, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
+WHERE  DATE_FORMAT(CONCAT(LEFT(ui.date, 4), '-', right(ui.date, 2), '-01'), '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 ;
