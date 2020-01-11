@@ -1,7 +1,7 @@
 -- 汇总维度 日-公会
 -- 汇总指标 开播天数，开播时长，主播流水，公会流水，公会收入
-DROP TABLE IF EXISTS warehouse.dw_day_now_guild;
-CREATE TABLE warehouse.dw_day_now_guild AS
+DROP TABLE IF EXISTS warehouse.dw_day_now_guild_commission;
+CREATE TABLE warehouse.dw_day_now_guild_commission AS
 SELECT al.dt,
        al.platform_id,
        al.platform_name,
@@ -11,8 +11,8 @@ SELECT al.dt,
        ac.anchor_live_cnt      AS anchor_live_cnt_ture,
        al.duration,
        al.anchor_commission_rmb,
-       ac.guild_commission_rmb AS guild_commission_true_rmb,
-       ac.guild_salary_rmb     AS guild_salary_ture_rmb
+       ac.guild_commission_rmb AS guild_commission_rmb_true,
+       ac.guild_salary_rmb     AS guild_salary_rmb_ture
 FROM (SELECT t.dt,
              t.platform_id,
              t.platform_name,
@@ -34,8 +34,8 @@ FROM (SELECT t.dt,
 
 -- 汇总维度 月-公会
 -- 汇总指标 公会主播数 公会开播主播数 公会主播收入
-DROP TABLE IF EXISTS warehouse.dw_month_now_guild;
-CREATE TABLE warehouse.dw_month_now_guild AS
+DROP TABLE IF EXISTS warehouse.dw_month_now_guild_commission;
+CREATE TABLE warehouse.dw_month_now_guild_commission AS
 SELECT al.dt,
        al.platform_id,
        al.platform_name,
@@ -44,7 +44,7 @@ SELECT al.dt,
        al.anchor_live_cnt,
        al.anchor_commission_rmb,
        gc.anchor_cnt AS anchor_cnt_ture,
-       gc.guild_commission_rmb AS guild_commission_ture_rmb,
+       gc.guild_commission_rmb AS guild_commission_rmb_ture,
        gc.anchor_live_rate,
        gc.average_anchor_commission_rmb
 FROM (
