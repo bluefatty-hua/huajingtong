@@ -110,6 +110,54 @@ WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
 GROUP BY anchor_uid,channel_id;
 
 
+-- DROP TABLE IF EXISTS stage.stage_month_huya_guild_live_revenue;
+-- CREATE TABLE stage.stage_month_huya_guild_live_revenue AS
+delete from stage.stage_month_huya_guild_live_revenue where dt ='{month.start}';
+insert into stage.stage_month_huya_guild_live_revenue
+SELECT
+  t1.`channel_id`,
+  SUM(ifnull(`revenue`,0)) AS revenue,
+  '{month.start}' as dt
+FROM `warehouse`.`ods_day_huya_guild_live` t1
+WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
+GROUP BY t1.channel_id;
+
+-- DROP TABLE IF EXISTS stage.stage_month_huya_guild_live_gift_income;
+-- CREATE TABLE stage.stage_month_huya_guild_live_gift_income AS
+delete from stage.stage_month_huya_guild_live_gift_income where dt ='{month.start}';
+insert into stage.stage_month_huya_guild_live_gift_income
+SELECT
+  t1.`channel_id`,
+  SUM(ifnull(`gift_income`,0)) AS gift_income,
+  '{month.start}' as dt
+FROM `warehouse`.`ods_day_huya_guild_live` t1
+WHERE gift_calc_month=  '{month.start}' 
+GROUP BY t1.channel_id;
+
+-- DROP TABLE IF EXISTS stage.stage_month_huya_guild_live_guard_income;
+-- CREATE TABLE stage.stage_month_huya_guild_live_guard_income AS
+delete from stage.stage_month_huya_guild_live_guard_income where dt ='{month.start}';
+insert into stage.stage_month_huya_guild_live_guard_income
+SELECT
+  t1.`channel_id`,
+  SUM(ifnull(`guard_income`,0)) AS guard_income,
+  '{month.start}' as dt
+FROM `warehouse`.`ods_day_huya_guild_live` t1
+WHERE guard_calc_month = '{month.start}' 
+GROUP BY t1.channel_id;
+
+-- DROP TABLE IF EXISTS stage.stage_month_huya_guild_live_noble_income;
+-- CREATE TABLE stage.stage_month_huya_guild_live_noble_income AS
+delete from stage.stage_month_huya_guild_live_noble_income where dt ='{month.start}';
+insert into stage.stage_month_huya_guild_live_noble_income
+SELECT
+  t1.`channel_id`,
+  SUM(ifnull(`noble_income`,0)) AS noble_income,
+  '{month.start}' as dt
+FROM `warehouse`.`ods_day_huya_guild_live` t1
+WHERE noble_calc_month = '{month.start}' 
+GROUP BY t1.channel_id;
+
 
 -- DROP TABLE IF EXISTS warehouse.dw_month_huya_guild_live;
 -- CREATE TABLE warehouse.dw_month_huya_guild_live AS
@@ -129,13 +177,20 @@ SELECT
   t2.`sign_count`,
   t2.`sign_limit`,
   '{month.start}' AS dt,
-  SUM(`revenue`) AS revenue,
-  SUM(IF(gift_calc_month= '{month.start}', `gift_income`,0)) AS gift_income,
-  SUM(IF(guard_calc_month= '{month.start}', `guard_income`,0)) AS guard_income,
-  SUM(IF(noble_calc_month= '{month.start}', `noble_income`,0)) AS noble_income
-FROM `warehouse`.`ods_day_huya_guild_live` t1
+  revenue,
+  gift_income,
+  guard_income,
+  noble_income
+FROM (SELECT channel_id FROM `warehouse`.`ods_day_huya_guild_live` WHERE dt BETWEEN '{month.start}' AND '{month.end}' GROUP BY channel_id) t1
+join stage.stage_month_huya_guild_live_revenue t3
+  on t3.channel_id = t1.channel_id and t3.dt = '{month.start}' 
+join stage.stage_month_huya_guild_live_gift_income t4
+  on t4.channel_id = t1.channel_id and t4.dt = '{month.start}'
+join stage.stage_month_huya_guild_live_guard_income t5
+  on t5.channel_id = t1.channel_id and t5.dt = '{month.start}'
+join stage.stage_month_huya_guild_live_noble_income t6
+  on t6.channel_id = t1.channel_id and t6.dt = '{month.start}'
 LEFT OUTER JOIN `warehouse`.`dw_month_huya_guild_info` t2
 	ON t1.channel_id= t2.channel_id AND t2.dt= '{month.start}'
-WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
-GROUP BY t1.channel_id;
+
 
