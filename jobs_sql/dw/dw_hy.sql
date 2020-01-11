@@ -3,16 +3,16 @@
 -- 汇总月guild、anchor info数据
 -- DROP TABLE IF EXISTS stage.stage_month_huya_guild_info;
 -- CREATE TABLE stage.stage_month_huya_guild_info AS
-delete from stage.stage_month_huya_guild_info where dt >='{month.start}' AND dt<='{month.end}'
+delete from stage.stage_month_huya_guild_info where dt >='{month.start}' AND dt<='{month.end}';
 insert into stage.stage_month_huya_guild_info
 SELECT channel_id,MAX(dt) AS dt
 FROM warehouse.ods_day_huya_guild_info
 WHERE dt >='{month.start}' AND dt<='{month.end}'
-GROUP BY channel_id
+GROUP BY channel_id;
 
 -- DROP TABLE IF EXISTS warehouse.dw_month_huya_guild_info;
 -- CREATE TABLE warehouse.dw_month_huya_guild_info AS
-delete from warehouse.dw_month_huya_guild_info where dt >='{month.start}' AND dt<='{month.end}'
+delete from warehouse.dw_month_huya_guild_info where dt >='{month.start}' AND dt<='{month.end}';
 insert into warehouse.dw_month_huya_guild_info
 select `platform_id`,
   `platform_name`,
@@ -30,22 +30,22 @@ select `platform_id`,
 from `warehouse`.`ods_day_huya_guild_info`  t1
 join stage.stage_month_huya_guild_info t2
 on t1.dt= t2.dt and t1.channel_id = t2.channel_id
-where t1.dt >='{month.start}' AND t1.dt<='{month.end}'
+where t1.dt >='{month.start}' AND t1.dt<='{month.end}';
 
 
 -- DROP TABLE IF EXISTS stage.stage_month_huya_anchor_info;
 -- CREATE TABLE stage.stage_month_huya_anchor_info AS
-delete from stage.stage_month_huya_anchor_info where dt >='{month.start}' AND dt<='{month.end}'
+delete from stage.stage_month_huya_anchor_info where dt >='{month.start}' AND dt<='{month.end}';
 insert into stage.stage_month_huya_anchor_info
 SELECT anchor_uid,MAX(dt) AS dt,channel_id
 FROM warehouse.ods_day_huya_anchor_info
 WHERE dt >='{month.start}' AND dt<='{month.end}'
-GROUP BY anchor_uid,channel_id
+GROUP BY anchor_uid,channel_id;
 
 
 -- DROP TABLE IF EXISTS warehouse.dw_month_huya_anchor_info;
 -- CREATE TABLE warehouse.dw_month_huya_anchor_info AS
-delete from warehouse.dw_month_huya_anchor_info where dt >='{month.start}' AND dt<='{month.end}'
+delete from warehouse.dw_month_huya_anchor_info where dt >='{month.start}' AND dt<='{month.end}';
 insert into warehouse.dw_month_huya_anchor_info
 select  `platform_id`,
   `platform_name`,
@@ -66,7 +66,7 @@ select  `platform_id`,
 from `warehouse`.`ods_day_huya_anchor_info`  t1
 join stage.stage_month_huya_anchor_info t2
 on t1.dt= t2.dt and t1.anchor_uid = t2.anchor_uid and t1.channel_id= t2.channel_id
-where t1.dt >='{month.start}' AND t1.dt<='{month.end}'
+where t1.dt >='{month.start}' AND t1.dt<='{month.end}';
 
 
 

@@ -121,7 +121,7 @@ INSERT INTO warehouse.ods_day_huya_guild_live
 SELECT cd.platform_id,
        cd.platform_name,
        cd.channel_id,
-       cd.channel_number AS channel_num,
+       cd.channel_num AS channel_num,
        cd.ow AS ow,
        cd.channel_name AS channel_name,
        cd.is_platinum,
