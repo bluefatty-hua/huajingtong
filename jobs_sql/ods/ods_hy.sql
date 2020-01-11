@@ -76,10 +76,10 @@ WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
 
 
 -- 主播直播和直播收入
--- DROP TABLE IF EXISTS warehouse.dw_day_huya_anchor_live;
--- CREATE TABLE warehouse.dw_day_huya_anchor_live AS
-DELETE FROM warehouse.dw_day_huya_anchor_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.dw_day_huya_anchor_live
+-- DROP TABLE IF EXISTS warehouse.ods_day_huya_anchor_live;
+-- CREATE TABLE warehouse.ods_day_huya_anchor_live AS
+DELETE FROM warehouse.ods_day_huya_anchor_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_day_huya_anchor_live
 SELECT ai.platform_id,
         ai.platform_name,
         ai.channel_id,
