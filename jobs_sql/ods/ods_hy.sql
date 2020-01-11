@@ -107,7 +107,7 @@ FROM warehouse.ods_day_huya_anchor_info ai
 JOIN spider_huya_backend.anchor_live_detail_day al 
     ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.uid AND ai.dt = al.date
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}';
 
 
 
