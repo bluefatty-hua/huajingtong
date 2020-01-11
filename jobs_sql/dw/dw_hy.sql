@@ -72,7 +72,7 @@ where t1.dt >='{month.start}' AND t1.dt<='{month.end}';
 
 -- DROP TABLE IF EXISTS warehouse.dw_month_huya_anchor_live;
 -- CREATE TABLE warehouse.dw_month_huya_anchor_live AS
-delete from warehouse.dw_month_huya_anchor_live where dt ='{month.start}' 
+delete from warehouse.dw_month_huya_anchor_live where dt ='{month.start}';
 insert into warehouse.dw_month_huya_anchor_live
 SELECT
 
@@ -107,13 +107,13 @@ FROM `warehouse`.`ods_day_huya_anchor_live` t1
 LEFT JOIN warehouse.dw_month_huya_anchor_info t2
         ON t1.channel_id = t2.channel_id AND t1.anchor_uid = t2.anchor_uid AND t2.dt = '{month.end}'
 WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
-GROUP BY anchor_uid,channel_id
+GROUP BY anchor_uid,channel_id;
 
 
 
 -- DROP TABLE IF EXISTS warehouse.dw_month_huya_guild_live;
 -- CREATE TABLE warehouse.dw_month_huya_guild_live AS
-delete from warehouse.dw_month_huya_guild_live where dt ='{month.start}' 
+delete from warehouse.dw_month_huya_guild_live where dt ='{month.start}';
 insert into warehouse.dw_month_huya_guild_live
 SELECT
   t2.`platform_id`,
@@ -134,8 +134,8 @@ SELECT
   SUM(IF(guard_calc_month= '{month.start}', `guard_income`,0)) AS guard_income,
   SUM(IF(noble_calc_month= '{month.start}', `noble_income`,0)) AS noble_income
 FROM `warehouse`.`ods_day_huya_guild_live` t1
-LEFT OUTER JOIN `warehouse`.`ods_month_huya_guild_info` t2
+LEFT OUTER JOIN `warehouse`.`dw_month_huya_guild_info` t2
 	ON t1.channel_id= t2.channel_id AND t2.dt= '{month.start}'
 WHERE t1.dt BETWEEN '{month.start}' AND '{month.end}'
-GROUP BY t1.channel_id
+GROUP BY t1.channel_id;
 
