@@ -89,7 +89,7 @@ SELECT
   SUM(IFNULL(t1.income,0)) AS income,
   AVG(IF(t1.peak_pcu>0,t1.peak_pcu,NULL)) AS peak_pcu_avg,
   MAX(t1.peak_pcu) AS peak_pcu_max,
-  MIN(t1.peak_pcu) AS peak_pcu_min,
+  MIN(if(t1.peak_pcu>0,t1.peak_pcu,null)) AS peak_pcu_min,
   '{month.start}' AS dt,
   t2.activity_days,
   t2.months,
