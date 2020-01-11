@@ -19,7 +19,7 @@ SELECT
   `dt`,
   `timestamp`
 FROM `spider_huya_backend`.`channel_detail` 
-WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt  BETWEEN '{start_date}' AND '{end_date}';
 
 -- 主播信息
 -- DROP TABLE IF EXISTS stage.stage_day_huya_anchor_info;
@@ -43,7 +43,7 @@ SELECT
 FROM `spider_huya_backend`.`anchor_detail` ad
 WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
 
-INSERT IGNORE INTO warehouse.ods_day_huya_anchor_info
+INSERT IGNORE INTO stage.stage_day_huya_anchor_info
 (anchor_uid,channel_id, `comment` ,dt)
 SELECT uid,channel_id,'from anchor_live_detail_day',`date` AS dt 
 FROM `spider_huya_backend`.`anchor_live_detail_day`
@@ -58,7 +58,7 @@ SELECT
   platform_id,
   platform_name,
   ad.`channel_id`,
-  channel_number AS channel_num,
+  channel_num AS channel_num,
   anchor_uid AS `anchor_uid`,
   anchor_no AS `anchor_no`,
   `comment`,
@@ -70,7 +70,7 @@ SELECT
   `surplus_days` surplus_days,
    ad.`dt`,
   `avatar` AS avatar
-FROM `warehouse`.`ods_day_huya_anchor_info` ad
+FROM `stage`.`stage_day_huya_anchor_info` ad
 LEFT JOIN warehouse.`ods_day_huya_guild_info` ch ON  ad.`channel_id` = ch.`channel_id` AND ad.dt = ch.dt
 WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
 
@@ -103,7 +103,7 @@ SELECT ai.platform_id,
         pf.vir_coin_rate,
         pf.include_pf_amt,
         pf.pf_amt_rate
-FROM warehouse.dw_day_huya_anchor_info ai
+FROM warehouse.ods_day_huya_anchor_info ai
 JOIN spider_huya_backend.anchor_live_detail_day al 
     ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.uid AND ai.dt = al.date
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
