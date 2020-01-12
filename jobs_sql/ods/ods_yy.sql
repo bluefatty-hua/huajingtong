@@ -247,12 +247,12 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- Merge
--- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_live_detail;
--- CREATE TABLE warehouse.ods_yy_anchor_live_detail AS
+-- DROP TABLE IF EXISTS warehouse.ods_day_yy_anchor_live_detail;
+-- CREATE TABLE warehouse.ods_day_yy_anchor_live_detail AS
 DELETE
-FROM warehouse.ods_yy_anchor_live_detail
+FROM warehouse.ods_day_yy_anchor_live_detail
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_yy_anchor_live_detail
+INSERT INTO warehouse.ods_day_yy_anchor_live_detail
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,

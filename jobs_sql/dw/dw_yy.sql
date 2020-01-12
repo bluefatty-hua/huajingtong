@@ -136,7 +136,7 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d')   
              SUM(CASE WHEN anchor_commission >= 0 THEN anchor_commission ELSE 0 END) AS anchor_commission,
              SUM(CASE WHEN guild_commission >= 0 THEN guild_commission ELSE 0 END)   AS guild_commission,
              COUNT(DISTINCT dt)                                                      AS dt_cnt
-      FROM warehouse.ods_yy_anchor_live_detail
+      FROM warehouse.ods_day_yy_anchor_live_detail
       WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
       GROUP BY DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d'),
                platform_id,
@@ -187,7 +187,7 @@ FROM (
                 SUM(CASE WHEN t.anchor_commission >= 0 THEN t.anchor_commission ELSE 0 END) AS anchor_commission,
                 SUM(CASE WHEN t.guild_commission >= 0 THEN t.guild_commission ELSE 0 END)   AS guild_commission,
                 COUNT(DISTINCT t.dt)                                                        AS dt_cnt
-         FROM warehouse.ods_yy_anchor_live_detail t
+         FROM warehouse.ods_day_yy_anchor_live_detail t
          WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
          GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                   t.platform_id,
