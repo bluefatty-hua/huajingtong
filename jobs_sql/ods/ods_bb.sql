@@ -10,7 +10,7 @@ SELECT t.backend_account_id,
        t1.id,
        t.dt
 FROM spider_bb_backend.anchor_detail t
-LEFT JOIN spider_bb_backend.normal_list t1 ON t.backend_account_id = t1.backend_account_id AND t.uid = t1.uid
+LEFT JOIN spider_bb_backend.normal_list t1 ON t.backend_account_id = t1.backend_account_id AND t.uid = t1.uid AND t.dt = t1.dt
 WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT backend_account_id,
