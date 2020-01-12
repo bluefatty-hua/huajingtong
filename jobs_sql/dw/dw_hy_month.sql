@@ -14,10 +14,12 @@ GROUP BY channel_id;
 -- CREATE TABLE warehouse.dw_huya_month_guild_info AS
 delete from warehouse.dw_huya_month_guild_info where dt >='{month.start}' AND dt<='{month.end}';
 insert into warehouse.dw_huya_month_guild_info
-select `platform_id`,
-  `platform_name`,
+select 
+  '{month.start}' as `dt`,
   t1.`channel_id`,
   `channel_num`,
+  `platform_id`,
+  `platform_name`,
   `ow`,
   `channel_name`,
   `logo`,
@@ -25,8 +27,8 @@ select `platform_id`,
   `create_time`,
   `is_platinum`,
   `sign_count`,
-  `sign_limit`,
-  '{month.start}' as `dt`
+  `sign_limit`
+  
 from `warehouse`.`dw_huya_day_guild_info`  t1
 join stage.stage_huya_month_guild_info t2
 on t1.dt= t2.dt and t1.channel_id = t2.channel_id
@@ -47,12 +49,14 @@ GROUP BY anchor_uid,channel_id;
 -- CREATE TABLE warehouse.dw_huya_month_anchor_info AS
 delete from warehouse.dw_huya_month_anchor_info where dt >='{month.start}' AND dt<='{month.end}';
 insert into warehouse.dw_huya_month_anchor_info
-select  `platform_id`,
-  `platform_name`,
+select  
+  '{month.start}' as `dt`,
   t1.`channel_id`,
   `channel_num`,
   t1.`anchor_uid`,
   `anchor_no`,
+  `platform_id`,
+  `platform_name`,
   `comment`,
   `nick`,
   `activity_days`,
@@ -60,7 +64,6 @@ select  `platform_id`,
   `ow_percent`,
   `sign_time`,
   `surplus_days`,
-  '{month.start}' as `dt`,
   `avatar`,
   t2.dt as last_active_date
 from `warehouse`.`dw_huya_day_anchor_info`  t1
@@ -75,9 +78,8 @@ where t1.dt >='{month.start}' AND t1.dt<='{month.end}';
 delete from warehouse.dw_huya_month_anchor_live where dt ='{month.start}';
 insert into warehouse.dw_huya_month_anchor_live
 SELECT
-
-  t2.platform_id,
-  t2.platform_name,
+ '{month.start}' AS dt,
+  
   t1.channel_id,
   t2.channel_num,
   t1.anchor_uid,
@@ -90,7 +92,8 @@ SELECT
   peak_pcu_avg,
   peak_pcu_max,
   peak_pcu_min,
-  '{month.start}' AS dt,
+  t2.platform_id,
+  t2.platform_name,
   t2.activity_days,
   t2.months,
   t2.ow_percent,
@@ -173,10 +176,11 @@ GROUP BY t1.channel_id;
 delete from warehouse.dw_huya_month_guild_live where dt ='{month.start}';
 insert into warehouse.dw_huya_month_guild_live
 SELECT
-  t2.`platform_id`,
-  t2.`platform_name`,
+  '{month.start}' AS dt,
   t1.`channel_id`,
   t2.`channel_num`,
+  t2.`platform_id`,
+  t2.`platform_name`,
   t2.`ow`,
   t2.`channel_name`,
   t2.`logo`,
@@ -185,7 +189,7 @@ SELECT
   t2.`is_platinum`,
   t2.`sign_count`,
   t2.`sign_limit`,
-  '{month.start}' AS dt,
+  
   revenue,
   gift_income,
   guard_income,
