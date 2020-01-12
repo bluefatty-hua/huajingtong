@@ -19,23 +19,24 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
--- CREATE TABLE warehouse.ods_bb_anchor_live_detail AS
+-- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live;
+-- CREATE TABLE warehouse.ods_day_bb_anchor_live AS
 DELETE
-FROM warehouse.ods_day_bb_anchor_live_detail
+FROM warehouse.ods_day_bb_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_day_bb_anchor_live_detail
+INSERT INTO warehouse.ods_day_bb_anchor_live
 SELECT 1001                                                                    AS platform_id,
        'B站'                                                                    AS platform_name,
+       gat.dt,
        gat.backend_account_id,
-       ad.g_id                                                                 AS guild_id,
-       ad.g_name                                                               AS guild_name,
-       ad.guild_type                                                           AS guild_type,
        nl.id                                                                   AS anchor_uid,
        ad.uid                                                                  AS anchor_no,
        ad.uname                                                                AS anchor_nick_name,
        nl.type                                                                 AS anchor_status,
        nl.type_text                                                            AS anchor_status_text,
+       ad.g_id                                                                 AS guild_id,
+       ad.g_name                                                               AS guild_name,
+       ad.guild_type                                                           AS guild_type,
        ad.live_day                                                             AS live_status,
        ad.valid_live_day                                                       AS valid_live_status,
        CASE WHEN ad.live_hour >= 0 THEN ad.live_hour ELSE 0 END                AS live_hour,
@@ -56,8 +57,7 @@ SELECT 1001                                                                    A
        nl.status                                                               AS contract_status,
        nl.status_text                                                          AS contract_status_text,
        DATE_FORMAT(nl.start_date, '%Y-%m-%d %T')                               AS contract_signtime,
-       DATE_FORMAT(nl.end_date, '%Y-%m-%d %T')                                 AS contract_endtime,
-       gat.dt
+       DATE_FORMAT(nl.end_date, '%Y-%m-%d %T')                                 AS contract_endtime
 FROM stage.bb_guild_anchor_dt gat
          LEFT JOIN spider_bb_backend.anchor_detail ad
                    ON gat.uid = ad.uid AND gat.dt = ad.dt AND gat.backend_account_id = ad.backend_account_id
@@ -70,14 +70,14 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- ================================================================================
 -- 公会月收入
--- DROP TABLE IF EXISTS warehouse.ods_month_bb_guild_virtual_coin;
--- CREATE TABLE warehouse.ods_month_bb_guild_virtual_coin AS
+-- DROP TABLE IF EXISTS warehouse.ods_month_bb_guild_live;
+-- CREATE TABLE warehouse.ods_month_bb_guild_live AS
 DELETE
-FROM warehouse.ods_month_bb_guild_virtual_coin
+FROM warehouse.ods_month_bb_guild_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-INSERT INTO warehouse.ods_month_bb_guild_virtual_coin
-SELECT gs.backend_account_id,
-       CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
+INSERT INTO warehouse.ods_month_bb_guild_live
+SELECT CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
+       gs.backend_account_id,
        gs.status,
        gs.status_text,
        gs.total                         AS guild_salary_rmb,
