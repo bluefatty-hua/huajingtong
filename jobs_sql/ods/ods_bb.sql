@@ -19,12 +19,12 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- DROP TABLE IF EXISTS warehouse.ods_bb_anchor_live_detail;
+-- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live_detail;
 -- CREATE TABLE warehouse.ods_bb_anchor_live_detail AS
 DELETE
-FROM warehouse.ods_bb_anchor_live_detail
+FROM warehouse.ods_day_bb_anchor_live_detail
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_bb_anchor_live_detail
+INSERT INTO warehouse.ods_day_bb_anchor_live_detail
 SELECT 1001                                                                    AS platform_id,
        'B站'                                                                    AS platform_name,
        gat.backend_account_id,
@@ -96,7 +96,7 @@ SELECT gs.backend_account_id,
 FROM spider_bb_backend.guild_salary gs
          LEFT JOIN spider_bb_backend.guild_salary_detail gd
                    ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
-WHERE DATE_FORMAT(gs.month, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE DATE_FORMAT(CONCAT(LEFT(gs.month, 4), '-' RIGHT(gs.month, 2), '-01'), '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
