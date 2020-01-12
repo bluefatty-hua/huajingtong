@@ -8,7 +8,7 @@ INSERT INTO stage.bb_guild_anchor_dt
 SELECT backend_account_id,
        uid,
        dt
-FROM spider_bb_backend.anchor_detail
+FROM spider_bb_backend.anchor_detail t
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT backend_account_id,
@@ -30,7 +30,7 @@ SELECT 1001                                                                    A
        gat.dt,
        gat.backend_account_id,
        nl.id                                                                   AS anchor_uid,
-       ad.uid                                                                  AS anchor_no,
+       gat.uid                                                                  AS anchor_no,
        ad.uname                                                                AS anchor_nick_name,
        nl.type                                                                 AS anchor_status,
        nl.type_text                                                            AS anchor_status_text,
@@ -98,9 +98,6 @@ FROM spider_bb_backend.guild_salary gs
                    ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
 WHERE gs.month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
-
-
-SELECT CONCAT(LEFT('{start_date}', 7), '-01')
 
 
 -- =====================================================================================================================
