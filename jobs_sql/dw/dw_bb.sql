@@ -1,10 +1,10 @@
 -- 汇总维度 月-公会—主播
 -- 汇总指标 开播天数，开播时长，虚拟币收入
-DROP TABLE IF EXISTS warehouse.dw_month_bb_anchor_live;
-CREATE TABLE warehouse.dw_month_bb_anchor_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_month_bb_anchor_live;
+-- CREATE TABLE warehouse.dw_month_bb_anchor_live AS
 DELETE
-FROM warehouse.dw_month_bb_anchor_live
-WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
+FROM warehouse.dw_month_bb_anchor_live 
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_month_bb_anchor_live
 SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
        t.platform_id,
@@ -15,7 +15,7 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        SUM(t.duration)                                                      AS duration,
        SUM(t.anchor_total_coin)                                             AS anchor_virtual_coin
 FROM warehouse.ods_day_bb_anchor_live_detail t
-WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
