@@ -14,7 +14,7 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        COUNT(CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)           AS live_days,
        SUM(t.duration)                                                      AS duration,
        SUM(t.anchor_total_coin)                                             AS anchor_virtual_coin
-FROM warehouse.ods_bb_anchor_live_detail t
+FROM warehouse.ods_day_bb_anchor_live_detail t
 WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
@@ -56,8 +56,8 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
              COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
              COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
              SUM(t.anchor_total_coin)                                                   AS anchor_virtual_coin
-      FROM warehouse.ods_bb_anchor_live_detail t
-      WHERE t.dt < CURRENT_DATE
+      FROM warehouse.ods_day_bb_anchor_live_detail t
+      WHERE t.dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
       GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                t.platform_id,
                t.platform_name,
