@@ -1,11 +1,11 @@
 -- 汇总维度 月-公会—主播
 -- 汇总指标 开播天数，开播时长，虚拟币收入
--- DROP TABLE IF EXISTS warehouse.dw_month_bb_guild_anchor_salary;
--- CREATE TABLE warehouse.dw_month_bb_guild_anchor_salary AS
+DROP TABLE IF EXISTS warehouse.dw_month_bb_anchor_live;
+CREATE TABLE warehouse.dw_month_bb_anchor_live AS
 DELETE
-FROM warehouse.dw_month_bb_guild_anchor_salary
+FROM warehouse.dw_month_bb_anchor_live
 WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
-INSERT INTO warehouse.dw_month_bb_guild_anchor_salary
+INSERT INTO warehouse.dw_month_bb_anchor_live
 SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
        t.platform_id,
        t.platform_name,
@@ -26,12 +26,12 @@ GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
 
 -- 汇总维度 月-公会
 -- 汇总指标 主播数，开播主播数，虚拟币收入
--- DROP TABLE IF EXISTS warehouse.dw_month_bb_guild_salary;
--- CREATE TABLE warehouse.dw_month_bb_guild_salary AS
+-- DROP TABLE IF EXISTS warehouse.dw_month_bb_guild_live;
+-- CREATE TABLE warehouse.dw_month_bb_guild_live AS
 DELETE
-FROM warehouse.dw_month_bb_guild_salary
+FROM warehouse.dw_month_bb_guild_live
 WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
-INSERT INTO warehouse.dw_month_bb_guild_salary
+INSERT INTO warehouse.dw_month_bb_guild_live
 SELECT t.dt,
        t.platform_id,
        t.platform_name,
