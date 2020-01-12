@@ -7,15 +7,12 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO stage.bb_guild_anchor_dt
 SELECT t.backend_account_id,
        t.uid,
-       t1.id,
        t.dt
 FROM spider_bb_backend.anchor_detail t
-LEFT JOIN spider_bb_backend.normal_list t1 ON t.backend_account_id = t1.backend_account_id AND t.uid = t1.uid AND t.dt = t1.dt
-WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT backend_account_id,
        uid,
-       id,
        dt
 FROM spider_bb_backend.normal_list
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
@@ -29,11 +26,11 @@ FROM warehouse.ods_day_bb_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_day_bb_anchor_live
 SELECT 1001                                                                    AS platform_id,
-       'B站'                                                                    AS platform_name,
+       'B站'                                                                   AS platform_name,
        gat.dt,
        gat.backend_account_id,
        nl.id                                                                   AS anchor_uid,
-       gat.uid                                                                  AS anchor_no,
+       gat.uid                                                                 AS anchor_no,
        ad.uname                                                                AS anchor_nick_name,
        nl.type                                                                 AS anchor_status,
        nl.type_text                                                            AS anchor_status_text,
