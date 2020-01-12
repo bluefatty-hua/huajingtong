@@ -74,7 +74,7 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_month_bb_guild_virtual_coin AS
 DELETE
 FROM warehouse.ods_month_bb_guild_virtual_coin
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.ods_month_bb_guild_virtual_coin
 SELECT gs.backend_account_id,
        CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
@@ -96,11 +96,11 @@ SELECT gs.backend_account_id,
 FROM spider_bb_backend.guild_salary gs
          LEFT JOIN spider_bb_backend.guild_salary_detail gd
                    ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
-WHERE DATE_FORMAT(CONCAT(LEFT(gs.month, 4), '-' RIGHT(gs.month, 2), '-01'), '%Y-%m-%d') BETWEEN DATE_FORMAT(CONCAT(LEFT('{start_date}', 7), '-01'), '%Y-%m-%d') AND DATE_FORMAT(CONCAT(LEFT('{end_date}', 7), '-01'), '%Y-%m-%d')
+WHERE gs.month BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
 
 
-
+SELECT CONCAT(LEFT('{start_date}', 7), '-01')
 
 
 -- =====================================================================================================================
