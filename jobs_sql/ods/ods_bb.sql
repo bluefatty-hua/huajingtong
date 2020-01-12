@@ -96,7 +96,7 @@ SELECT gs.backend_account_id,
 FROM spider_bb_backend.guild_salary gs
          LEFT JOIN spider_bb_backend.guild_salary_detail gd
                    ON gs.month = gd.month AND gs.backend_account_id = gd.backend_account_id
-WHERE DATE_FORMAT(CONCAT(LEFT(gs.month, 4), '-' RIGHT(gs.month, 2), '-01'), '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE DATE_FORMAT(CONCAT(LEFT(gs.month, 4), '-' RIGHT(gs.month, 2), '-01'), '%Y-%m-%d') BETWEEN DATE_FORMAT(CONCAT(LEFT('{start_date}', 7), '-01'), '%Y-%m-%d') AND DATE_FORMAT(CONCAT(LEFT('{end_date}', 7), '-01'), '%Y-%m-%d')
 ;
 
 
