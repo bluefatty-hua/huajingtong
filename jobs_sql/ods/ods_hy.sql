@@ -100,7 +100,7 @@ INSERT INTO warehouse.ods_huya_day_guild_live_income_guard
 SELECT channel_id,
       income_date as dt,
       month as calc_month,
-      income_amt as gift_income,
+      income_amt as guard_income,
       `timestamp`
 FROM spider_huya_backend.channel_income_guard_day 
 WHERE income_date BETWEEN '{start_date}' AND '{end_date}';
@@ -113,7 +113,7 @@ INSERT INTO warehouse.ods_huya_day_guild_live_income_noble
 SELECT channel_id,
       dt as dt,
       month as calc_month,
-      income_amt as gift_income,
+      income_amt as noble_income,
       `timestamp`
 FROM spider_huya_backend.channel_income_noble_day 
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
