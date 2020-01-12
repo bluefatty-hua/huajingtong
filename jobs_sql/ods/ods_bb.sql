@@ -5,14 +5,17 @@ DELETE
 FROM stage.bb_guild_anchor_dt
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO stage.bb_guild_anchor_dt
-SELECT backend_account_id,
-       uid,
-       dt
+SELECT t.backend_account_id,
+       t.uid,
+       t1.id,
+       t.dt
 FROM spider_bb_backend.anchor_detail t
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+LEFT JOIN spider_bb_backend.normal_list t1 ON t.backend_account_id = t1.backend_account_id AND t.uid = t1.uid
+WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT backend_account_id,
        uid,
+       id,
        dt
 FROM spider_bb_backend.normal_list
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
