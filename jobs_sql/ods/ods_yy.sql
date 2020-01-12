@@ -311,26 +311,28 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- =====================================================================
 -- 公会收支明细
 -- 公会每月获得各主播分成蓝钻
--- DROP TABLE IF EXISTS warehouse.ods_yy_guild_virtual_coin_detail;
--- CREATE TABLE warehouse.ods_yy_guild_virtual_coin_detail AS
+-- DROP TABLE IF EXISTS warehouse.ods_yy_guild_live_bluediamond;
+-- CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
 DELETE
-FROM warehouse.ods_yy_guild_virtual_coin_detail
+FROM warehouse.ods_yy_guild_live_bluediamond
 WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
-INSERT INTO warehouse.ods_yy_guild_virtual_coin_detail
-SELECT 1000                                     AS platform_id,
+INSERT INTO warehouse.ods_yy_guild_live_bluediamond
+SELECT
+       CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
+       1000                                     AS platform_id,
        'YY'                                     AS platform_name,
        cl.backend_account_id,
        cl.channel_num,
        gb.yynum                                 AS anchor_no,
        gb.nick                                  AS anchor_nick_name,
-       gb.totalDiamond                          AS anchor_virtual_coin,
+       gb.totalDiamond                          AS bluediamond,
        gb.settType                              AS settle_method_code,
        CASE
            WHEN gb.settType = 1 THEN '对公分成'
            WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
        gb.money                                 AS guild_virtual_coin,
        gb.payTime                               AS pay_time,
-       CONCAT(gb.year, '-', gb.month, '-01')    AS dt
+      
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
 WHERE CONCAT(gb.year, '-', gb.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
@@ -338,21 +340,21 @@ WHERE CONCAT(gb.year, '-', gb.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'),
 
 
 -- 公会每月获得各主播分成佣金
--- DROP TABLE IF EXISTS warehouse.ods_yy_guild_commission_detail;
--- CREATE TABLE warehouse.ods_yy_guild_commission_detail AS
+-- DROP TABLE IF EXISTS warehouse.ods_yy_guild_live_commission;
+-- CREATE TABLE warehouse.ods_yy_guild_live_commission AS
 DELETE
-FROM warehouse.ods_yy_guild_commission_detail
+FROM warehouse.ods_yy_guild_live_commission
 WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
-INSERT INTO warehouse.ods_yy_guild_commission_detail
-SELECT 1000                                  AS platform_id,
+INSERT INTO warehouse.ods_yy_guild_live_commission
+SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
+       1000                                  AS platform_id,
        'YY'                                  AS platform_name,
        cl.backend_account_id,
        cl.channel_num,
        gc.yynum                              AS anchor_no,
        gc.nick                               AS anchor_nick_name,
        gc.owMoney                            AS guild_commission,
-       gc.time                               AS get_commission_time,
-       CONCAT(gc.year, '-', gc.month, '-01') AS dt
+       gc.time                               AS get_commission_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
 WHERE CONCAT(gc.year, '-', gc.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
