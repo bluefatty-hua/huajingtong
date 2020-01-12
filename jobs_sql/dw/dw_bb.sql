@@ -3,7 +3,7 @@
 -- DROP TABLE IF EXISTS warehouse.dw_month_bb_anchor_live;
 -- CREATE TABLE warehouse.dw_month_bb_anchor_live AS
 DELETE
-FROM warehouse.dw_month_bb_anchor_live 
+FROM warehouse.dw_month_bb_anchor_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_month_bb_anchor_live
 SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
@@ -14,7 +14,7 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        COUNT(CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)           AS live_days,
        SUM(t.duration)                                                      AS duration,
        SUM(t.anchor_total_coin)                                             AS anchor_virtual_coin
-FROM warehouse.ods_day_bb_anchor_live_detail t
+FROM warehouse.ods_day_bb_anchor_live t
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
@@ -56,12 +56,12 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
              COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
              COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
              SUM(t.anchor_total_coin)                                                   AS anchor_virtual_coin
-      FROM warehouse.ods_day_bb_anchor_live_detail t
+      FROM warehouse.ods_day_bb_anchor_live t
       GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                t.platform_id,
                t.platform_name,
                t.backend_account_id) t
-         LEFT JOIN warehouse.ods_month_bb_guild_virtual_coin t1
+         LEFT JOIN warehouse.ods_month_bb_guild_live t1
                    ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
 WHERE t1.type = '公会总收益'
   AND DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
