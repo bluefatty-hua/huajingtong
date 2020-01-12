@@ -4,21 +4,21 @@
 DELETE FROM  warehouse.dw_huya_day_guild_info  WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_huya_day_guild_info
 SELECT
-  1002 AS platform_id,
- '虎牙' AS platform_name,
-`channel_id`,
-  `channel_number` as channel_num,
-  `uid` as ow,
-  `name` as channel_name,
+  `dt`,
+  platform_id,
+  platform_name,
+  `channel_id`,
+  channel_num,
+  ow,
+  channel_name,
   `logo`,
   `desc`,
   `create_time`,
   `is_platinum`,
   `sign_count`,
   `sign_limit`,
-  `dt`,
   `timestamp`
-FROM `spider_huya_backend`.`channel_detail` 
+FROM `warehouse`.`ods_huya_day_guild_info` 
 WHERE dt  BETWEEN '{start_date}' AND '{end_date}';
 
 
@@ -27,29 +27,28 @@ WHERE dt  BETWEEN '{start_date}' AND '{end_date}';
 -- 主播信息
 -- DROP TABLE IF EXISTS stage.stage_day_huya_anchor_info;
 -- CREATE TABLE stage.stage_day_huya_anchor_info AS
-DELETE FROM  stage.stage_day_huya_anchor_info  WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO stage.stage_day_huya_anchor_info
+DELETE FROM  stage.ods_huya_day_anchor_info  WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO stage.ods_huya_day_anchor_info
 SELECT
-  l_uid AS `anchor_uid`,
-  l_yy AS `anchor_no`,
-  ad.`channel_id`,
+  `dt`,
+  `anchor_uid`,
+  `anchor_no`,
+  `channel_id`,
   'orig' AS `comment`,
-  `s_nick` AS nick,
-  `i_activity_days` AS activity_days,
-  `i_months` AS months,
-  `i_ow_percent` AS ow_percent,
-  `i_sign_time` AS sign_time,
-  `i_surplus_days` surplus_days,
-   ad.`dt`,
-   ad.`timestamp`,
-  `s_avatar` AS avatar
-FROM `spider_huya_backend`.`anchor_detail` ad
-WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
+  nick,
+  activity_days,
+  months,
+  ow_percent,
+  sign_time,
+  surplus_days,
+  avatar
+FROM `warehouse`.`ods_huya_day_anchor_info` 
+WHERE dt  BETWEEN '{start_date}' AND '{end_date}';
 
-INSERT IGNORE INTO stage.stage_day_huya_anchor_info
+INSERT IGNORE INTO stage.ods_huya_day_anchor_info
 (anchor_uid,channel_id, `comment` ,dt)
 SELECT uid,channel_id,'from anchor_live_detail_day',`date` AS dt 
-FROM `spider_huya_backend`.`anchor_live_detail_day`
+FROM `warehouse`.`ods_huya_day_anchor_live`
 WHERE `date` BETWEEN '{start_date}' AND '{end_date}';
 
 
@@ -73,7 +72,7 @@ SELECT
   `surplus_days` surplus_days,
    ad.`dt`,
   `avatar` AS avatar
-FROM `stage`.`stage_day_huya_anchor_info` ad
+FROM `stage`.`ods_huya_day_anchor_info` ad
 LEFT JOIN warehouse.`dw_huya_day_guild_info` ch ON  ad.`channel_id` = ch.`channel_id` AND ad.dt = ch.dt
 WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
 
@@ -83,7 +82,9 @@ WHERE ad.dt  BETWEEN '{start_date}' AND '{end_date}';
 -- CREATE TABLE warehouse.dw_huya_day_anchor_live AS
 DELETE FROM warehouse.dw_huya_day_anchor_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_huya_day_anchor_live
-SELECT ai.platform_id,
+SELECT 
+        al.dt AS dt,
+        ai.platform_id,
         ai.platform_name,
         ai.channel_id,
         ai.channel_num,
@@ -95,7 +96,6 @@ SELECT ai.platform_id,
         CASE WHEN al.live_time > 0 THEN 1 ELSE 0 END AS live_status,
         al.income AS income,
         al.peak_pcu,
-	    al.date AS dt,
         ai.activity_days,
         ai.months,
         ai.ow_percent,
@@ -107,7 +107,7 @@ SELECT ai.platform_id,
         pf.include_pf_amt,
         pf.pf_amt_rate
 FROM warehouse.dw_huya_day_anchor_info ai
-JOIN spider_huya_backend.anchor_live_detail_day al 
+JOIN warehouse.ods_huya_day_anchor_live al 
     ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.uid AND ai.dt = al.date
 LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}';
