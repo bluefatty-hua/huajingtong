@@ -30,7 +30,7 @@ GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
 -- CREATE TABLE warehouse.dw_month_bb_guild_live AS
 DELETE
 FROM warehouse.dw_month_bb_guild_live
-WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_month_bb_guild_live
 SELECT t.dt,
        t.platform_id,
@@ -57,7 +57,6 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
              COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
              SUM(t.anchor_total_coin)                                                   AS anchor_virtual_coin
       FROM warehouse.ods_day_bb_anchor_live_detail t
-      WHERE t.dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
       GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                t.platform_id,
                t.platform_name,
@@ -65,7 +64,7 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
          LEFT JOIN warehouse.ods_month_bb_guild_virtual_coin t1
                    ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
 WHERE t1.type = '公会总收益'
-  AND t.dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01')
+  AND DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
 
 
