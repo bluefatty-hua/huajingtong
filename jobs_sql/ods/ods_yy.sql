@@ -80,7 +80,7 @@ SELECT 1000       AS platform_id,
        uid,
        yynum,
        ''         AS nick,
-       '修复主播缺失插入' AS comment,
+       'from anchor_bluediamond' AS comment,
        dt
 FROM spider_yy_backend.anchor_bluediamond
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
@@ -315,12 +315,12 @@ SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        cl.channel_num,
        gb.yynum                                 AS anchor_no,
        gb.nick                                  AS anchor_nick_name,
-       gb.totalDiamond                          AS bluediamond,
+       gb.totalDiamond                          AS anchor_bluediamond,
        gb.settType                              AS settle_method_code,
        CASE
            WHEN gb.settType = 1 THEN '对公分成'
            WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
-       gb.money                                 AS guild_virtual_coin,
+       gb.money                                 AS guild_bluediamond,
        gb.payTime                               AS pay_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
