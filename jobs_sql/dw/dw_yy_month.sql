@@ -21,7 +21,7 @@
 -- CREATE TABLE warehouse.dw_yy_month_guild_anchor_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_guild_anchor_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_anchor_live_bluediamond
 SELECT dt,
        platform_id,
@@ -31,7 +31,7 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -47,7 +47,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_guild_anchor_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_guild_anchor_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_anchor_live_commission
 SELECT dt,
        platform_id,
@@ -57,7 +57,7 @@ SELECT dt,
        anchor_no,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -74,7 +74,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_guild_anchor_live AS
 DELETE
 FROM warehouse.dw_yy_month_guild_anchor_live
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_anchor_live
 SELECT ad.dt,
        ad.platform_id,
@@ -106,7 +106,7 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d')   
              SUM(CASE WHEN guild_commission >= 0 THEN guild_commission ELSE 0 END)   AS guild_commission,
              COUNT(DISTINCT dt)                                                      AS dt_cnt
       FROM warehouse.ods_yy_day_anchor_live
-      WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+      WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
       GROUP BY DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d'),
                platform_id,
                platform_name,
@@ -128,7 +128,7 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d')   
 -- CREATE TABLE warehouse.dw_yy_month_guild_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live_bluediamond
 SELECT dt,
        platform_id,
@@ -137,7 +137,7 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -152,7 +152,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_guild_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live_commission
 SELECT dt,
        platform_id,
@@ -161,7 +161,7 @@ SELECT dt,
        channel_num,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -174,7 +174,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_guild_live AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live
 SELECT ad.dt,
        ad.platform_id,
@@ -203,7 +203,7 @@ FROM (
                 SUM(CASE WHEN t.guild_commission >= 0 THEN t.guild_commission ELSE 0 END)   AS guild_commission,
                 COUNT(DISTINCT t.dt)                                                        AS dt_cnt
          FROM warehouse.dw_yy_day_anchor_live t
-         WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+         WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
          GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                   t.platform_id,
                   t.platform_name,
@@ -222,7 +222,7 @@ FROM (
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_bluediamond
 SELECT dt,
        platform_id,
@@ -231,7 +231,7 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -247,7 +247,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_commission
 SELECT dt,
        platform_id,
@@ -255,7 +255,7 @@ SELECT dt,
        anchor_no,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -271,7 +271,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live
 SELECT ad.dt,
        ad.platform_id,
@@ -304,7 +304,7 @@ FROM (
                 SUM(CASE WHEN t.guild_commission >= 0 THEN t.guild_commission ELSE 0 END)   AS guild_commission,
                 COUNT(DISTINCT t.dt)                                                        AS dt_cnt
          FROM warehouse.dw_yy_day_anchor_live t
-         WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('start_date'), '-', MONTH('start_date'), '-01'), '%Y-%m-%d') AND '{end_date}'
+         WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'), '%Y-%m-%d') AND '{end_date}'
          GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                   t.platform_id,
                   t.platform_name,
