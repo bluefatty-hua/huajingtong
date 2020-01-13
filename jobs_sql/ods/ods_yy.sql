@@ -74,7 +74,7 @@ SELECT 1000                   AS platform_id,
        'from anchor_duration' AS comment,
        ad.dt
 FROM spider_yy_backend.anchor_duration ad
-         LEFT JOIN spider_yy_backend.channel_list cl ON ac.backend_account_id = cl.backend_account_id
+         LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 UNION
 SELECT 1000                           AS platform_id,
@@ -87,7 +87,7 @@ SELECT 1000                           AS platform_id,
        'from anchor_duration_history' AS comment,
        ad.dt
 FROM spider_yy_backend.anchor_duration_history ad
-         LEFT JOIN spider_yy_backend.channel_list cl ON ac.backend_account_id = cl.backend_account_id
+         LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
