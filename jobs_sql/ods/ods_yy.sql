@@ -277,7 +277,8 @@ DELETE
 FROM warehouse.dw_yy_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_yy_day_anchor_live
-SELECT ai.platform_id,
+SELECT ai.dt,
+       ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
        ai.channel_num,
@@ -305,8 +306,7 @@ SELECT ai.platform_id,
        ai.settle_method_code,
        ai.settle_method_text,
        ai.anchor_settle_rate,
-       ai.logo,
-       ai.dt
+       ai.logo
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN warehouse.dw_yy_day_anchor_live_duration al
                    ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
