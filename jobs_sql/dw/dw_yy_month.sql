@@ -271,7 +271,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live
-WHERE dt = CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01');
+WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live
 SELECT ad.dt,
        ad.platform_id,
