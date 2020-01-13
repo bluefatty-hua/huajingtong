@@ -92,18 +92,19 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-INSERT IGNORE INTO warehouse.ods_yy_day_anchor_info (platform_id, platform_name, backend_account_id, anchor_uid,
-                                                     anchor_no,
-                                                     anchor_nick_name, comment, dt)
+INSERT IGNORE INTO warehouse.ods_yy_day_anchor_info (platform_id, platform_name, backend_account_id, channel_num,
+                                                     anchor_uid, anchor_no, anchor_nick_name, comment, dt)
 SELECT 1000                      AS platform_id,
        'YY'                      AS platform_name,
        ab.backend_account_id,
+       cl.channel_num,
        ab.uid,
        ab.yynum,
        ''                        AS nick,
        'from anchor_bluediamond' AS comment,
        ab.dt
 FROM spider_yy_backend.anchor_bluediamond ab
+         LEFT JOIN spider_yy_backend.channel_list cl ON ab.backend_account_id = cl.backend_account_id
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
