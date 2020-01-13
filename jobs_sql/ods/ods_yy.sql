@@ -3,8 +3,7 @@
 -- CREATE TABLE warehouse.ods_yy_day_anchor_info AS
 DELETE FROM warehouse.ods_yy_day_anchor_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_yy_day_anchor_info
-SELECT 
-       ga.dt,
+SELECT ga.dt,
        1000                                    AS platform_id,
        'YY'                                    AS platform_name,
        ga.backend_account_id,
@@ -33,6 +32,7 @@ FROM spider_yy_backend.guild_anchor ga
          LEFT JOIN spider_yy_backend.channel_list cl ON ga.backend_account_id = cl.backend_account_id
 WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
+
 
 -- 补充spider_yy_backend.guild_anchor中缺失主播
 INSERT IGNORE INTO warehouse.ods_yy_day_anchor_info (platform_id, platform_name, backend_account_id, anchor_uid, anchor_no,
@@ -87,8 +87,6 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-
-
 -- 主播直播
 -- DROP TABLE IF EXISTS stage.union_yy_anchor_duration;
 -- CREATE TABLE stage.union_yy_anchor_duration AS
@@ -136,7 +134,7 @@ WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
 -- DROP TABLE IF EXISTS warehouse.dw_yy_day_anchor_live_duration;
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live_duration AS
 DELETE
-FROM warehouse.ods_yy_day_anchor_live_duration
+FROM warehouse.ods_yy_guild_live_bluediamond
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_yy_day_anchor_live_duration
 SELECT 
@@ -224,6 +222,7 @@ GROUP BY ac.platform_id,
          ac.dt
 ;
 
+
 -- 主播收入（蓝钻）
 -- DROP TABLE IF EXISTS warehouse.dw_yy_day_anchor_live_bluediamond;
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live_bluediamond AS
@@ -251,7 +250,6 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}' and diamond>0
 ;
 
 
--- Merge
 -- DROP TABLE IF EXISTS warehouse.dw_yy_day_anchor_live;
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live AS
 DELETE
@@ -301,24 +299,16 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 
-
-
-
-
-
-
-
 -- =====================================================================
 -- 公会收支明细
 -- 公会每月获得各主播分成蓝钻
--- DROP TABLE IF EXISTS warehouse.ods_yy_guild_live_bluediamond;
--- CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
-DELETE
-FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
-INSERT INTO warehouse.ods_yy_guild_live_bluediamond
-SELECT
-       CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
+DROP TABLE IF EXISTS warehouse.ods_yy_guild_live_bluediamond;
+CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
+-- DELETE
+-- FROM warehouse.ods_yy_guild_live_bluediamond
+-- WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
+-- INSERT INTO warehouse.ods_yy_guild_live_bluediamond
+SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        1000                                     AS platform_id,
        'YY'                                     AS platform_name,
        cl.backend_account_id,
@@ -331,8 +321,7 @@ SELECT
            WHEN gb.settType = 1 THEN '对公分成'
            WHEN gb.settType = 2 then '对私分成' END AS settle_method_text,
        gb.money                                 AS guild_virtual_coin,
-       gb.payTime                               AS pay_time,
-      
+       gb.payTime                               AS pay_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
 WHERE CONCAT(gb.year, '-', gb.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
