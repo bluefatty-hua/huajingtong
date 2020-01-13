@@ -1,8 +1,8 @@
 -- 主播信息
 -- DROP TABLE IF EXISTS warehouse.ods_day_now_anchor_info;
 -- CREATE TABLE warehouse.ods_day_now_anchor_info AS
-DELETE FROM warehouse.ods_day_now_anchor_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_day_now_anchor_info
+DELETE FROM warehouse.ods_now_day_anchor_info WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_now_day_anchor_info
 SELECT 1003 AS platform_id,
        'NOW' AS platform_name,
        ad.backend_account_id,
@@ -52,7 +52,7 @@ SELECT ai.platform_id,
        ai.settle_method_code,
        ai.settle_method_text,
        ai.dt
-FROM warehouse.ods_day_now_anchor_info ai
+FROM warehouse.ods_now_day_anchor_info ai
 LEFT JOIN spider_now_backend.anchor_income ain ON ai.backend_account_id = ain.backend_account_id AND ai.dt = DATE_FORMAT(ain.date, '%Y-%m-%d') AND ai.anchor_qq_no = ain.uin
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
@@ -62,8 +62,8 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- 公会每日流水、收入、每日开播主播数
 -- DROP TABLE IF EXISTS warehouse.ods_day_now_guild_commission;
 -- CREATE TABLE warehouse.ods_day_now_guild_commission AS
-DELETE FROM warehouse.ods_day_now_guild_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_day_now_guild_commission
+DELETE FROM warehouse.ods_now_day_guild_live_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_now_day_guild_live_commission
 SELECT 1003 AS platform_id,
        'NOW' AS platform_name,
        ui.backend_account_id,
