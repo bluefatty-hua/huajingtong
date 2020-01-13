@@ -322,12 +322,12 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- =====================================================================
 -- 公会收支明细
 -- 公会每月获得各主播分成蓝钻
-DROP TABLE IF EXISTS warehouse.ods_yy_guild_live_bluediamond;
-CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
-    -- DELETE
--- FROM warehouse.ods_yy_guild_live_bluediamond
--- WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
--- INSERT INTO warehouse.ods_yy_guild_live_bluediamond
+-- DROP TABLE IF EXISTS warehouse.ods_yy_guild_live_bluediamond;
+-- CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
+DELETE
+FROM warehouse.ods_yy_guild_live_bluediamond
+WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
+INSERT INTO warehouse.ods_yy_guild_live_bluediamond
 SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        1000                                     AS platform_id,
        'YY'                                     AS platform_name,
