@@ -188,7 +188,8 @@ DELETE
 FROM warehouse.ods_yy_anchor_live_commission
 WHERE dt BETWEEN '2019-01-01' AND '2019-12-31';
 INSERT INTO warehouse.ods_yy_anchor_live_commission
-SELECT ai.platform_id,
+SELECT ai.dt,
+       ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
        ai.anchor_uid,
@@ -203,8 +204,7 @@ SELECT ai.platform_id,
        ac.inType   as in_type,
        ac.frmYY    AS from_visitor_no,
        ac.frmNick  AS from_visitor_name,
-       ac.dtime,
-       ai.dt
+       ac.dtime
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_commission ac
                    ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND
