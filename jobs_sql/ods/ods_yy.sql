@@ -1,3 +1,14 @@
+-- table list
+-- warehouse.ods_yy_day_anchor_info
+-- warehouse.ods_yy_anchor_live_commission
+-- warehouse.ods_yy_guild_live_bluediamond
+-- warehouse.ods_yy_guild_live_commission
+-- warehouse.dw_yy_day_anchor_live_duration
+-- warehouse.dw_yy_day_anchor_live_commission
+-- warehouse.dw_yy_day_anchor_live_bluediamond
+-- warehouse.dw_yy_day_anchor_live
+
+
 -- 主播信息
 -- DROP TABLE IF EXISTS warehouse.ods_yy_day_anchor_info;
 -- CREATE TABLE warehouse.ods_yy_day_anchor_info AS
