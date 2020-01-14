@@ -354,7 +354,7 @@ WHERE CONCAT(gb.year, gb.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND 
 -- CREATE TABLE warehouse.ods_yy_guild_live_commission AS
 DELETE
 FROM warehouse.ods_yy_guild_live_commission
-WHERE CONCAT(gb.year, gb.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.ods_yy_guild_live_commission
 SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
        1000                                  AS platform_id,
@@ -367,5 +367,5 @@ SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
        gc.time                               AS get_commission_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
-WHERE CONCAT(gb.year, gb.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+WHERE CONCAT(gc.year, gc.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
