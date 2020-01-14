@@ -30,10 +30,10 @@ WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- Merge
--- DROP TABLE IF EXISTS warehouse.ods_day_now_anchor_live_detail;
--- CREATE TABLE warehouse.ods_day_now_anchor_live_detail AS
-DELETE FROM warehouse.ods_now_anchor_live_detail WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_now_anchor_live_detail
+-- DROP TABLE IF EXISTS warehouse.ods_now_day_anchor_live;
+-- CREATE TABLE warehouse.ods_now_day_anchor_live AS
+DELETE FROM warehouse.ods_now_day_anchor_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_now_day_anchor_live
 SELECT ai.platform_id,
        ai.platform_name,
        ai.backend_account_id,
@@ -80,15 +80,15 @@ WHERE DATE_FORMAT(ui.day, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 -- 公会每月流水，平均主播流水
 -- DROP TABLE IF EXISTS warehouse.ods_month_now_guild_commission;
 -- CREATE TABLE warehouse.ods_month_now_guild_commission AS
-DELETE FROM warehouse.ods_month_now_guild_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_month_now_guild_commission
+DELETE FROM warehouse.ods_now_month_guild_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.ods_now_month_guild_commission
 SELECT 1003 AS platform_id,
        'NOW' AS platform_name,
        backend_account_id,
        DATE_FORMAT(CONCAT(LEFT(ui.date, 4), '-', right(ui.date, 2), '-01'), '%Y-%m-%d') AS dt,
        ui.anchor_num AS anchor_cnt,
-       ui.cur_month_total_journal AS guild_commission_rmb,
-       ui.average_journal AS average_anchor_commission_rmb,
+       ui.cur_month_total_journal AS guild_revenue_rmb,
+       ui.average_journal AS average_anchor_revenue_rmb,
        ui.living_rate AS anchor_live_rate
 FROM spider_now_backend.union_stat_info_by_month ui
 WHERE  DATE_FORMAT(CONCAT(LEFT(ui.date, 4), '-', right(ui.date, 2), '-01'), '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'

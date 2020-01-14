@@ -42,7 +42,7 @@ FROM (SELECT t.dt,
 -- CREATE TABLE warehouse.dw_month_now_guild_commission AS
 DELETE
 FROM warehouse.dw_now_month_guild_live_commission
-WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_now_month_guild_live_commission
 SELECT al.dt,
        al.platform_id,
@@ -51,10 +51,10 @@ SELECT al.dt,
        al.anchor_cnt,
        al.anchor_live_cnt,
        al.anchor_commission_rmb,
-       gc.anchor_cnt           AS anchor_cnt_ture,
-       gc.guild_commission_rmb AS guild_commission_rmb_ture,
+       gc.anchor_cnt    AS anchor_cnt_ture,
+       gc.guild_revenue AS guild_commission_rmb_ture,
        gc.anchor_live_rate,
-       gc.average_anchor_commission_rmb
+       gc.average_anchor_revenue_rmb
 FROM (
          SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')       AS dt,
                 t.platform_id,
@@ -64,13 +64,13 @@ FROM (
                 COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
                 ROUND(SUM(t.anchor_commission_rmb), 2)                                     AS anchor_commission_rmb
          FROM warehouse.ods_now_day_anchor_live t
-         WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
          GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                   t.platform_id,
                   t.platform_name,
                   t.backend_account_id) al
-         LEFT JOIN warehouse.ods_month_now_guild_commission gc
+         LEFT JOIN warehouse.ods_now_month_guild_commission gc
                    ON al.dt = gc.dt AND al.backend_account_id = gc.backend_account_id
+WHERE DATE_FORMAT(al.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
 
 
@@ -80,7 +80,7 @@ FROM (
 -- CREATE TABLE warehouse.dw_month_now_guild_anchor_commission AS
 DELETE
 FROM warehouse.dw_now_month_guild_anchor_live_commission
-WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_now_month_guild_anchor_live_commission
 SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
        t.platform_id,
@@ -91,8 +91,8 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)  AS live_days,
        ROUND(SUM(t.duration), 2)                                            AS duration,
        ROUND(SUM(t.anchor_commission_rmb), 2)                               AS anchor_commission_rmb
-FROM warehouse.ods_now_anchor_live_detail t
-WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
+FROM warehouse.ods_now_day_anchor_live t
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
