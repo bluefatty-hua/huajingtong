@@ -80,7 +80,8 @@ WHERE DATE_FORMAT(ui.day, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 -- 公会每月流水，平均主播流水
 -- DROP TABLE IF EXISTS warehouse.ods_month_now_guild_commission;
 -- CREATE TABLE warehouse.ods_month_now_guild_commission AS
-DELETE FROM warehouse.ods_now_month_guild_commission WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE FROM warehouse.ods_now_month_guild_commission
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_now_month_guild_commission
 SELECT 1003 AS platform_id,
        'NOW' AS platform_name,
@@ -91,5 +92,5 @@ SELECT 1003 AS platform_id,
        ui.average_journal AS average_anchor_revenue_rmb,
        ui.living_rate AS anchor_live_rate
 FROM spider_now_backend.union_stat_info_by_month ui
-WHERE  DATE_FORMAT(CONCAT(LEFT(ui.date, 4), '-', right(ui.date, 2), '-01'), '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
+WHERE ui.date BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
