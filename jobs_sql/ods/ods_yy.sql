@@ -327,7 +327,7 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
 DELETE
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_yy_guild_live_bluediamond
 SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        1000                                     AS platform_id,
@@ -345,7 +345,7 @@ SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        gb.payTime                               AS pay_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
-WHERE CONCAT(gb.year, '-', gb.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
+WHERE CONCAT(gb.year, gb.month) BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -354,7 +354,7 @@ WHERE CONCAT(gb.year, '-', gb.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'),
 -- CREATE TABLE warehouse.ods_yy_guild_live_commission AS
 DELETE
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}';
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_yy_guild_live_commission
 SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
        1000                                  AS platform_id,
@@ -367,6 +367,5 @@ SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
        gc.time                               AS get_commission_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
-WHERE CONCAT(gc.year, '-', gc.month, '-01') BETWEEN CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01') AND '{end_date}'
+WHERE CONCAT(gc.year, '-', gc.month, '-01') BETWEEN '{start_date}' AND '{end_date}'
 ;
-
