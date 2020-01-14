@@ -51,8 +51,8 @@ SELECT al.dt,
        al.anchor_cnt,
        al.anchor_live_cnt,
        al.anchor_commission_rmb,
-       gc.anchor_cnt    AS anchor_cnt_ture,
-       gc.guild_revenue AS guild_commission_rmb_ture,
+       gc.anchor_cnt        AS anchor_cnt_ture,
+       gc.guild_revenue_rmb AS guild_revenue_rmb_ture,
        gc.anchor_live_rate,
        gc.average_anchor_revenue_rmb
 FROM (
