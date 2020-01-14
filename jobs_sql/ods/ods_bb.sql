@@ -26,7 +26,7 @@ FROM warehouse.ods_bb_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_bb_day_anchor_live
 SELECT 1001                                                                    AS platform_id,
-       'B站'                                                                   AS platform_name,
+       'B站'                                                                    AS platform_name,
        gat.dt,
        gat.backend_account_id,
        nl.id                                                                   AS anchor_uid,
@@ -49,6 +49,7 @@ SELECT 1001                                                                    A
        (CASE WHEN ad.ios_coin >= 0 THEN ad.ios_coin ELSE 0 END +
         CASE WHEN ad.android_coin >= 0 THEN ad.android_coin ELSE 0 END +
         CASE WHEN ad.pc_coin >= 0 THEN ad.pc_coin ELSE 0 END)                  AS anchor_total_coin,
+       CASE WHEN ad.total_income > 0 THEN ad.total_income ELSE 0 END           AS anchor_income_virtual_coin,
        CASE WHEN ad.special_coin >= 0 THEN ad.special_coin ELSE 0 END          AS special_coin,
        CASE WHEN ad.send_coin >= 0 THEN ad.send_coin ELSE 0 END                AS send_coin,
        ad.DAU,
@@ -80,18 +81,18 @@ SELECT CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
        gs.backend_account_id,
        gs.status,
        gs.status_text,
-       gs.total                         AS guild_salary_rmb,
+       gs.total                                                  AS guild_salary_rmb,
        ROUND(gd.income + gd.base + gd.award + gd.send_money + gd.special_income + gd.admin_change +
-             gd.anchor_admin_change, 2) AS guild_virtual_coin,
+             gd.anchor_admin_change, 2)                          AS guild_virtual_coin,
        gd.type,
-       gd.income                        AS anchor_virtual_coin,
-       gd.base                          AS anchor_base_coin,
-       gd.award                         AS guild_award_coin,
-       gd.send_money                    AS operate_award_punish_coin,
-       gd.special_income                AS special_coin,
-       gd.admin_change                  AS guild_change_coin,
-       gd.anchor_admin_change           AS anchor_change_vir_coin,
-       gd.admin_note                    AS comment,
+       gd.income                                                 AS anchor_virtual_coin,
+       gd.base                                                   AS anchor_base_coin,
+       gd.award                                                  AS guild_award_coin,
+       gd.send_money                                             AS operate_award_punish_coin,
+       gd.special_income                                         AS special_coin,
+       gd.admin_change                                           AS guild_change_coin,
+       gd.anchor_admin_change                                    AS anchor_change_vir_coin,
+       gd.admin_note                                             AS comment,
        gs.timestamp
 FROM spider_bb_backend.guild_salary gs
          LEFT JOIN spider_bb_backend.guild_salary_detail gd
