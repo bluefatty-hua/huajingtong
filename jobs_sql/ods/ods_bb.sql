@@ -19,12 +19,12 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
--- DROP TABLE IF EXISTS warehouse.ods_day_bb_anchor_live;
--- CREATE TABLE warehouse.ods_day_bb_anchor_live AS
+-- DROP TABLE IF EXISTS warehouse.ods_bb_day_anchor_live;
+-- CREATE TABLE warehouse.ods_bb_day_anchor_live AS
 DELETE
-FROM warehouse.ods_day_bb_anchor_live
+FROM warehouse.ods_bb_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_day_bb_anchor_live
+INSERT INTO warehouse.ods_bb_day_anchor_live
 SELECT 1001                                                                    AS platform_id,
        'B站'                                                                   AS platform_name,
        gat.dt,
@@ -70,12 +70,12 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- ================================================================================
 -- 公会月收入
--- DROP TABLE IF EXISTS warehouse.ods_month_bb_guild_live;
--- CREATE TABLE warehouse.ods_month_bb_guild_live AS
+-- DROP TABLE IF EXISTS warehouse.ods_bbmonth_guild_live;
+-- CREATE TABLE warehouse.ods_bbmonth_guild_live AS
 DELETE
-FROM warehouse.ods_month_bb_guild_live
+FROM warehouse.ods_bb_month_guild_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-INSERT INTO warehouse.ods_month_bb_guild_live
+INSERT INTO warehouse.ods_bb_month_guild_live
 SELECT CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
        gs.backend_account_id,
        gs.status,
