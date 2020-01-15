@@ -21,7 +21,7 @@ from warehouse.dw_huya_month_guild_info
 where dt >= '{start_date}'
   AND dt <= '{end_date}';
 insert into warehouse.dw_huya_month_guild_info
-select '{start_date}' as `dt`,
+select CONCAT(DATE_FORMAT(t1.dt, '%Y-%m'), '-01') as `dt`,
        t1.`channel_id`,
        `channel_num`,
        `platform_id`,
@@ -63,7 +63,7 @@ from warehouse.dw_huya_month_anchor_info
 where dt >= '{start_date}'
   AND dt <= '{end_date}';
 insert into warehouse.dw_huya_month_anchor_info
-select '{start_date}' as `dt`,
+select CONCAT(DATE_FORMAT(t1.dt, '%Y-%m'), '-01') as `dt`,
        t1.`channel_id`,
        `channel_num`,
        t1.`anchor_uid`,
@@ -93,7 +93,7 @@ delete
 from warehouse.dw_huya_month_anchor_live
 where dt = '{start_date}';
 insert into warehouse.dw_huya_month_anchor_live
-SELECT '{start_date}' AS dt,
+SELECT CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01') AS dt,
 
        t1.channel_id,
        t2.channel_num,
