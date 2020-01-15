@@ -29,7 +29,7 @@ SELECT 1001                                                                    A
        'B站'                                                                    AS platform_name,
        gat.dt,
        gat.backend_account_id,
-       nl.id                                                                   AS anchor_uid,
+       gat.uid                                                                 AS anchor_uid,
        gat.uid                                                                 AS anchor_no,
        ad.uname                                                                AS anchor_nick_name,
        nl.type                                                                 AS anchor_status,
