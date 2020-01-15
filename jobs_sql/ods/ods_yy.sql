@@ -14,7 +14,7 @@
 -- CREATE TABLE warehouse.ods_yy_day_anchor_info AS
 DELETE
 FROM warehouse.ods_yy_day_anchor_info
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO warehouse.ods_yy_day_anchor_info
 SELECT ga.dt,
        1000                                    AS platform_id,
@@ -43,7 +43,7 @@ SELECT ga.dt,
        ''                                      AS comment
 FROM spider_yy_backend.guild_anchor ga
          LEFT JOIN spider_yy_backend.channel_list cl ON ga.backend_account_id = cl.backend_account_id
-WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ga.dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -62,7 +62,7 @@ SELECT 1000                     AS platform_id,
        DATE(dtime)              AS dt
 FROM spider_yy_backend.anchor_commission ac
          LEFT JOIN spider_yy_backend.channel_list cl ON ac.backend_account_id = cl.backend_account_id
-WHERE DATE(dtime) BETWEEN '{start_date}' AND '{end_date}'
+WHERE DATE(dtime) BETWEEN '2019-01-01' AND '2020-01-14'
 UNION
 SELECT 1000                   AS platform_id,
        'YY'                   AS platform_name,
@@ -75,7 +75,7 @@ SELECT 1000                   AS platform_id,
        ad.dt
 FROM spider_yy_backend.anchor_duration ad
          LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14'
 UNION
 SELECT 1000                           AS platform_id,
        'YY'                           AS platform_name,
@@ -88,7 +88,7 @@ SELECT 1000                           AS platform_id,
        ad.dt
 FROM spider_yy_backend.anchor_duration_history ad
          LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -105,7 +105,7 @@ SELECT 1000                      AS platform_id,
        ab.dt
 FROM spider_yy_backend.anchor_bluediamond ab
          LEFT JOIN spider_yy_backend.channel_list cl ON ab.backend_account_id = cl.backend_account_id
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -114,15 +114,15 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE stage.union_yy_anchor_duration AS
 DELETE
 FROM stage.union_yy_anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO stage.union_yy_anchor_duration
 SELECT *
 FROM spider_yy_backend.anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14'
 UNION ALL
 SELECT *
 FROM spider_yy_backend.anchor_duration_history
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -130,11 +130,11 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE stage.union_yy_anchor_duration_max_time AS
 DELETE
 FROM stage.union_yy_anchor_duration_max_time
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO stage.union_yy_anchor_duration_max_time
 SELECT backend_account_id, dt, uid, MAX(timestamp) AS max_timestamp
 FROM stage.union_yy_anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14'
 group by backend_account_id, dt, uid
 ;
 
@@ -143,21 +143,21 @@ group by backend_account_id, dt, uid
 -- CREATE TABLE stage.distinct_yy_anchor_duration AS
 DELETE
 FROM stage.distinct_yy_anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO stage.distinct_yy_anchor_duration
 SELECT uad.*
 FROM stage.union_yy_anchor_duration_max_time mt
          LEFT JOIN stage.union_yy_anchor_duration uad
                    ON mt.backend_account_id = uad.backend_account_id AND mt.dt = uad.dt AND mt.uid = uad.uid AND
                       mt.max_timestamp = uad.timestamp
-WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE mt.dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 -- DROP TABLE IF EXISTS warehouse.dw_yy_day_anchor_live_duration;
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live_duration AS
 DELETE
 FROM warehouse.dw_yy_day_anchor_live_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO warehouse.dw_yy_day_anchor_live_duration
 SELECT ai.dt,
        ai.platform_id,
@@ -178,7 +178,7 @@ SELECT ai.dt,
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN stage.distinct_yy_anchor_duration ad
                    ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.dt = ad.dt
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -210,7 +210,7 @@ FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_commission ac
                    ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND
                       ai.dt = DATE(ac.dtime)
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -219,13 +219,12 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live_commission AS
 DELETE
 FROM warehouse.dw_yy_day_anchor_live_commission
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO warehouse.dw_yy_day_anchor_live_commission
 SELECT dt,
        platform_id,
        backend_account_id,
        anchor_uid,
-       anchor_no,
        max(platform_name)                   as platform_name,
        max(anchor_nick_name)                as anchor_nick_name,
        max(anchor_type)                     as anchor_type,
@@ -235,11 +234,10 @@ SELECT dt,
        SUM(ifnull(ac.anchor_commission, 0)) AS anchor_commission,
        SUM(ifnull(ac.guild_commission, 0))  AS guild_commission
 FROM warehouse.ods_yy_anchor_live_commission ac
-WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ac.dt BETWEEN '2019-01-01' AND '2020-01-14'
 GROUP BY ac.platform_id,
          ac.backend_account_id,
          ac.anchor_uid,
-         ac.anchor_no,
          ac.dt
 ;
 
@@ -249,7 +247,7 @@ GROUP BY ac.platform_id,
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_day_anchor_live_bluediamond
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO warehouse.dw_yy_day_anchor_live_bluediamond
 SELECT ai.dt,
        ai.platform_id,
@@ -267,7 +265,7 @@ SELECT ai.dt,
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_bluediamond ab
                    ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ai.dt = ab.dt
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '2019-01-01' AND '2020-01-14'
   and diamond > 0
 ;
 
@@ -276,7 +274,7 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live AS
 DELETE
 FROM warehouse.dw_yy_day_anchor_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt BETWEEN '2019-01-01' AND '2020-01-14';
 INSERT INTO warehouse.dw_yy_day_anchor_live
 SELECT ai.dt,
        ai.platform_id,
@@ -316,7 +314,7 @@ FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN warehouse.dw_yy_day_anchor_live_commission ac
                    ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.anchor_uid AND ai.dt = ac.dt
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '2019-01-01' AND '2020-01-14'
 ;
 
 
@@ -327,7 +325,7 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_yy_guild_live_bluediamond AS
 DELETE
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('2019-01-01', '%Y%m') AND DATE_FORMAT('2020-01-14', '%Y%m');
 INSERT INTO warehouse.ods_yy_guild_live_bluediamond
 SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        1000                                     AS platform_id,
@@ -345,7 +343,7 @@ SELECT CONCAT(gb.year, '-', gb.month, '-01')    AS dt,
        gb.payTime                               AS pay_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_bluediamond gb ON cl.backend_account_id = gb.backend_account_id
-WHERE CONCAT(gb.year, gb.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+WHERE CONCAT(gb.year, gb.month) BETWEEN DATE_FORMAT('2019-01-01', '%Y%m') AND DATE_FORMAT('2020-01-14', '%Y%m')
 ;
 
 
@@ -354,7 +352,7 @@ WHERE CONCAT(gb.year, gb.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND 
 -- CREATE TABLE warehouse.ods_yy_guild_live_commission AS
 DELETE
 FROM warehouse.ods_yy_guild_live_commission
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('2019-01-01', '%Y%m') AND DATE_FORMAT('2020-01-14', '%Y%m');
 INSERT INTO warehouse.ods_yy_guild_live_commission
 SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
        1000                                  AS platform_id,
@@ -367,5 +365,5 @@ SELECT CONCAT(gc.year, '-', gc.month, '-01') AS dt,
        gc.time                               AS get_commission_time
 FROM spider_yy_backend.channel_list cl
          LEFT JOIN spider_yy_backend.guild_commission gc ON cl.backend_account_id = gc.backend_account_id
-WHERE CONCAT(gc.year, gc.month) BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+WHERE CONCAT(gc.year, gc.month) BETWEEN DATE_FORMAT('2019-01-01', '%Y%m') AND DATE_FORMAT('2020-01-14', '%Y%m')
 ;
