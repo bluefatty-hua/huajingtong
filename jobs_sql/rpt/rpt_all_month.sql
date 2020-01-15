@@ -1,7 +1,7 @@
 -- create table bireport.rpt_month_all
 -- (
 --     dt            varchar(10) charset utf8           null,
---     platform      varchar(2) charset utf8 default '' not null,
+--     platform      varchar(8) charset utf8 default '' not null,
 --     anchor_cnt    bigint(21)              default 0  not null,
 --     live_cnt      bigint(21)              default 0  not null,
 --     revenue       decimal(64, 2)                     null,
@@ -11,27 +11,92 @@
 --         unique (dt, platform)
 -- );
 
-
--- yy
-delete
-from bireport.rpt_month_all t
-WHERE t.dt = '2020-01-01'
-  AND t.platform = 'YY';
-INSERT INTO bireport.rpt_month_all
--- DROP TABLE IF EXISTS bireport.rpt_month_all;
--- CREATE TABLE bireport.rpt_month_all AS
-SELECT t0.dt,
-       t0.platform_name                                                                            AS platform,
-       COUNT(DISTINCT t0.anchor_uid)                                                               AS anchor_cnt,
-       COUNT(DISTINCT CASE WHEN live_days > 0 THEN t0.anchor_uid ELSE NULL END)                    AS live_cnt,
-       ROUND(SUM(t0.anchor_bluediamond_true + anchor_commission + guild_commission) / 500, 2)      AS revenue,
-       ROUND(SUM(t0.guild_bluediamond_true + guild_commission) / 1000, 2)                          AS guild_income,
-       ROUND(SUM(t0.anchor_bluediamond - t0.guild_bluediamond_true + anchor_commission) / 1000, 2) AS anchor_income
-FROM warehouse.dw_yy_month_anchor_live t0
-GROUP BY t0.dt,
-         t0.platform_id,
-         t0.platform_name
+DELETE
+FROM bireport.rpt_month_all_guild
+WHERE 1;
+INSERT INTO bireport.rpt_month_all_guild
+SELECT dt,
+       platform_id,
+       platform,
+       channel_num,
+       CASE WHEN anchor_cnt >= 0 THEN anchor_cnt ELSE 0 END                 AS anchor_cnt,
+       CASE WHEN live_cnt >= 0 THEN live_cnt ELSE 0 END                     AS live_cnt,
+       CASE WHEN revenue >= 0 THEN revenue ELSE 0 END                       AS revenue,
+       CASE WHEN revenue_orig >= 0 THEN revenue_orig ELSE 0 END             AS revenue_orig,
+       CASE WHEN guild_income >= 0 THEN guild_income ELSE 0 END             AS guild_income,
+       CASE WHEN guild_income_orig >= 0 THEN guild_income_orig ELSE 0 END   AS guild_income_orig,
+       CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
+       CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
+FROM (
+-- YY
+         SELECT dt,
+                platform_id,
+                platform,
+                channel_num,
+                anchor_cnt,
+                live_cnt,
+                revenue,
+                revenue_orig,
+                guild_income,
+                guild_income_orig,
+                anchor_income,
+                anchor_income_orig
+         FROM bireport.rpt_month_yy_guild
+         UNION ALL
+--  BILIBILI
+         SELECT dt,
+                platform_id,
+                platform,
+                backend_account_id AS channel_num,
+                anchor_cnt,
+                live_cnt,
+                revenue,
+                revenue_orig,
+                guild_income,
+                guild_income_orig,
+                anchor_income,
+                anchor_income_orig
+         FROM bireport.rpt_month_bb_guild
+         UNION ALL
+-- NOW
+         SELECT dt,
+                platform_id,
+                platform,
+                backend_account_id AS channel_num,
+                anchor_cnt,
+                live_cnt,
+                revenue,
+                revenue_orig,
+                guild_income,
+                guild_income_orig,
+                anchor_income,
+                anchor_income_orig
+         FROM bireport.rpt_month_now_guild
+         UNION ALL
+-- HuYa
+         SELECT dt,
+                platform_id,
+                platform,
+                channel_num,
+                anchor_cnt,
+                live_cnt,
+                revenue,
+                revenue_orig,
+                guild_income,
+                guild_income_orig,
+                anchor_income,
+                anchor_income_orig
+         FROM bireport.rpt_month_hy_guild) t
 ;
+
+
+
+
+
+
+
+
+
 
 
 
