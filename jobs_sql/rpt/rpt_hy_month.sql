@@ -3,7 +3,7 @@
 # CREATE TABLE bireport.rpt_month_hy_guild AS
 delete
 from bireport.rpt_month_hy_guild
-WHERE platform_id = 1002;
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m');
 INSERT INTO bireport.rpt_month_hy_guild
 SELECT t0.dt,
        t0.platform_id,
@@ -17,7 +17,6 @@ SELECT t0.dt,
        t0.gift_income + t0.guard_income + t0.noble_income                        AS guild_income_orig,
        (t0.gift_income + t0.guard_income + t0.noble_income) * 0.7 / (0.3 * 1000) AS anchor_income,
        t0.gift_income + t0.guard_income + t0.noble_income                        AS anchor_incom_orig
--- SELECT *
 FROM warehouse.dw_huya_month_guild_live t0
          LEFT JOIN (SELECT CONCAT(DATE_FORMAT(t.dt, '%Y-%m'), '-01')                          AS dt,
                            t.channel_id,
@@ -29,5 +28,6 @@ FROM warehouse.dw_huya_month_guild_live t0
                     GROUP BY CONCAT(DATE_FORMAT(t.dt, '%Y-%m'), '-01'),
                              t.channel_id) t1 ON t0.dt = t1.dt AND t0.channel_id = t1.channel_id
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
+WHERE DATE_FORMAT(t0.dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m')
 ;
 
