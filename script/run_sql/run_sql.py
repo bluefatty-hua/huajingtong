@@ -33,18 +33,19 @@ def format_param_dict(param_lst):
     platform_id = [pf_id for pf_id in [list(t)[0] for t in cursor.fetchall()]]
     # platform_id = cursor.fetchall()
 
-    # 设置默认终止日期 前一天
+    # 设置默认终止日期：前一天, 开始时间：7天前
+    start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
     end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 
     if len(param_lst) > 2:
         param = eval(param_lst[2])
         print(type(param), '/n', param)
-        param['start_date'] = param['start_date'] if param.get('start_date') else '2000-01-01'
+        param['start_date'] = param['start_date'] if param.get('start_date') else start_date
         param['end_date'] = param['end_date'] if param.get('end_date') else end_date
         param['platform_id'] = param['platform_id'] if param.get('platform_id') else str(platform_id)[
                                                                                      :-2] + ')'
     else:
-        param = {'start_date': '2019-01-01',
+        param = {'start_date': start_date,
                  'end_date': end_date,
                  'platform_id': str(platform_id).replace('[', '').replace(']', '')
                  }
@@ -53,7 +54,7 @@ def format_param_dict(param_lst):
 
 if __name__ == '__main__':
     # 部署项目路径
-    project_path = '/repo/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
+    project_path = '/services/etl/xjl_etl/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
     sql_file = project_path + sys.argv[1]
     param_dic = format_param_dict(sys.argv)
     print(param_dic)
