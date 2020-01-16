@@ -3,7 +3,7 @@
 -- CREATE TABLE bireport.rpt_month_bb_guild AS
 DELETE
 FROM bireport.rpt_month_bb_guild
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m');
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO bireport.rpt_month_bb_guild
 SELECT t.dt,
        t.platform_id,
@@ -25,7 +25,7 @@ SELECT t.dt,
 FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m')
+WHERE DATE_FORMAT(t.dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 GROUP BY t.dt,
          t.platform_id,
          pf.platform_name,

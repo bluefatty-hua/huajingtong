@@ -13,7 +13,7 @@
 
 DELETE
 FROM bireport.rpt_month_all_guild
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m');
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO bireport.rpt_month_all_guild
 SELECT dt,
        platform_id,
@@ -87,7 +87,7 @@ FROM (
                 anchor_income,
                 anchor_income_orig
          FROM bireport.rpt_month_hy_guild) t
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 ;
 
 
