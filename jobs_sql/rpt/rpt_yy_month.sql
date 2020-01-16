@@ -3,7 +3,7 @@
 -- CREATE TABLE bireport.rpt_month_yy_guild AS
 delete
 from bireport.rpt_month_yy_guild
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('start_date', '%Y-%m') AND DATE_FORMAT('end_date', '%Y-%m');
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO bireport.rpt_month_yy_guild
 select t0.dt,
        t0.platform_id,
@@ -47,6 +47,6 @@ select t0.dt,
        t0.anchor_bluediamond - t0.guild_income_bluediamond                       AS anchor_income_orig
 from warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('end_date', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
 ;
 
