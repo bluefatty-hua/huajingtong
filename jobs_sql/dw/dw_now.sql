@@ -24,7 +24,7 @@ FROM (SELECT t.dt,
              COUNT(t.anchor_no)                                                         AS anchor_cnt,
              COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
              ROUND(SUM(t.duration), 2)                                                  AS duration,
-             ROUND(SUM(t.anchor_revenue_rmb), 2) AS anchor_commission_rmb
+             ROUND(SUM(t.anchor_revenue_rmb), 2)                                        AS anchor_commission_rmb
       FROM warehouse.ods_now_day_anchor_live t
       WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY t.dt,
@@ -62,7 +62,7 @@ FROM (
                 t.backend_account_id,
                 COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
                 COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
-                ROUND(SUM(t.anchor_revenue_rmb), 2) AS anchor_revenue_rmb
+                ROUND(SUM(t.anchor_revenue_rmb), 2)                                        AS anchor_revenue_rmb
          FROM warehouse.ods_now_day_anchor_live t
          GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                   t.platform_id,
@@ -90,7 +90,7 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        anchor_no,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)  AS live_days,
        ROUND(SUM(t.duration), 2)                                            AS duration,
-       ROUND(SUM(t.anchor_revenue_rmb), 2) AS anchor_commission_rmb
+       ROUND(SUM(t.anchor_revenue_rmb), 2)                                  AS anchor_commission_rmb
 FROM warehouse.ods_now_day_anchor_live t
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),

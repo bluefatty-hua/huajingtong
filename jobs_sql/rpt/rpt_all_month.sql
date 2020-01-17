@@ -86,7 +86,8 @@ FROM (
                 guild_income_orig,
                 anchor_income,
                 anchor_income_orig
-         FROM bireport.rpt_month_hy_guild) t
+         FROM bireport.rpt_month_hy_guild
+         ) t
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 ;
 
