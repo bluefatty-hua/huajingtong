@@ -65,6 +65,6 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
                t.backend_account_id) t
          LEFT JOIN (SELECT * FROM warehouse.ods_bb_month_guild_live WHERE type = '公会总收益') t1
                    ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
-WHERE DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('2019-01-01', '%Y%m') AND DATE_FORMAT('2020-01-14', '%Y%m')
+WHERE DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('start_date', '%Y%m') AND DATE_FORMAT('end_date', '%Y%m')
 
 
