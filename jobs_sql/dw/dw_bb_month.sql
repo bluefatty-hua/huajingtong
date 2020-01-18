@@ -30,7 +30,7 @@ GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
 -- CREATE TABLE warehouse.dw_bb_month_guild_live AS
 DELETE
 FROM warehouse.dw_bb_month_guild_live
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+    WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_bb_month_guild_live
 SELECT t.dt,
        t.platform_id,
@@ -65,6 +65,6 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
                t.backend_account_id) t
          LEFT JOIN (SELECT * FROM warehouse.ods_bb_month_guild_live WHERE type = '公会总收益') t1
                    ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
-WHERE DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('start_date', '%Y%m') AND DATE_FORMAT('end_date', '%Y%m')
+WHERE DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 
 
