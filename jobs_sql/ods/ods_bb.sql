@@ -26,7 +26,7 @@ FROM warehouse.ods_bb_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_bb_day_anchor_live
 SELECT 1001                                                                    AS platform_id,
-       'B站'                                                                    AS platform_name,
+       'bilibili'                                                              AS platform_name,
        gat.dt,
        gat.backend_account_id,
        gat.uid                                                                 AS anchor_uid,
