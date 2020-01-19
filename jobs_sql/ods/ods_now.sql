@@ -32,18 +32,6 @@ WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-INSERT IGNORE INTO warehouse.ods_now_day_anchor_info (dt, platform_id, platform_name, backend_account_id, anchor_qq_no, anchor_no)
-SELECT DATE_FORMAT(date, '%Y-%m-%d') AS dt,
-       1003                                                     AS platform_id,
-       'NOW'                                                    AS platform_name,
-       backend_account_id,
-       uin,
-       nowid
-FROM spider_now_backend.anchor_income
-WHERE DATE_FORMAT(date, '%Y-%m-%d') BETWEEN '2019-12-01' AND '2019-12-31'
-;
-
-
 -- Merge
 -- DROP TABLE IF EXISTS warehouse.ods_now_day_anchor_live;
 -- CREATE TABLE warehouse.ods_now_day_anchor_live AS
