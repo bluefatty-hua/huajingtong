@@ -4,7 +4,7 @@
 DELETE
 FROM bireport.rpt_month_now_guild
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
-# INSERT INTO bireport.rpt_month_now_guild
+INSERT INTO bireport.rpt_month_now_guild
 SELECT t0.dt,
        t0.platform_id,
        pf.platform_name                                AS platform,
