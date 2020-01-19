@@ -15,7 +15,9 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        SUM(t.duration)                                                      AS duration,
        SUM(t.anchor_total_coin)                                             AS anchor_virtual_coin
 FROM warehouse.ods_bb_day_anchor_live t
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+WHERE (contract_status = 0
+    OR contract_status = 1)
+  AND DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
@@ -30,7 +32,7 @@ GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
 -- CREATE TABLE warehouse.dw_bb_month_guild_live AS
 DELETE
 FROM warehouse.dw_bb_month_guild_live
-    WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.dw_bb_month_guild_live
 SELECT t.dt,
        t.platform_id,
@@ -59,6 +61,8 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
              SUM(t.anchor_total_coin)                                                   AS anchor_virtual_coin,
              SUM(t.anchor_income_virtual_coin)                                          AS anchor_income
       FROM warehouse.ods_bb_day_anchor_live t
+      WHERE contract_status = 0
+         OR contract_status = 1
       GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                t.platform_id,
                t.platform_name,
