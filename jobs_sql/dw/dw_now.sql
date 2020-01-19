@@ -86,7 +86,6 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        t.platform_id,
        t.platform_name,
        t.backend_account_id,
-       anchor_uid,
        anchor_no,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)  AS live_days,
        ROUND(SUM(t.duration), 2)                                            AS duration,
@@ -97,7 +96,6 @@ GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
          t.backend_account_id,
-         anchor_uid,
          anchor_no
 ;
 
