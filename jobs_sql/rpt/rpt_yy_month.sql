@@ -70,17 +70,17 @@ SELECT dt,
        CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
        CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
 FROM (SELECT dt,
-                platform_id,
-                platform,
-                channel_num,
-                anchor_cnt,
-                live_cnt,
-                revenue,
-                revenue_orig,
-                guild_income,
-                guild_income_orig,
-                anchor_income,
-                anchor_income_orig
-         FROM bireport.rpt_month_yy_guild) t
+             platform_id,
+             platform,
+             channel_num,
+             anchor_cnt,
+             live_cnt,
+             revenue,
+             revenue_orig,
+             guild_income,
+             guild_income_orig,
+             anchor_income,
+             anchor_income_orig
+      FROM bireport.rpt_month_yy_guild) t
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 ;
