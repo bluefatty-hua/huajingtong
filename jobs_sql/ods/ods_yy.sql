@@ -194,7 +194,7 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_yy_anchor_live_commission AS
 DELETE
 FROM warehouse.ods_yy_anchor_live_commission
-WHERE dt BETWEEN '{start_date}' AND '2019-12-31';
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.ods_yy_anchor_live_commission
 SELECT ai.dt,
        ai.platform_id,

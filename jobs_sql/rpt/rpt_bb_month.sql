@@ -13,7 +13,7 @@ GROUP BY backend_account_id
 -- CREATE TABLE bireport.rpt_month_bb_guild AS
 DELETE
 FROM bireport.rpt_month_bb_guild
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('2019-01-01', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO bireport.rpt_month_bb_guild
 SELECT t.dt,
        t.platform_id,
@@ -76,7 +76,7 @@ GROUP BY t.dt,
 DELETE
 FROM bireport.rpt_month_all_guild
 WHERE platform_id = 1001
-  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('2019-01-01', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO bireport.rpt_month_all_guild
 SELECT dt,
        platform_id,
@@ -103,5 +103,5 @@ FROM (SELECT dt,
              anchor_income,
              anchor_income_orig
       FROM bireport.rpt_month_bb_guild) t
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('2019-01-01', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 ;
