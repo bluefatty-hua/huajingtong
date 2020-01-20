@@ -17,7 +17,7 @@ SELECT t0.dt,
        t0.guild_revenue_rmb_ture * 0.6 * 0.5           AS guild_income_orig,
        round(t0.guild_revenue_rmb_ture * 0.6 * 0.5, 2) AS anchor_income,
        t0.guild_revenue_rmb_ture * 0.6 * 0.5           AS anchor_income_orig
-FROM warehouse.dw_now_month_guild_live_commission t0
+FROM warehouse.dw_now_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
   AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
@@ -34,7 +34,7 @@ SELECT t0.dt,
        t0.anchor_revenue_rmb * 0.6 * 0.5           AS guild_income_orig,
        round(t0.anchor_revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
        t0.anchor_revenue_rmb * 0.6 * 0.5           AS anchor_income_orig
-FROM warehouse.dw_now_month_guild_live_commission t0
+FROM warehouse.dw_now_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
 ;
