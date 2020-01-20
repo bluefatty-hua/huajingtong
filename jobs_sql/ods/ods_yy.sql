@@ -40,7 +40,7 @@ SELECT ga.dt,
            WHEN ga.contype = 2 then '对私分成' END AS settle_method_text,
        ga.anchorRate / 100                     AS anchor_settle_rate,
        ga.logo                                 AS logo,
-       ''                                      AS comment
+       'orig'                                      AS comment
 FROM spider_yy_backend.guild_anchor ga
          LEFT JOIN spider_yy_backend.channel_list cl ON ga.backend_account_id = cl.backend_account_id
 WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
@@ -88,12 +88,7 @@ SELECT 1000                           AS platform_id,
        ad.dt
 FROM spider_yy_backend.anchor_duration_history ad
          LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-;
-
-
-INSERT IGNORE INTO warehouse.ods_yy_day_anchor_info (platform_id, platform_name, backend_account_id, channel_num,
-                                                     anchor_uid, anchor_no, anchor_nick_name, comment, dt)
+UNION
 SELECT 1000                      AS platform_id,
        'YY'                      AS platform_name,
        ab.backend_account_id,
@@ -105,6 +100,18 @@ SELECT 1000                      AS platform_id,
        ab.dt
 FROM spider_yy_backend.anchor_bluediamond ab
          LEFT JOIN spider_yy_backend.channel_list cl ON ab.backend_account_id = cl.backend_account_id
+UNION
+SELECT 1000                      AS platform_id,
+       'YY'                      AS platform_name,
+       at.backend_account_id,
+       cl.channel_num,
+       at.uid,
+       at.yynum,
+       nick,
+       'from anchor_sign_tran' AS comment,
+       at.dt
+FROM spider_yy_backend.guild_anchor_sign_tran at
+         LEFT JOIN spider_yy_backend.channel_list cl ON at.backend_account_id = cl.backend_account_id
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
