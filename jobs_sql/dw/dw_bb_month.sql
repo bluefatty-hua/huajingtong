@@ -40,17 +40,20 @@ SELECT t.dt,
        t.anchor_cnt,
        t.anchor_live_cnt,
        t1.type,
-       t1.guild_salary_rmb          AS guild_salart_rmb_ture,
-       t1.guild_virtual_coin        AS guild_virtual_coin_ture,
-       t.anchor_virtual_coin,
-       t1.anchor_virtual_coin       AS anchor_vitual_coin_ture,
+       IFNULL(t1.guild_salart_rmb, 0)          AS guild_salart_rmb_true,
+       IFNULL(t1.guild_virtual_coin, 0)        AS guild_virtual_coin_true,
+       IFNULL(t.anchor_virtual_coin, 0)        AS virtual_coin_revenue,
+       IFNULL(t1.anchor_income, 0)             AS anchor_income_true,
        t.anchor_income,
-       t1.anchor_base_coin          AS anchor_base_coin,
-       t1.guild_award_coin          AS guild_award_coin,
-       t1.operate_award_punish_coin AS operate_award_punish_coin,
-       t1.special_coin              AS special_virtual_coin,
-       t1.anchor_change_vir_coin,
-       t1.guild_change_coin
+       IFNULL(t1.anchor_base_coin, 0)          AS anchor_base_coin_true,
+       t.anchor_base_coin,
+       IFNULL(t1.guild_award_coin, 0)          AS guild_award_coin_true,
+       IFNULL(t1.operate_award_punish_coin, 0) AS operate_award_punish_coin_true,
+       t.operate_award_punish_coin,
+       IFNULL(t1.special_coin, 0)              AS special_coin_true,
+       t.special_coin,
+       IFNULL(t1.anchor_change_coin, 0)        AS anchor_change_coi,
+       IFNULL(t1.guild_change_coin, 0)         AS guild_change_coin
 FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')       AS dt,
              t.platform_id,
              t.platform_name,
@@ -58,7 +61,10 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
              COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
              COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
              SUM(t.anchor_total_coin)                                                   AS anchor_virtual_coin,
-             SUM(t.anchor_income_virtual_coin)                                          AS anchor_income
+             SUM(t.anchor_income)                                                       AS anchor_income,
+             SUM(t.special_coin)                                                        AS special_coin,
+             SUM(t.send_coin)                                                           AS operate_award_punish_coin,
+             SUM(t.anchor_base_coin)                                                    AS anchor_base_coin
       FROM warehouse.ods_bb_day_anchor_live t
       WHERE (contract_status <> 2 OR contract_status IS NULL)
       GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
@@ -69,3 +75,15 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
                    ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
 WHERE DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
+
+
+
+
+
+
+
+
+
+
+
+

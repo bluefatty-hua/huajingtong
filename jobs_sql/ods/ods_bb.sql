@@ -52,6 +52,7 @@ SELECT 1001                                                                    A
        CASE WHEN ad.total_income > 0 THEN ad.total_income ELSE 0 END           AS anchor_income_virtual_coin,
        CASE WHEN ad.special_coin >= 0 THEN ad.special_coin ELSE 0 END          AS special_coin,
        CASE WHEN ad.send_coin >= 0 THEN ad.send_coin ELSE 0 END                AS send_coin,
+       IF(ad.base_salary > 0, ad.base_salary, 0)                               AS base_coin,
        ad.DAU,
        ad.max_ppl,
        ad.fc,
@@ -66,7 +67,6 @@ FROM stage.bb_guild_anchor_dt gat
                    ON gat.uid = nl.uid AND gat.dt = nl.dt AND gat.backend_account_id = nl.backend_account_id
 WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
-
 
 
 -- ================================================================================
@@ -85,13 +85,13 @@ SELECT CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
        ROUND(gd.income + gd.base + gd.award + gd.send_money + gd.special_income + gd.admin_change +
              gd.anchor_admin_change, 2)                          AS guild_virtual_coin,
        gd.type,
-       gd.income                                                 AS anchor_virtual_coin,
+       gd.income                                                 AS anchor_income,
        gd.base                                                   AS anchor_base_coin,
        gd.award                                                  AS guild_award_coin,
        gd.send_money                                             AS operate_award_punish_coin,
        gd.special_income                                         AS special_coin,
        gd.admin_change                                           AS guild_change_coin,
-       gd.anchor_admin_change                                    AS anchor_change_vir_coin,
+       gd.anchor_admin_change                                    AS anchor_change_coin,
        gd.admin_note                                             AS comment,
        gs.timestamp
 FROM spider_bb_backend.guild_salary gs
