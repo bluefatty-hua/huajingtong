@@ -12,11 +12,11 @@ SELECT al.dt,
        al.backend_account_id,
        al.anchor_cnt,
        al.anchor_live_cnt,
-       ac.anchor_live_cnt      AS anchor_live_cnt_ture,
+       ac.anchor_live_cnt      AS anchor_live_cnt_true,
        al.duration,
        al.anchor_commission_rmb,
        ac.guild_commission_rmb AS guild_commission_rmb_true,
-       ac.guild_salary_rmb     AS guild_salary_rmb_ture
+       ac.guild_salary_rmb     AS guild_salary_rmb_true
 FROM (SELECT t.dt,
              t.platform_id,
              t.platform_name,
@@ -31,7 +31,7 @@ FROM (SELECT t.dt,
                t.platform_id,
                t.platform_name,
                t.backend_account_id) al
-         LEFT JOIN warehouse.ods_now_day_guild_live_commission ac
+         LEFT JOIN warehouse.ods_now_day_guild_live ac
                    ON al.dt = ac.dt AND al.backend_account_id = ac.backend_account_id
 ;
 
@@ -51,8 +51,8 @@ SELECT al.dt,
        al.anchor_cnt,
        al.anchor_live_cnt,
        al.anchor_revenue_rmb,
-       gc.anchor_cnt        AS anchor_cnt_ture,
-       gc.guild_revenue_rmb AS guild_revenue_rmb_ture,
+       gc.anchor_cnt        AS anchor_cnt_true,
+       gc.guild_revenue_rmb AS guild_revenue_rmb_true,
        gc.anchor_live_rate,
        gc.average_anchor_revenue_rmb
 FROM (
@@ -68,7 +68,7 @@ FROM (
                   t.platform_id,
                   t.platform_name,
                   t.backend_account_id) al
-         LEFT JOIN warehouse.ods_now_month_guild_commission gc
+         LEFT JOIN warehouse.ods_now_month_guild gc
                    ON al.dt = gc.dt AND al.backend_account_id = gc.backend_account_id
 WHERE DATE_FORMAT(al.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;

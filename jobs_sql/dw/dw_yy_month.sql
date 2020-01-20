@@ -97,7 +97,7 @@ SELECT ad.dt,
        gv.guild_bluediamond  AS guild_bluediamond_true,
        ad.anchor_commission,
        ad.guild_commission,
-       gc.guild_commission   AS guild_commission_ture,
+       gc.guild_commission   AS guild_commission_true,
        ad.dt_cnt
 FROM (SELECT DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d')        AS dt,
              platform_id,
@@ -209,7 +209,7 @@ SELECT ad.dt,
        CASE WHEN gv.guild_bluediamond >= 0 THEN gv.guild_bluediamond ELSE 0 END   AS guild_bluediamond_true,
        ad.anchor_commission,
        ad.guild_commission,
-       CASE WHEN gc.guild_commission >= 0 THEN gc.guild_commission ELSE 0 END     AS guild_commission_ture,
+       CASE WHEN gc.guild_commission >= 0 THEN gc.guild_commission ELSE 0 END     AS guild_commission_true,
        ad.dt_cnt
 FROM (
          SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')        AS dt,
@@ -321,7 +321,7 @@ SELECT ad.dt,
        gv.guild_bluediamond  AS guild_bluediamond_true,
        ad.anchor_commission,
        ad.guild_commission,
-       gc.guild_commission   AS guild_commission_ture,
+       gc.guild_commission   AS guild_commission_true,
        ad.dt_cnt
 FROM (
          SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d')        AS dt,

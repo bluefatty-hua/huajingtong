@@ -84,9 +84,9 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 -- DROP TABLE IF EXISTS warehouse.ods_day_now_guild_commission;
 -- CREATE TABLE warehouse.ods_day_now_guild_commission AS
 DELETE
-FROM warehouse.ods_now_day_guild_live_commission
+FROM warehouse.ods_now_day_guild_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_now_day_guild_live_commission
+INSERT INTO warehouse.ods_now_day_guild_live
 SELECT 1003                            AS platform_id,
        'NOW'                           AS platform_name,
        ui.backend_account_id,
@@ -105,9 +105,9 @@ WHERE DATE_FORMAT(ui.day, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 -- DROP TABLE IF EXISTS warehouse.ods_month_now_guild_commission;
 -- CREATE TABLE warehouse.ods_month_now_guild_commission AS
 DELETE
-FROM warehouse.ods_now_month_guild_commission
+FROM warehouse.ods_now_month_guild
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.ods_now_month_guild_commission
+INSERT INTO warehouse.ods_now_month_guild
 SELECT 1003                                                                             AS platform_id,
        'NOW'                                                                            AS platform_name,
        backend_account_id,
