@@ -75,15 +75,3 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'
                    ON t.dt = t1.dt AND t.backend_account_id = t1.backend_account_id
 WHERE DATE_FORMAT(t.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 ;
-
-
-
-
-
-
-
-
-
-
-
-
