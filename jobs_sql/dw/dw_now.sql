@@ -1,16 +1,16 @@
 -- 汇总维度 日-公会
 -- 汇总指标 开播天数，开播时长，主播流水，公会流水，公会收入
--- DROP TABLE IF EXISTS warehouse.dw_day_now_guild_commission;
--- CREATE TABLE warehouse.dw_day_now_guild_commission AS
+-- DROP TABLE IF EXISTS warehouse.dw_now_day_guild_live;
+-- CREATE TABLE warehouse.dw_now_day_guild_live AS
 DELETE
-FROM warehouse.dw_now_day_guild_live_commission
+FROM warehouse.dw_now_day_guild_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.dw_now_day_guild_live_commission
+INSERT INTO warehouse.dw_now_day_guild_live
 SELECT al.dt,
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
-       anchor_cnt,
+       al.anchor_cnt,
        al.anchor_live_cnt,
        ac.anchor_live_cnt      AS anchor_live_cnt_ture,
        al.duration,
@@ -38,12 +38,12 @@ FROM (SELECT t.dt,
 
 -- 汇总维度 月-公会
 -- 汇总指标 公会主播数 公会开播主播数 公会主播收入
--- DROP TABLE IF EXISTS warehouse.dw_month_now_guild_commission;
--- CREATE TABLE warehouse.dw_month_now_guild_commission AS
+-- DROP TABLE IF EXISTS warehouse.dw_now_month_guild_live;
+-- CREATE TABLE warehouse.dw_now_month_guild_live AS
 DELETE
-FROM warehouse.dw_now_month_guild_live_commission
+FROM warehouse.dw_now_month_guild_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-INSERT INTO warehouse.dw_now_month_guild_live_commission
+INSERT INTO warehouse.dw_now_month_guild_live
 SELECT al.dt,
        al.platform_id,
        al.platform_name,
@@ -76,12 +76,12 @@ WHERE DATE_FORMAT(al.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND
 
 -- 汇总维度 月-公会-主播
 -- 汇总指标 主播数，开播主播数，虚拟币收入,主播佣金，公会佣金
--- DROP TABLE IF EXISTS warehouse.dw_month_now_guild_anchor_commission;
--- CREATE TABLE warehouse.dw_month_now_guild_anchor_commission AS
+-- DROP TABLE IF EXISTS warehouse.dw_now_month_guild_anchor_live;
+-- CREATE TABLE warehouse.dw_now_month_guild_anchor_live AS
 DELETE
-FROM warehouse.dw_now_month_guild_anchor_live_commission
+FROM warehouse.dw_now_month_guild_anchor_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-INSERT INTO warehouse.dw_now_month_guild_anchor_live_commission
+INSERT INTO warehouse.dw_now_month_guild_anchor_live
 SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
        t.platform_id,
        t.platform_name,
