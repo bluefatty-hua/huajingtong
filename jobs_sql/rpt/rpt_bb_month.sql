@@ -1,8 +1,11 @@
 DROP TABLE IF EXISTS stage.bb_guild_income_rate;
 CREATE TABLE stage.bb_guild_income_rate AS
-SELECT backend_account_id, AVG(guild_virtual_coin_true / virtual_coin_revenue) AS avg_rate
-FROM warehouse.dw_bb_month_guild_live
-WHERE virtual_coin_revenue > 0
+SELECT backend_account_id,
+       AVG(guild_income / revenue)  AS guild_income_rate,
+       AVG(anchor_income / revenue) AS anchor_income_rate
+FROM bireport.rpt_month_bb_guild
+WHERE guild_income > 0
+  AND revenue > 0
   AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
 GROUP BY backend_account_id
 ;
@@ -36,7 +39,8 @@ FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
-  AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
+  AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{start_date}', '%Y-%m')
+  AND DATE_FORMAT(dt, '%Y-%m') > DATE_FORMAT('2019-01-01', '%Y-%m')
 GROUP BY t.dt,
          t.platform_id,
          pf.platform_name,
@@ -45,26 +49,23 @@ GROUP BY t.dt,
 UNION ALL
 SELECT t.dt,
        t.platform_id,
-       pf.platform_name                                     AS platform,
+       pf.platform_name                                           AS platform,
        t.backend_account_id,
        t1.remark,
-       SUM(t.anchor_cnt)                                    AS anchor_cnt,
-       SUM(t.anchor_live_cnt)                               AS live_cnt,
-       SUM(t.virtual_coin_revenue) / 1000                   AS revenue,
-       SUM(t.virtual_coin_revenue)                          AS revenune_orig,
-       SUM(t.virtual_coin_revenue * ig.avg_rate - t.anchor_change_coin - t.anchor_income - t.anchor_base_coin -
-           operate_award_punish_coin - special_coin) / 1000 AS guild_income,
-       SUM(t.virtual_coin_revenue * ig.avg_rate - t.anchor_change_coin - t.anchor_income - t.anchor_base_coin -
-           operate_award_punish_coin - special_coin)        AS guild_income_orig,
-       SUM(t.anchor_income + t.anchor_base_coin + operate_award_punish_coin +
-           special_coin) / 1000                             AS anchor_income,
-       SUM(t.anchor_income + t.anchor_base_coin + operate_award_punish_coin +
-           special_coin)                                    AS anchor_income_orig
+       SUM(t.anchor_cnt)                                          AS anchor_cnt,
+       SUM(t.anchor_live_cnt)                                     AS live_cnt,
+       SUM(t.virtual_coin_revenue) / 1000                         AS revenue,
+       SUM(t.virtual_coin_revenue)                                AS revenune_orig,
+       SUM(t.virtual_coin_revenue * ig.guild_income_rate) / 1000  AS guild_income,
+       SUM(t.virtual_coin_revenue * ig.guild_income_rate)         AS guild_income_orig,
+       SUM(t.virtual_coin_revenue * ig.anchor_income_rate) / 1000 AS anchor_income,
+       SUM(t.virtual_coin_revenue * ig.anchor_income_rate)        AS anchor_income_orig
 FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
          LEFT JOIN stage.bb_guild_income_rate ig ON t.backend_account_id = ig.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
+   OR DATE_FORMAT(dt, '%Y-%m') <= DATE_FORMAT('2019-01-01', '%Y-%m')
 GROUP BY t.dt,
          t.platform_id,
          pf.platform_name,
@@ -82,14 +83,14 @@ SELECT dt,
        platform_id,
        platform,
        channel_num,
-       CASE WHEN anchor_cnt >= 0 THEN anchor_cnt ELSE 0 END                 AS anchor_cnt,
-       CASE WHEN live_cnt >= 0 THEN live_cnt ELSE 0 END                     AS live_cnt,
-       CASE WHEN revenue >= 0 THEN revenue ELSE 0 END                       AS revenue,
-       CASE WHEN revenue_orig >= 0 THEN revenue_orig ELSE 0 END             AS revenue_orig,
-       CASE WHEN guild_income >= 0 THEN guild_income ELSE 0 END             AS guild_income,
-       CASE WHEN guild_income_orig >= 0 THEN guild_income_orig ELSE 0 END   AS guild_income_orig,
-       CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
-       CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
+       anchor_cnt         AS anchor_cnt,
+       live_cnt           AS live_cnt,
+       revenue            AS revenue,
+       revenue_orig       AS revenue_orig,
+       guild_income       AS guild_income,
+       guild_income_orig  AS guild_income_orig,
+       anchor_income      AS anchor_income,
+       anchor_income_orig AS anchor_income_orig
 FROM (SELECT dt,
              platform_id,
              platform,
