@@ -22,14 +22,17 @@ sys.setdefaultencoding('utf8')
 conn = pymysql.Connect(host='127.0.0.1', user='wh_user', password='Nd^93)9f@445Fv')
 cursor = conn.cursor()
 
+# 设置默认终止日期：前一天, 开始时间：7天前
+start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
+end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+
+
 # 解析参数
 parser = argparse.ArgumentParser()
-parser.add_argument('-s', '--start_date', help='开始时间')
-parser.add_argument('-e', '--end_date', help='结束时间')
-parser.add_argument('-f', '--sql_file', help='指定执行SQL文件')
-parser.add_argument('-p', '--platform_id', help='指定平台ID')
 parser.add_argument('-l', '--log_file', help='指定的log文件')
+parser.add_argument('-f', '--sql_file', help='指定执行SQL文件')
 args = parser.parse_args()
+
 
 # 配置LOG
 LOG_NAME = args.sql_file.split('/')[-1]
@@ -64,10 +67,10 @@ def format_param_dict(args):
     cursor.execute('select id from warehouse.platform;')
     # platform_id = cursor.fetchall()
     platform_id = str([pf_id for pf_id in [list(t)[0] for t in cursor.fetchall()]]).replace('[', '(').replace(']', ')')
-
-    # 设置默认终止日期：前一天, 开始时间：7天前
-    start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
-    end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+    parser.add_argument('-s', '--start_date', default=start_date, help='开始时间')
+    parser.add_argument('-e', '--end_date', default=end_date, help='结束时间')
+    parser.add_argument('-p', '--platform_id', default=platform_id, help='指定平台ID')
+    args = parser.parse_args()
 
     param = dict()
     param['start_date'] = args.start_date if args.start_date else start_date
