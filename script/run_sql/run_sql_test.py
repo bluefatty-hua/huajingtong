@@ -81,7 +81,7 @@ def format_param_dict(args):
 
 if __name__ == '__main__':
     logging.info('------------------------------START------------------------------\n')
-    logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H-%M-%S')))
+    logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
     # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
@@ -99,5 +99,5 @@ if __name__ == '__main__':
     finally:
         cursor.close()
         conn.close()
-        logging.info('end_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H-%M-%S')))
+        logging.info('end_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
