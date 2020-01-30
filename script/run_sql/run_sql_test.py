@@ -60,9 +60,9 @@ def run_sql(sql_param, file):
                     sql = (sql + ';').replace('/n', '').format(**sql_param) + '\n'
                     cursor.execute(sql)
                     conn.commit()
-                    logging.info('-----------------------------SUCCESS----------------------------\n{}    '.format(sql))
+                    logging.info('-----------------------------SUCCESS----------------------------\n{}'.format(sql))
             except Exception as err:
-                logging.info('----------------------------ERROR SQL---------------------------\n{}    '.format(sql))
+                logging.info('----------------------------ERROR SQL---------------------------\n{}'.format(sql))
                 logging.exception(err)
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
