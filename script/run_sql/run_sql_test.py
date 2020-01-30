@@ -78,6 +78,7 @@ def format_param_dict(args):
 
 
 if __name__ == '__main__':
+    logging.info('------------------------------START------------------------------')
     # 部署项目路径
     # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
     project_path = '/services/xjl_etl/script/run_sql/'  # TEST
