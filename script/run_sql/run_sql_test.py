@@ -64,7 +64,7 @@ def run_sql(sql_param, file):
             except Exception as err:
                 logging.info('----------------------------ERROR SQL---------------------------\n{}\n'.format(sql))
                 logging.exception(err)
-                logging.info('--ROLLBACK-->>>>>>>>>>>>>>>>>')
+                logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
                 break
 
