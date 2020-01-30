@@ -106,7 +106,7 @@ WHERE DATE_FORMAT(ui.day, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_month_now_guild_commission AS
 DELETE
 FROM warehouse.ods_now_month_guild
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
 INSERT INTO warehouse.ods_now_month_guild
 SELECT 1003                                                                             AS platform_id,
        'NOW'                                                                            AS platform_name,
