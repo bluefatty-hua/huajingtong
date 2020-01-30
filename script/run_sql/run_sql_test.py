@@ -52,7 +52,7 @@ init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO,
 
 
 def run_sql(sql_param, file):
-    logging.info('RUN>>>>>>>>>>>>>>>>>>>>>>>>>>...\n')
+    logging.info('RUN>>>>>>>>>>>>>>>>>>>>>>>>>>...    ')
     with io.open(file, 'r', encoding='utf8') as fr:
         for sql in fr.read().split(';'):
             try:
@@ -60,11 +60,11 @@ def run_sql(sql_param, file):
                     sql = (sql + ';').replace('/n', '').format(**sql_param) + '\n'
                     cursor.execute(sql)
                     conn.commit()
-                    logging.info('-----------------------------SUCCESS----------------------------\n{}\n'.format(sql))
+                    logging.info('-----------------------------SUCCESS----------------------------\n{}    '.format(sql))
             except Exception as err:
-                logging.info('----------------------------ERROR SQL---------------------------\n{}\n'.format(sql))
+                logging.info('----------------------------ERROR SQL---------------------------\n{}    '.format(sql))
                 logging.exception(err)
-                logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
+                logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...    ')
                 conn.rollback()
                 break
 
@@ -75,12 +75,13 @@ def format_param_dict(args):
         'end_date': args.end_date,
         'platform_id': args.platform_id
     }
-    logging.info('------------------------------PARAM-----------------------------\n{}\n'.format(param))
+    logging.info('------------------------------PARAM-----------------------------    ')
+    logging.info(param)
     return param
 
 
 if __name__ == '__main__':
-    logging.info('------------------------------START-----------------------------\n')
+    logging.info('------------------------------START-----------------------------    ')
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
@@ -96,7 +97,9 @@ if __name__ == '__main__':
     try:
         run_sql(param_dic, sql_file)
         conn.commit()
-        logging.info('------------------------------DONE------------------------------\n')
+        logging.info('------------------------------DONE------------------------------    ')
+    except Exception as err:
+        logging.exception(err)
     finally:
         cursor.close()
         conn.close()
