@@ -48,7 +48,7 @@ if args.log_file == None:
     log_file = log_path + '/' + LOG_NAME
 else:
     log_file = args.log_file
-init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO, 'log_file': log_file})
+init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.DEBUG, 'log_file': log_file})
 
 
 def run_sql(sql_param, file):
