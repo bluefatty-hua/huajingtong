@@ -39,7 +39,7 @@ FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
-  AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{start_date}', '%Y-%m')
+  AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
   AND DATE_FORMAT(dt, '%Y-%m') > DATE_FORMAT('2019-01-01', '%Y-%m')
 GROUP BY t.dt,
          t.platform_id,
