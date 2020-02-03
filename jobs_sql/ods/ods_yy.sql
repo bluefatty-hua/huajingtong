@@ -181,6 +181,7 @@ SELECT ai.dt,
        warehouse.DURATION_CH(ad.pcduration)  AS pcduration_sec,
        ad.mobduration,
        warehouse.DURATION_CH(ad.mobduration) AS mobduration_sec,
+       ai.comment,
        ad.timestamp
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN stage.distinct_yy_anchor_duration ad
@@ -212,6 +213,7 @@ SELECT ai.dt,
        ac.inType   as in_type,
        ac.frmYY    AS from_visitor_no,
        ac.frmNick  AS from_visitor_name,
+       ai.comment,
        ac.dtime
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_commission ac
@@ -232,6 +234,7 @@ SELECT dt,
        platform_id,
        backend_account_id,
        anchor_uid,
+       ac.comment,
        max(platform_name)                   as platform_name,
        max(anchor_nick_name)                as anchor_nick_name,
        max(anchor_type)                     as anchor_type,
@@ -245,7 +248,8 @@ WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY ac.platform_id,
          ac.backend_account_id,
          ac.anchor_uid,
-         ac.dt
+         ac.dt,
+         ac.comment
 ;
 
 
@@ -268,6 +272,7 @@ SELECT ai.dt,
        ai.settle_method_text,
        ai.anchor_settle_rate,
        ab.diamond AS bluediamond,
+       ai.comment,
        ab.timestamp
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_bluediamond ab
@@ -312,7 +317,8 @@ SELECT ai.dt,
        ai.settle_method_code,
        ai.settle_method_text,
        ai.anchor_settle_rate,
-       ai.logo
+       ai.logo,
+       ai.comment
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN warehouse.dw_yy_day_anchor_live_duration al
                    ON ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
