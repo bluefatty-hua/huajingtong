@@ -40,7 +40,7 @@ FROM warehouse.dw_bb_month_guild_live t
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
   AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
-  AND DATE_FORMAT(dt, '%Y-%m') > DATE_FORMAT('2019-01-01', '%Y-%m')
+#   AND DATE_FORMAT(dt, '%Y-%m') > DATE_FORMAT('2019-01-01', '%Y-%m')
 GROUP BY t.dt,
          t.platform_id,
          pf.platform_name,
@@ -65,7 +65,7 @@ FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN stage.bb_guild_income_rate ig ON t.backend_account_id = ig.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
-   OR DATE_FORMAT(dt, '%Y-%m') <= DATE_FORMAT('2019-01-01', '%Y-%m')
+#    OR DATE_FORMAT(dt, '%Y-%m') <= DATE_FORMAT('2019-01-01', '%Y-%m')
 GROUP BY t.dt,
          t.platform_id,
          pf.platform_name,
