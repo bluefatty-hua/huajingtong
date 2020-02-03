@@ -76,12 +76,12 @@ WHERE DATE_FORMAT(al.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND
 
 -- 汇总维度 月-公会-主播
 -- 汇总指标 主播数，开播主播数，虚拟币收入,主播佣金，公会佣金
--- DROP TABLE IF EXISTS warehouse.dw_now_month_guild_anchor_live;
--- CREATE TABLE warehouse.dw_now_month_guild_anchor_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_now_month_anchor_live;
+-- CREATE TABLE warehouse.dw_now_month_anchor_live AS
 DELETE
-FROM warehouse.dw_now_month_guild_anchor_live
+FROM warehouse.dw_now_month_anchor_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-INSERT INTO warehouse.dw_now_month_guild_anchor_live
+INSERT INTO warehouse.dw_now_month_anchor_live
 SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS dt,
        t.platform_id,
        t.platform_name,
