@@ -69,6 +69,7 @@ SELECT al.dt,
        al.bluediamond,
        al.anchor_commission,
        al.guild_commission,
+       al.anchor_settle_rate,
        al.comment
 FROM warehouse.dw_yy_day_anchor_live al
          INNER JOIN stage.stage_yy_month_anchor_info ai ON DATE_FORMAT(ai.dt, '%Y-%m') = DATE_FORMAT(al.dt, '%Y-%m') AND
