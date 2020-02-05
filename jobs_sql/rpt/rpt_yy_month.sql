@@ -1,10 +1,10 @@
 -- 公会每月流水、公会收入、主播收入
 -- DROP TABLE IF EXISTS bireport.rpt_month_yy_guild;
 -- CREATE TABLE bireport.rpt_month_yy_guild AS
-# DELETE
-# FROM bireport.rpt_month_yy_guild
-# WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
-# INSERT INTO bireport.rpt_month_yy_guild
+DELETE
+FROM bireport.rpt_month_yy_guild
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+INSERT INTO bireport.rpt_month_yy_guild
 SELECT t0.dt,
        t0.platform_id,
        pf.platform_name                                                          AS platform,
