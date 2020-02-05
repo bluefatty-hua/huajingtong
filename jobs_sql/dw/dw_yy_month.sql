@@ -14,8 +14,8 @@
 
 
 -- 取出每月主播数（以每个月最后一天为准）
-# DROP TABLE IF EXISTS stage.stage_yy_month_anchor_info;
-# CREATE TABLE stage.stage_yy_month_anchor_info AS
+-- DROP TABLE IF EXISTS stage.stage_yy_month_anchor_info;
+-- CREATE TABLE stage.stage_yy_month_anchor_info AS
 DELETE
 FROM stage.stage_yy_month_anchor_info
 WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
@@ -40,8 +40,8 @@ FROM (
 
 
 -- 取出每日主播数（以每个月最后一天为准）
-# DROP TABLE IF EXISTS stage.stage_yy_day_anchor_live;
-# CREATE TABLE stage.stage_yy_day_anchor_live
+-- DROP TABLE IF EXISTS stage.stage_yy_day_anchor_live;
+-- CREATE TABLE stage.stage_yy_day_anchor_live
 DELETE
 FROM stage.stage_yy_day_anchor_live
 WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
