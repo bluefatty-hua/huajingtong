@@ -17,16 +17,15 @@ SELECT t0.dt,
        ROUND((t0.anchor_bluediamond_true + t0.guild_commission_true) / 500, 2)   AS revenue,
        t0.anchor_bluediamond_true + t0.guild_commission_true                     AS revenue_orig,
        -- 公会收入
-       t0.guild_bluediamond_true                                                 AS guild_income_bluediamond,
-       ROUND((t0.guild_bluediamond_true + t0.guild_commission_true) / 1000, 2)   AS guild_income,
-       t0.guild_bluediamond_true + t0.guild_commission_true                      AS guild_income_orig,
+       t0.guild_income_bluediamond_true                                                 AS guild_income_bluediamond,
+       ROUND((t0.guild_income_bluediamond_true + t0.guild_commission_true) / 1000, 2)   AS guild_income,
+       t0.guild_income_bluediamond_true + t0.guild_commission_true                      AS guild_income_orig,
        -- 主播收入
-       ROUND((t0.anchor_bluediamond_true - t0.guild_bluediamond_true) / 1000, 2) AS anchor_income,
-       t0.anchor_bluediamond_true - t0.guild_bluediamond_true                    AS anchor_income_orig
+       ROUND((t0.anchor_bluediamond_true - t0.guild_income_bluediamond_true) / 1000, 2) AS anchor_income,
+       t0.anchor_bluediamond_true - t0.guild_income_bluediamond_true                    AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE comment = 'orig'
-  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
   AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
 UNION ALL
 SELECT t0.dt,
@@ -49,8 +48,7 @@ SELECT t0.dt,
        t0.anchor_bluediamond - t0.guild_income_bluediamond                       AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE comment = 'orig'
-  AND DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
 ;
 
 
