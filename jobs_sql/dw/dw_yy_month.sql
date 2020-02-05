@@ -14,6 +14,20 @@
 
 
 -- 取出每月主播数（以每个月最后一天为准）
+DROP TABLE IF EXISTS stage.stage_yy_month_guild_info_max_day;
+CREATE TABLE stage.stage_yy_month_guild_info_max_day AS
+SELECT CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01') AS dt,
+       backend_account_id,
+       MAX(dt)                                 AS max_dt
+FROM warehouse.dw_yy_day_anchor_live
+WHERE comment = 'orig'
+  AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}'
+GROUP BY CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01'),
+         backend_account_id
+;
+
+
 -- DROP TABLE IF EXISTS stage.stage_yy_month_anchor_info;
 -- CREATE TABLE stage.stage_yy_month_anchor_info AS
 DELETE
@@ -22,16 +36,7 @@ WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_dat
                              '%Y-%m-%d') AND '{end_date}';
 INSERT INTO stage.stage_yy_month_anchor_info
 SELECT t0.dt, t0.backend_account_id, anchor_uid
-FROM (
-         SELECT CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01') AS dt,
-                backend_account_id,
-                MAX(dt)                                 AS max_dt
-         FROM warehouse.dw_yy_day_anchor_live
-         WHERE comment = 'orig'
-           AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
-                                      '%Y-%m-%d') AND '{end_date}'
-         GROUP BY CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01'),
-                  backend_account_id) t0
+FROM stage.stage_yy_month_guild_info_max_day t0
          LEFT JOIN (SELECT dt, backend_account_id, anchor_uid
                     FROM warehouse.dw_yy_day_anchor_live
                     WHERE comment = 'orig'
@@ -42,16 +47,31 @@ FROM (
 
 
 -- 取出每日主播数（以每个月最后一天为准）
--- DROP TABLE IF EXISTS stage.stage_yy_day_anchor_live;
--- CREATE TABLE stage.stage_yy_day_anchor_live
+# DROP TABLE IF EXISTS stage.stage_yy_day_anchor_live;
+# CREATE TABLE stage.stage_yy_day_anchor_live
 DELETE
 FROM stage.stage_yy_day_anchor_live
 WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
                              '%Y-%m-%d') AND '{end_date}';
 INSERT INTO stage.stage_yy_day_anchor_live
-SELECT al.*
-FROM stage.stage_yy_month_anchor_info ai
-         LEFT JOIN warehouse.dw_yy_day_anchor_live al ON DATE_FORMAT(ai.dt, '%Y-%m') = DATE_FORMAT(al.dt, '%Y-%m') AND
+SELECT al.dt,
+       al.platform_id,
+       al.platform_name,
+       ai.backend_account_id,
+       al.channel_num,
+       al.anchor_uid,
+       al.anchor_no,
+       al.anchor_nick_name,
+       al.anchor_type,
+       al.anchor_type_text,
+       al.duration,
+       al.live_status,
+       al.bluediamond,
+       al.anchor_commission,
+       al.guild_commission,
+       al.comment
+FROM warehouse.dw_yy_day_anchor_live al
+         INNER JOIN stage.stage_yy_month_anchor_info ai ON DATE_FORMAT(ai.dt, '%Y-%m') = DATE_FORMAT(al.dt, '%Y-%m') AND
                                                          ai.backend_account_id = al.backend_account_id AND
                                                          ai.anchor_uid = al.anchor_uid
 WHERE ai.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND CONCAT(DATE_FORMAT('{end_date}', '%Y-%m'), '-01')
