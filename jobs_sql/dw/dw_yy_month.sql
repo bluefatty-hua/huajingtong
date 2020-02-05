@@ -34,7 +34,9 @@ FROM (
                   backend_account_id) t0
          LEFT JOIN (SELECT dt, backend_account_id, anchor_uid
                     FROM warehouse.dw_yy_day_anchor_live
-                    WHERE comment = 'orig') t1
+                    WHERE comment = 'orig'
+                      AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                                                 '%Y-%m-%d') AND '{end_date}') t1
                    ON t0.backend_account_id = t1.backend_account_id AND t0.max_dt = t1.dt
 ;
 
