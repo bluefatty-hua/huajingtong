@@ -29,7 +29,8 @@ WHERE comment = 'orig'
 
 DELETE
 FROM bireport.rpt_day_all
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE platform = 'YY'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_all
 SELECT gl.dt,
        pf.platform_name                                                              AS platform,

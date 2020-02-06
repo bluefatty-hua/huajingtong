@@ -1,8 +1,8 @@
 -- 主播
 -- 汇总维度 日-公会
 -- 汇总指标 开播天数，开播时长，虚拟币收入
-# DROP TABLE IF EXISTS warehouse.dw_bb_day_guild_live;
-# CREATE TABLE warehouse.dw_bb_day_guild_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_bb_day_guild_live;
+-- CREATE TABLE warehouse.dw_bb_day_guild_live AS
 DELETE
 FROM warehouse.dw_bb_day_guild_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');

@@ -28,7 +28,8 @@ WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
 
 DELETE
 FROM bireport.rpt_day_all
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE platform = 'bilibili'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_all
 SELECT t.dt,
        t.platform_name,
