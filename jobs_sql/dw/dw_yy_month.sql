@@ -75,8 +75,8 @@ FROM warehouse.dw_yy_day_anchor_live al
          INNER JOIN stage.stage_yy_month_anchor_info ai ON DATE_FORMAT(ai.dt, '%Y-%m') = DATE_FORMAT(al.dt, '%Y-%m') AND
                                                          ai.backend_account_id = al.backend_account_id AND
                                                          ai.anchor_uid = al.anchor_uid
-WHERE ai.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND CONCAT(DATE_FORMAT('{end_date}', '%Y-%m'), '-01')
-  AND al.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND CONCAT(DATE_FORMAT('{end_date}', '%Y-%m'), '-01')
+WHERE ai.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND '{end_date}'
+  AND al.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND '{end_date}'
 ;
 
 
