@@ -1,5 +1,58 @@
 -- 汇总维度 月-公会—主播
 -- 汇总指标 开播天数，开播时长，虚拟币收入
+# DROP TABLE IF EXISTS stage.stage_bb_month_anchor_info;
+# CREATE TABLE stage.stage_bb_month_anchor_info AS
+# DELETE
+# FROM stage.stage_bb_month_anchor_info
+# WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m') AND DATE_FORMAT('2020-01-20', '%Y-%m');
+# INSERT INTO stage.stage_bb_month_anchor_info
+# SELECT CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01') AS dt,
+#        al.platform_id,
+#        al.platform_name,
+#        al.backend_account_id,
+#        al.anchor_no,
+#        al.contract_status,
+#        al.contract_status_text,
+#        MAX(dt)                                    AS max_dt
+# FROM warehouse.ods_bb_day_anchor_live al
+# WHERE DATE_FORMAT(al.dt, '%Y-%m') BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m') AND DATE_FORMAT('2020-01-20', '%Y-%m')
+# GROUP BY CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01'),
+#          al.platform_id,
+#          al.platform_name,
+#          al.backend_account_id,
+#          al.anchor_no,
+#          contract_status,
+#          contract_status_text
+# ;
+#
+#
+# # DROP TABLE IF EXISTS warehouse.dw_bb_month_anchor_info;
+# # CREATE TABLE warehouse.dw_bb_month_anchor_info AS
+# DELETE
+# FROM warehouse.dw_bb_month_anchor_info
+# WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m') AND DATE_FORMAT('2020-01-20', '%Y-%m');
+# INSERT INTO warehouse.dw_bb_month_anchor_info
+# SELECT al1.dt,
+#        al1.platform_id,
+#        al1.platform_name,
+#        al1.backend_account_id,
+#        al1.anchor_no,
+#        al2.anchor_uid,
+#        al2.anchor_nick_name,
+#        al2.anchor_status,
+#        al2.anchor_status_text,
+#        al2.contract_status,
+#        al2.contract_status_text,
+#        al2.contract_signtime,
+#        al2.contract_endtime
+# FROM stage.stage_bb_month_anchor_info al1
+#          LEFT JOIN warehouse.ods_bb_day_anchor_live al2
+#                    ON al1.max_dt = al2.dt AND al1.backend_account_id = al2.backend_account_id AND
+#                       al1.anchor_no = al2.anchor_no
+# WHERE DATE_FORMAT(al1.dt, '%Y-%m') BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m') AND DATE_FORMAT('2020-01-20', '%Y-%m')
+# ;
+
+
 -- DROP TABLE IF EXISTS warehouse.dw_month_bb_anchor_live;
 -- CREATE TABLE warehouse.dw_month_bb_anchor_live AS
 DELETE
