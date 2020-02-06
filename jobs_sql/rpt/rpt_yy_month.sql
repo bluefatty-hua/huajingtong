@@ -7,15 +7,15 @@ WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND 
 INSERT INTO bireport.rpt_month_yy_guild
 SELECT t0.dt,
        t0.platform_id,
-       pf.platform_name                                                          AS platform,
+       pf.platform_name                                                                 AS platform,
        t0.channel_num,
        t0.anchor_cnt,
-       t0.anchor_live_cnt                                                        AS live_cnt,
+       t0.anchor_live_cnt                                                               AS live_cnt,
        -- 平台流水
-       t0.anchor_bluediamond                                                     AS anchor_bluediamond_revenue,
-       ROUND(t0.guild_commission_true / 1000, 2)                                 AS guild_commission_revenue,
-       ROUND((t0.anchor_bluediamond_true + t0.guild_commission_true) / 500, 2)   AS revenue,
-       t0.anchor_bluediamond_true + t0.guild_commission_true                     AS revenue_orig,
+       t0.anchor_bluediamond_true                                                       AS anchor_bluediamond_revenue,
+       ROUND(t0.guild_commission_true / 1000, 2)                                        AS guild_commission_revenue,
+       ROUND((t0.anchor_bluediamond_true + t0.guild_commission_true) / 500, 2)          AS revenue,
+       t0.anchor_bluediamond_true + t0.guild_commission_true                            AS revenue_orig,
        -- 公会收入
        t0.guild_income_bluediamond_true                                                 AS guild_income_bluediamond,
        ROUND((t0.guild_income_bluediamond_true + t0.guild_commission_true) / 1000, 2)   AS guild_income,
@@ -25,7 +25,8 @@ SELECT t0.dt,
        t0.anchor_bluediamond_true - t0.guild_income_bluediamond_true                    AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE comment = 'orig'
+  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
   AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
 UNION ALL
 SELECT t0.dt,
@@ -48,7 +49,8 @@ SELECT t0.dt,
        t0.anchor_bluediamond - t0.guild_income_bluediamond                       AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE t0.comment = 'orig'
+  AND DATE_FORMAT(t0.dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
 ;
 
 
