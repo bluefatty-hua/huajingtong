@@ -26,6 +26,19 @@ WHERE comment = 'orig'
   AND gl.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+-- 补充汇总数据
+REPLACE INTO bireport.`rpt_day_yy_guild`
+(dt,channel_num,anchor_cnt,live_cnt,revenue,guild_income,anchor_income)
+select  dt,'all' as channel_num,sum(ifnull(anchor_cnt,0)) as anchor_cnt,
+sum(ifnull(live_cnt,0)) live_cnt,
+sum(ifnull(revenue,0)) as revenue,
+sum(finull(guild_income)) as guild_income,
+sum(finull(anchor_income)) as anchor_income,
+from  bireport.`rpt_day_yy_guild_bak`
+where channel_num!='all' and dt BETWEEN '{start_date}' AND '{end_date}'
+group by dt;
+
+
 
 DELETE
 FROM bireport.rpt_day_all
