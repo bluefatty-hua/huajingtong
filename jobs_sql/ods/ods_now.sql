@@ -27,20 +27,21 @@ SELECT 1003                                                     AS platform_id,
            ELSE '' END                                          AS settle_method_text,
        ad.dt,
        ad.timestamp,
-       'orig' AS comment
+       'orig'                                                   AS comment
 FROM spider_now_backend.anchor_detail ad
 WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-INSERT IGNORE INTO warehouse.ods_now_day_anchor_info (dt, platform_id, platform_name, backend_account_id, anchor_qq_no, anchor_no, comment)
+INSERT IGNORE INTO warehouse.ods_now_day_anchor_info (dt, platform_id, platform_name, backend_account_id, anchor_qq_no,
+                                                      anchor_no, comment)
 SELECT DATE_FORMAT(date, '%Y-%m-%d') AS dt,
-       1003                                                     AS platform_id,
-       'NOW'                                                    AS platform_name,
+       1003                          AS platform_id,
+       'NOW'                         AS platform_name,
        backend_account_id,
        uin,
        nowid,
-       'from' AS comment
+       'from'                        AS comment
 FROM spider_now_backend.anchor_income
 WHERE DATE_FORMAT(date, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 ;
@@ -61,12 +62,12 @@ SELECT ai.platform_id,
        ai.anchor_no,
        ai.anchor_nick_name,
        ai.anchor_name,
-       ai.fans_num                                                                AS fans_cnt,
-       ai.fans_group_num                                                          AS fans_goup_cnt,
-       CASE WHEN ain.live_time > 0 THEN 1 ELSE 0 END                              AS live_status,
-       CASE WHEN ain.live_time >= 0 THEN ain.live_time ELSE 0 END                 AS duration_hour,
-       CASE WHEN ain.live_time >= 0 THEN ain.live_time * 60 * 60 ELSE 0 END       AS duration,
-       ROUND(CASE WHEN ain.origin_money >= 0 THEN ain.origin_money ELSE 0 END, 2) AS anchor_revenue_rmb,
+       ai.fans_num                                                          AS fans_cnt,
+       ai.fans_group_num                                                    AS fans_goup_cnt,
+       CASE WHEN ain.live_time > 0 THEN 1 ELSE 0 END                        AS live_status,
+       CASE WHEN ain.live_time >= 0 THEN ain.live_time ELSE 0 END           AS duration_hour,
+       CASE WHEN ain.live_time >= 0 THEN ain.live_time * 60 * 60 ELSE 0 END AS duration,
+       CASE WHEN ain.origin_money >= 0 THEN ain.origin_money ELSE 0 END     AS revenue_rmb,
        ai.contract_sign_time,
        ai.settle_method_code,
        ai.settle_method_text,
@@ -91,8 +92,8 @@ SELECT 1003                            AS platform_id,
        'NOW'                           AS platform_name,
        ui.backend_account_id,
        ui.on_live                      AS anchor_live_cnt,
-       ut.origin_money                 AS guild_commission_rmb,
-       ut.income                       AS guild_salary_rmb,
+       ut.origin_money                 AS revenue_rmb,
+       ut.income                       AS guild_income_rmb,
        DATE_FORMAT(ui.day, '%Y-%m-%d') AS dt
 FROM spider_now_backend.union_stat_info_by_day ui
          LEFT JOIN spider_now_backend.union_total_income ut
@@ -113,7 +114,7 @@ SELECT 1003                                                                     
        backend_account_id,
        DATE_FORMAT(CONCAT(LEFT(ui.date, 4), '-', right(ui.date, 2), '-01'), '%Y-%m-%d') AS dt,
        ui.anchor_num                                                                    AS anchor_cnt,
-       ui.cur_month_total_journal                                                       AS guild_revenue_rmb,
+       ui.cur_month_total_journal                                                       AS revenue_rmb,
        ui.average_journal                                                               AS average_anchor_revenue_rmb,
        ui.living_rate                                                                   AS anchor_live_rate
 FROM spider_now_backend.union_stat_info_by_month ui

@@ -1,3 +1,15 @@
+# DROP TABLE IF EXISTS warehouse.dw_now_day_anchor_live;
+# CREATE TABLE warehouse.dw_now_day_anchor_live AS
+DELETE
+FROM warehouse.dw_now_day_anchor_live
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.dw_now_day_anchor_live
+SELECT *
+FROM warehouse.ods_now_day_anchor_live
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
 -- 汇总维度 日-公会
 -- 汇总指标 开播天数，开播时长，主播流水，公会流水，公会收入
 -- DROP TABLE IF EXISTS warehouse.dw_now_day_guild_live;
@@ -12,19 +24,19 @@ SELECT al.dt,
        al.backend_account_id,
        al.anchor_cnt,
        al.anchor_live_cnt,
-       ac.anchor_live_cnt      AS anchor_live_cnt_true,
+       ac.anchor_live_cnt  AS anchor_live_cnt_true,
        al.duration,
-       al.anchor_commission_rmb,
-       ac.guild_commission_rmb AS guild_commission_rmb_true,
-       ac.guild_salary_rmb     AS guild_salary_rmb_true
+       al.revenue_rmb,
+       ac.revenue_rmb      AS guild_commission_rmb_true,
+       ac.guild_income_rmb AS guild_income_rmb_true
 FROM (SELECT t.dt,
              t.platform_id,
              t.platform_name,
              t.backend_account_id,
              COUNT(t.anchor_no)                                                         AS anchor_cnt,
              COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
-             ROUND(SUM(t.duration), 2)                                                  AS duration,
-             ROUND(SUM(t.anchor_revenue_rmb), 2)                                        AS anchor_commission_rmb
+             SUM(t.duration)                                                            AS duration,
+             SUM(t.revenue_rmb)                                                         AS revenue_rmb
       FROM warehouse.ods_now_day_anchor_live t
       WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY t.dt,
@@ -50,9 +62,9 @@ SELECT al.dt,
        al.backend_account_id,
        al.anchor_cnt,
        al.anchor_live_cnt,
-       al.anchor_revenue_rmb,
-       gc.anchor_cnt        AS anchor_cnt_true,
-       gc.guild_revenue_rmb AS guild_revenue_rmb_true,
+       al.revenue_rmb,
+       gc.anchor_cnt  AS anchor_cnt_true,
+       gc.revenue_rmb AS revenue_rmb_true,
        gc.anchor_live_rate,
        gc.average_anchor_revenue_rmb
 FROM (
@@ -62,7 +74,7 @@ FROM (
                 t.backend_account_id,
                 COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
                 COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
-                ROUND(SUM(t.anchor_revenue_rmb), 2)                                        AS anchor_revenue_rmb
+                SUM(t.revenue_rmb)                                                         AS revenue_rmb
          FROM warehouse.ods_now_day_anchor_live t
          GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
                   t.platform_id,
@@ -75,7 +87,7 @@ WHERE DATE_FORMAT(al.dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND
 
 
 -- 汇总维度 月-公会-主播
--- 汇总指标 主播数，开播主播数，虚拟币收入,主播佣金，公会佣金
+-- 汇总指标 主播数，开播主播数，开播时长，流水
 -- DROP TABLE IF EXISTS warehouse.dw_now_month_anchor_live;
 -- CREATE TABLE warehouse.dw_now_month_anchor_live AS
 DELETE
@@ -88,15 +100,14 @@ SELECT DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d') AS d
        t.backend_account_id,
        anchor_no,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END)  AS live_days,
-       ROUND(SUM(t.duration), 2)                                            AS duration,
-       ROUND(SUM(t.anchor_revenue_rmb), 2)                                  AS anchor_commission_rmb
+       SUM(t.duration)                                                      AS duration,
+       SUM(t.revenue_rmb)                                                   AS revenue_rmb
 FROM warehouse.ods_now_day_anchor_live t
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+# WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(CONCAT(YEAR(t.dt), '-', MONTH(t.dt), '-01'), '%Y-%m-%d'),
          t.platform_id,
          t.platform_name,
          t.backend_account_id,
          anchor_no
 ;
-
 

@@ -7,16 +7,16 @@ WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND 
 INSERT INTO bireport.rpt_month_now_guild
 SELECT t0.dt,
        t0.platform_id,
-       pf.platform_name                                AS platform,
+       pf.platform_name                          AS platform,
        t0.backend_account_id,
-       t0.anchor_cnt_true                              AS anchor_cnt,
-       t0.anchor_live_cnt                              AS live_cnt,
-       t0.guild_revenue_rmb_true                       AS revenue,
-       t0.guild_revenue_rmb_true                       AS revenue_orig,
-       round(t0.guild_revenue_rmb_true * 0.6 * 0.5, 2) AS guild_income,
-       t0.guild_revenue_rmb_true * 0.6 * 0.5           AS guild_income_orig,
-       round(t0.guild_revenue_rmb_true * 0.6 * 0.5, 2) AS anchor_income,
-       t0.guild_revenue_rmb_true * 0.6 * 0.5           AS anchor_income_orig
+       t0.anchor_cnt_true                        AS anchor_cnt,
+       t0.anchor_live_cnt                        AS live_cnt,
+       t0.revenue_rmb_true                       AS revenue,
+       t0.revenue_rmb_true                       AS revenue_orig,
+       round(t0.revenue_rmb_true * 0.6 * 0.5, 2) AS guild_income,
+       t0.revenue_rmb_true * 0.6 * 0.5           AS guild_income_orig,
+       round(t0.revenue_rmb_true * 0.6 * 0.5, 2) AS anchor_income,
+       t0.revenue_rmb_true * 0.6 * 0.5           AS anchor_income_orig
 FROM warehouse.dw_now_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
@@ -24,21 +24,20 @@ WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND 
 UNION ALL
 SELECT t0.dt,
        t0.platform_id,
-       pf.platform_name                            AS platform,
+       pf.platform_name                     AS platform,
        t0.backend_account_id,
-       t0.anchor_cnt_true                          AS anchor_cnt,
-       t0.anchor_live_cnt                          AS live_cnt,
-       t0.anchor_revenue_rmb                       AS revenue,
-       t0.anchor_revenue_rmb                       AS revenue_orig,
-       round(t0.anchor_revenue_rmb * 0.6 * 0.5, 2) AS guild_income,
-       t0.anchor_revenue_rmb * 0.6 * 0.5           AS guild_income_orig,
-       round(t0.anchor_revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
-       t0.anchor_revenue_rmb * 0.6 * 0.5           AS anchor_income_orig
+       t0.anchor_cnt_true                   AS anchor_cnt,
+       t0.anchor_live_cnt                   AS live_cnt,
+       t0.revenue_rmb                       AS revenue,
+       t0.revenue_rmb                       AS revenue_orig,
+       round(t0.revenue_rmb * 0.6 * 0.5, 2) AS guild_income,
+       t0.revenue_rmb * 0.6 * 0.5           AS guild_income_orig,
+       round(t0.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
+       t0.revenue_rmb * 0.6 * 0.5           AS anchor_income_orig
 FROM warehouse.dw_now_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE DATE_FORMAT(dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
 ;
-
 
 
 DELETE
