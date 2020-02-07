@@ -1,30 +1,5 @@
-DELETE
-FROM bireport.rpt_day_yy_guild
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO bireport.rpt_day_yy_guild
-SELECT gl.dt,
-       gl.platform_id,
-       pf.platform_name                                                              AS platform_name,
-       gl.channel_num,
-       gl.anchor_cnt,
-       gl.anchor_live_cnt                                                            AS live_cnt,
-       -- 平台流水
-       gl.bluediamond                                                                AS anchor_bluediamond_revenue,
-       ROUND(gl.guild_commission / 1000, 2)                                          AS guild_commssion_revenue,
-       ROUND((gl.bluediamond + gl.guild_commission + gl.anchor_commission) / 500, 2) AS revenue,
-       gl.bluediamond + gl.guild_commission                                          AS revenue_orig,
-       -- 公会收入
-       gl.guild_income_bluediamond,
-       ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)          AS guild_income,
-       gl.guild_income_bluediamond + gl.guild_commission                             AS guild_income_orig,
-       -- 主播收入
-       ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2)        AS anchor_income,
-       gl.anchor_income_bluediamond + gl.anchor_commission                           AS anchor_income_orig
-FROM warehouse.dw_yy_day_guild_live gl
-         LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
-WHERE comment = 'orig'
-  AND gl.dt BETWEEN '{start_date}' AND '{end_date}'
-;
+
+
 
 
 DELETE
@@ -62,4 +37,44 @@ FROM (SELECT al.dt,
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
 ;
 
+
+
+DELETE
+FROM bireport.rpt_day_yy_guild
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO bireport.rpt_day_yy_guild
+SELECT gl.dt,
+       gl.platform_id,
+       pf.platform_name                                                              AS platform_name,
+       gl.channel_num,
+       gl.anchor_cnt,
+       gl.anchor_live_cnt                                                            AS live_cnt,
+       -- 平台流水
+       gl.bluediamond                                                                AS anchor_bluediamond_revenue,
+       ROUND(gl.guild_commission / 1000, 2)                                          AS guild_commssion_revenue,
+       ROUND((gl.bluediamond + gl.guild_commission + gl.anchor_commission) / 500, 2) AS revenue,
+       gl.bluediamond + gl.guild_commission                                          AS revenue_orig,
+       -- 公会收入
+       gl.guild_income_bluediamond,
+       ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)          AS guild_income,
+       gl.guild_income_bluediamond + gl.guild_commission                             AS guild_income_orig,
+       -- 主播收入
+       ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2)        AS anchor_income,
+       gl.anchor_income_bluediamond + gl.anchor_commission                           AS anchor_income_orig
+FROM warehouse.dw_yy_day_guild_live gl
+         LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
+WHERE comment = 'orig'
+  AND gl.dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+-- 补充汇总数据
+REPLACE INTO bireport.`rpt_day_yy_guild`
+(dt,channel_num,anchor_cnt,live_cnt,revenue,guild_income,anchor_income)
+SELECT  dt,'all' AS channel_num,anchor_cnt,
+live_cnt,
+revenue,
+guild_income,
+anchor_income
+FROM  bireport.rpt_day_all
+WHERE platform='YY' AND  dt BETWEEN '{start_date}' AND '{end_date}';
 
