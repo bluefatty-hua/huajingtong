@@ -33,15 +33,15 @@ WHERE platform = 'bilibili'
 INSERT INTO bireport.rpt_day_all
 SELECT t.dt,
        t.platform_name,
-       COUNT(DISTINCT t.anchor_no)                                             AS anchor_cnt,
-       COUNT(CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END)       AS live_cnt,
-       SUM(t.anchor_total_coin) / 1000                                         AS revenue,
+       SUM(anchor_cnt)                                                         AS anchor_cnt,
+       SUM(live_cnt)                                                           AS live_cnt,
+       SUM(t.revenue) / 1000                                         AS revenue,
        SUM(CASE
                WHEN t.backend_account_id = 3 THEN
-                       t.anchor_total_coin * gr.anchor_income_rate + t.send_coin + t.special_coin
+                       t.revenue * gr.anchor_income_rate + t.send_coin + t.special_coin
                ELSE t.anchor_income + t.send_coin + t.special_coin END) / 1000 AS anchor_income,
-       SUM(t.anchor_total_coin * gr.guild_income_rate) / 1000                  AS guild_income
-FROM warehouse.ods_bb_day_anchor_live t
+       SUM(t.revenue * gr.guild_income_rate) / 1000                  AS guild_income
+FROM warehouse.dw_bb_day_guild_live t
          LEFT JOIN stage.bb_guild_income_rate gr ON
     t.backend_account_id = gr.backend_account_id
 WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'

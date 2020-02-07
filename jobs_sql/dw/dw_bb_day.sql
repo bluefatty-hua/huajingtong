@@ -20,7 +20,8 @@ SELECT t.dt,
        SUM(t.anchor_base_coin)                                           AS anchor_base_coin,
        SUM(t.anchor_income)                                              AS anchor_income
 FROM warehouse.ods_bb_day_anchor_live t
-WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE (t.contract_status <> 2 OR t.contract_status IS NULL)
+  AND t.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY t.dt,
          t.platform_id,
          t.platform_name,
