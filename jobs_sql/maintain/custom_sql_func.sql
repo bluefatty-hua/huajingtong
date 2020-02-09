@@ -1,4 +1,4 @@
--- 注意函数间使用
+-- 注意函数使用
 -- 直播时长转秒 DURATION_CH 用于ods_yy_sql
 DELIMITER $$
 DROP FUNCTION IF EXISTS DURATION_CH$$
