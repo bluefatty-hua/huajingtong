@@ -48,9 +48,53 @@ DELETE
 FROM warehouse.dw_yy_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_yy_day_anchor_live
-SELECT *
-FROM warehouse.ods_yy_day_anchor_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+SELECT al.*,
+       aml.min_live_dt,
+       ams.min_sign_dt,
+       -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
+       CASE
+           WHEN aml.min_live_dt IS NOT NULL AND ams.min_sign_dt IS NOT NULL THEN
+               CASE
+                   WHEN aml.min_live_dt <= ams.min_sign_dt
+                       THEN CASE
+                                WHEN DATEDIFF('{end_date}', aml.min_live_dt) >= 180 THEN '老主播'
+                                ELSE '新主播' END
+                   ELSE CASE
+                            WHEN DATEDIFF('{end_date}', ams.min_sign_dt) >= 180 THEN '老主播'
+                            ELSE '新主播' END
+                   END
+           WHEN aml.min_live_dt IS NOT NULL THEN
+               CASE
+                   WHEN DATEDIFF('{end_date}', aml.min_live_dt) >= 180 THEN '老主播'
+                   ELSE '新主播' END
+           WHEN ams.min_sign_dt IS NOT NULL THEN
+               CASE
+                   WHEN DATEDIFF('{end_date}', ams.min_sign_dt) >= 180 THEN '老主播'
+                   ELSE '新主播' END
+           ELSE '未知' END    AS newold_state,
+       mal.duration AS last_month_duration,
+       mal.live_days,
+       -- 开播天数大于等于20天且开播时长大于等于20小时（t-1月累计）
+       CASE
+           WHEN mal.live_days >= 20 AND mal.duration >= 20 * 60 * 60 THEN '活跃主播'
+           ELSE '非活跃主播' END AS active_state,
+       mal.revenue AS last_month_revenue,
+       -- 主播流水分级（t-1月）
+       CASE
+           WHEN mal.revenue * 2 / 1000 / 10000 >= 50 THEN '50+'
+           WHEN mal.revenue * 2 / 1000 / 10000 >= 10 THEN '10-50'
+           WHEN mal.revenue * 2 / 1000 / 10000 >= 3 THEN '3-10'
+           WHEN mal.revenue * 2 / 1000 / 10000 > 0 THEN '0-3'
+           ELSE '0' END     AS revenue_level
+FROM warehouse.ods_yy_day_anchor_live al
+         LEFT JOIN stage.stage_yy_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
+         LEFT JOIN stage.stage_yy_anchor_min_sign_dt ams ON al.anchor_uid = ams.anchor_uid
+         LEFT JOIN stage.stage_yy_month_anchor_live mal
+                   ON CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01') = DATE_ADD(mal.dt, INTERVAL 1 MONTH) AND
+                      al.anchor_uid = mal.anchor_uid
+WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+  AND mal.dt BETWEEN DATE_SUB(CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01'), INTERVAL 1 MONTH)
+    AND DATE_SUB(CONCAT(DATE_FORMAT('{end_date}', '%Y-%m'), '-01'), INTERVAL 1 MONTH)
 ;
 
 
