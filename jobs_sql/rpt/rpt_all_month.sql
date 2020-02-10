@@ -103,14 +103,14 @@ INSERT INTO bireport.rpt_month_all
  revenue,
  guild_income,
  anchor_income)
-SELECT rpt_month_all_guild.dt                 AS dt,
+SELECT bireport.rpt_month_all_guild.dt                 AS dt,
        rpt_month_all_guild.platform           AS platform,
        SUM(rpt_month_all_guild.anchor_cnt)    AS anchor_cnt,
        SUM(rpt_month_all_guild.live_cnt)      AS live_cnt,
        SUM(rpt_month_all_guild.revenue)       AS revenue,
        SUM(rpt_month_all_guild.guild_income)  AS guild_income,
        SUM(rpt_month_all_guild.anchor_income) AS anchor_income
-FROM rpt_month_all_guild
+FROM bireport.rpt_month_all_guild
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 GROUP BY rpt_month_all_guild.platform, rpt_month_all_guild.dt
 ;
