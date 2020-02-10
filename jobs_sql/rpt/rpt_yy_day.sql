@@ -12,7 +12,7 @@ SELECT gl.dt,
        gl.anchor_cnt,
        gl.anchor_live_cnt                                                            AS live_cnt,
        -- 平台流水
-       ROUND((gl.bluediamond + gl.guild_commission + gl.anchor_commission) / 500, 2) AS revenue,
+       ROUND((gl.bluediamond + gl.guild_commission) / 500, 2) AS revenue,
        -- 公会收入
        ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)          AS guild_income,
        -- 主播收入
