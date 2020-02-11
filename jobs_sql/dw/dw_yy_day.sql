@@ -90,7 +90,7 @@ FROM warehouse.ods_yy_day_anchor_live al
          LEFT JOIN stage.stage_yy_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
          LEFT JOIN stage.stage_yy_anchor_min_sign_dt ams ON al.anchor_uid = ams.anchor_uid
          LEFT JOIN stage.stage_yy_month_anchor_live mal
-                   ON CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01') = DATE_ADD(mal.dt, INTERVAL 1 MONTH) AND
+                   ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
