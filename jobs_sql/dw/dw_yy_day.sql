@@ -93,8 +93,6 @@ FROM warehouse.ods_yy_day_anchor_live al
                    ON CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01') = DATE_ADD(mal.dt, INTERVAL 1 MONTH) AND
                       al.anchor_uid = mal.anchor_uid
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
-  AND mal.dt BETWEEN DATE_SUB(CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01'), INTERVAL 1 MONTH)
-    AND DATE_SUB(CONCAT(DATE_FORMAT('{end_date}', '%Y-%m'), '-01'), INTERVAL 1 MONTH)
 ;
 
 
