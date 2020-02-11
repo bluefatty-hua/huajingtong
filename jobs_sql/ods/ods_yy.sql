@@ -245,7 +245,7 @@ SELECT dt,
        SUM(ifnull(ac.guild_commission, 0))  AS guild_commission
 FROM warehouse.ods_yy_anchor_live_commission ac
 WHERE ac.dt BETWEEN '{start_date}' AND '{end_date}'
-  AND ac.anchor_no <> ac.from_visitor_no
+--  AND ac.anchor_no <> ac.from_visitor_no
 -- 提出主播自主结算佣金
 GROUP BY ac.platform_id,
          ac.backend_account_id,
