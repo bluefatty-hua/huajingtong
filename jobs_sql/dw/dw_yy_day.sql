@@ -72,13 +72,13 @@ SELECT al.*,
                    WHEN DATEDIFF('{end_date}', ams.min_sign_dt) >= 180 THEN '老主播'
                    ELSE '新主播' END
            ELSE '未知' END    AS newold_state,
-       mal.duration AS last_month_duration,
+       mal.duration         AS last_month_duration,
        mal.live_days,
        -- 开播天数大于等于20天且开播时长大于等于20小时（t-1月累计）
        CASE
            WHEN mal.live_days >= 20 AND mal.duration >= 20 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END AS active_state,
-       mal.revenue AS last_month_revenue,
+       mal.revenue          AS last_month_revenue,
        -- 主播流水分级（t-1月）
        CASE
            WHEN mal.revenue * 2 / 1000 / 10000 >= 50 THEN '50+'
@@ -111,6 +111,9 @@ SELECT al.dt,
        al.backend_account_id,
        al.channel_num,
        al.comment,
+       al.newold_state,
+       al.active_state,
+       al.revenue_level,
        COUNT(DISTINCT al.anchor_uid)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_uid ELSE NULL END) AS anchor_live_cnt,
        SUM(IF(al.duration > 0, al.duration, 0))                                      AS duration,
@@ -119,12 +122,15 @@ SELECT al.dt,
        SUM(IF(al.bluediamond > 0, al.bluediamond * (1 - al.anchor_settle_rate), 0))  AS guild_income_bluediamond,
        SUM(IF(al.anchor_commission > 0, al.anchor_commission, 0))                    AS anchor_commission,
        SUM(IF(al.guild_commission > 0, al.guild_commission, 0))                      AS guild_commission
-FROM warehouse.ods_yy_day_anchor_live al
+FROM warehouse.dw_yy_day_anchor_live al
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 -- where comment <> 'from guild_anchor_sign_tran'
 GROUP BY al.dt,
          al.platform_id,
          al.backend_account_id,
          al.channel_num,
-         comment
+         al.comment,
+         al.newold_state,
+         al.active_state,
+         al.revenue_level
 ;
