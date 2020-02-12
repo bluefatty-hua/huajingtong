@@ -106,9 +106,9 @@ WHERE DATE_FORMAT(ui.day, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
 -- DROP TABLE IF EXISTS warehouse.ods_month_now_guild_commission;
 -- CREATE TABLE warehouse.ods_month_now_guild_commission AS
 DELETE
-FROM warehouse.ods_now_month_guild
+FROM warehouse.ods_now_month_guild_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
-INSERT INTO warehouse.ods_now_month_guild
+INSERT INTO warehouse.ods_now_month_guild_live
 SELECT 1003                                                                             AS platform_id,
        'NOW'                                                                            AS platform_name,
        backend_account_id,
