@@ -10,3 +10,40 @@ BEGIN
     RETURN sec;
 END $$
 DELIMITER ;
+
+
+
+-- 用于判断新老主播
+-- live_dt：开播时长，sign_dt：签约时间，dt：用于判断新老主播的时间
+DELIMITER $$
+DROP FUNCTION IF EXISTS ANCHOR_NEW_OLD$$
+CREATE FUNCTION ANCHOR_NEW_OLD(live_dt date, sign_dt date, dt date, days int)
+RETURNS varchar(4)
+BEGIN
+    DECLARE newOld_state varchar(4) DEFAULT '';
+    DECLARE days varchar(4) DEFAULT 180;
+    SET newold_state = (CASE
+           WHEN live_dt IS NOT NULL AND sign_dt IS NOT NULL THEN
+               CASE
+                   WHEN live_dt <= sign_dt
+                       THEN CASE
+                                WHEN DATEDIFF(dt, live_dt) >= days THEN '老主播'
+                                ELSE '新主播' END
+                   ELSE CASE
+                            WHEN DATEDIFF(dt, sign_dt) >= days THEN '老主播'
+                            ELSE '新主播' END
+                   END
+           WHEN live_dt IS NOT NULL THEN
+               CASE
+                   WHEN DATEDIFF(dt, live_dt) >= days THEN '老主播'
+                   ELSE '新主播' END
+           WHEN sign_dt IS NOT NULL THEN
+               CASE
+                   WHEN DATEDIFF(dt, sign_dt) >= days THEN '老主播'
+                   ELSE '新主播' END
+           ELSE '未知' END);
+    RETURN newOld_state;
+END $$
+DELIMITER ;
+
+SELECT ANCHOR_NEW_OLD('2020-01-01', '2020-01-01', '2020-02-01', 180)
