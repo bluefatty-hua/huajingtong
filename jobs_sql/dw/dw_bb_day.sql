@@ -37,10 +37,10 @@ SELECT al.*,
        mal.revenue          AS last_month_revenue,
        -- 主播流水分级（t-1月）
        CASE
-           WHEN mal.revenue * 2 / 1000 / 10000 >= 50 THEN '50+'
-           WHEN mal.revenue * 2 / 1000 / 10000 >= 10 THEN '10-50'
-           WHEN mal.revenue * 2 / 1000 / 10000 >= 3 THEN '3-10'
-           WHEN mal.revenue * 2 / 1000 / 10000 > 0 THEN '0-3'
+           WHEN mal.revenue / 1000 / 10000 >= 50 THEN '50+'
+           WHEN mal.revenue / 1000 / 10000 >= 10 THEN '10-50'
+           WHEN mal.revenue / 1000 / 10000 >= 3 THEN '3-10'
+           WHEN mal.revenue / 1000 / 10000 > 0 THEN '0-3'
            ELSE '0' END     AS revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
          LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
