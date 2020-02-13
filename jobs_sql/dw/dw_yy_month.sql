@@ -17,8 +17,8 @@
 --        MAX(dt)                                 AS max_dt
 -- FROM warehouse.dw_yy_day_anchor_live
 -- WHERE comment = 'orig'
---   AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
---                              '%Y-%m-%d') AND '2020-02-13'
+--   AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+--                              '%Y-%m-%d') AND '{end_date}'
 -- GROUP BY CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01'),
 --          backend_account_id
 -- ;
@@ -28,16 +28,16 @@
 -- CREATE TABLE stage.stage_yy_month_anchor_info AS
 -- DELETE
 -- FROM stage.stage_yy_month_anchor_info
--- WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
---                              '%Y-%m-%d') AND '2020-02-13';
+-- WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+--                              '%Y-%m-%d') AND '{end_date}';
 -- INSERT INTO stage.stage_yy_month_anchor_info
 -- SELECT t0.dt, t0.backend_account_id, anchor_uid
 -- FROM stage.stage_yy_month_guild_info_max_day t0
 --          LEFT JOIN (SELECT dt, backend_account_id, anchor_uid
 --                     FROM warehouse.dw_yy_day_anchor_live
 --                     WHERE comment = 'orig'
---                       AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
---                                                  '%Y-%m-%d') AND '2020-02-13') t1
+--                       AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+--                                                  '%Y-%m-%d') AND '{end_date}') t1
 --                    ON t0.backend_account_id = t1.backend_account_id AND t0.max_dt = t1.dt
 -- ;
 
@@ -47,8 +47,8 @@
 -- CREATE TABLE stage.stage_yy_day_anchor_live
 -- DELETE
 -- FROM stage.stage_yy_day_anchor_live
--- WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
---                              '%Y-%m-%d') AND '2020-02-13';
+-- WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+--                              '%Y-%m-%d') AND '{end_date}';
 -- INSERT INTO stage.stage_yy_day_anchor_live
 -- SELECT al.dt,
 --        al.platform_id,
@@ -71,8 +71,8 @@
 --          INNER JOIN stage.stage_yy_month_anchor_info ai ON DATE_FORMAT(ai.dt, '%Y-%m') = DATE_FORMAT(al.dt, '%Y-%m') AND
 --                                                          ai.backend_account_id = al.backend_account_id AND
 --                                                          ai.anchor_uid = al.anchor_uid
--- WHERE ai.dt BETWEEN CONCAT(DATE_FORMAT('2018-01-01', '%Y-%m'), '-01') AND '2020-02-13'
---   AND al.dt BETWEEN CONCAT(DATE_FORMAT('2018-01-01', '%Y-%m'), '-01') AND '2020-02-13'
+-- WHERE ai.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND '{end_date}'
+--   AND al.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND '{end_date}'
 -- ;
 
 
@@ -84,8 +84,8 @@
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_bluediamond
 SELECT dt,
        platform_id,
@@ -95,8 +95,8 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -112,8 +112,8 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_commission
 SELECT dt,
        platform_id,
@@ -123,8 +123,8 @@ SELECT dt,
        anchor_no,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -142,7 +142,7 @@ GROUP BY dt,
 # CREATE TABLE warehouse.dw_yy_month_anchor_live_true AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_true
-WHERE dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_true
 SELECT ab.dt,
        ab.platform_id,
@@ -155,7 +155,7 @@ SELECT ab.dt,
 FROM warehouse.dw_yy_month_anchor_live_bluediamond ab
          LEFT JOIN warehouse.dw_yy_month_anchor_live_commission ac
                    ON ab.dt = ac.dt AND ab.backend_account_id = ac.backend_account_id AND ab.anchor_no = ac.anchor_no
-WHERE ab.dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13'
+WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 ;
 
 
@@ -163,8 +163,8 @@ WHERE ab.dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13'
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_anchor_live
 SELECT ad.dt,
        ad.platform_id,
@@ -206,8 +206,8 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d')   
              SUM(CASE WHEN guild_commission >= 0 THEN guild_commission ELSE 0 END)   AS guild_commission,
              COUNT(DISTINCT dt)                                                      AS dt_cnt
       FROM warehouse.dw_yy_day_anchor_live
-      WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                                   '%Y-%m-%d') AND '2020-02-13'
+      WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                                   '%Y-%m-%d') AND '{end_date}'
       GROUP BY DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d'),
                platform_id,
                platform_name,
@@ -230,8 +230,8 @@ FROM (SELECT DATE_FORMAT(CONCAT(YEAR(dt), '-', MONTH(dt), '-01'), '%Y-%m-%d')   
 -- CREATE TABLE warehouse.dw_yy_month_guild_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live_bluediamond
 SELECT dt,
        platform_id,
@@ -240,8 +240,8 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -256,8 +256,8 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_guild_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live_commission
 SELECT dt,
        platform_id,
@@ -266,8 +266,8 @@ SELECT dt,
        channel_num,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13'
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -283,7 +283,7 @@ GROUP BY dt,
 # CREATE TABLE warehouse.dw_yy_month_guild_live_true AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_true
-WHERE dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live_true
 SELECT ab.dt,
        ab.platform_id,
@@ -296,7 +296,7 @@ FROM warehouse.dw_yy_month_guild_live_bluediamond ab
          LEFT OUTER JOIN warehouse.dw_yy_month_guild_live_commission ac
                          ON ab.dt = ac.dt AND ab.backend_account_id = ac.backend_account_id
          LEFT JOIN spider_yy_backend.channel_list cl ON ab.backend_account_id = cl.backend_account_id
-WHERE ab.dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13';
+WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
 ;
 
 
@@ -304,8 +304,8 @@ WHERE ab.dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13';
 -- CREATE TABLE warehouse.dw_yy_month_guild_live AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('2018-01-01'), '-', MONTH('2018-01-01'), '-01'),
-                             '%Y-%m-%d') AND '2020-02-13';
+WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
+                             '%Y-%m-%d') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                                    AS dt,
        al.platform_id,
@@ -333,12 +333,12 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
 FROM (SELECT *,
              --
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('2020-02-13', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{end_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE dt END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_yy_day_anchor_live
-      WHERE dt BETWEEN DATE_FORMAT('2018-01-01', '%Y-%m-01') AND '2020-02-13'
+      WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 #         AND backend_account_id = 3
     ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
