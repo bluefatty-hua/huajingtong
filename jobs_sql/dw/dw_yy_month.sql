@@ -339,7 +339,6 @@ FROM (SELECT *,
                  ) AS month_newold_state
       FROM warehouse.dw_yy_day_anchor_live
       WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
-#         AND backend_account_id = 3
     ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
