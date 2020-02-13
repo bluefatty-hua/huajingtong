@@ -89,7 +89,7 @@ DELETE
 FROM warehouse.dw_huya_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_huya_day_anchor_live
-SELECT ai.dt     AS dt,
+SELECT ai.dt                                                                  AS dt,
        ai.platform_id,
        ai.platform_name,
        ai.channel_id,
@@ -100,22 +100,46 @@ SELECT ai.dt     AS dt,
        ai.comment,
        al.duration,
        al.live_status,
-       al.income AS income,
+       al.income                                                              AS revenue,
        al.peak_pcu,
        ai.activity_days,
        ai.months,
        ai.ow_percent,
        ai.sign_time,
+       FROM_UNIXTIME(ai.sign_time, '%Y-%m-%d')                                AS sign_date,
        ai.surplus_days,
-       ai.avatar AS avatar,
+       ai.avatar                                                              AS avatar,
+       aml.min_live_dt,
+       ams.min_sign_dt,
+       -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
+       mal.duration                                                           AS last_month_duration,
+       mal.live_days AS last_month_live_days,
+       -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
+       CASE
+           WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
+           ELSE '非活跃主播' END                                                   AS active_state,
+       mal.revenue                                                            AS last_month_revenue,
+       -- 主播流水分级（t-1月）
+       CASE
+           WHEN mal.revenue / 10000 >= 50 THEN '50+'
+           WHEN mal.revenue / 10000 >= 10 THEN '10-50'
+           WHEN mal.revenue / 10000 >= 3 THEN '3-10'
+           WHEN mal.revenue / 10000 > 0 THEN '0-3'
+           ELSE '0' END                                                       AS revenue_level,
        pf.vir_coin_name,
        pf.vir_coin_rate,
        pf.include_pf_amt,
        pf.pf_amt_rate
 FROM warehouse.dw_huya_day_anchor_info ai
          LEFT JOIN warehouse.ods_huya_day_anchor_live al
-         -- 现只有2019-12至今的数据
+    -- 现只有2019-12至今的数据
                    ON ai.channel_id = al.channel_id AND ai.anchor_uid = al.anchor_uid AND ai.dt = al.dt
+         LEFT JOIN stage.stage_hy_anchor_min_live_dt aml ON ai.anchor_no = aml.anchor_no
+         LEFT JOIN stage.stage_hy_anchor_min_sign_dt ams ON ai.anchor_no = ams.anchor_no
+         LEFT JOIN stage.stage_hy_month_anchor_live mal
+                   ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
+                      ai.anchor_uid = mal.anchor_uid
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
