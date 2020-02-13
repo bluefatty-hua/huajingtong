@@ -45,10 +45,10 @@ if args.log_file == None:
     log_path = LOG_DIR + datetime.now().strftime('%Y%m%d')
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-    log_file = log_path + '/' + LOG_NAME
+    log_file = log_path + '/etl_' + LOG_NAME
 else:
     log_file = args.log_file
-init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.DEBUG, 'log_file': log_file})
+init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO, 'log_file': log_file})
 
 
 def run_sql(sql_param, file):
@@ -85,8 +85,8 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
-    project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
-    # project_path = '/services/xjl_etl/script/run_sql/'  # TEST
+    # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
+    project_path = '/services/xjl_etl/script/run_sql/'  # TEST
     sql_file = project_path + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
 
