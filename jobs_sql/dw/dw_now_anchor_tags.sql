@@ -45,7 +45,7 @@ SELECT CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01')                         AS dt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
        SUM(al.duration)                                                   AS duration
 FROM warehouse.ods_now_day_anchor_live al
--- WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 GROUP BY CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01'),
          al.platform_id,
          al.anchor_no
