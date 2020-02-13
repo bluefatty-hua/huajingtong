@@ -1,6 +1,6 @@
 -- 主播最早开播时间（基于现有数据）
-# DROP TABLE IF EXISTS stage.stage_hy_anchor_min_live_dt;
-# CREATE TABLE stage.stage_hy_anchor_min_live_dt
+-- DROP TABLE IF EXISTS stage.stage_hy_anchor_min_live_dt;
+-- CREATE TABLE stage.stage_hy_anchor_min_live_dt
 INSERT IGNORE INTO stage.stage_hy_anchor_min_live_dt
 SELECT t.anchor_no,
        MIN(t.min_live_dt)
@@ -24,8 +24,8 @@ GROUP BY anchor_no
 
 
 -- 主播最早签约时间（基于现有数据）,后期结合公司现有主播的签约时间
-# DROP TABLE IF EXISTS stage.stage_hy_anchor_min_sign_dt;
-# CREATE TABLE stage.stage_hy_anchor_min_sign_dt
+-- DROP TABLE IF EXISTS stage.stage_hy_anchor_min_sign_dt;
+-- CREATE TABLE stage.stage_hy_anchor_min_sign_dt
 INSERT IGNORE INTO stage.stage_hy_anchor_min_sign_dt
 SELECT t.anchor_no,
        MIN(min_sign_dt) AS min_sign_dt
@@ -44,19 +44,19 @@ GROUP BY t.anchor_no
 
 
 -- 计算每月主播开播天数，开播时长，流水
-DROP TABLE IF EXISTS stage.stage_hy_month_anchor_live;
-CREATE TABLE stage.stage_hy_month_anchor_live
-    # DELETE
-# FROM stage.stage_hy_month_anchor_live
-# WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
-# INSERT INTO stage.stage_hy_month_anchor_live
+-- DROP TABLE IF EXISTS stage.stage_hy_month_anchor_live;
+-- CREATE TABLE stage.stage_hy_month_anchor_live
+DELETE
+FROM stage.stage_hy_month_anchor_live
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+INSERT INTO stage.stage_hy_month_anchor_live
 SELECT CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01')                         AS dt,
        al.anchor_uid,
        SUM(income)                                                        AS revenue,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
        SUM(al.duration)                                                   AS duration
 FROM warehouse.ods_huya_day_anchor_live al
-# WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 GROUP BY CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01'),
          al.anchor_uid
 ;
