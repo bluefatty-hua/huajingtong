@@ -56,7 +56,7 @@ SELECT t0.dt,
        t0.anchor_bluediamond - t0.guild_income_bluediamond                    AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE t0.comment = 'orig' AND t0.revenue_level
+WHERE t0.comment = 'orig' AND t0.revenue_level = 'all'
   AND dt = DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
