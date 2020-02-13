@@ -19,7 +19,7 @@ SELECT t0.dt,
        IFNULL(alt.guild_commission_true, 0)                                                AS revenue_orig,
        -- 公会收入
        IFNULL(alt.guild_bluediamond_true, 0)                                               AS guild_income_bluediamond,
-       ROUND((IFNULL(alt.guild_bluediamond_true, 0) + alt.guild_commission_true) / 1000,
+       ROUND((IFNULL(alt.guild_bluediamond_true, 0) + IFNULL(alt.guild_commission_true, 0)) / 1000,
              2)                                                                            AS guild_income,
        IFNULL(alt.guild_bluediamond_true, 0) +
        IFNULL(alt.guild_commission_true, 0)                                                AS guild_income_orig,
@@ -27,14 +27,26 @@ SELECT t0.dt,
        ROUND((IFNULL(alt.anchor_bluediamond_true, 0) - IFNULL(alt.guild_bluediamond_true, 0)) / 1000,
              2)                                                                            AS anchor_income,
        IFNULL(alt.anchor_bluediamond_true, 0) -
-       IFNULL(alt.guild_bluediamond_true, 0)                                         AS anchor_income_orig
-FROM warehouse.dw_yy_month_guild_live t0
+       IFNULL(alt.guild_bluediamond_true, 0)                                               AS anchor_income_orig
+FROM (SELECT dt,
+             platform_id,
+             backend_account_id,
+             channel_num,
+             SUM(anchor_cnt)       AS anchor_cnt,
+             SUM(anchor_live_cnt)  AS anchor_live_cnt,
+             SUM(guild_commission) AS guild_commission
+      FROM warehouse.dw_yy_month_guild_live
+      WHERE comment = 'orig'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt <> DATE_FORMAT('{end_date}', '%Y-%m-01')
+      GROUP BY dt,
+               platform_id,
+               backend_account_id,
+               channel_num
+     ) t0
          LEFT JOIN warehouse.dw_yy_month_guild_live_true alt
                    ON t0.dt = alt.dt AND alt.backend_account_id = t0.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE comment = 'orig' AND t0.revenue_level = 'all'
-  AND t0.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
-  AND t0.dt <> DATE_FORMAT('{end_date}', '%Y-%m-01')
 UNION ALL
 SELECT t0.dt,
        t0.platform_id,
@@ -54,10 +66,24 @@ SELECT t0.dt,
        -- 主播收入
        ROUND((t0.anchor_bluediamond - t0.guild_income_bluediamond) / 1000, 2) AS anchor_income,
        t0.anchor_bluediamond - t0.guild_income_bluediamond                    AS anchor_income_orig
-FROM warehouse.dw_yy_month_guild_live t0
+FROM (SELECT dt,
+             platform_id,
+             backend_account_id,
+             channel_num,
+             SUM(anchor_cnt)               AS anchor_cnt,
+             SUM(anchor_live_cnt)          AS anchor_live_cnt,
+             SUM(anchor_bluediamond)       AS anchor_bluediamond,
+             SUM(guild_income_bluediamond) AS guild_income_bluediamond,
+             SUM(guild_commission)         AS guild_commission
+      FROM warehouse.dw_yy_month_guild_live
+      WHERE comment = 'orig'
+        AND dt = DATE_FORMAT('{end_date}', '%Y-%m-01')
+      GROUP BY dt,
+               platform_id,
+               backend_account_id,
+               channel_num
+     ) t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE t0.comment = 'orig' AND t0.revenue_level = 'all'
-  AND dt = DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
@@ -93,3 +119,51 @@ FROM (SELECT dt,
       FROM bireport.rpt_month_yy_guild) t
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
+
+
+-- rpt_month_yy_guild_new
+# DELETE
+# FROM bireport.rpt_month_yy_guild_new
+# WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+# INSERT INTO bireport.rpt_month_yy_guild_new
+# SELECT gl.dt,
+#        gl.platform_id,
+#        pf.platform_name                                                       AS platform_name,
+#        gl.channel_num,
+#        gl.revenue_level,
+#        gl.newold_state,
+#        gl.active_state,
+#        gl.anchor_cnt,
+#        gl.anchor_live_cnt                                                     AS live_cnt,
+#        gl.duration,
+#        -- 平台流水
+#        gl.anchor_bluediamond                                                  AS anchor_bluediamond_revenue,
+#        ROUND(gl.guild_commission / 1000, 2)                                   AS guild_commssion_revenue,
+#        ROUND((gl.anchor_bluediamond + gl.guild_commission) * 2 / 1000, 2)     AS revenue,
+#        gl.anchor_bluediamond + gl.guild_commission                            AS revenue_orig,
+#        -- 公会收入
+#        gl.guild_income_bluediamond,
+#        ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
+#        gl.guild_income_bluediamond + gl.guild_commission                      AS guild_income_orig,
+#        -- 主播收入
+#        ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
+#        gl.anchor_income_bluediamond + gl.anchor_commission                    AS anchor_income_orig
+# FROM warehouse.dw_yy_month_guild_live gl
+#          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
+# WHERE comment = 'orig'
+#   AND gl.revenue_level = 'all'
+#   AND gl.dt BETWEEN '{start_date}' AND '{end_date}'
+# ;
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
