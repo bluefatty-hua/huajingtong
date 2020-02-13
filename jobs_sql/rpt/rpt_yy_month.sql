@@ -3,61 +3,68 @@
 -- CREATE TABLE bireport.rpt_month_yy_guild AS
 DELETE
 FROM bireport.rpt_month_yy_guild
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_yy_guild
 SELECT t0.dt,
        t0.platform_id,
-       pf.platform_name                                                                 AS platform,
+       pf.platform_name                                                                    AS platform,
        t0.channel_num,
        t0.anchor_cnt,
-       t0.anchor_live_cnt                                                               AS live_cnt,
+       t0.anchor_live_cnt                                                                  AS live_cnt,
        -- 平台流水
-       t0.anchor_bluediamond_true                                                       AS anchor_bluediamond_revenue,
-       ROUND(t0.guild_commission_true / 1000, 2)                                        AS guild_commission_revenue,
-       ROUND((t0.anchor_bluediamond_true + t0.guild_commission) / 1000 * 2, 2)     AS revenue,
-       t0.anchor_bluediamond_true + t0.guild_commission_true                            AS revenue_orig,
+       IFNULL(alt.anchor_bluediamond_true, 0)                                              AS anchor_bluediamond_revenue,
+       ROUND(IFNULL(alt.guild_commission_true, 0) / 1000, 2)                               AS guild_commission_revenue,
+       ROUND((IFNULL(alt.anchor_bluediamond_true, 0) + t0.guild_commission) / 1000 * 2, 2) AS revenue,
+       IFNULL(alt.anchor_bluediamond_true, 0) +
+       IFNULL(alt.guild_commission_true, 0)                                                AS revenue_orig,
        -- 公会收入
-       t0.guild_income_bluediamond_true                                                 AS guild_income_bluediamond,
-       ROUND((t0.guild_income_bluediamond_true + t0.guild_commission_true) / 1000, 2)   AS guild_income,
-       t0.guild_income_bluediamond_true + t0.guild_commission_true                      AS guild_income_orig,
+       IFNULL(alt.guild_bluediamond_true, 0)                                               AS guild_income_bluediamond,
+       ROUND((IFNULL(alt.guild_bluediamond_true, 0) + alt.guild_commission_true) / 1000,
+             2)                                                                            AS guild_income,
+       IFNULL(alt.guild_bluediamond_true, 0) +
+       IFNULL(alt.guild_commission_true, 0)                                                AS guild_income_orig,
        -- 主播收入
-       ROUND((t0.anchor_bluediamond_true - t0.guild_income_bluediamond_true) / 1000, 2) AS anchor_income,
-       t0.anchor_bluediamond_true - t0.guild_income_bluediamond_true                    AS anchor_income_orig
+       ROUND((IFNULL(alt.anchor_bluediamond_true, 0) - IFNULL(alt.guild_bluediamond_true, 0)) / 1000,
+             2)                                                                            AS anchor_income,
+       IFNULL(alt.anchor_bluediamond_true, 0) -
+       IFNULL(alt.guild_bluediamond_true, 0)                                         AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
+         LEFT JOIN warehouse.dw_yy_month_guild_live_true alt
+                   ON t0.dt = alt.dt AND alt.backend_account_id = t0.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE comment = 'orig'
-  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
-  AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
+  AND t0.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+  AND t0.dt <> DATE_FORMAT('{end_date}', '%Y-%m-01')
 UNION ALL
 SELECT t0.dt,
        t0.platform_id,
-       pf.platform_name                                                          AS platform,
+       pf.platform_name                                                       AS platform,
        t0.channel_num,
        t0.anchor_cnt,
-       t0.anchor_live_cnt                                                        AS live_cnt,
+       t0.anchor_live_cnt                                                     AS live_cnt,
        -- 平台流水
-       t0.anchor_bluediamond                                                     AS anchor_bluediamond_revenue,
-       ROUND(t0.guild_commission_true / 1000, 2)                                 AS guild_commission_revenue,
-       ROUND((t0.anchor_bluediamond + t0.guild_commission) / 500, 2)        AS revenue,
-       t0.anchor_bluediamond + t0.guild_commission_true                          AS revenue_orig,
+       t0.anchor_bluediamond                                                  AS anchor_bluediamond_revenue,
+       ROUND(t0.guild_commission / 1000, 2)                                   AS guild_commission_revenue,
+       ROUND((t0.anchor_bluediamond + t0.guild_commission) / 1000 * 2, 2)     AS revenue,
+       t0.anchor_bluediamond + t0.guild_commission                            AS revenue_orig,
        -- 公会收入
-       t0.guild_income_bluediamond                                               AS guild_income_bluediamond,
-       ROUND((t0.guild_income_bluediamond + t0.guild_commission_true) / 1000, 2) AS guild_income,
-       t0.guild_income_bluediamond + t0.guild_commission_true                    AS guild_income_orig,
+       t0.guild_income_bluediamond                                            AS guild_income_bluediamond,
+       ROUND((t0.guild_income_bluediamond + t0.guild_commission) / 1000, 2)   AS guild_income,
+       t0.guild_income_bluediamond + t0.guild_commission                      AS guild_income_orig,
        -- 主播收入
-       ROUND((t0.anchor_bluediamond - t0.guild_income_bluediamond) / 1000, 2)    AS anchor_income,
-       t0.anchor_bluediamond - t0.guild_income_bluediamond                       AS anchor_income_orig
+       ROUND((t0.anchor_bluediamond - t0.guild_income_bluediamond) / 1000, 2) AS anchor_income,
+       t0.anchor_bluediamond - t0.guild_income_bluediamond                    AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE t0.comment = 'orig'
-  AND DATE_FORMAT(t0.dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m')
+  AND DATE_FORMAT(t0.dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
 DELETE
 FROM bireport.rpt_month_all_guild
 WHERE platform_id = 1000
-  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_all_guild
 SELECT dt,
        platform_id,
@@ -84,5 +91,5 @@ FROM (SELECT dt,
              anchor_income,
              anchor_income_orig
       FROM bireport.rpt_month_yy_guild) t
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
