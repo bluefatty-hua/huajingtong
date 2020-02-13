@@ -304,21 +304,21 @@ WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
 -- CREATE TABLE warehouse.dw_yy_month_guild_live AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
-                             '%Y-%m-%d') AND '{end_date}';
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
 INSERT INTO warehouse.dw_yy_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                                    AS dt,
        al.platform_id,
        al.platform_name,
-       COALESCE(al.backend_account_id, 'all')                                            AS backend_account_id,
-       COALESCE(al.channel_num, 'all')                                                   AS channel_num,
-       COALESCE(al.comment, 'all')                                                       AS comment,
-       COALESCE(al.revenue_level, 'all')                                                 AS revenue_level,
-       COALESCE(al.month_newold_state, 'all')                                            AS newold_state,
-       COALESCE(al.active_state, 'all')                                                  AS active_state,
+       al.backend_account_id,
+       al.channel_num,
+       al.comment,
+       al.revenue_level,
+       al.month_newold_state,
+       al.active_state,
        COUNT(DISTINCT al.anchor_no)                                                      AS anchor_cnt,
        COUNT(DISTINCT
              CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END)               AS anchor_live_cnt,
+       SUM(al.duration) AS duration,
        SUM(CASE WHEN al.bluediamond >= 0 THEN al.bluediamond ELSE 0 END)                 AS anchor_bluediamond,
        SUM(CASE
                WHEN al.bluediamond >= 0 THEN al.bluediamond * IFNULL(al.anchor_settle_rate, 0)
@@ -349,7 +349,5 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.revenue_level,
          al.month_newold_state,
          al.active_state
-WITH ROLLUP
-HAVING comment <> 'all'
 ;
 
