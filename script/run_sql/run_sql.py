@@ -45,7 +45,7 @@ if args.log_file == None:
     log_path = LOG_DIR + datetime.now().strftime('%Y%m%d')
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-    log_file = log_path + '/' + LOG_NAME
+    log_file = log_path + '/etl_' + LOG_NAME
 else:
     log_file = args.log_file
 init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO, 'log_file': log_file})
