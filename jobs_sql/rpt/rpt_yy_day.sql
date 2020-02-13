@@ -252,7 +252,7 @@ AND (channel_num!='all' OR revenue_level!='all' OR newold_state!='all' OR active
 GROUP BY dt,active_state,channel_num,revenue_level,newold_state
 WITH ROLLUP
 )t
-WHERE dt IS NOT NULL
+WHERE dt IS NOT NULL;
 
 
 
