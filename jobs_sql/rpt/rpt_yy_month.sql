@@ -64,7 +64,7 @@ WHERE t0.comment = 'orig'
 DELETE
 FROM bireport.rpt_month_all_guild
 WHERE platform_id = 1000
-  AND DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+  AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_all_guild
 SELECT dt,
        platform_id,
