@@ -57,7 +57,7 @@ SELECT t0.dt,
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
 WHERE t0.comment = 'orig'
-  AND DATE_FORMAT(t0.dt, '%Y-%m') = DATE_FORMAT('{end_date}', '%Y-%m-01')
+  AND dt = DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
@@ -91,5 +91,5 @@ FROM (SELECT dt,
              anchor_income,
              anchor_income_orig
       FROM bireport.rpt_month_yy_guild) t
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
