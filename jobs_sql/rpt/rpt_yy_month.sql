@@ -32,7 +32,7 @@ FROM warehouse.dw_yy_month_guild_live t0
          LEFT JOIN warehouse.dw_yy_month_guild_live_true alt
                    ON t0.dt = alt.dt AND alt.backend_account_id = t0.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE comment = 'orig'
+WHERE comment = 'orig' AND t0.revenue_level = 'all'
   AND t0.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
   AND t0.dt <> DATE_FORMAT('{end_date}', '%Y-%m-01')
 UNION ALL
@@ -56,7 +56,7 @@ SELECT t0.dt,
        t0.anchor_bluediamond - t0.guild_income_bluediamond                    AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live t0
          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-WHERE t0.comment = 'orig'
+WHERE t0.comment = 'orig' AND t0.revenue_level
   AND dt = DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
