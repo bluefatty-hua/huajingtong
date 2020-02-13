@@ -8,7 +8,7 @@ SELECT al.*,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, '{end_date}', 180)    AS newold_state,
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)    AS newold_state,
        mal.duration         AS last_month_duration,
        mal.live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
