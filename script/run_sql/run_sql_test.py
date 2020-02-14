@@ -21,9 +21,10 @@ sys.setdefaultencoding('utf8')
 conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJL_ETL_DB['user'], password=XJL_ETL_DB['password'])
 cursor = conn.cursor()
 
-# 设置默认终止日期：前一天, 开始时间：7天前
+# 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
 start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
 end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+month = (date.today() + timedelta(days=-1)).strftime('%Y-%m-01')
 
 # 获取所有平台ID
 cursor.execute('select id from warehouse.platform;')
@@ -32,8 +33,9 @@ platform_id = str([pf_id for pf_id in [list(t)[0] for t in cursor.fetchall()]]).
 
 # 解析参数
 parser = argparse.ArgumentParser()
-parser.add_argument('-s', '--start_date', default=start_date, help='开始时间')
-parser.add_argument('-e', '--end_date', default=end_date, help='结束时间')
+parser.add_argument('-s', '--start_date', default=start_date, help='开始时间 xxxx-xx-xx')
+parser.add_argument('-e', '--end_date', default=end_date, help='结束时间 xxxx-xx-xx')
+parser.add_argument('-m', '--month', default=month, help='月 xxxx-xx-01')
 parser.add_argument('-p', '--platform_id', default=platform_id, help='指定平台ID')
 parser.add_argument('-l', '--log_file', default=None, help='指定的log文件')
 parser.add_argument('-f', '--sql_file', help='指定执行SQL文件')
@@ -73,6 +75,7 @@ def format_param_dict(args):
     param = {
         'start_date': args.start_date,
         'end_date': args.end_date,
+        'month': args.month,
         'platform_id': args.platform_id
     }
     logging.info('------------------------------PARAM-----------------------------')
@@ -85,8 +88,8 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
-    # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
-    project_path = '/services/xjl_etl/script/run_sql/'  # TEST
+    project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
+    # project_path = '/services/xjl_etl/script/run_sql/'  # TEST
     sql_file = project_path + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
 
