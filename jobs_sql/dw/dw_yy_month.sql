@@ -291,7 +291,7 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        al.channel_num,
        al.comment,
        al.revenue_level,
-       al.month_newold_state,
+       al.month_newold_state                                                             AS newold_state,
        al.active_state,
        COUNT(DISTINCT al.anchor_no)                                                      AS anchor_cnt,
        COUNT(DISTINCT
@@ -309,7 +309,6 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        SUM(
                CASE WHEN al.guild_commission >= 0 THEN al.guild_commission ELSE 0 END)   AS guild_commission
 FROM (SELECT *,
-             --
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{end_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
