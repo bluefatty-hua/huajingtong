@@ -88,8 +88,8 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
-    project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
-    # project_path = '/services/xjl_etl/script/run_sql/'  # TEST
+    # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
+    project_path = '/services/xjl_etl/script/run_sql/'  # TEST
     sql_file = project_path + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
 
