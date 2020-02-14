@@ -18,48 +18,50 @@ DELETE
 FROM bireport.rpt_month_bb_guild
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO bireport.rpt_month_bb_guild
-SELECT t.dt,
-       t.platform_id,
-       pf.platform_name                                                                         AS platform,
-       t.backend_account_id,
+SELECT gl.dt,
+       gl.platform_id,
+       gl.platform_name                                                                   AS platform,
+       gl.backend_account_id,
        t1.remark,
-       SUM(t.anchor_cnt)                                                                        AS anchor_cnt,
-       SUM(t.anchor_live_cnt)                                                                   AS live_cnt,
-       SUM(t.virtual_coin_revenue) / 1000                                                       AS revenue,
-       SUM(t.virtual_coin_revenue)                                                              AS revenue_orig,
-       SUM(t.guild_virtual_coin_true - t.anchor_change_coin - t.anchor_income_true -
-           t.anchor_base_coin_true - operate_award_punish_coin_true - special_coin_true) / 1000 AS guild_income,
-       SUM(t.guild_virtual_coin_true - t.anchor_change_coin - t.anchor_income_true -
-           t.anchor_base_coin_true - operate_award_punish_coin_true - special_coin_true)        AS guild_income_orig,
-       SUM(t.anchor_income_true + t.anchor_base_coin_true + operate_award_punish_coin_true +
-           special_coin_true) / 1000                                                            AS anchor_income,
-       SUM(t.anchor_income_true + t.anchor_base_coin_true + operate_award_punish_coin_true +
-           special_coin_true)                                                                   AS anchor_income_orig
-FROM warehouse.dw_bb_month_guild_live t
-         LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
-         lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
-  AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
-#   AND DATE_FORMAT(dt, '%Y-%m') > DATE_FORMAT('2019-01-01', '%Y-%m')
-GROUP BY t.dt,
-         t.platform_id,
+       SUM(gl.anchor_cnt)                                                                 AS anchor_cnt,
+       SUM(gl.anchor_live_cnt)                                                            AS live_cnt,
+       SUM(gl.revenue) / 1000                                                             AS revenue,
+       SUM(gl.revenue)                                                                    AS revenue_orig,
+       SUM(gr.guild_virtual_coin_true - gr.anchor_change_coin - gr.anchor_income_true -
+           gr.anchor_base_coin - gr.operate_award_punish_coin - special_coin_true) / 1000 AS guild_income,
+       SUM(gr.guild_virtual_coin_true - gr.anchor_change_coin - gr.anchor_income_true -
+           gr.anchor_base_coin - gr.operate_award_punish_coin - special_coin_true)        AS guild_income_orig,
+       SUM(gr.anchor_income_true + gr.anchor_base_coin + gr.operate_award_punish_coin +
+           gr.special_coin) / 1000                                                      AS anchor_income,
+       SUM(gr.anchor_income_true + gr.anchor_base_coin + gr.operate_award_punish_coin +
+           gr.special_coin)                                                             AS anchor_income_orig
+FROM warehouse.dw_bb_month_guild_live gl
+         LEFT JOIN warehouse.dw_bb_month_guild_live_true gr
+                   ON gl.dt = gr.dt AND gl.backend_account_id = gr.backend_account_id
+         LEFT JOIN spider_bb_backend.account_info t1 ON gl.backend_account_id = t1.backend_account_id
+         lEFT JOIN warehouse.platform pf ON pf.id = gl.platform_id
+WHERE DATE_FORMAT(gl.dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+  AND DATE_FORMAT(gl.dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
+#   AND DATE_FORMAT(gl.dt, '%Y-%m') > DATE_FORMAT('2019-01-01', '%Y-%m')
+GROUP BY gl.dt,
+         gl.platform_id,
          pf.platform_name,
-         t.backend_account_id,
+         gl.backend_account_id,
          t1.remark
 UNION ALL
 SELECT t.dt,
        t.platform_id,
-       pf.platform_name                                           AS platform,
+       pf.platform_name                              AS platform,
        t.backend_account_id,
        t1.remark,
-       SUM(t.anchor_cnt)                                          AS anchor_cnt,
-       SUM(t.anchor_live_cnt)                                     AS live_cnt,
-       SUM(t.virtual_coin_revenue) / 1000                         AS revenue,
-       SUM(t.virtual_coin_revenue)                                AS revenune_orig,
-       SUM(t.virtual_coin_revenue * ig.guild_income_rate) / 1000  AS guild_income,
-       SUM(t.virtual_coin_revenue * ig.guild_income_rate)         AS guild_income_orig,
-       SUM(t.virtual_coin_revenue * ig.anchor_income_rate) / 1000 AS anchor_income,
-       SUM(t.virtual_coin_revenue * ig.anchor_income_rate)        AS anchor_income_orig
+       SUM(t.anchor_cnt)                             AS anchor_cnt,
+       SUM(t.anchor_live_cnt)                        AS live_cnt,
+       SUM(t.revenue) / 1000                         AS revenue,
+       SUM(t.revenue)                                AS revenune_orig,
+       SUM(t.revenue * ig.guild_income_rate) / 1000  AS guild_income,
+       SUM(t.revenue * ig.guild_income_rate)         AS guild_income_orig,
+       SUM(t.revenue * ig.anchor_income_rate) / 1000 AS anchor_income,
+       SUM(t.revenue * ig.anchor_income_rate)        AS anchor_income_orig
 FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
          LEFT JOIN stage.bb_guild_income_rate ig ON t.backend_account_id = ig.backend_account_id
