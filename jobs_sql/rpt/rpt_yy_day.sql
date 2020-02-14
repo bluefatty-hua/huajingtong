@@ -244,6 +244,33 @@ FROM (SELECT dt,
         AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
       GROUP BY dt, active_state, channel_num, revenue_level, newold_state
       WITH ROLLUP
+
+      UNION
+
+      SELECT dt,
+             MAX(platform_id)                AS platform_id,
+             MAX(platform)                   AS platform,
+             IFNULL(channel_num, 'all')      AS channel_num,
+             IFNULL(revenue_level, 'all')    AS revenue_level,
+             IFNULL(newold_state, 'all')     AS newold_state,
+             IFNULL(active_state, 'all')     AS active_state,
+             SUM(anchor_cnt)                 AS anchor_cnt,
+             SUM(live_cnt)                   AS live_cnt,
+             SUM(duration)                   AS duration,
+             SUM(anchor_bluediamond_revenue) AS anchor_bluediamond_revenue,
+             SUM(guild_commission_revenue)   AS guild_commission_revenue,
+             SUM(revenue)                    AS revenue,
+             SUM(revenue_orig)               AS revenue_orig,
+             SUM(guild_income_bluediamond)   AS guild_income_bluediamond,
+             SUM(guild_income)               AS guild_income,
+             SUM(guild_income_orig)          AS guild_income_orig,
+             SUM(anchor_income)              AS anchor_income,
+             SUM(anchor_income_orig)         AS anchor_income_orig
+      FROM bireport.rpt_day_yy_guild_new
+      WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+        AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      GROUP BY dt, active_state, revenue_level, channel_num, newold_state
+      WITH ROLLUP
      ) t
 WHERE dt IS NOT NULL
 ;
