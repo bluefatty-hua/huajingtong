@@ -322,3 +322,33 @@ WHERE backend_account_id = 0
   AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
+-- 报表用，计算上周、上月同期数据---
+REPLACE INTO bireport.rpt_month_bb_guild_new_view
+SELECT 
+	t1.dt,
+	t1.remark,
+	t1.revenue_level,
+	t1.newold_state,
+	t1.active_state,
+	t1.anchor_cnt,
+	t3.anchor_cnt AS anchor_cnt_lastmonth,
+	t1.live_cnt,
+	t3.live_cnt AS live_cnt_lastmonth,
+	IF(t1.anchor_cnt>0,ROUND(t1.live_cnt/t1.anchor_cnt,3),0) AS live_ratio,
+	IF(t3.anchor_cnt>0,ROUND(t3.live_cnt/t3.anchor_cnt,3),0) AS live_ratio_lastmonth,
+	ROUND(t1.duration/3600,1) AS duration,
+	ROUND(t3.duration/3600,1) AS duration_lastmonth,
+	t1.revenue,
+	t3.revenue AS revenue_lastmonth,
+	IF(t1.live_cnt>0,ROUND(t1.`revenue`/t1.live_cnt,0),0) AS revenue_per_live,
+	IF(t3.live_cnt>0,ROUND(t3.`revenue`/t3.live_cnt,0),0) AS revenue_per_live_lastmonth,
+	0 AS `guild_income`,
+	0 AS `anchor_income` 
+FROM bireport.rpt_month_bb_guild_new t1
+LEFT JOIN bireport.rpt_month_bb_guild_new t3
+	ON t1.dt - INTERVAL 1 MONTH = t3.dt
+	AND t1.remark = t3.remark
+	AND t1.revenue_level = t3.revenue_level
+	AND t1.newold_state = t3.newold_state
+	AND t1.active_state = t3.active_state
+  -- WHERE t1.dt = '{month}';
