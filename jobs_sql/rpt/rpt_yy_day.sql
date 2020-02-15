@@ -348,3 +348,19 @@ LEFT JOIN bireport.rpt_day_yy_guild_new t3
 	AND t1.newold_state = t3.newold_state
 	AND t1.active_state = t3.active_state
   WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}';
+
+
+-- 报表用，计算指标占比---
+replace into `bireport`.`rpt_day_yy_guild_new_view_compare` 
+select * from
+(SELECT dt,channel_num,revenue_level,newold_state,active_state,'主播数' as idx,
+anchor_cnt as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all'
+union 
+SELECT dt,channel_num,revenue_level,newold_state,active_state,'开播数' as idx,
+live_cnt as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and revenue_level!='all'
+union 
+SELECT dt,channel_num,revenue_level,newold_state,active_state,'流水' as idx,
+revenue as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and revenue_level!='all'
+union 
+SELECT dt,channel_num,revenue_level,newold_state,active_state,'开播人均流水' as idx,
+round(revenue/live_cnt,0) as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all' and live_cnt>0) t
