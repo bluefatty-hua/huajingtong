@@ -306,7 +306,7 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
   AND channel_num = 'all'
 ;
 
---报表用，计算上周、上月同期数据---
+-- 报表用，计算上周、上月同期数据---
 replace into rpt_day_yy_guild_new_view
 SELECT 
 	t1.dt,
