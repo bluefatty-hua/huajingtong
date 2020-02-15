@@ -307,7 +307,7 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 -- 报表用，计算上周、上月同期数据---
-replace into rpt_day_yy_guild_new_view
+REPLACE INTO bireport.rpt_day_yy_guild_new_view
 SELECT 
 	t1.dt,
 	t1.channel_num,
@@ -334,14 +334,14 @@ SELECT
 	IF(t3.live_cnt>0,ROUND(t3.`revenue`/t3.live_cnt,0),0) AS revenue_per_live_lastmonth,
 	t1.`guild_income`,
 	t1.`anchor_income` 
-FROM rpt_day_yy_guild_new t1
-LEFT JOIN rpt_day_yy_guild_new t2
+FROM bireport.rpt_day_yy_guild_new t1
+LEFT JOIN bireport.rpt_day_yy_guild_new t2
 	ON t1.dt - INTERVAL 7 DAY = t2.dt
 	AND t1.channel_num = t2.channel_num
 	AND t1.revenue_level = t2.revenue_level
 	AND t1.newold_state = t2.newold_state
 	AND t1.active_state = t2.active_state
-LEFT JOIN rpt_day_yy_guild_new t3
+LEFT JOIN bireport.rpt_day_yy_guild_new t3
 	ON t1.dt - INTERVAL 1 MONTH = t3.dt
 	AND t1.channel_num = t3.channel_num
 	AND t1.revenue_level = t3.revenue_level
