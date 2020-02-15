@@ -111,7 +111,7 @@ DELETE
 FROM bireport.rpt_month_hy_guild_new
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_hy_guild_new
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01') AS dt,
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01')    AS dt,
        al.platform_id,
        al.platform_name                  AS platform,
        al.channel_num,
