@@ -164,16 +164,16 @@ SELECT cd.dt,
        cd.sign_count,
        cd.sign_limit,
        cr.live_cnt,
-       ifnull(cr.revenue, 0)       AS revenue,
-       ifnull(cgi.gift_income, 0)  AS gift_income,
-       ifnull(cgu.guard_income, 0) AS guard_income,
-       ifnull(cn.noble_income, 0)  AS noble_income,
+       IFNULL(cr.revenue, 0)       AS revenue,
+       IFNULL(cgi.gift_income, 0)  AS gift_income,
+       IFNULL(cgu.guard_income, 0) AS guard_income,
+       IFNULL(cn.noble_income, 0)  AS noble_income,
        cd.logo,
        cd.desc,
        cd.create_time,
-       cgi.calc_month              as gift_calc_month,
-       cgu.calc_month              as guard_calc_month,
-       cn.calc_month               as noble_calc_month
+       cgi.calc_month              AS gift_calc_month,
+       cgu.calc_month              AS guard_calc_month,
+       cn.calc_month               AS noble_calc_month
 FROM warehouse.dw_huya_day_guild_info cd
          LEFT JOIN warehouse.ods_huya_day_guild_live_revenue cr ON cd.dt = cr.dt AND cd.channel_id = cr.channel_id
          LEFT JOIN warehouse.ods_huya_day_guild_live_income_gift cgi
