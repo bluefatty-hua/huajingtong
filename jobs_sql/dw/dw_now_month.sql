@@ -43,7 +43,7 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE dt END, 180) AS month_newold_state
       FROM warehouse.dw_now_day_anchor_live
-WHERE DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
      ) al
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          al.platform_id,
