@@ -97,7 +97,7 @@ select dt,
        SUM(IFNULL(duration, 0))                                                AS duration,
        SUM(IFNULL(revenue, 0))                                                 AS revenue
 from warehouse.dw_huya_day_anchor_live
-# WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
