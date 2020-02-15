@@ -248,9 +248,7 @@ SELECT
 	t3.revenue AS revenue_lastmonth,
 	IF(t1.live_cnt>0,ROUND(t1.`revenue`/t1.live_cnt,0),0) AS revenue_per_live,
 	IF(t2.live_cnt>0,ROUND(t2.`revenue`/t2.live_cnt,0),0) AS revenue_per_live_lastweek,
-	IF(t3.live_cnt>0,ROUND(t3.`revenue`/t3.live_cnt,0),0) AS revenue_per_live_lastmonth,
-	t1.`guild_income`,
-	t1.`anchor_income` 
+	IF(t3.live_cnt>0,ROUND(t3.`revenue`/t3.live_cnt,0),0) AS revenue_per_live_lastmonth
 FROM bireport.rpt_day_hy_guild_new t1
 LEFT JOIN bireport.rpt_day_hy_guild_new t2
 	ON t1.dt - INTERVAL 7 DAY = t2.dt
