@@ -141,7 +141,7 @@ FROM warehouse.dw_huya_day_anchor_info ai
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       ai.anchor_uid = mal.anchor_uid
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-# WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
