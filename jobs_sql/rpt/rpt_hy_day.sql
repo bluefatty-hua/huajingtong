@@ -186,7 +186,7 @@ FROM (SELECT dt,
       FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt, active_state, revenue_level, channel_id, newold_state
+      GROUP BY dt, active_state, revenue_level, channel_num, newold_state
       WITH ROLLUP
      ) t
 WHERE dt IS NOT NULL
