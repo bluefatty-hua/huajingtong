@@ -3,7 +3,7 @@
 -- CREATE TABLE bireport.rpt_month_now_guild AS
 DELETE
 FROM bireport.rpt_month_now_guild
-WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_now_guild
 SELECT gl.dt,
        gl.platform_id,
@@ -26,7 +26,7 @@ FROM (SELECT gl.dt,
              SUM(revenue_rmb)     AS revenue_rmb
       FROM warehouse.dw_now_month_guild_live gl
                lEFT JOIN warehouse.platform pf ON pf.id = gl.platform_id
-       WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
+       WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY gl.dt,
                gl.platform_id,
                pf.platform_name,
