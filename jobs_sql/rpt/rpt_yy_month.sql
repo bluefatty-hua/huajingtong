@@ -4,6 +4,7 @@
 DELETE
 FROM bireport.rpt_month_yy_guild
 WHERE dt = '{month}';
+INSERT INTO bireport.rpt_month_yy_guild
 SELECT t0.dt,
        t0.platform_id,
        pf.platform_name                                                       AS platform,
