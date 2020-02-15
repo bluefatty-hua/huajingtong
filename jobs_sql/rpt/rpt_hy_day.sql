@@ -104,7 +104,7 @@ GROUP BY dt,
 ;
 
 
-REPLACE INTO bireport.rpt_day_hy_guild_new (dt, platform_id, platform, channel_num, revenue_level,
+REPLACE INTO bireport.rpt_day_hy_guild_new (dt, channel_num, revenue_level,
                                             newold_state, active_state, anchor_cnt, live_cnt, duration, revenue)
 SELECT *
 FROM (SELECT dt,
