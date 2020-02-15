@@ -113,3 +113,211 @@ FROM (SELECT dt,
       FROM bireport.rpt_month_bb_guild) t
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
+
+
+-- rpt_month_bb_guild_new
+DELETE
+FROM bireport.rpt_month_bb_guild_new
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+INSERT INTO bireport.rpt_month_bb_guild_new
+SELECT gl.dt,
+       gl.platform_id,
+       pf.platform_name                            AS platform,
+       gl.backend_account_id,
+       ai.remark,
+       gl.revenue_level,
+       gl.newold_state,
+       gl.active_state,
+       gl.anchor_cnt,
+       gl.anchor_live_cnt                          AS live_cnt,
+       gl.duration,
+       gl.revenue / 1000                           AS revenue,
+       gl.revenue                                  AS revenune_orig,
+       (gl.revenue * ig.guild_income_rate) / 1000  AS guild_income,
+       gl.revenue * ig.guild_income_rate           AS guild_income_orig,
+       (gl.revenue * ig.anchor_income_rate) / 1000 AS anchor_income,
+       gl.revenue * ig.anchor_income_rate          AS anchor_income_orig
+FROM warehouse.dw_bb_month_guild_live gl
+         LEFT JOIN spider_bb_backend.account_info ai ON gl.backend_account_id = ai.backend_account_id
+         LEFT JOIN stage.bb_guild_income_rate ig ON gl.backend_account_id = ig.backend_account_id
+         lEFT JOIN warehouse.platform pf ON pf.id = gl.platform_id
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+;
+
+
+REPLACE into bireport.rpt_month_bb_guild_new (dt, platform_id, platform, backend_account_id, remark, revenue_level,
+                                              newold_state,
+                                              active_state,
+                                              anchor_cnt, live_cnt, duration, revenue, revenue_orig,
+                                              guild_income, guild_income_orig, anchor_income, anchor_income_orig)
+SELECT t.dt,
+       t.platform_id,
+       t.platform,
+       t.backend_account_id,
+       CASE WHEN t.backend_account_id = 0 THEN 'all' ELSE ai.remark END AS remark,
+       t.revenue_level,
+       t.newold_state,
+       t.active_state,
+       t.anchor_cnt,
+       t.live_cnt,
+       t.duration,
+       t.revenue,
+       t.revenue_orig,
+       t.guild_income,
+       t.guild_income_orig,
+       t.anchor_income,
+       t.anchor_income_orig
+FROM (
+         SELECT dt,
+                MAX(platform_id)                AS platform_id,
+                MAX(platform)                   AS platform,
+                IFNULL(backend_account_id, '0') AS backend_account_id,
+                IFNULL(revenue_level, 'all')    AS revenue_level,
+                IFNULL(newold_state, 'all')     AS newold_state,
+                IFNULL(active_state, 'all')     AS active_state,
+                SUM(anchor_cnt)                 AS anchor_cnt,
+                SUM(live_cnt)                   AS live_cnt,
+                SUM(duration)                   AS duration,
+                SUM(revenue)                    AS revenue,
+                SUM(revenue_orig)               AS revenue_orig,
+                SUM(guild_income)               AS guild_income,
+                SUM(guild_income_orig)          AS guild_income_orig,
+                SUM(anchor_income)              AS anchor_income,
+                SUM(anchor_income_orig)         AS anchor_income_orig
+         FROM bireport.rpt_month_bb_guild_new
+         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+                active_state != 'all')
+           AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+         GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
+         WITH ROLLUP
+
+         UNION
+
+         SELECT dt,
+                MAX(platform_id)                AS platform_id,
+                MAX(platform)                   AS platform,
+                IFNULL(backend_account_id, '0') AS backend_account_id,
+                IFNULL(revenue_level, 'all')    AS revenue_level,
+                IFNULL(newold_state, 'all')     AS newold_state,
+                IFNULL(active_state, 'all')     AS active_state,
+                SUM(anchor_cnt)                 AS anchor_cnt,
+                SUM(live_cnt)                   AS live_cnt,
+                SUM(duration)                   AS duration,
+                SUM(revenue)                    AS revenue,
+                SUM(revenue_orig)               AS revenue_orig,
+                SUM(guild_income)               AS guild_income,
+                SUM(guild_income_orig)          AS guild_income_orig,
+                SUM(anchor_income)              AS anchor_income,
+                SUM(anchor_income_orig)         AS anchor_income_orig
+         FROM bireport.rpt_month_bb_guild_new
+         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+                active_state != 'all')
+           AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+         GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
+         WITH ROLLUP
+
+         UNION
+
+         SELECT dt,
+                MAX(platform_id)                AS platform_id,
+                MAX(platform)                   AS platform,
+                IFNULL(backend_account_id, '0') AS backend_account_id,
+                IFNULL(revenue_level, 'all')    AS revenue_level,
+                IFNULL(newold_state, 'all')     AS newold_state,
+                IFNULL(active_state, 'all')     AS active_state,
+                SUM(anchor_cnt)                 AS anchor_cnt,
+                SUM(live_cnt)                   AS live_cnt,
+                SUM(duration)                   AS duration,
+                SUM(revenue)                    AS revenue,
+                SUM(revenue_orig)               AS revenue_orig,
+                SUM(guild_income)               AS guild_income,
+                SUM(guild_income_orig)          AS guild_income_orig,
+                SUM(anchor_income)              AS anchor_income,
+                SUM(anchor_income_orig)         AS anchor_income_orig
+         FROM bireport.rpt_month_bb_guild_new
+         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+                active_state != 'all')
+           AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+         GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
+         WITH ROLLUP
+
+         UNION
+
+         SELECT dt,
+                MAX(platform_id)                AS platform_id,
+                MAX(platform)                   AS platform,
+                IFNULL(backend_account_id, '0') AS backend_account_id,
+                IFNULL(revenue_level, 'all')    AS revenue_level,
+                IFNULL(newold_state, 'all')     AS newold_state,
+                IFNULL(active_state, 'all')     AS active_state,
+                SUM(anchor_cnt)                 AS anchor_cnt,
+                SUM(live_cnt)                   AS live_cnt,
+                SUM(duration)                   AS duration,
+                SUM(revenue)                    AS revenue,
+                SUM(revenue_orig)               AS revenue_orig,
+                SUM(guild_income)               AS guild_income,
+                SUM(guild_income_orig)          AS guild_income_orig,
+                SUM(anchor_income)              AS anchor_income,
+                SUM(anchor_income_orig)         AS anchor_income_orig
+         FROM bireport.rpt_month_bb_guild_new
+         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+                active_state != 'all')
+           AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+         GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
+         WITH ROLLUP
+         UNION
+
+         SELECT dt,
+                MAX(platform_id)                AS platform_id,
+                MAX(platform)                   AS platform,
+                IFNULL(backend_account_id, '0') AS backend_account_id,
+                IFNULL(revenue_level, 'all')    AS revenue_level,
+                IFNULL(newold_state, 'all')     AS newold_state,
+                IFNULL(active_state, 'all')     AS active_state,
+                SUM(anchor_cnt)                 AS anchor_cnt,
+                SUM(live_cnt)                   AS live_cnt,
+                SUM(duration)                   AS duration,
+                SUM(revenue)                    AS revenue,
+                SUM(revenue_orig)               AS revenue_orig,
+                SUM(guild_income)               AS guild_income,
+                SUM(guild_income_orig)          AS guild_income_orig,
+                SUM(anchor_income)              AS anchor_income,
+                SUM(anchor_income_orig)         AS anchor_income_orig
+         FROM bireport.rpt_month_bb_guild_new
+         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+                active_state != 'all')
+           AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+         GROUP BY dt, newold_state, revenue_level, backend_account_id, active_state
+         WITH ROLLUP
+     ) t
+         LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
+;
+
+
+replace into bireport.rpt_month_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       guild_income,
+       anchor_income
+FROM bireport.rpt_month_bb_guild_new
+WHERE backend_account_id = 0
+  AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+;
