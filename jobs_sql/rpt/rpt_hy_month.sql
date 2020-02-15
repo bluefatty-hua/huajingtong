@@ -111,7 +111,7 @@ DELETE
 FROM bireport.rpt_month_hy_guild_new
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_hy_guild_new
-SELECT al.dt,
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01') AS dt,
        al.platform_id,
        al.platform_name                  AS platform,
        al.channel_num,
@@ -137,7 +137,7 @@ FROM (SELECT *,
       FROM warehouse.dw_huya_day_anchor_live
       WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
      ) al
-GROUP BY al.dt,
+GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
          al.channel_num,
