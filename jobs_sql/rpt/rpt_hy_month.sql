@@ -353,7 +353,7 @@ LEFT JOIN bireport.rpt_month_hy_guild_new t3
 	AND t1.revenue_level = t3.revenue_level
 	AND t1.newold_state = t3.newold_state
 	AND t1.active_state = t3.active_state
-  WHERE t1.dt = '{month}';
+  -- WHERE t1.dt = '{month}';
 
 
 

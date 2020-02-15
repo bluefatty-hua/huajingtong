@@ -256,3 +256,4 @@ FROM bireport.rpt_month_now_guild_new
 WHERE backend_account_id = 'all'
    AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
+
