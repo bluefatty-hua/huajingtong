@@ -39,11 +39,11 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        SUM(al.revenue_rmb)                                                          AS revenue_rmb
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('2020-02-14', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{end_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE dt END, 180) AS month_newold_state
       FROM warehouse.dw_now_day_anchor_live
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+# WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
      ) al
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          al.platform_id,
