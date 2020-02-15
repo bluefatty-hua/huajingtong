@@ -293,10 +293,10 @@ LEFT JOIN bireport.rpt_day_now_guild_new t3
 
 
 -- 报表用，计算指标占比---
-replace into `rpt_day_now_guild_new_view_compare` 
+replace into `bireport`.`rpt_day_now_guild_new_view_compare` 
 select * from
 (SELECT dt,backend_account_id,revenue_level,newold_state,active_state,'主播数' as idx,
-anchor_cnt as val FROM `bireport`.`rpt_day_now_guild_new` where .dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all'
+anchor_cnt as val FROM `bireport`.`rpt_day_now_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all'
 union 
 SELECT dt,backend_account_id,revenue_level,newold_state,active_state,'开播数' as idx,
 live_cnt as val FROM `bireport`.`rpt_day_now_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and revenue_level!='all'
