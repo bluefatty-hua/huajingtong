@@ -27,7 +27,6 @@ FROM (SELECT gl.dt,
       FROM warehouse.dw_now_month_guild_live gl
                lEFT JOIN warehouse.platform pf ON pf.id = gl.platform_id
        WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
-         AND DATE_FORMAT(dt, '%Y-%m') <> DATE_FORMAT('{end_date}', '%Y-%m')
       GROUP BY gl.dt,
                gl.platform_id,
                pf.platform_name,
