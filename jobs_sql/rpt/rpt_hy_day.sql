@@ -94,10 +94,10 @@ select dt,
        active_state,
        COUNT(DISTINCT anchor_uid)                                              AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN live_status = 1 THEN anchor_uid ELSE NULL END) AS live_cnt,
-       SUM(duration)                                                           AS duration,
-       SUM(revenue)                                                            AS revenue
+       SUM(IFNULL(duration, 0))                                                AS duration,
+       SUM(IFNULL(revenue, 0))                                                 AS revenue
 from warehouse.dw_huya_day_anchor_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+# WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -108,27 +108,131 @@ GROUP BY dt,
 ;
 
 
-DELETE
-FROM bireport.rpt_day_now_guild_new
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-  AND backend_account_id = 'ALL';
-INSERT INTO bireport.rpt_day_hy_guild_new
-SELECT t.dt,
-       t.platform_id,
-       t.platform_name                AS platform,
-       'ALL' AS channel_id,
+REPLACE INTO bireport.rpt_day_hy_guild_new (dt, platform_id, platform, channel_id, revenue_level,
+                                            newold_state, active_state, anchor_cnt, live_cnt, duration, revenue)
+SELECT *
+FROM (SELECT dt,
+             MAX(platform_id)             AS platform_id,
+             MAX(platform)                AS platform,
+             IFNULL(channel_id, 'all')    AS channel_id,
+             IFNULL(revenue_level, 'all') AS revenue_level,
+             IFNULL(newold_state, 'all')  AS newold_state,
+             IFNULL(active_state, 'all')  AS active_state,
+             SUM(anchor_cnt)              AS anchor_cnt,
+             SUM(live_cnt)                AS live_cnt,
+             SUM(duration)                AS duration,
+             SUM(revenue)                 AS revenue
+      FROM bireport.rpt_day_hy_guild_new
+      WHERE (channel_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
+      GROUP BY dt, channel_id, revenue_level, newold_state, active_state
+      WITH ROLLUP
+
+      UNION
+
+      SELECT dt,
+             MAX(platform_id)             AS platform_id,
+             MAX(platform)                AS platform,
+             IFNULL(channel_id, 'all')    AS channel_id,
+             IFNULL(revenue_level, 'all') AS revenue_level,
+             IFNULL(newold_state, 'all')  AS newold_state,
+             IFNULL(active_state, 'all')  AS active_state,
+             SUM(anchor_cnt)              AS anchor_cnt,
+             SUM(live_cnt)                AS live_cnt,
+             SUM(duration)                AS duration,
+             SUM(revenue)                 AS revenue
+      FROM bireport.rpt_day_hy_guild_new
+      WHERE (channel_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
+      GROUP BY dt, revenue_level, newold_state, active_state, channel_id
+      WITH ROLLUP
+
+      UNION
+
+      SELECT dt,
+             MAX(platform_id)             AS platform_id,
+             MAX(platform)                AS platform,
+             IFNULL(channel_id, 'all')    AS channel_id,
+             IFNULL(revenue_level, 'all') AS revenue_level,
+             IFNULL(newold_state, 'all')  AS newold_state,
+             IFNULL(active_state, 'all')  AS active_state,
+             SUM(anchor_cnt)              AS anchor_cnt,
+             SUM(live_cnt)                AS live_cnt,
+             SUM(duration)                AS duration,
+             SUM(revenue)                 AS revenue
+      FROM bireport.rpt_day_hy_guild_new
+      WHERE (channel_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
+      GROUP BY dt, newold_state, active_state, channel_id, revenue_level
+      WITH ROLLUP
+
+      UNION
+
+      SELECT dt,
+             MAX(platform_id)             AS platform_id,
+             MAX(platform)                AS platform,
+             IFNULL(channel_id, 'all')    AS channel_id,
+             IFNULL(revenue_level, 'all') AS revenue_level,
+             IFNULL(newold_state, 'all')  AS newold_state,
+             IFNULL(active_state, 'all')  AS active_state,
+             SUM(anchor_cnt)              AS anchor_cnt,
+             SUM(live_cnt)                AS live_cnt,
+             SUM(duration)                AS duration,
+             SUM(revenue)                 AS revenue
+      FROM bireport.rpt_day_hy_guild_new
+      WHERE (channel_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
+      GROUP BY dt, active_state, channel_id, revenue_level, newold_state
+      WITH ROLLUP
+
+      UNION ALL
+      SELECT dt,
+             MAX(platform_id)             AS platform_id,
+             MAX(platform)                AS platform,
+             IFNULL(channel_id, 'all')    AS channel_id,
+             IFNULL(revenue_level, 'all') AS revenue_level,
+             IFNULL(newold_state, 'all')  AS newold_state,
+             IFNULL(active_state, 'all')  AS active_state,
+             SUM(anchor_cnt)              AS anchor_cnt,
+             SUM(live_cnt)                AS live_cnt,
+             SUM(duration)                AS duration,
+             SUM(revenue)                 AS revenue
+      FROM bireport.rpt_day_hy_guild_new
+      WHERE (channel_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
+      GROUP BY dt, active_state, revenue_level, channel_id, newold_state
+      WITH ROLLUP
+     ) t
+WHERE dt IS NOT NULL
+;
+
+
+-- - rpt_day_all_new ----
+
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       platform,
        revenue_level,
        newold_state,
        active_state,
-       COUNT(DISTINCT anchor_uid)                                              AS anchor_cnt,
-       COUNT(DISTINCT CASE WHEN live_status = 1 THEN anchor_uid ELSE NULL END) AS live_cnt,
-       SUM(duration)                                                           AS duration,
-       SUM(revenue)                                                            AS revenue
-FROM warehouse.dw_huya_day_anchor_live t
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-GROUP BY t.dt,
-         t.platform_id,
-         t.platform_name,
-         t.revenue_level,
-         t.newold_state,
-         t.active_state
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       0 AS guild_income,
+       0 AS anchor_income
+FROM bireport.rpt_day_hy_guild_new
+WHERE channel_id = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
