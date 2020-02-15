@@ -146,15 +146,14 @@ WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_d
 
 
 REPLACE into bireport.rpt_month_bb_guild_new (dt, platform_id, platform, backend_account_id, remark, revenue_level,
-                                              newold_state,
-                                              active_state,
-                                              anchor_cnt, live_cnt, duration, revenue, revenue_orig,
-                                              guild_income, guild_income_orig, anchor_income, anchor_income_orig)
+                                              newold_state, active_state, anchor_cnt, live_cnt, duration, revenue,
+                                              revenue_orig, guild_income, guild_income_orig, anchor_income,
+                                              anchor_income_orig)
 SELECT t.dt,
        t.platform_id,
        t.platform,
        t.backend_account_id,
-       CASE WHEN t.backend_account_id = 0 THEN 'all' ELSE ai.remark END AS remark,
+       CASE WHEN t.backend_account_id = '0' THEN 'all' ELSE ai.remark END AS remark,
        t.revenue_level,
        t.newold_state,
        t.active_state,
@@ -288,13 +287,14 @@ FROM (
                 active_state != 'all')
            AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
          GROUP BY dt, newold_state, revenue_level, backend_account_id, active_state
-         WITH ROLLUP
-     ) t
-         LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
+         WITH ROLLUP) t
+         LEFT JOIN spider_bb_backend.account_info ai
+                   ON t.backend_account_id = ai.backend_account_id
+WHERE dt IS NOT NULL
 ;
 
 
-replace into bireport.rpt_month_all_new
+REPLACE INTO bireport.rpt_month_all_new
 (dt,
  platform,
  revenue_level,
