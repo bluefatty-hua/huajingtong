@@ -23,7 +23,7 @@ GROUP BY t.anchor_uid
 -- 主播最早签约时间（基于现有数据）,后期结合公司现有主播的签约时间
 -- DROP TABLE IF EXISTS stage.stage_yy_anchor_min_sign_dt;
 -- CREATE TABLE stage.stage_yy_anchor_min_sign_dt
-INSERT IGNORE INTO stage.stage_yy_anchor_min_live_dt
+INSERT IGNORE INTO stage.stage_yy_anchor_min_sign_dt
 SELECT 1000             AS platform_id,
        t.anchor_no,
        MIN(min_sign_dt) AS min_sign_dt
