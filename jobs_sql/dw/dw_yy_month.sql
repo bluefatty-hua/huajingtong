@@ -188,7 +188,7 @@ FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{end_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
-                                                                    ELSE dt END, 180) AS month_newold_state
+                                                                    ELSE '{end_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_yy_day_anchor_live
       WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}') al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
