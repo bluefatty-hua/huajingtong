@@ -55,7 +55,7 @@ SELECT al.*,
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)    AS newold_state,
        IFNULL(mal.duration, 0)         AS last_month_duration,
        IFNULL(mal.live_days, 0),
-       -- 开播天数大于等于20天且开播时长大于等于20小时（t-1月累计）
+       -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
        CASE
            WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END AS active_state,
