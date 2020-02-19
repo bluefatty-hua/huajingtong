@@ -45,3 +45,9 @@ INSERT IGNORE INTO guild_anchor
 SELECT * FROM guild_anchor_new;
 
 
+
+INSERT IGNORE INTO guild_anchor
+(yynum,uid,dt,backend_account_id)
+SELECT t1.yynum,t2.uid,t1.dt,t1.backend_account_id FROM   guild_anchor_real t1
+JOIN (SELECT yynum,MAX(uid) AS uid FROM `anchor_bluediamond` GROUP BY yynum)t2
+ON t1.yynum = t2.yynum
