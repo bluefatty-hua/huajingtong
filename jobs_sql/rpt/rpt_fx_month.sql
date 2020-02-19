@@ -2,7 +2,7 @@
 -- DROP TABLE IF EXISTS bireport.rpt_month_fx_guild;
 -- CREATE TABLE bireport.rpt_month_fx_guild AS
 DELETE
-FROM bireport.rpt_month_now_guild
+FROM bireport.rpt_month_fx_guild
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_fx_guild
 SELECT gl.dt,
@@ -275,7 +275,7 @@ FROM bireport.rpt_month_fx_guild_new t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt = '{month}'
+WHERE t1.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
