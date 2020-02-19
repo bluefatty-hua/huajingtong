@@ -50,7 +50,6 @@ SELECT al.dt,
        COUNT(DISTINCT al.anchor_no)                                                AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS live_cnt,
        SUM(al.duration)                                                            AS duration,
-       SUM(al.anchor_income) / 0.4                                                 AS revenue,
        SUM(al.anchor_income)                                                       AS anchor_income
 FROM warehouse.dw_fx_day_anchor_live al
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
