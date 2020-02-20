@@ -218,7 +218,7 @@ WHERE dt IS NOT NULL
 ;
 
 
-replace into bireport.rpt_month_all_new
+REPLACE INTO bireport.rpt_month_all_new
 (dt,
  platform,
  revenue_level,
