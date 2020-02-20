@@ -48,123 +48,112 @@ WHERE ga.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 补充spider_yy_backend.guild_anchor中缺失主播
-INSERT IGNORE INTO warehouse.ods_yy_day_anchor_info (platform_id, platform_name, backend_account_id, channel_num,
-                                                     anchor_uid,
-                                                     anchor_no, anchor_nick_name, comment, dt)
-SELECT 1000                     AS platform_id,
-       'YY'                     AS platform_name,
-       ac.backend_account_id,
-       cl.channel_num,
-       ac.uid,
-       ac.yynum,
-       ac.nick,
-       'from anchor_commission' AS comment,
-       DATE(dtime)              AS dt
-FROM spider_yy_backend.anchor_commission ac
-         LEFT JOIN spider_yy_backend.channel_list cl ON ac.backend_account_id = cl.backend_account_id
-WHERE DATE(dtime) BETWEEN '{start_date}' AND '{end_date}'
-UNION
-SELECT 1000                   AS platform_id,
-       'YY'                   AS platform_name,
-       ad.backend_account_id,
-       cl.channel_num,
-       ad.uid,
-       ad.yynum,
-       nick,
-       'from anchor_duration' AS comment,
-       ad.dt
-FROM spider_yy_backend.anchor_duration ad
-         LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-UNION
-SELECT 1000                           AS platform_id,
-       'YY'                           AS platform_name,
-       ad.backend_account_id,
-       cl.channel_num,
-       ad.uid,
-       ad.yynum,
-       nick,
-       'from anchor_duration_history' AS comment,
-       ad.dt
-FROM spider_yy_backend.anchor_duration_history ad
-         LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
-UNION
-SELECT 1000                      AS platform_id,
-       'YY'                      AS platform_name,
-       ab.backend_account_id,
-       cl.channel_num,
-       ab.uid,
-       ab.yynum,
-       ''                        AS nick,
-       'from anchor_bluediamond' AS comment,
-       ab.dt
-FROM spider_yy_backend.anchor_bluediamond ab
-         LEFT JOIN spider_yy_backend.channel_list cl ON ab.backend_account_id = cl.backend_account_id
-UNION
-SELECT 1000                      AS platform_id,
-       'YY'                      AS platform_name,
-       at.backend_account_id,
-       cl.channel_num,
-       at.uid,
-       at.yynum,
-       nick,
-       'from anchor_sign_tran' AS comment,
-       at.dt
-FROM spider_yy_backend.guild_anchor_sign_tran at
-         LEFT JOIN spider_yy_backend.channel_list cl ON at.backend_account_id = cl.backend_account_id
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-;
+-- INSERT IGNORE INTO warehouse.ods_yy_day_anchor_info (platform_id, platform_name, backend_account_id, channel_num,
+--                                                      anchor_uid,
+--                                                      anchor_no, anchor_nick_name, comment, dt)
+-- SELECT 1000                     AS platform_id,
+--        'YY'                     AS platform_name,
+--        ac.backend_account_id,
+--        cl.channel_num,
+--        ac.uid,
+--        ac.yynum,
+--        ac.nick,
+--        'from anchor_commission' AS comment,
+--        DATE(dtime)              AS dt
+-- FROM spider_yy_backend.anchor_commission ac
+--          LEFT JOIN spider_yy_backend.channel_list cl ON ac.backend_account_id = cl.backend_account_id
+-- WHERE DATE(dtime) BETWEEN '{start_date}' AND '{end_date}'
+-- UNION
+-- SELECT 1000                   AS platform_id,
+--        'YY'                   AS platform_name,
+--        ad.backend_account_id,
+--        cl.channel_num,
+--        ad.uid,
+--        ad.yynum,
+--        nick,
+--        'from anchor_duration' AS comment,
+--        ad.dt
+-- FROM spider_yy_backend.anchor_duration ad
+--          LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+-- UNION
+-- SELECT 1000                           AS platform_id,
+--        'YY'                           AS platform_name,
+--        ad.backend_account_id,
+--        cl.channel_num,
+--        ad.uid,
+--        ad.yynum,
+--        nick,
+--        'from anchor_duration_history' AS comment,
+--        ad.dt
+-- FROM spider_yy_backend.anchor_duration_history ad
+--          LEFT JOIN spider_yy_backend.channel_list cl ON ad.backend_account_id = cl.backend_account_id
+-- UNION
+-- SELECT 1000                      AS platform_id,
+--        'YY'                      AS platform_name,
+--        at.backend_account_id,
+--        cl.channel_num,
+--        at.uid,
+--        at.yynum,
+--        nick,
+--        'from anchor_sign_tran' AS comment,
+--        at.dt
+-- FROM spider_yy_backend.guild_anchor_sign_tran at
+--          LEFT JOIN spider_yy_backend.channel_list cl ON at.backend_account_id = cl.backend_account_id
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+-- ;
 
 
--- 主播直播
--- DROP TABLE IF EXISTS stage.union_yy_anchor_duration;
--- CREATE TABLE stage.union_yy_anchor_duration AS
-DELETE
-FROM stage.union_yy_anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO stage.union_yy_anchor_duration
-SELECT *
-FROM spider_yy_backend.anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-UNION ALL
-SELECT *
-FROM spider_yy_backend.anchor_duration_history
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-;
+-- -- 主播直播
+-- -- DROP TABLE IF EXISTS stage.union_yy_anchor_duration;
+-- -- CREATE TABLE stage.union_yy_anchor_duration AS
+-- DELETE
+-- FROM stage.union_yy_anchor_duration
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+-- INSERT INTO stage.union_yy_anchor_duration
+-- SELECT *
+-- FROM spider_yy_backend.anchor_duration
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+-- UNION ALL
+-- SELECT *
+-- FROM spider_yy_backend.anchor_duration_history
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+-- ;
+
+-- 
+-- -- DROP TABLE IF EXISTS stage.union_yy_anchor_duration_max_time;
+-- -- CREATE TABLE stage.union_yy_anchor_duration_max_time AS
+-- DELETE
+-- FROM stage.union_yy_anchor_duration_max_time
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+-- INSERT INTO stage.union_yy_anchor_duration_max_time
+-- SELECT backend_account_id, dt, uid, MAX(timestamp) AS max_timestamp
+-- FROM stage.union_yy_anchor_duration
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+-- group by backend_account_id, dt, uid
+-- ;
 
 
--- DROP TABLE IF EXISTS stage.union_yy_anchor_duration_max_time;
--- CREATE TABLE stage.union_yy_anchor_duration_max_time AS
-DELETE
-FROM stage.union_yy_anchor_duration_max_time
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO stage.union_yy_anchor_duration_max_time
-SELECT backend_account_id, dt, uid, MAX(timestamp) AS max_timestamp
-FROM stage.union_yy_anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-group by backend_account_id, dt, uid
-;
-
-
--- DROP TABLE IF EXISTS stage.distinct_yy_anchor_duration;
--- CREATE TABLE stage.distinct_yy_anchor_duration AS
-DELETE
-FROM stage.distinct_yy_anchor_duration
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO stage.distinct_yy_anchor_duration
-SELECT uad.*
-FROM stage.union_yy_anchor_duration_max_time mt
-         LEFT JOIN stage.union_yy_anchor_duration uad
-                   ON mt.backend_account_id = uad.backend_account_id AND mt.dt = uad.dt AND mt.uid = uad.uid AND
-                      mt.max_timestamp = uad.timestamp
-WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
-;
+-- -- DROP TABLE IF EXISTS stage.distinct_yy_anchor_duration;
+-- -- CREATE TABLE stage.distinct_yy_anchor_duration AS
+-- DELETE
+-- FROM stage.distinct_yy_anchor_duration
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+-- INSERT INTO stage.distinct_yy_anchor_duration
+-- SELECT uad.*
+-- FROM stage.union_yy_anchor_duration_max_time mt
+--          LEFT JOIN stage.union_yy_anchor_duration uad
+--                    ON mt.backend_account_id = uad.backend_account_id AND mt.dt = uad.dt AND mt.uid = uad.uid AND
+--                       mt.max_timestamp = uad.timestamp
+-- WHERE mt.dt BETWEEN '{start_date}' AND '{end_date}'
+-- ;
 
 -- DROP TABLE IF EXISTS warehouse.ods_yy_day_anchor_live_duration;
 -- CREATE TABLE warehouse.ods_yy_day_anchor_live_duration AS
 DELETE
 FROM warehouse.ods_yy_day_anchor_live_duration
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+
 INSERT INTO warehouse.ods_yy_day_anchor_live_duration
 SELECT ai.dt,
        ai.platform_id,
@@ -184,11 +173,34 @@ SELECT ai.dt,
        ai.comment,
        ad.timestamp
 FROM warehouse.ods_yy_day_anchor_info ai
-         LEFT JOIN stage.distinct_yy_anchor_duration ad
+         LEFT JOIN spider_yy_backend.anchor_duration ad
                    ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.dt = ad.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+INSERT IGNORE  INTO warehouse.ods_yy_day_anchor_live_duration
+SELECT ai.dt,
+       ai.platform_id,
+       ai.platform_name,
+       ai.backend_account_id,
+       ai.anchor_uid,
+       ai.anchor_no,
+       ai.anchor_nick_name,
+       ai.anchor_type,
+       ad.chaid                              AS channel_id,
+       ad.duration,
+       warehouse.DURATION_CH(ad.duration)    AS duration_sec,
+       ad.pcduration,
+       warehouse.DURATION_CH(ad.pcduration)  AS pcduration_sec,
+       ad.mobduration,
+       warehouse.DURATION_CH(ad.mobduration) AS mobduration_sec,
+       ai.comment,
+       ad.timestamp
+FROM warehouse.ods_yy_day_anchor_info ai
+         LEFT JOIN spider_yy_backend.anchor_duration_history ad
+                   ON ai.backend_account_id = ad.backend_account_id AND ai.anchor_uid = ad.uid AND ai.dt = ad.dt
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+;
 
 -- 主播收入（佣金）
 -- DROP TABLE IF EXISTS warehouse.ods_yy_anchor_live_commission;
@@ -208,8 +220,8 @@ SELECT ai.dt,
        ai.settle_method_code,
        ai.settle_method_text,
        ai.anchor_settle_rate,
-       ac.usrMoney AS anchor_commission,
-       ac.owMoney  AS guild_commission,
+       ifnull(ac.usrMoney,0) AS anchor_commission,
+       ifnull(ac.owMoney,0)  AS guild_commission,
        ac.inType   as in_type,
        ac.frmYY    AS from_visitor_no,
        ac.frmNick  AS from_visitor_name,
@@ -217,9 +229,10 @@ SELECT ai.dt,
        ac.dtime
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_commission ac
-                   ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.uid AND
+                   ON ai.anchor_uid = ac.uid AND
                       ai.dt = DATE(ac.dtime)
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+and ac.dtime BETWEEN '{start_date} 00:00:00' AND '{end_date} 23:59:59'
 ;
 
 
@@ -278,7 +291,7 @@ SELECT ai.dt,
        ab.timestamp
 FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN spider_yy_backend.anchor_bluediamond ab
-                   ON ab.backend_account_id = ai.backend_account_id AND ab.uid = ai.anchor_uid AND ai.dt = ab.dt
+                   ON  ab.uid = ai.anchor_uid AND ai.dt = ab.dt
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
   and diamond > 0
 ;
@@ -329,7 +342,7 @@ FROM warehouse.ods_yy_day_anchor_info ai
          LEFT JOIN warehouse.ods_yy_day_anchor_live_commission ac
                    ON ai.backend_account_id = ac.backend_account_id AND ai.anchor_uid = ac.anchor_uid AND ai.dt = ac.dt
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}' 
 ;
 
 
