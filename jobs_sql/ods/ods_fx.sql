@@ -137,12 +137,12 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 公会-月（结算）
--- DROP TABLE IF EXISTS warehouse.ods_month_fx_guild_live_revenue;
--- CREATE TABLE warehouse.ods_month_fx_guild_live_revenue AS
+-- DROP TABLE IF EXISTS warehouse.ods_fx_month_guild_live_revenue;
+-- CREATE TABLE warehouse.ods_fx_month_guild_live_revenue AS
 DELETE
-FROM warehouse.ods_month_fx_guild_live_revenue
+FROM warehouse.ods_fx_month_guild_live_revenue
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
-INSERT INTO warehouse.ods_month_fx_guild_live_revenue
+INSERT INTO warehouse.ods_fx_month_guild_live_revenue
 SELECT CONCAT(r.month, '-01') AS dt,
        1004                   AS platform_id,
        'FanXing'              AS platform_name,
