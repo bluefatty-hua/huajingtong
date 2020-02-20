@@ -232,7 +232,7 @@ REPLACE INTO bireport.rpt_day_all_new
  guild_income,
  anchor_income)
 SELECT dt,
-       'NOW' AS platform,
+       platform,
        revenue_level,
        newold_state,
        active_state,
@@ -249,7 +249,7 @@ WHERE backend_account_id = 'all'
 
 
 -- 报表用，计算上周、上月同期数据---
-REPLACE INTO bireport.rpt_day_now_guild_new_view
+REPLACE INTO bireport.rpt_day_fx_guild_new_view
 SELECT t1.dt,
        t1.backend_account_id,
        t1.revenue_level,
