@@ -13,7 +13,7 @@ SELECT gl.dt,
        0 as guild_income,
        -- ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
        -- 主播收入
-      0 as anchor_income,
+      0 as anchor_income
        -- ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income
 FROM (SELECT al.dt,
              al.platform_id,
