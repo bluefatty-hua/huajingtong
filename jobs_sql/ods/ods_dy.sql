@@ -56,6 +56,7 @@ SELECT ad.dt,
        ad.fan_rise,
        ad.timestamp
 FROM spider_dy_backend.anchor_data ad
+WHERE ad.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
