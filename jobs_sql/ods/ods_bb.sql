@@ -1,3 +1,13 @@
+-- 公会列表
+REPLACE INTO warehouse.ods_bb_account_info
+SELECT *
+FROM spider_bb_backend.account_info
+;
+
+-- auto-generated definition
+
+
+
 -- 主播信息
 -- DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
 -- CREATE TABLE stage.bb_guild_anchor_dt AS

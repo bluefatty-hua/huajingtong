@@ -33,3 +33,37 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.month_newold_state,
          al.active_state
 ;
+
+
+
+# DROP TABLE IF EXISTS warehouse.dw_dy_month_anchor_live;
+# CREATE TABLE warehouse.dw_dy_month_anchor_live AS
+DELETE
+FROM warehouse.dw_dy_month_anchor_live
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+INSERT INTO warehouse.dw_dy_month_anchor_live
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                                    AS dt,
+       al.platform_id,
+       al.platform_name,
+       al.backend_account_id,
+       al.anchor_no,
+       al.anchor_uid,
+       al.revenue_level,
+       al.newold_state,
+       al.active_state,
+       COUNT(DISTINCT al.anchor_no)                                                      AS anchor_cnt,
+       COUNT(DISTINCT
+             CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END)               AS anchor_live_cnt,
+       SUM(al.duration)                                                                  AS duration,
+       SUM(CASE WHEN al.revenue >= 0 THEN al.revenue ELSE 0 END)                 AS revenue
+FROM warehouse.dw_dy_day_anchor_live al
+GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+         al.platform_id,
+         al.platform_name,
+         al.backend_account_id,
+         al.anchor_no,
+         al.anchor_uid,
+         al.revenue_level,
+         al.newold_state,
+         al.active_state
+;
