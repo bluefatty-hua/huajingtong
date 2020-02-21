@@ -5,7 +5,7 @@ DELETE
 FROM bireport.rpt_month_dy_guild
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_dy_guild
-SELECT al.dt,
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01'),
        al.platform_id,
        al.platform_name                       AS                platform,
        al.backend_account_id,
@@ -18,8 +18,8 @@ SELECT al.dt,
        SUM(IFNULL(al.revenue, 0)) / 10 * 0.45 AS                anchor_income,
        SUM(IFNULL(al.revenue, 0))             AS                anchor_income_orig
 FROM warehouse.dw_dy_day_anchor_live al
-WHERE al.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
-GROUP BY al.dt,
+WHERE DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
          al.backend_account_id
