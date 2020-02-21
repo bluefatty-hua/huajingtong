@@ -5,6 +5,8 @@ FROM warehouse.dw_dy_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_dy_day_anchor_live
 SELECT al.*,
+       al.revenue * al.anchor_settle_rate                                     AS anchor_income,
+       al.revenue * 0.1                                                       AS guild_income,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
@@ -16,7 +18,7 @@ SELECT al.*,
            WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END                                                   AS active_state,
        IFNULL(mal.revenue, 0)                                                 AS last_month_revenue,
-       -- 主播流水分级（t-1月）
+       -- 主播流水(人民币)分级（t-1月）
        CASE
            WHEN mal.revenue / 10 / 10000 >= 50 THEN '50+'
            WHEN mal.revenue / 10 / 10000 >= 10 THEN '10-50'
@@ -29,9 +31,8 @@ FROM warehouse.ods_dy_day_anchor_live al
          LEFT JOIN stage.stage_dy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
-WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+# WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
-
 
 
 -- DROP TABLE IF EXISTS warehouse.dw_dy_day_guild_live;
@@ -50,7 +51,9 @@ SELECT al.dt,
        COUNT(DISTINCT al.anchor_uid)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_uid ELSE NULL END) AS anchor_live_cnt,
        SUM(IF(al.duration > 0, al.duration, 0))                                      AS duration,
-       SUM(IF(al.revenue > 0, al.revenue, 0))                                        AS revenue
+       SUM(IF(al.revenue > 0, al.revenue, 0))                                        AS revenue,
+       SUM(IF(al.anchor_income > 0, al.anchor_income, 0))                            AS anchor_income,
+       SUM(IF(al.guild_income > 0, al.guild_income, 0))                              AS guild_income
 FROM warehouse.dw_dy_day_anchor_live al
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY al.dt,
