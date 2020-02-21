@@ -7,16 +7,16 @@ WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_d
 INSERT INTO bireport.rpt_month_dy_guild
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01'),
        al.platform_id,
-       al.platform_name                       AS                platform,
+       al.platform_name                      AS                 platform,
        al.backend_account_id,
-       COUNT(DISTINCT al.anchor_uid)          AS                anchor_cnt,
+       COUNT(DISTINCT al.anchor_uid)         AS                 anchor_cnt,
        COUNT(DISTINCT IF(al.live_status = 1, anchor_uid, NULL)) ASlive_cnt,
-       SUM(IFNULL(al.revenue, 0)) / 10        AS                revenue,
-       SUM(IFNULL(al.revenue, 0))             AS                revenue_orig,
-       SUM(IFNULL(al.revenue, 0)) / 10 * 0.05 AS                guild_income,
-       SUM(IFNULL(al.revenue, 0))             AS                guild_income_orig,
-       SUM(IFNULL(al.revenue, 0)) / 10 * 0.45 AS                anchor_income,
-       SUM(IFNULL(al.revenue, 0))             AS                anchor_income_orig
+       SUM(IFNULL(al.revenue, 0)) / 10       AS                 revenue,
+       SUM(IFNULL(al.revenue, 0))            AS                 revenue_orig,
+       SUM(IFNULL(al.guild_income, 0)) / 10  AS                 guild_income,
+       SUM(IFNULL(al.guild_income, 0))       AS                 guild_income_orig,
+       SUM(IFNULL(al.anchor_income, 0)) / 10 AS                 anchor_income,
+       SUM(IFNULL(al.anchor_income, 0))      AS                 anchor_income_orig
 FROM warehouse.dw_dy_day_anchor_live al
 WHERE DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
@@ -78,9 +78,9 @@ SELECT gl.dt,
        gl.duration,
        gl.revenue         AS revenue,
        gl.revenue         AS revenue_orig,
-       gl.revenue         AS guild_income,
+       gl.guild_income    AS guild_income,
        gl.revenue         AS guild_income_orig,
-       gl.revenue         AS anchor_income,
+       gl.anchor_income   AS anchor_income,
        gl.revenue         AS anchor_income_orig
 FROM warehouse.dw_dy_month_guild_live gl
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')

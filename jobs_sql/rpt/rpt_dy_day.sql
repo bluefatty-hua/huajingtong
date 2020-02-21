@@ -4,12 +4,12 @@ WHERE platform = 'DouYin'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_all
 SELECT t.dt,
-       t.platform_name            AS platform,
-       SUM(t.anchor_cnt)          AS anchor_cnt,
-       SUM(t.anchor_live_cnt)     AS live_cnt,
-       SUM(t.revenue)             AS revenue,
-       SUM(t.revenue) / 10 * 0.45 AS guild_income,
-       SUM(t.revenue) / 10 * 0.05 AS anchor_income
+       t.platform_name           AS platform,
+       SUM(t.anchor_cnt)         AS anchor_cnt,
+       SUM(t.anchor_live_cnt)    AS live_cnt,
+       SUM(t.revenue) / 10       AS revenue,
+       SUM(t.guild_income) / 10  AS guild_income,
+       SUM(t.anchor_income) / 10 AS anchor_income
 FROM warehouse.dw_dy_day_guild_live t
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY t.dt,
@@ -23,16 +23,16 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_dy_guild
 SELECT t.dt,
        t.platform_id,
-       t.platform_name            AS platform,
+       t.platform_name           AS platform,
        t.backend_account_id,
-       SUM(t.anchor_cnt)          AS anchor_cnt,
-       SUM(t.anchor_live_cnt)     AS live_cnt,
-       SUM(t.revenue) / 10        AS revenue,
-       SUM(t.revenue)             AS revenue_orig,
-       SUM(t.revenue) / 10 * 0.05 AS guild_income,
-       SUM(t.revenue)             AS guild_income_orig,
-       SUM(t.revenue) / 10 * 0.45 AS anchor_income,
-       SUM(t.revenue)             AS anchor_income_orig
+       SUM(t.anchor_cnt)         AS anchor_cnt,
+       SUM(t.anchor_live_cnt)    AS live_cnt,
+       SUM(t.revenue) / 10       AS revenue,
+       SUM(t.revenue)            AS revenue_orig,
+       SUM(t.guild_income) / 10  AS guild_income,
+       SUM(t.guild_income)       AS guild_income_orig,
+       SUM(t.anchor_income) / 10 AS anchor_income,
+       SUM(t.anchor_income)      AS anchor_income_orig
 FROM warehouse.dw_dy_day_guild_live t
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY t.dt,
@@ -65,20 +65,20 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_dy_guild_new
 SELECT t.dt,
        t.platform_id,
-       t.platform_name            AS platform,
+       t.platform_name           AS platform,
        t.backend_account_id,
        t.revenue_level,
        t.newold_state,
        t.active_state,
-       SUM(t.anchor_cnt)          AS anchor_cnt,
-       SUM(t.anchor_live_cnt)     AS live_cnt,
-       SUM(t.duration)            AS duration,
-       SUM(t.revenue) / 10        AS revenue,
-       SUM(t.revenue)             AS revenue_orig,
-       SUM(t.revenue) / 10 * 0.05 AS guild_income,
-       SUM(t.revenue)             AS guild_income_orig,
-       SUM(t.revenue) / 10 * 0.45 AS anchor_income,
-       SUM(t.revenue)             AS anchor_income_orig
+       SUM(t.anchor_cnt)         AS anchor_cnt,
+       SUM(t.anchor_live_cnt)    AS live_cnt,
+       SUM(t.duration)           AS duration,
+       SUM(t.revenue) / 10       AS revenue,
+       SUM(t.revenue)            AS revenue_orig,
+       SUM(t.guild_income) / 10  AS guild_income,
+       SUM(t.guild_income)       AS guild_income_orig,
+       SUM(t.anchor_income) / 10 AS anchor_income,
+       SUM(t.anchor_income)      AS anchor_income_orig
 FROM warehouse.dw_dy_day_guild_live t
 WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY t.dt,
@@ -241,8 +241,8 @@ SELECT dt,
        live_cnt,
        duration,
        revenue,
-       guild_income,
-       anchor_income
+       IFNULL(guild_income, 0) AS guild_income,
+       IFNULL(anchor_income, 0) AS anchor_income
 FROM bireport.rpt_day_dy_guild_new
 WHERE backend_account_id = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
