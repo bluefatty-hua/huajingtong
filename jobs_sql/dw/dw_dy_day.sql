@@ -31,7 +31,7 @@ FROM warehouse.ods_dy_day_anchor_live al
          LEFT JOIN stage.stage_dy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
-# WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
