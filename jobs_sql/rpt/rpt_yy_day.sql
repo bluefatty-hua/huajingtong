@@ -108,7 +108,7 @@ SELECT gl.dt,
        -- 公会收入
        gl.guild_income_bluediamond,
        0 as guild_income,
-       --ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
+       -- ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
        gl.guild_income_bluediamond + gl.guild_commission                      AS guild_income_orig,
        -- 主播收入
       0 as anchor_income,
