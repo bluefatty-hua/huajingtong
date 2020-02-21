@@ -10,9 +10,11 @@ SELECT gl.dt,
        -- 平台流水
        ROUND((gl.bluediamond + gl.guild_commission) * 2 / 1000, 2)            AS revenue,
        -- 公会收入
-       ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
+       0 as guild_income,
+       -- ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
        -- 主播收入
-       ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income
+      0 as anchor_income,
+       -- ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income
 FROM (SELECT al.dt,
              al.platform_id,
              COUNT(DISTINCT al.anchor_uid)                                                 AS anchor_cnt,
@@ -49,10 +51,10 @@ SELECT gl.dt,
        SUM(gl.bluediamond + gl.guild_commission)                                 AS revenue_orig,
        -- 公会收入
        SUM(gl.guild_income_bluediamond),
-       ROUND(SUM(gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
+       0  AS guild_income,
        SUM(gl.guild_income_bluediamond + gl.guild_commission)                    AS guild_income_orig,
        -- 主播收入
-       ROUND(SUM(gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
+       0 AS anchor_income,
        SUM(gl.anchor_income_bluediamond + gl.anchor_commission)                  AS anchor_income_orig
 FROM warehouse.dw_yy_day_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
@@ -105,10 +107,12 @@ SELECT gl.dt,
        gl.bluediamond + gl.guild_commission                                   AS revenue_orig,
        -- 公会收入
        gl.guild_income_bluediamond,
-       ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
+       0 as guild_income,
+       --ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
        gl.guild_income_bluediamond + gl.guild_commission                      AS guild_income_orig,
        -- 主播收入
-       ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
+      0 as anchor_income,
+       -- ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
        gl.anchor_income_bluediamond + gl.anchor_commission                    AS anchor_income_orig
 FROM warehouse.dw_yy_day_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
