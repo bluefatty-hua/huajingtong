@@ -68,20 +68,20 @@ WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_d
 INSERT INTO bireport.rpt_month_dy_guild_new
 SELECT gl.dt,
        gl.platform_id,
-       gl.platform_name   AS platform,
+       gl.platform_name      AS platform,
        gl.backend_account_id,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
        gl.anchor_cnt,
-       gl.anchor_live_cnt AS live_cnt,
+       gl.anchor_live_cnt    AS live_cnt,
        gl.duration,
-       gl.revenue         AS revenue,
-       gl.revenue         AS revenue_orig,
-       gl.guild_income    AS guild_income,
-       gl.revenue         AS guild_income_orig,
-       gl.anchor_income   AS anchor_income,
-       gl.revenue         AS anchor_income_orig
+       gl.revenue / 10       AS revenue,
+       gl.revenue            AS revenue_orig,
+       gl.guild_income / 10  AS guild_income,
+       gl.revenue            AS guild_income_orig,
+       gl.anchor_income / 10 AS anchor_income,
+       gl.revenue            AS anchor_income_orig
 FROM warehouse.dw_dy_month_guild_live gl
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
