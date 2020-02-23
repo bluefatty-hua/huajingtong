@@ -11,9 +11,9 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                      AS dt
        al.revenue_level,
        al.month_newold_state                                               AS newold_state,
        al.active_state,
-       COUNT(DISTINCT al.anchor_no)                                        AS anchor_cnt,
+       COUNT(DISTINCT al.anchor_uid)                                        AS anchor_cnt,
        COUNT(DISTINCT
-             CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS anchor_live_cnt,
+             CASE WHEN al.live_status = 1 THEN al.anchor_uid ELSE NULL END) AS anchor_live_cnt,
        SUM(al.duration)                                                    AS duration,
        SUM(IF(al.revenue >= 0, al.revenue, 0))                             AS revenue,
        SUM(IF(al.anchor_income >= 0, al.anchor_income, 0))                 AS anchor_income,
@@ -47,14 +47,10 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                      AS dt
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
-       al.anchor_no,
        al.anchor_uid,
        al.revenue_level,
        al.month_newold_state                                               AS newold_state,
        al.active_state,
-       COUNT(DISTINCT al.anchor_no)                                        AS anchor_cnt,
-       COUNT(DISTINCT
-             CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS anchor_live_cnt,
        SUM(IF(al.duration >= 0, al.duration, 0))                           AS duration,
        SUM(IF(al.revenue >= 0, al.revenue, 0))                             AS revenue,
        SUM(IF(al.anchor_income >= 0, al.anchor_income, 0))                 AS anchor_income,
@@ -72,9 +68,9 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
          al.backend_account_id,
-         al.anchor_no,
          al.anchor_uid,
          al.revenue_level,
          al.month_newold_state,
          al.active_state
 ;
+
