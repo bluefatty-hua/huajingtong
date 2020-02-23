@@ -1,11 +1,11 @@
 -- spider_fx_backend.star_list 1月以前的数据的数据
 -- 125星豆 = 1元
-REPLACE INTO stage.stage_fx_star_list
-SELECT *
-FROM spider_fx_backend.star_list
-WHERE dt >= 20200209
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
-;
+# REPLACE INTO stage.stage_fx_star_list
+# SELECT *
+# FROM spider_fx_backend.star_list
+# WHERE dt >= 20200209
+#   AND dt BETWEEN '{start_date}' AND '{end_date}'
+# ;
 
 -- DROP TABLE IF EXISTS warehouse.ods_fx_day_anchor_info;
 -- CREATE TABLE warehouse.ods_fx_day_anchor_info AS
@@ -29,7 +29,7 @@ SELECT sl.dt,
        sl.latest_time,
        sl.avatar_url,
        sl.timestamp
-FROM stage.stage_fx_star_list sl
+FROM spider_fx_backend.star_list sl
 WHERE sl.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
