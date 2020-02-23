@@ -5,8 +5,8 @@ FROM warehouse.dw_dy_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_dy_day_anchor_live
 SELECT al.*,
-       IFNULL(al.revenue, 0) * IFNULL(al.anchor_settle_rate, 0)                                     AS anchor_income,
-       IFNULL(al.revenue, 0) * 0.1                                                       AS guild_income,
+       IFNULL(al.revenue, 0) * IFNULL(al.anchor_settle_rate, 0) / 100         AS anchor_income,
+       IFNULL(al.revenue, 0) * 0.1                                            AS guild_income,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
