@@ -3,20 +3,21 @@
 -- CREATE TABLE stage.stage_dy_anchor_min_live_dt
 INSERT IGNORE INTO stage.stage_dy_anchor_min_live_dt
 SELECT 1005 AS platform_id,
-       t.anchor_no,
+       t.anchor_uid,
        MIN(t.min_live_dt)
-FROM (SELECT al.anchor_no,
+FROM (SELECT al.anchor_uid,
              MIN(al.dt) AS min_live_dt
       FROM warehouse.ods_dy_day_anchor_live al
       WHERE al.live_status = 1
-      GROUP BY al.anchor_no
+      GROUP BY al.anchor_uid
       UNION
-      SELECT yj.uid             AS anchor_no,
+      SELECT ai.anchor_uid,
              yj.first_live_time AS min_live_time
       FROM warehouse.ods_yujia_anchor_list yj
+               LEFT JOIN warehouse.ods_dy_day_anchor_info ai ON yj.uid = ai.anchor_no
       WHERE platform = '抖音'
         AND first_live_time != '0000-00-00') t
-GROUP BY t.anchor_no
+GROUP BY t.anchor_uid
 ;
 
 
@@ -26,22 +27,23 @@ GROUP BY t.anchor_no
 -- CREATE TABLE stage.stage_dy_anchor_min_sign_dt
 INSERT IGNORE INTO stage.stage_dy_anchor_min_sign_dt
 SELECT 1005             AS platform_id,
-       t.anchor_no,
+       t.anchor_uid,
        MIN(min_sign_dt) AS min_sign_dt
-FROM (SELECT al.anchor_no,
+FROM (SELECT al.anchor_uid,
              MIN(al.sign_time) AS min_sign_dt
       FROM warehouse.ods_dy_day_anchor_live al
       WHERE al.signing_time IS NOT NULL
         AND al.signing_time <> 0
-      GROUP BY al.anchor_no
+      GROUP BY al.anchor_uid
       UNION
       SELECT yj.uid       AS anchor_no,
              yj.sign_time AS min_sign_dt
       FROM warehouse.ods_yujia_anchor_list yj
+               LEFT JOIN warehouse.ods_dy_day_anchor_info ai ON yj.uid = ai.anchor_no
       WHERE platform = '抖音'
         AND yj.sign_time <> '0000-00-00'
      ) t
-GROUP BY t.anchor_no
+GROUP BY t.anchor_uid
 ;
 
 
