@@ -5,8 +5,8 @@ FROM warehouse.dw_dy_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_dy_day_anchor_live
 SELECT al.*,
-       al.revenue * al.anchor_settle_rate                                     AS anchor_income,
-       al.revenue * 0.1                                                       AS guild_income,
+       IFNULL(al.revenue, 0) * IFNULL(al.anchor_settle_rate, 0)                                     AS anchor_income,
+       IFNULL(al.revenue, 0) * 0.1                                                       AS guild_income,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
@@ -26,8 +26,8 @@ SELECT al.*,
            WHEN mal.revenue / 10 / 10000 > 0 THEN '0-3'
            ELSE '0' END                                                       AS revenue_level
 FROM warehouse.ods_dy_day_anchor_live al
-         LEFT JOIN stage.stage_dy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
-         LEFT JOIN stage.stage_dy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
+         LEFT JOIN stage.stage_dy_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
+         LEFT JOIN stage.stage_dy_anchor_min_sign_dt ams ON al.anchor_uid = ams.anchor_uid
          LEFT JOIN stage.stage_dy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
