@@ -289,7 +289,7 @@ SELECT dt,
        0      AS guild_income,
        0      AS anchor_income
 FROM bireport.rpt_day_hy_guild_new
-WHERE channel_num = 'all'
+WHERE channel_type = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 

@@ -306,8 +306,8 @@ SELECT dt,
        guild_income,
        anchor_income
 FROM bireport.rpt_day_yy_guild_new
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-  AND channel_num = 'all'
+WHERE channel_num = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 -- 报表用，计算上周、上月同期数据---
