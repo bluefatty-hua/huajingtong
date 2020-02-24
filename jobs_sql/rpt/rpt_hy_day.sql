@@ -107,7 +107,7 @@ GROUP BY dt,
 
 
 
-REPLACE INTO stage.rpt_day_hy_guild_new_tmp (dt, channel_type, channel_num, revenue_level,
+REPLACE INTO bireport.rpt_day_hy_guild_new (dt, channel_type, channel_num, revenue_level,
                                              newold_state, active_state, anchor_cnt, live_cnt, duration, revenue)
 SELECT *
 FROM (SELECT dt,
@@ -120,7 +120,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -139,7 +139,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -158,7 +158,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -177,7 +177,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -196,7 +196,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -215,7 +215,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -234,7 +234,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -253,7 +253,7 @@ FROM (SELECT dt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
-      FROM stage.rpt_day_hy_guild_new_tmp
+      FROM bireport.rpt_day_hy_guild_new
       WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
@@ -265,7 +265,6 @@ WHERE dt IS NOT NULL
 
 
 -- - rpt_day_all_new ----
-
 REPLACE INTO bireport.rpt_day_all_new
 (dt,
  platform,
@@ -293,6 +292,7 @@ FROM bireport.rpt_day_hy_guild_new
 WHERE channel_num = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
+
 
 -- 报表用，计算上周、上月同期数据---
 REPLACE INTO bireport.rpt_day_hy_guild_new_view
