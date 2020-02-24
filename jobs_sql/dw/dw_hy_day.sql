@@ -92,6 +92,7 @@ INSERT INTO warehouse.dw_huya_day_anchor_live
 SELECT ai.dt                                                                  AS dt,
        ai.platform_id,
        ai.platform_name,
+       aci.channel_type,
        ai.channel_id,
        ai.channel_num,
        ai.anchor_uid,
@@ -114,7 +115,7 @@ SELECT ai.dt                                                                  AS
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
        mal.duration                                                           AS last_month_duration,
-       mal.live_days AS last_month_live_days,
+       mal.live_days                                                          AS last_month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
        CASE
            WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
@@ -141,7 +142,8 @@ FROM warehouse.dw_huya_day_anchor_info ai
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       ai.anchor_uid = mal.anchor_uid
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
-WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+         LEFT JOIN warehouse.ods_hy_account_info aci ON ai.channel_id = aci.channel_id
+# WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -153,34 +155,36 @@ DELETE
 FROM warehouse.dw_huya_day_guild_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_huya_day_guild_live
-SELECT cd.dt,
-       cd.platform_id,
-       cd.platform_name,
-       cd.channel_id,
-       cd.channel_num              AS channel_num,
-       cd.ow                       AS ow,
-       cd.channel_name             AS channel_name,
-       cd.is_platinum,
-       cd.sign_count,
-       cd.sign_limit,
+SELECT gi.dt,
+       gi.platform_id,
+       gi.platform_name,
+       ai.channel_type,
+       gi.channel_id,
+       gi.channel_num              AS channel_num,
+       gi.ow                       AS ow,
+       gi.channel_name             AS channel_name,
+       gi.is_platinum,
+       gi.sign_count,
+       gi.sign_limit,
        cr.live_cnt,
        IFNULL(cr.revenue, 0)       AS revenue,
        IFNULL(cgi.gift_income, 0)  AS gift_income,
        IFNULL(cgu.guard_income, 0) AS guard_income,
        IFNULL(cn.noble_income, 0)  AS noble_income,
-       cd.logo,
-       cd.desc,
-       cd.create_time,
+       gi.logo,
+       gi.desc,
+       gi.create_time,
        cgi.calc_month              AS gift_calc_month,
        cgu.calc_month              AS guard_calc_month,
        cn.calc_month               AS noble_calc_month
-FROM warehouse.dw_huya_day_guild_info cd
-         LEFT JOIN warehouse.ods_huya_day_guild_live_revenue cr ON cd.dt = cr.dt AND cd.channel_id = cr.channel_id
+FROM warehouse.dw_huya_day_guild_info gi
+         LEFT JOIN warehouse.ods_huya_day_guild_live_revenue cr ON gi.dt = cr.dt AND gi.channel_id = cr.channel_id
          LEFT JOIN warehouse.ods_huya_day_guild_live_income_gift cgi
-                   ON cd.dt = cgi.dt AND cd.channel_id = cgi.channel_id
+                   ON gi.dt = cgi.dt AND gi.channel_id = cgi.channel_id
          LEFT JOIN warehouse.ods_huya_day_guild_live_income_guard cgu
-                   ON cd.dt = cgu.dt AND cd.channel_id = cgu.channel_id
-         LEFT JOIN warehouse.ods_huya_day_guild_live_income_noble cn ON cd.dt = cn.dt AND cd.channel_id = cn.channel_id
-WHERE cd.dt BETWEEN '{start_date}' AND '{end_date}'
+                   ON gi.dt = cgu.dt AND gi.channel_id = cgu.channel_id
+         LEFT JOIN warehouse.ods_huya_day_guild_live_income_noble cn ON gi.dt = cn.dt AND gi.channel_id = cn.channel_id
+         LEFT JOIN warehouse.ods_hy_account_info ai ON gi.channel_id = ai.channel_id
+    WHERE gi.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 

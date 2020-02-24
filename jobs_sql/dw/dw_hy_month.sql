@@ -87,37 +87,38 @@ DELETE
 FROM warehouse.dw_huya_month_anchor_live
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO warehouse.dw_huya_month_anchor_live
-SELECT t1.dt,
-       t1.channel_id,
-       t2.channel_num,
-       t1.anchor_uid,
-       t2.anchor_no,
-       t2.nick,
-       t2.comment,
-       t1.duration,
-       t1.live_days,
-       t1.revenue,
-       t1.peak_pcu_avg,
-       t1.peak_pcu_max,
-       t1.peak_pcu_min,
-       t2.platform_id,
-       t2.platform_name,
-       t2.activity_days,
-       t2.months,
-       t2.ow_percent,
-       t2.sign_time,
-       t2.surplus_days,
-       t2.avatar AS avatar,
-       t1.vir_coin_name,
-       t1.vir_coin_rate,
-       t1.include_pf_amt,
-       t1.pf_amt_rate
+SELECT al.dt,
+       aci.channel_type,
+       al.channel_id,
+       ai.channel_num,
+       al.anchor_uid,
+       ai.anchor_no,
+       ai.nick,
+       ai.comment,
+       al.duration,
+       al.live_days,
+       al.revenue,
+       al.peak_pcu_avg,
+       al.peak_pcu_max,
+       al.peak_pcu_min,
+       ai.platform_id,
+       ai.platform_name,
+       ai.activity_days,
+       ai.months,
+       ai.ow_percent,
+       ai.sign_time,
+       ai.surplus_days,
+       ai.avatar AS avatar,
+       al.vir_coin_name,
+       al.vir_coin_rate,
+       al.include_pf_amt,
+       al.pf_amt_rate
 FROM (SELECT CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01') AS dt,
              anchor_uid,
              channel_id,
              SUM(IFNULL(duration, 0))                AS duration,
              SUM(IFNULL(live_status, 0))             AS live_days,
-             SUM(IFNULL(revenue, 0))                  AS revenue,
+             SUM(IFNULL(revenue, 0))                 AS revenue,
              AVG(IF(peak_pcu > 0, peak_pcu, NULL))   AS peak_pcu_avg,
              MAX(peak_pcu)                           AS peak_pcu_max,
              MIN(IF(peak_pcu > 0, peak_pcu, NULL))   AS peak_pcu_min,
@@ -129,9 +130,10 @@ FROM (SELECT CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01') AS dt,
       WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
       GROUP BY CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01'),
                anchor_uid,
-               channel_id) t1
-         LEFT JOIN warehouse.dw_huya_month_anchor_info t2
-                   ON t1.channel_id = t2.channel_id AND t1.anchor_uid = t2.anchor_uid AND t2.dt = t1.dt
+               channel_id) al
+         LEFT JOIN warehouse.dw_huya_month_anchor_info ai
+                   ON al.channel_id = ai.channel_id AND al.anchor_uid = ai.anchor_uid AND ai.dt = al.dt
+         LEFT JOIN warehouse.ods_hy_account_info aci ON al.channel_id = aci.channel_id
 ;
 
 
@@ -206,10 +208,11 @@ FROM warehouse.dw_huya_month_guild_live
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO warehouse.dw_huya_month_guild_live
 SELECT CONCAT(DATE_FORMAT(t3.dt, '%Y-%m'), '-01') AS dt,
-       t1.channel_id,
-       t1.channel_num,
        t1.platform_id,
        t1.platform_name,
+       aci.channel_type,
+       t1.channel_id,
+       t1.channel_num,
        t1.ow,
        t1.channel_name,
        t1.logo,
@@ -222,18 +225,19 @@ SELECT CONCAT(DATE_FORMAT(t3.dt, '%Y-%m'), '-01') AS dt,
        t3.gift_income,
        t4.guard_income,
        t5.noble_income
-FROM  warehouse.dw_huya_month_guild_info t1
+FROM warehouse.dw_huya_month_guild_info t1
          LEFT JOIN
-         stage.stage_huya_month_guild_live_revenue t2
+     stage.stage_huya_month_guild_live_revenue t2
      ON t2.channel_id = t1.channel_id AND t1.dt = t2.dt
          LEFT JOIN
-         stage.stage_huya_month_guild_live_gift_income t3
+     stage.stage_huya_month_guild_live_gift_income t3
      ON t3.channel_id = t1.channel_id AND t1.dt = t3.dt
          LEFT JOIN
-         stage.stage_huya_month_guild_live_guard_income t4
+     stage.stage_huya_month_guild_live_guard_income t4
      ON t4.channel_id = t1.channel_id AND t4.dt = t1.dt
          LEFT JOIN stage.stage_huya_month_guild_live_noble_income t5
                    ON t5.channel_id = t1.channel_id AND t5.dt = t1.dt
+         LEFT JOIN warehouse.ods_hy_account_info aci ON t1.channel_id = aci.channel_id
 WHERE DATE_FORMAT(t1.dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 ;
 
