@@ -143,7 +143,7 @@ FROM warehouse.dw_huya_day_anchor_info ai
                       ai.anchor_uid = mal.anchor_uid
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
          LEFT JOIN warehouse.ods_hy_account_info aci ON ai.channel_id = aci.channel_id
-# WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
