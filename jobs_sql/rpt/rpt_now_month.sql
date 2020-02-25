@@ -74,7 +74,7 @@ WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_d
 -- rpt_month_yy_guild_new
 DELETE
 FROM bireport.rpt_month_now_guild_new
-WHERE dt = '{month}';
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO bireport.rpt_month_now_guild_new
 SELECT gl.dt,
        gl.platform_id,
