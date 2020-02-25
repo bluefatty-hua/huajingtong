@@ -72,7 +72,7 @@ SELECT DATE_FORMAT(dt, '%Y-%m-01')                                         AS dt
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END) AS live_days,
        SUM(t.duration)                                                     AS duration,
        SUM(t.revenue_rmb)                                                  AS revenue_rmb
-FROM warehouse.ods_now_day_anchor_live t
+FROM warehouse.dw_now_day_anchor_live t
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          t.platform_id,
