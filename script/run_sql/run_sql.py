@@ -1,6 +1,5 @@
 # -*- coding: utf8 -*-
 
-# 注意传参格式 eg: slq_file_path ['{'start_date':'2019-01-01','end_date':'2019-12-31','platform_id':'1004,1005,1000'}']
 import argparse
 import pymysql
 from datetime import datetime
@@ -18,25 +17,21 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 # 链接数据库
-conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJL_ETL_DB['user'], password=XJL_ETL_DB['password'])
+conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJL_ETL_DB['user'],
+                       password=XJL_ETL_DB['password'])
 cursor = conn.cursor()
 
 # 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
+cur_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
 start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
 end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 month = (date.today() + timedelta(days=-1)).strftime('%Y-%m-01')
-
-# 获取所有平台ID
-cursor.execute('select id from warehouse.platform;')
-# platform_id = cursor.fetchall()
-platform_id = str([pf_id for pf_id in [list(t)[0] for t in cursor.fetchall()]]).replace('[', '(').replace(']', ')')
 
 # 解析参数
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--start_date', default=start_date, help='开始时间 xxxx-xx-xx')
 parser.add_argument('-e', '--end_date', default=end_date, help='结束时间 xxxx-xx-xx')
 parser.add_argument('-m', '--month', default=month, help='月 xxxx-xx-01')
-parser.add_argument('-p', '--platform_id', default=platform_id, help='指定平台ID')
 parser.add_argument('-l', '--log_file', default=None, help='指定的log文件')
 parser.add_argument('-f', '--sql_file', help='指定执行SQL文件')
 args = parser.parse_args()
@@ -73,10 +68,10 @@ def run_sql(sql_param, file):
 
 def format_param_dict(args):
     param = {
+        'cur_date': cur_date,
         'start_date': args.start_date,
         'end_date': args.end_date,
-        'month': args.month,
-        'platform_id': args.platform_id
+        'month': args.month
     }
     logging.info('------------------------------PARAM-----------------------------')
     logging.info(param)
@@ -107,4 +102,3 @@ if __name__ == '__main__':
         cursor.close()
         conn.close()
         logging.info('end_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-
