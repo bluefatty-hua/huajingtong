@@ -44,7 +44,7 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE '{end_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_now_day_anchor_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+      WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
      ) al
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          al.platform_id,
@@ -70,16 +70,30 @@ SELECT DATE_FORMAT(dt, '%Y-%m-01')                                         AS dt
        t.platform_id,
        t.platform_name,
        t.backend_account_id,
-       anchor_no,
+       t.city,
+       t.active_state,
+       t.month_newold_state                                                AS newold_state,
+       t.revenue_level,
+       t.anchor_no,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END) AS live_days,
        SUM(t.duration)                                                     AS duration,
        SUM(t.revenue_rmb)                                                  AS revenue_rmb
-FROM warehouse.dw_now_day_anchor_live t
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m')
+FROM (SELECT *,
+             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
+                                                                    WHEN dt < DATE_FORMAT('{end_date}', '%Y-%m-01')
+                                                                        THEN LAST_DAY(dt)
+                                                                    ELSE '{end_date}' END, 180) AS month_newold_state
+      FROM warehouse.dw_now_day_anchor_live
+      WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+     ) t
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          t.platform_id,
          t.platform_name,
          t.backend_account_id,
-         anchor_no
+         t.city,
+         t.active_state,
+         t.month_newold_state,
+         t.revenue_level,
+         t.anchor_no
 ;
 

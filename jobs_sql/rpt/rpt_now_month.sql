@@ -340,6 +340,7 @@ FROM bireport.rpt_month_now_guild_new t1
          LEFT JOIN bireport.rpt_month_now_guild_new t3
                    ON t1.dt - INTERVAL 1 MONTH = t3.dt
                        AND t1.backend_account_id = t3.backend_account_id
+                          AND t1.city = t3.city
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
