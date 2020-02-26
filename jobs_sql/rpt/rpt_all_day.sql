@@ -13,7 +13,7 @@ FROM (SELECT dt,
              SUM(guild_income)            AS guild_income,
              SUM(anchor_income)           AS anchor_income
       FROM bireport.rpt_day_all_new
-      WHERE (revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, platform, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -32,7 +32,7 @@ FROM (SELECT dt,
              SUM(guild_income)            AS guild_income,
              SUM(anchor_income)           AS anchor_income
       FROM bireport.rpt_day_all_new
-      WHERE (revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, newold_state, active_state, platform
       WITH ROLLUP
@@ -51,7 +51,7 @@ FROM (SELECT dt,
              SUM(guild_income)            AS guild_income,
              SUM(anchor_income)           AS anchor_income
       FROM bireport.rpt_day_all_new
-      WHERE (revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, platform, revenue_level
       WITH ROLLUP
@@ -70,7 +70,7 @@ FROM (SELECT dt,
              SUM(guild_income)            AS guild_income,
              SUM(anchor_income)           AS anchor_income
       FROM bireport.rpt_day_all_new
-      WHERE (revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, platform, revenue_level
       WITH ROLLUP
@@ -89,7 +89,7 @@ FROM (SELECT dt,
              SUM(guild_income)            AS guild_income,
              SUM(anchor_income)           AS anchor_income
       FROM bireport.rpt_day_all_new
-      WHERE (revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, platform, revenue_level, platform, active_state
       WITH ROLLUP
