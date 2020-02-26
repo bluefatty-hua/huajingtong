@@ -5,6 +5,7 @@ FROM warehouse.dw_now_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_now_day_anchor_live
 SELECT al.*,
+       IFNULL(at.city, '未知')                                                  AS city,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
@@ -29,6 +30,7 @@ FROM warehouse.ods_now_day_anchor_live al
          LEFT JOIN stage.stage_now_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
+         LEFT JOIN warehouse.ods_yj_anchor_team at ON al.anchor_no = at.anchor_no
 WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
   AND al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
@@ -49,6 +51,7 @@ SELECT al.dt,
        al.active_state,
        al.newold_state,
        al.revenue_level,
+       al.city,
        al.anchor_cnt,
        al.anchor_live_cnt,
        ac.anchor_live_cnt  AS anchor_live_cnt_true,
@@ -60,6 +63,7 @@ FROM (SELECT t.dt,
              t.platform_id,
              t.platform_name,
              t.backend_account_id,
+             t.city,
              t.active_state,
              t.newold_state,
              t.revenue_level,
@@ -73,6 +77,7 @@ FROM (SELECT t.dt,
                t.platform_id,
                t.platform_name,
                t.backend_account_id,
+               t.city,
                t.active_state,
                t.newold_state,
                t.revenue_level) al
