@@ -78,6 +78,7 @@ SELECT DATE_FORMAT(dt, '%Y-%m-01')                                         AS dt
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END) AS live_days,
        SUM(t.duration)                                                     AS duration,
        SUM(t.revenue_rmb)                                                  AS revenue_rmb
+-- cur_date: t-1
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
