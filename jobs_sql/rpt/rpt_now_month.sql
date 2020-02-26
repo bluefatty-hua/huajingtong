@@ -98,7 +98,7 @@ SELECT gl.dt,
        ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income_orig
 FROM warehouse.dw_now_month_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
-# WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 
@@ -127,7 +127,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, backend_account_id, city, revenue_level, newold_state, active_state
       WITH ROLLUP
 
@@ -152,7 +152,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, city, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
 
@@ -177,7 +177,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, city, newold_state, revenue_level, active_state, backend_account_id
       WITH ROLLUP
 
@@ -202,7 +202,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, city, active_state, newold_state, revenue_level, backend_account_id
       WITH ROLLUP
 
@@ -227,7 +227,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id, city
       WITH ROLLUP
 
@@ -252,7 +252,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, newold_state, active_state, backend_account_id, city, revenue_level
       WITH ROLLUP
 
@@ -277,7 +277,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_now_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-#         AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
       GROUP BY dt, active_state, backend_account_id, city, revenue_level, newold_state
       WITH ROLLUP
      ) t
