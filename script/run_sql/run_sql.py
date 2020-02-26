@@ -22,7 +22,7 @@ conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJ
 cursor = conn.cursor()
 
 # 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
-cur_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
+cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
 end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 month = (date.today() + timedelta(days=-1)).strftime('%Y-%m-01')
