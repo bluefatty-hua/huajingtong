@@ -139,7 +139,7 @@ SELECT dt,
        guild_income,
        anchor_income
 FROM bireport.rpt_day_now_guild_new
-WHERE backend_account_id = 'all'
+WHERE backend_account_id = 'all' AND city = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
