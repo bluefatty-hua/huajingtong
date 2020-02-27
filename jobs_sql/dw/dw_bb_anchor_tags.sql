@@ -43,20 +43,18 @@ GROUP BY t.anchor_no
 ;
 
 -- 计算每月主播开播天数，开播时长，流水
-# DROP TABLE IF EXISTS stage.stage_bb_month_anchor_live;
-# CREATE TABLE stage.stage_bb_month_anchor_live
-DELETE
-FROM stage.stage_bb_month_anchor_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
-INSERT INTO stage.stage_bb_month_anchor_live
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                         AS dt,
+-- DROP TABLE IF EXISTS stage.stage_bb_month_anchor_live;
+-- CREATE TABLE stage.stage_bb_month_anchor_live
+REPLACE INTO stage.stage_bb_month_anchor_live
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
        al.platform_id,
        al.anchor_uid,
        SUM(anchor_total_coin)                                             AS revenue,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
        SUM(al.duration)                                                   AS duration
 FROM warehouse.ods_bb_day_anchor_live al
-WHERE al.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE al.dt >= '{month}'
+  AND al.dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.anchor_uid
