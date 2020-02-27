@@ -129,9 +129,9 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        SUM(al.special_coin)                                                         AS special_coin
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('{end_date}', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
-                                                                    ELSE '{end_date}' END, 180) AS month_newold_state
+                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_bb_day_anchor_live
       WHERE (contract_status <> 2 OR contract_status IS NULL)
         AND DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
