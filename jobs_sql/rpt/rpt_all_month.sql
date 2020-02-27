@@ -78,7 +78,7 @@ SELECT dt,
        anchor_income
 FROM bireport.rpt_month_bb_guild_new
 WHERE backend_account_id = 0
-#   AND dt = '{month}'
+  AND dt = '{month}'
 ;
 
 
