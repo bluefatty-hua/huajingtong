@@ -246,7 +246,7 @@ SELECT dt,
        SUM(revenue)       AS revenue,
        SUM(guild_income)  AS guild_income,
        SUM(anchor_income) AS anchor_income
-FROM bireport.rpt_day_all_new
+FROM bireport.rpt_month_all_new
 WHERE platform != 'all'
   AND dt = '{month}'
 GROUP BY dt, revenue_level, newold_state, active_state
