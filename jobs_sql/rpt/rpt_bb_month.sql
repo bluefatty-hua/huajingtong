@@ -79,7 +79,7 @@ FROM (SELECT dt,
          LEFT JOIN spider_bb_backend.account_info ai ON gl.backend_account_id = ai.backend_account_id
 ;
 
-
+-- =====================================================================================================================
 -- rpt_month_bb_guild_new
 REPLACE INTO bireport.rpt_month_bb_guild_new
 SELECT gl.dt,
@@ -143,7 +143,7 @@ FROM (
                 SUM(anchor_income)              AS anchor_income,
                 SUM(anchor_income_orig)         AS anchor_income_orig
          FROM bireport.rpt_month_bb_guild_new
-         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+         WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
            AND dt = '{month}'
          GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
@@ -168,7 +168,7 @@ FROM (
                 SUM(anchor_income)              AS anchor_income,
                 SUM(anchor_income_orig)         AS anchor_income_orig
          FROM bireport.rpt_month_bb_guild_new
-         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+         WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
            AND dt = '{month}'
          GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
@@ -193,7 +193,7 @@ FROM (
                 SUM(anchor_income)              AS anchor_income,
                 SUM(anchor_income_orig)         AS anchor_income_orig
          FROM bireport.rpt_month_bb_guild_new
-         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+         WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
            AND dt = '{month}'
          GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
@@ -218,7 +218,7 @@ FROM (
                 SUM(anchor_income)              AS anchor_income,
                 SUM(anchor_income_orig)         AS anchor_income_orig
          FROM bireport.rpt_month_bb_guild_new
-         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+         WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
            AND dt = '{month}'
          GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
@@ -242,7 +242,7 @@ FROM (
                 SUM(anchor_income)              AS anchor_income,
                 SUM(anchor_income_orig)         AS anchor_income_orig
          FROM bireport.rpt_month_bb_guild_new
-         WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+         WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
            AND dt = '{month}'
          GROUP BY dt, newold_state, revenue_level, backend_account_id, active_state
