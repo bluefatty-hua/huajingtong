@@ -264,36 +264,6 @@ WHERE dt IS NOT NULL
 ;
 
 
--- - rpt_day_all_new ----
-REPLACE INTO bireport.rpt_day_all_new
-(dt,
- platform,
- revenue_level,
- newold_state,
- active_state,
- anchor_cnt,
- live_cnt,
- duration,
- revenue,
- guild_income,
- anchor_income)
-SELECT dt,
-       'HUYA' as platform,
-       revenue_level,
-       newold_state,
-       active_state,
-       anchor_cnt,
-       live_cnt,
-       duration,
-       revenue,
-       0      AS guild_income,
-       0      AS anchor_income
-FROM bireport.rpt_day_hy_guild_new
-WHERE channel_type = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
-;
-
-
 -- 报表用，计算上周、上月同期数据---
 REPLACE INTO bireport.rpt_day_hy_guild_new_view
 SELECT t1.dt,

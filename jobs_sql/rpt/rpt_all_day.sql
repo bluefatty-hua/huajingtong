@@ -1,20 +1,195 @@
+-- - rpt_day_all_new ----
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       'bilibili' AS platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       guild_income,
+       anchor_income
+FROM bireport.rpt_day_bb_guild_new
+WHERE remark = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       'DouYin' as platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       IFNULL(guild_income, 0) AS guild_income,
+       IFNULL(anchor_income, 0) AS anchor_income
+FROM bireport.rpt_day_dy_guild_new
+WHERE backend_account_id = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       guild_income,
+       anchor_income
+FROM bireport.rpt_day_fx_guild_new
+WHERE backend_account_id = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       'HUYA' as platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       0      AS guild_income,
+       0      AS anchor_income
+FROM bireport.rpt_day_hy_guild_new
+WHERE channel_type = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       'NOW' as platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       guild_income,
+       anchor_income
+FROM bireport.rpt_day_now_guild_new
+WHERE backend_account_id = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+REPLACE INTO bireport.rpt_day_all_new
+(dt,
+ platform,
+ revenue_level,
+ newold_state,
+ active_state,
+ anchor_cnt,
+ live_cnt,
+ duration,
+ revenue,
+ guild_income,
+ anchor_income)
+SELECT dt,
+       'YY' AS platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       anchor_cnt,
+       live_cnt,
+       duration,
+       revenue,
+       guild_income,
+       anchor_income
+FROM bireport.rpt_day_yy_guild_new
+WHERE channel_num = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
 REPLACE INTO bireport.rpt_day_all_new (dt, platform, revenue_level, newold_state, active_state, anchor_cnt, live_cnt,
                                        duration, revenue, guild_income, anchor_income)
 SELECT dt,
-             'all'   AS platform,
-            revenue_level,
-             newold_state,
-            active_state,
-             SUM(anchor_cnt)              AS anchor_cnt,
-             SUM(live_cnt)                AS live_cnt,
-             SUM(duration)                AS duration,
-             SUM(revenue)                 AS revenue,
-             SUM(guild_income)            AS guild_income,
-             SUM(anchor_income)           AS anchor_income
-      FROM bireport.rpt_day_all_new
-      WHERE platform != 'all' 
-        AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt,revenue_level, newold_state, active_state
+       'all'              AS platform,
+       revenue_level,
+       newold_state,
+       active_state,
+       SUM(anchor_cnt)    AS anchor_cnt,
+       SUM(live_cnt)      AS live_cnt,
+       SUM(duration)      AS duration,
+       SUM(revenue)       AS revenue,
+       SUM(guild_income)  AS guild_income,
+       SUM(anchor_income) AS anchor_income
+FROM bireport.rpt_day_all_new
+WHERE platform != 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}'
+GROUP BY dt, revenue_level, newold_state, active_state
 ;
 
 

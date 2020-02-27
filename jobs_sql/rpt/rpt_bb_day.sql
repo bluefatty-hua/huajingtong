@@ -253,37 +253,6 @@ WHERE dt IS NOT NULL
 ;
 
 
--- - rpt_day_all_new ----
-
-REPLACE INTO bireport.rpt_day_all_new
-(dt,
- platform,
- revenue_level,
- newold_state,
- active_state,
- anchor_cnt,
- live_cnt,
- duration,
- revenue,
- guild_income,
- anchor_income)
-SELECT dt,
-       'bilibili' AS platform,
-       revenue_level,
-       newold_state,
-       active_state,
-       anchor_cnt,
-       live_cnt,
-       duration,
-       revenue,
-       guild_income,
-       anchor_income
-FROM bireport.rpt_day_bb_guild_new
-WHERE remark = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
-;
-
-
 -- 报表用，计算上周、上月同期数据---
 REPLACE INTO bireport.rpt_day_bb_guild_new_view
 SELECT t1.dt,
