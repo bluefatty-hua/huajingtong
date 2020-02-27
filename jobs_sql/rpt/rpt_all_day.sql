@@ -1,11 +1,10 @@
 REPLACE INTO bireport.rpt_day_all_new (dt, platform, revenue_level, newold_state, active_state, anchor_cnt, live_cnt,
                                        duration, revenue, guild_income, anchor_income)
-SELECT *
-FROM (SELECT dt,
-             IFNULL(platform, 'all')      AS platform,
-             IFNULL(revenue_level, 'all') AS revenue_level,
-             IFNULL(newold_state, 'all')  AS newold_state,
-             IFNULL(active_state, 'all')  AS active_state,
+SELECT dt,
+             'all'   AS platform,
+            revenue_level,
+             newold_state,
+            active_state,
              SUM(anchor_cnt)              AS anchor_cnt,
              SUM(live_cnt)                AS live_cnt,
              SUM(duration)                AS duration,
@@ -13,88 +12,9 @@ FROM (SELECT dt,
              SUM(guild_income)            AS guild_income,
              SUM(anchor_income)           AS anchor_income
       FROM bireport.rpt_day_all_new
-      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE platform != 'all' 
         AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt, platform, revenue_level, newold_state, active_state
-      WITH ROLLUP
-
-      UNION
-
-      SELECT dt,
-             IFNULL(platform, 'all')      AS platform,
-             IFNULL(revenue_level, 'all') AS revenue_level,
-             IFNULL(newold_state, 'all')  AS newold_state,
-             IFNULL(active_state, 'all')  AS active_state,
-             SUM(anchor_cnt)              AS anchor_cnt,
-             SUM(live_cnt)                AS live_cnt,
-             SUM(duration)                AS duration,
-             SUM(revenue)                 AS revenue,
-             SUM(guild_income)            AS guild_income,
-             SUM(anchor_income)           AS anchor_income
-      FROM bireport.rpt_day_all_new
-      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt, revenue_level, newold_state, active_state, platform
-      WITH ROLLUP
-
-      UNION
-
-      SELECT dt,
-             IFNULL(platform, 'all')      AS platform,
-             IFNULL(revenue_level, 'all') AS revenue_level,
-             IFNULL(newold_state, 'all')  AS newold_state,
-             IFNULL(active_state, 'all')  AS active_state,
-             SUM(anchor_cnt)              AS anchor_cnt,
-             SUM(live_cnt)                AS live_cnt,
-             SUM(duration)                AS duration,
-             SUM(revenue)                 AS revenue,
-             SUM(guild_income)            AS guild_income,
-             SUM(anchor_income)           AS anchor_income
-      FROM bireport.rpt_day_all_new
-      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt, newold_state, active_state, platform, revenue_level
-      WITH ROLLUP
-
-      UNION
-
-      SELECT dt,
-             IFNULL(platform, 'all')      AS platform,
-             IFNULL(revenue_level, 'all') AS revenue_level,
-             IFNULL(newold_state, 'all')  AS newold_state,
-             IFNULL(active_state, 'all')  AS active_state,
-             SUM(anchor_cnt)              AS anchor_cnt,
-             SUM(live_cnt)                AS live_cnt,
-             SUM(duration)                AS duration,
-             SUM(revenue)                 AS revenue,
-             SUM(guild_income)            AS guild_income,
-             SUM(anchor_income)           AS anchor_income
-      FROM bireport.rpt_day_all_new
-      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt, newold_state, active_state, platform, revenue_level
-      WITH ROLLUP
-
-      UNION
-
-      SELECT dt,
-             IFNULL(platform, 'all')      AS platform,
-             IFNULL(revenue_level, 'all') AS revenue_level,
-             IFNULL(newold_state, 'all')  AS newold_state,
-             IFNULL(active_state, 'all')  AS active_state,
-             SUM(anchor_cnt)              AS anchor_cnt,
-             SUM(live_cnt)                AS live_cnt,
-             SUM(duration)                AS duration,
-             SUM(revenue)                 AS revenue,
-             SUM(guild_income)            AS guild_income,
-             SUM(anchor_income)           AS anchor_income
-      FROM bireport.rpt_day_all_new
-      WHERE (platform != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN '{start_date}' AND '{end_date}'
-      GROUP BY dt, newold_state, platform, revenue_level, platform, active_state
-      WITH ROLLUP
-     ) t
-WHERE t.dt IS NOT NULL
+      GROUP BY dt,revenue_level, newold_state, active_state
 ;
 
 
