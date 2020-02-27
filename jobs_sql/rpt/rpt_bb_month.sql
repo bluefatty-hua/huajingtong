@@ -31,7 +31,7 @@ FROM warehouse.dw_bb_month_guild_live t
          LEFT JOIN spider_bb_backend.account_info t1 ON t.backend_account_id = t1.backend_account_id
          LEFT JOIN stage.bb_guild_income_rate ig ON t.backend_account_id = ig.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = t.platform_id
-WHERE dt = '{month}'
+# WHERE dt = '{month}'
 GROUP BY t.dt,
          t.platform_id,
          pf.platform_name,
@@ -103,7 +103,7 @@ FROM warehouse.dw_bb_month_guild_live gl
          LEFT JOIN spider_bb_backend.account_info ai ON gl.backend_account_id = ai.backend_account_id
          LEFT JOIN stage.bb_guild_income_rate ig ON gl.backend_account_id = ig.backend_account_id
          lEFT JOIN warehouse.platform pf ON pf.id = gl.platform_id
-WHERE dt = '{month}'
+# WHERE dt = '{month}'
 ;
 
 
@@ -112,7 +112,7 @@ SELECT t.dt,
        t.platform_id,
        t.platform,
        t.backend_account_id,
-       CASE WHEN t.backend_account_id = '0' THEN 'all' ELSE ai.remark END AS remark,
+       CASE WHEN t.backend_account_id = 0 THEN 'all' ELSE ai.remark END AS remark,
        t.revenue_level,
        t.newold_state,
        t.active_state,
@@ -145,7 +145,7 @@ FROM (
          FROM bireport.rpt_month_bb_guild_new
          WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
-           AND dt = '{month}'
+#            AND dt = '{month}'
          GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
          WITH ROLLUP
 
@@ -170,7 +170,7 @@ FROM (
          FROM bireport.rpt_month_bb_guild_new
          WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
-           AND dt = '{month}'
+#            AND dt = '{month}'
          GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
          WITH ROLLUP
 
@@ -195,7 +195,7 @@ FROM (
          FROM bireport.rpt_month_bb_guild_new
          WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
-           AND dt = '{month}'
+#            AND dt = '{month}'
          GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
          WITH ROLLUP
 
@@ -220,7 +220,7 @@ FROM (
          FROM bireport.rpt_month_bb_guild_new
          WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
-           AND dt = '{month}'
+#            AND dt = '{month}'
          GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
          WITH ROLLUP
          UNION
@@ -244,7 +244,7 @@ FROM (
          FROM bireport.rpt_month_bb_guild_new
          WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
-           AND dt = '{month}'
+#            AND dt = '{month}'
          GROUP BY dt, newold_state, revenue_level, backend_account_id, active_state
          WITH ROLLUP) t
          LEFT JOIN spider_bb_backend.account_info ai
@@ -281,7 +281,7 @@ FROM bireport.rpt_month_bb_guild_new t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt = '{month}'
+# WHERE t1.dt = '{month}'
 ;
 
 
@@ -297,7 +297,7 @@ FROM (SELECT dt,
              anchor_cnt AS val
       FROM bireport.rpt_month_bb_guild_new
       WHERE revenue_level != 'all'
-        AND dt = '{month}'
+#         AND dt = '{month}'
       UNION
       SELECT dt,
              backend_account_id,
@@ -308,7 +308,7 @@ FROM (SELECT dt,
              live_cnt AS val
       FROM bireport.rpt_month_bb_guild_new
       WHERE revenue_level != 'all'
-        AND dt = '{month}'
+#         AND dt = '{month}'
       UNION
       SELECT dt,
              backend_account_id,
@@ -319,7 +319,7 @@ FROM (SELECT dt,
              revenue AS val
       FROM bireport.rpt_month_bb_guild_new
       WHERE revenue_level != 'all'
-        AND dt = '{month}'
+#         AND dt = '{month}'
       UNION
       SELECT dt,
              backend_account_id,
@@ -330,7 +330,7 @@ FROM (SELECT dt,
              round(revenue / live_cnt, 0) AS val
       FROM bireport.rpt_month_bb_guild_new
       WHERE revenue_level != 'all'
-        AND dt = '{month}'
+#         AND dt = '{month}'
         AND live_cnt > 0
      ) t
 ;

@@ -191,7 +191,7 @@ FROM (
          FROM bireport.rpt_month_hy_guild_new
          WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
                 active_state != 'all')
-           AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+#            AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
          GROUP BY dt, channel_type, channel_num, revenue_level, newold_state, active_state
          WITH ROLLUP
 
@@ -378,35 +378,6 @@ FROM (
          WITH ROLLUP
      ) t
 WHERE dt IS NOT NULL
-;
-
-
-REPLACE INTO bireport.rpt_month_all_new
-(dt,
- platform,
- revenue_level,
- newold_state,
- active_state,
- anchor_cnt,
- live_cnt,
- duration,
- revenue,
- guild_income,
- anchor_income)
-SELECT dt,
-       platform,
-       revenue_level,
-       newold_state,
-       active_state,
-       anchor_cnt,
-       live_cnt,
-       duration,
-       revenue,
-       guild_income,
-       anchor_income
-FROM bireport.rpt_month_hy_guild_new
-WHERE channel_type = 'all'
-  AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 ;
 
 

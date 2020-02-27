@@ -214,34 +214,6 @@ WHERE dt IS NOT NULL
 ;
 
 
-REPLACE INTO bireport.rpt_month_all_new
-(dt,
- platform,
- revenue_level,
- newold_state,
- active_state,
- anchor_cnt,
- live_cnt,
- duration,
- revenue,
- guild_income,
- anchor_income)
-SELECT dt,
-       platform,
-       revenue_level,
-       newold_state,
-       active_state,
-       anchor_cnt,
-       live_cnt,
-       duration,
-       revenue,
-       guild_income,
-       anchor_income
-FROM bireport.rpt_month_dy_guild_new
-WHERE backend_account_id = 'all'
-  AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
-;
-
 -- 报表用，计算上周、上月同期数据---
 REPLACE INTO bireport.rpt_month_dy_guild_new_view
 SELECT t1.dt,
