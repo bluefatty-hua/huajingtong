@@ -4,7 +4,7 @@ DEBUG = False
 
 LOG_DIR = "/logs/"
 PROJECT_DIR = '/services/xjl_etl/jobs_sql/'
-PROJECT_TEST_DIR = '/services/xjl_etl/script/run_sql/'
+PROJECT_TEST_DIR = '/services/xjl_etl/script/py_script/'
 
 
 EMAIL_CONF = {
