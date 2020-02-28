@@ -29,6 +29,40 @@ WHERE dt = '{month}'
 ;
 
 
+-- 4、虎牙
+REPLACE INTO bireport.rpt_month_all_guild
+SELECT dt,
+       platform_id,
+       platform,
+       channel_num,
+       CASE WHEN anchor_cnt >= 0 THEN anchor_cnt ELSE 0 END                 AS anchor_cnt,
+       CASE WHEN live_cnt >= 0 THEN live_cnt ELSE 0 END                     AS live_cnt,
+       CASE WHEN revenue >= 0 THEN revenue ELSE 0 END                       AS revenue,
+       CASE WHEN revenue_orig >= 0 THEN revenue_orig ELSE 0 END             AS revenue_orig,
+       CASE WHEN guild_income >= 0 THEN guild_income ELSE 0 END             AS guild_income,
+       CASE WHEN guild_income_orig >= 0 THEN guild_income_orig ELSE 0 END   AS guild_income_orig,
+       CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
+       CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
+FROM (
+         SELECT dt,
+                platform_id,
+                platform,
+                channel_num,
+                anchor_cnt,
+                live_cnt,
+                revenue,
+                revenue_orig,
+                guild_income,
+                guild_income_orig,
+                anchor_income,
+                anchor_income_orig
+         FROM bireport.rpt_month_hy_guild
+     ) t
+WHERE dt = '{month}'
+;
+
+
+
 REPLACE INTO bireport.rpt_month_all
 (dt,
  platform,
@@ -278,5 +312,5 @@ FROM bireport.rpt_month_all_new t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-  WHERE t1.dt = '{month}'
+WHERE t1.dt = '{month}'
 ;
