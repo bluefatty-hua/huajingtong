@@ -1,9 +1,6 @@
 -- DROP TABLE IF EXISTS warehouse.dw_dy_xjl_month_guild_live;
 -- CREATE TABLE warehouse.dw_dy_xjl_month_guild_live AS
-DELETE
-FROM warehouse.dw_dy_xjl_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
-INSERT INTO warehouse.dw_dy_xjl_month_guild_live
+REPLACE INTO warehouse.dw_dy_xjl_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                       AS dt,
        al.platform_id,
        al.platform_name,
@@ -25,7 +22,8 @@ FROM (SELECT *,
                                                                     ELSE '{cur_date}' END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_dy_xjl_day_anchor_live
-      WHERE DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
@@ -39,10 +37,7 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
 
 -- DROP TABLE IF EXISTS warehouse.dw_dy_xjl_month_anchor_live;
 -- CREATE TABLE warehouse.dw_dy_xjl_month_anchor_live AS
-DELETE
-FROM warehouse.dw_dy_xjl_month_anchor_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
-INSERT INTO warehouse.dw_dy_xjl_month_anchor_live
+REPLACE INTO warehouse.dw_dy_xjl_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                      AS dt,
        al.platform_id,
        al.platform_name,
@@ -62,7 +57,8 @@ FROM (SELECT *,
                                                                     ELSE '{cur_date}' END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_dy_xjl_day_anchor_live
-      WHERE DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
