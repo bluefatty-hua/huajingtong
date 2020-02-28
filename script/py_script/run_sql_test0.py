@@ -71,7 +71,6 @@ def format_param_dict(args):
         'cur_date': cur_date,
         'start_date': args.start_date,
         'end_date': args.end_date,
-        'month': args.month,
         'platform_id': args.platform_id
     }
     logging.info('------------------------------PARAM-----------------------------')
