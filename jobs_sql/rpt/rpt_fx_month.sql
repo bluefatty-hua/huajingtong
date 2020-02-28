@@ -3,22 +3,22 @@
 -- CREATE TABLE bireport.rpt_month_fx_guild AS
 DELETE
 FROM bireport.rpt_month_fx_guild
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE dt = '{month}';
 INSERT INTO bireport.rpt_month_fx_guild
 SELECT gl.dt,
        gl.platform_id,
        gl.platform_name,
        gl.backend_account_id,
-       SUM(gl.anchor_cnt)                      AS anchor_cnt,
-       SUM(gl.anchor_live_cnt)                 AS live_cnt,
-       SUM(gl.anchor_income / 125 / 0.4)       AS revenue,
-       SUM(gl.anchor_income)                   AS revenue_orig,
+       SUM(gl.anchor_cnt)                       AS anchor_cnt,
+       SUM(gl.anchor_live_cnt)                  AS live_cnt,
+       SUM(gl.anchor_income / 125 / 0.4)        AS revenue,
+       SUM(gl.anchor_income)                    AS revenue_orig,
        SUM(gl.anchor_income / 125 / 0.4 * 0.09) AS guild_income,
-       SUM(gl.anchor_income)                   AS guild_income_orig,
-       SUM(gl.anchor_income / 125)             AS anchor_income,
-       SUM(gl.anchor_income)                   AS anchor_income_orig
+       SUM(gl.anchor_income)                    AS guild_income_orig,
+       SUM(gl.anchor_income / 125)              AS anchor_income,
+       SUM(gl.anchor_income)                    AS anchor_income_orig
 FROM warehouse.dw_fx_month_guild_live gl
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE dt = '{month}'
 GROUP BY gl.dt,
          gl.platform_id,
          gl.platform_name,
@@ -29,7 +29,7 @@ GROUP BY gl.dt,
 DELETE
 FROM bireport.rpt_month_all_guild
 WHERE platform_id = 1004
-  AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+  AND dt = '{month}';
 INSERT INTO bireport.rpt_month_all_guild
 SELECT dt,
        platform_id,
@@ -55,49 +55,49 @@ FROM (SELECT dt,
              guild_income_orig,
              anchor_income,
              anchor_income_orig
-      FROM bireport.rpt_month_fx_guild) t
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      FROM bireport.rpt_month_fx_guild
+      WHERE dt = '{month}'
+     ) t
 ;
 
 
 -- rpt_month_fx_guild_new
 DELETE
 FROM bireport.rpt_month_fx_guild_new
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE dt = '{month}';
 INSERT INTO bireport.rpt_month_fx_guild_new
 SELECT gl.dt,
        gl.platform_id,
-       gl.platform_name                   AS platform,
+       gl.platform_name                    AS platform,
        gl.backend_account_id,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
        gl.anchor_cnt,
-       gl.anchor_live_cnt                 AS live_cnt,
+       gl.anchor_live_cnt                  AS live_cnt,
        gl.duration,
        -- 平台流水
-       gl.anchor_income / 125 / 0.4       AS revenue,
-       gl.anchor_income                   AS revenue_orig,
+       gl.anchor_income / 125 / 0.4        AS revenue,
+       gl.anchor_income                    AS revenue_orig,
        -- 公会收入
        gl.anchor_income / 125 / 0.4 * 0.09 AS guild_income,
-       gl.anchor_income                   AS guild_income_orig,
+       gl.anchor_income                    AS guild_income_orig,
        -- 主播收入
-       gl.anchor_income / 125             AS anchor_income,
-       gl.anchor_income                   AS anchor_income_orig
+       gl.anchor_income / 125              AS anchor_income,
+       gl.anchor_income                    AS anchor_income_orig
 FROM warehouse.dw_fx_month_guild_live gl
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE dt = '{month}'
 ;
 
 
-
-REPLACE into bireport.rpt_month_fx_guild_new (dt, platform_id, platform, backend_account_id, revenue_level,
+REPLACE INTO bireport.rpt_month_fx_guild_new (dt, platform_id, platform, backend_account_id, revenue_level,
                                               newold_state, active_state, anchor_cnt, live_cnt, duration, revenue,
                                               revenue_orig, guild_income, guild_income_orig, anchor_income,
                                               anchor_income_orig)
 SELECT *
 FROM (SELECT dt,
              MAX(platform_id)                  AS platform_id,
-             MAX(platform)                        platform,
+             MAX(platform)                     AS platform,
              IFNULL(backend_account_id, 'all') AS backend_account_id,
              IFNULL(revenue_level, 'all')      AS revenue_level,
              IFNULL(newold_state, 'all')       AS newold_state,
@@ -113,7 +113,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
       WITH ROLLUP
 
@@ -137,7 +137,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
 
@@ -161,7 +161,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
       WITH ROLLUP
 
@@ -185,7 +185,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
       WITH ROLLUP
 
@@ -209,7 +209,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild_new
       WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       GROUP BY dt, backend_account_id, newold_state, revenue_level, active_state
       WITH ROLLUP
      ) t
@@ -245,7 +245,7 @@ FROM bireport.rpt_month_fx_guild_new t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE t1.dt = '{month}'
 ;
 
 
@@ -261,7 +261,7 @@ FROM (SELECT dt,
              anchor_cnt AS val
       FROM bireport.rpt_month_fx_guild_new
       WHERE revenue_level != 'all'
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       UNION
       SELECT dt,
              backend_account_id,
@@ -272,7 +272,7 @@ FROM (SELECT dt,
              live_cnt AS val
       FROM bireport.rpt_month_fx_guild_new
       WHERE revenue_level != 'all'
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       UNION
       SELECT dt,
              backend_account_id,
@@ -283,7 +283,7 @@ FROM (SELECT dt,
              revenue AS val
       FROM bireport.rpt_month_fx_guild_new
       WHERE revenue_level != 'all'
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
       UNION
       SELECT dt,
              backend_account_id,
@@ -294,7 +294,7 @@ FROM (SELECT dt,
              round(revenue / live_cnt, 0) AS val
       FROM bireport.rpt_month_fx_guild_new
       WHERE revenue_level != 'all'
-        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND dt = '{month}'
         AND live_cnt > 0) t
 ;
 

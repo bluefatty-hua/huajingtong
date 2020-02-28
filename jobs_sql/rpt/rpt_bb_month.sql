@@ -79,6 +79,8 @@ FROM (SELECT dt,
          LEFT JOIN spider_bb_backend.account_info ai ON gl.backend_account_id = ai.backend_account_id
 ;
 
+
+
 -- =====================================================================================================================
 -- rpt_month_bb_guild_new
 REPLACE INTO bireport.rpt_month_bb_guild_new
