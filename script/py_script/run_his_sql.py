@@ -92,7 +92,7 @@ if __name__ == '__main__':
     try:
         while 1:
             # 执行SQL脚本
-            # run_sql(param_dic, sql_file)
+            run_sql(param_dic, sql_file)
             logging.info('-----------------------{}--DONE------------------------------'.format(
                 param_dic['month']))
             time.sleep(5)
