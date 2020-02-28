@@ -2,8 +2,6 @@
 import argparse
 import pymysql
 from datetime import datetime
-from datetime import date
-from datetime import timedelta
 import io
 import os
 import logging
@@ -24,20 +22,10 @@ conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJ
 cursor = conn.cursor()
 
 # 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
-# start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
-# end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-# cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-# month = (date.today() + timedelta(days=-1)).strftime('%Y-%m-01')
-#
-# print(start_date, end_date, cur_date, month)
-
-
-start_date = arrow.now().shift(days=-7).format('YYYY-MM-DD')
-end_date = arrow.now().shift(days=-1).format('YYYY-MM-DD')
+start_date = arrow.now().shift(days=-1).format('%Y-%m-01')
+end_date = arrow.now().shift(days=-1).format('%Y-%m-01')
 cur_date = arrow.now().shift(days=-1).format('YYYY-MM-DD')
 month = arrow.now().shift(days=-1).format('%Y-%m-01')
-
-print(start_date, end_date, cur_date, month)
 
 # 解析参数
 parser = argparse.ArgumentParser()
@@ -60,7 +48,7 @@ init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO,
 
 
 def run_sql(sql_param, file):
-    logging.info('RUN>>>>>>>>>>>>>>>>>>>>>>>>>>...')
+    logging.info('RUN>>>>>>>>>>>>>>>>>>>>>>>>>>...........................................')
     with io.open(file, 'r', encoding='utf8') as fr:
         for sql in fr.read().split(';'):
             try:
@@ -72,7 +60,7 @@ def run_sql(sql_param, file):
             except Exception as err:
                 logging.info('----------------------------ERROR SQL---------------------------\n{}'.format(sql))
                 logging.exception(err)
-                logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
+                logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>...........................................')
                 conn.rollback()
                 break
 
@@ -93,7 +81,9 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 被执行SQL文件
-    sql_file = PROJECT_TEST_DIR + args.sql_file  # PROJECT_TEST_DIR = '/services/xjl_etl/script/py_script/'
+    # sql_file = PROJECT_TEST_DIR + args.sql_file  # PROJECT_TEST_DIR = '/services/xjl_etl/script/py_script/'
+
+    sql_file = PROJECT_DIR + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
     # 格式化参数字典
     param_dic = format_param_dict(args)
