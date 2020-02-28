@@ -1,6 +1,5 @@
 # -*- coding: utf8 -*-
 import argparse
-import time
 
 import pymysql
 from datetime import datetime
@@ -95,7 +94,6 @@ if __name__ == '__main__':
             run_sql(param_dic, sql_file)
             logging.info('-----------------------{}--DONE------------------------------'.format(
                 param_dic['month']))
-            time.sleep(5)
             # 判断是否终止条件
             if param_dic['month'] == param_dic['end_date']:
                 break
