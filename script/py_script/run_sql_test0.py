@@ -87,19 +87,23 @@ if __name__ == '__main__':
     # 格式化参数字典
     param_dic = format_param_dict(args)
     i = 0
-    while 1:
-        try:
-            # 执行SQL脚本
-            param_dic['month'] = datetime.date(*map(int, param_dic['start_date'].split('-'))) + timedelta(days=+0)
-            print(param_dic)
-            # run_sql(param_dic, sql_file)
-            if param_dic['month'] == param_dic['end_date']:
+    try:
+        while 1:
+            try:
+                # 执行SQL脚本
+                param_dic['month'] = datetime.date(*map(int, param_dic['start_date'].split('-'))) + timedelta(days=+0)
+                print(param_dic)
+                # run_sql(param_dic, sql_file)
+                if param_dic['month'] == param_dic['end_date']:
+                    break
+                # conn.commit()
+                logging.info('------------------------------DONE------------------------------')
+            except Exception as err:
+                logging.exception(err)
                 break
-            # conn.commit()
-            logging.info('------------------------------DONE------------------------------')
-        except Exception as err:
-            logging.exception(err)
-        finally:
-            cursor.close()
-            conn.close()
-            logging.info('end_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+    except Exception as err:
+        logging.exception(err)
+    finally:
+        cursor.close()
+        conn.close()
+        logging.info('end_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
