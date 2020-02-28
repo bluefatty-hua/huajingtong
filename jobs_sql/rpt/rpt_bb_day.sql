@@ -344,3 +344,30 @@ from (SELECT dt,
         and live_cnt > 0) t
 ;
 
+
+
+-- 主播数据 --- 
+delete from bireport.`rpt_day_bb_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
+INSERT INTO  bireport.rpt_day_bb_anchor 
+SELECT    
+`dt`,
+t.backend_account_id,
+remark,
+`min_live_dt` AS first_live_date,
+`min_sign_dt` AS sign_date,
+`newold_state`,
+`last_month_duration`/3600 AS duration_lastmonth,
+`live_days` AS live_days_lastmonth,
+`active_state` ,
+`last_month_revenue`*2/1000 AS revenue_lastmonth,
+`revenue_level`,
+anchor_no AS `anchor_uid`,
+`anchor_no`,
+dau,max_ppl,fc,
+`anchor_nick_name`,
+anchor_status_text,
+`duration`/3600 AS  duration,
+IF(`live_status`=1,'是','否') AS live_status ,
+anchor_total_coin/1000 AS revenue FROM warehouse.dw_bb_day_anchor_live t
+LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
+where dt BETWEEN '{start_date}' AND '{end_date}'; 
