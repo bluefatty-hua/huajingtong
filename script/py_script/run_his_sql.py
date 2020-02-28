@@ -87,7 +87,7 @@ if __name__ == '__main__':
     logging.info('SQl_FILE: {}'.format(sql_file))
     # 格式化参数字典
     param_dic = format_param_dict(args)
-    param_dic['month'] = param_dic['start_date']
+    param_dic['month'] = param_dic['start_date'][:-2] + '01'
     print(param_dic)
     try:
         while 1:
