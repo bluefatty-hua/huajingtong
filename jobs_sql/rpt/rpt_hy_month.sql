@@ -415,4 +415,53 @@ WHERE t1.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{en
 ;
 
 
+-- 报表用，计算指标占比---
+REPLACE INTO bireport.rpt_month_hy_guild_new_view_compare
+SELECT *
+FROM (SELECT dt,
+             channel_num,
+             revenue_level,
+             newold_state,
+             active_state,
+             '主播数'      AS idx,
+             anchor_cnt AS val
+      FROM bireport.rpt_month_hy_guild_new
+      WHERE revenue_level != 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      UNION
+      SELECT dt,
+             channel_num,
+             revenue_level,
+             newold_state,
+             active_state,
+             '开播数'    AS idx,
+             live_cnt AS val
+      FROM bireport.rpt_month_hy_guild_new
+      WHERE revenue_level != 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      UNION
+      SELECT dt,
+             channel_num,
+             revenue_level,
+             newold_state,
+             active_state,
+             '流水'    AS idx,
+             revenue AS val
+      FROM bireport.rpt_month_hy_guild_new
+      WHERE revenue_level != 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      UNION
+      SELECT dt,
+             channel_num,
+             revenue_level,
+             newold_state,
+             active_state,
+             '开播人均流水'                     AS idx,
+             round(revenue / live_cnt, 0) AS val
+      FROM bireport.rpt_month_hy_guild_new
+      WHERE revenue_level != 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND live_cnt > 0
+     ) t
+;
 
