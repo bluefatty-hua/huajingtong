@@ -26,7 +26,6 @@ GROUP BY gl.dt,
 ;
 
 
-
 DELETE
 FROM bireport.rpt_month_all_guild
 WHERE platform_id = 1004
