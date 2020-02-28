@@ -440,7 +440,8 @@ FROM bireport.rpt_day_now_guild_new t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
+;
 
 
 -- 报表用，计算指标占比---
@@ -456,6 +457,7 @@ FROM (SELECT dt,
              anchor_cnt AS val
       FROM bireport.rpt_day_now_guild_new
       WHERE revenue_level != 'all'
+        AND city = 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       UNION
       SELECT dt,
@@ -468,6 +470,7 @@ FROM (SELECT dt,
              live_cnt AS val
       FROM bireport.rpt_day_now_guild_new
       WHERE revenue_level != 'all'
+        AND city = 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       UNION
       SELECT dt,
@@ -480,6 +483,7 @@ FROM (SELECT dt,
              revenue AS val
       FROM bireport.rpt_day_now_guild_new
       WHERE revenue_level != 'all'
+        AND city = 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       UNION
       SELECT dt,
@@ -492,5 +496,7 @@ FROM (SELECT dt,
              round(revenue / live_cnt, 0) AS val
       FROM bireport.rpt_day_now_guild_new
       WHERE revenue_level != 'all'
+        AND city = 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
         AND live_cnt > 0) t
+;

@@ -13,9 +13,9 @@ SELECT gl.dt,
        gl.live_cnt,
        gl.revenue_rmb                       AS revenue,
        gl.revenue_rmb                       AS revenue_orig,
-       round(gl.revenue_rmb * 0.6 * 0.5, 2) AS guild_income,
+       ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS guild_income,
        gl.revenue_rmb * 0.6 * 0.5           AS guild_income_orig,
-       round(gl.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
+       ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
        gl.revenue_rmb * 0.6 * 0.5           AS anchor_income_orig
 FROM (SELECT gl.dt,
              gl.platform_id,
@@ -34,7 +34,6 @@ FROM (SELECT gl.dt,
          LEFT JOIN warehouse.dw_now_month_guild_live_true gr
                    ON gl.dt = gr.dt AND gl.backend_account_id = gr.backend_account_id
 ;
-
 
 
 DELETE
@@ -303,10 +302,10 @@ SELECT t1.dt,
        ROUND(t3.duration / 3600, 1)                                    AS duration_lastmonth,
        t1.revenue,
        t3.revenue                                                      AS revenue_lastmonth,
-       IF(t1.live_cnt > 0, ROUND(t1.`revenue` / t1.live_cnt, 0), 0)    AS revenue_per_live,
-       IF(t3.live_cnt > 0, ROUND(t3.`revenue` / t3.live_cnt, 0), 0)    AS revenue_per_live_lastmonth,
-       0                                                               AS `guild_income`,
-       0                                                               AS `anchor_income`
+       IF(t1.live_cnt > 0, ROUND(t1.revenue / t1.live_cnt, 0), 0)      AS revenue_per_live,
+       IF(t3.live_cnt > 0, ROUND(t3.revenue / t3.live_cnt, 0), 0)      AS revenue_per_live_lastmonth,
+       0                                                               AS guild_income,
+       0                                                               AS anchor_income
 FROM bireport.rpt_month_now_guild_new t1
          LEFT JOIN bireport.rpt_month_now_guild_new t3
                    ON t1.dt - INTERVAL 1 MONTH = t3.dt
@@ -316,4 +315,59 @@ FROM bireport.rpt_month_now_guild_new t1
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
 WHERE t1.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+;
+
+
+-- 报表用，计算指标占比---
+REPLACE INTO bireport.rpt_month_now_guild_new_view_compare
+SELECT *
+FROM (SELECT dt,
+             backend_account_id,
+             revenue_level,
+             newold_state,
+             active_state,
+             '主播数'      AS idx,
+             anchor_cnt AS val
+      FROM bireport.rpt_month_now_guild_new
+      WHERE revenue_level != 'all'
+      AND city = 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      UNION
+      SELECT dt,
+             backend_account_id,
+             revenue_level,
+             newold_state,
+             active_state,
+             '开播数'    AS idx,
+             live_cnt AS val
+      FROM bireport.rpt_month_now_guild_new
+      WHERE revenue_level != 'all'
+      AND city = 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      UNION
+      SELECT dt,
+             backend_account_id,
+             revenue_level,
+             newold_state,
+             active_state,
+             '流水'    AS idx,
+             revenue AS val
+      FROM bireport.rpt_month_now_guild_new
+      WHERE revenue_level != 'all'
+      AND city = 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      UNION
+      SELECT dt,
+             backend_account_id,
+             revenue_level,
+             newold_state,
+             active_state,
+             '开播人均流水'                     AS idx,
+             round(revenue / live_cnt, 0) AS val
+      FROM bireport.rpt_month_now_guild_new
+      WHERE revenue_level != 'all'
+      AND city = 'all'
+        AND dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+        AND live_cnt > 0
+     ) t
 ;
