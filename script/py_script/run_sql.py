@@ -12,10 +12,11 @@ from log import init_logging
 from config import LOG_DIR
 from config import XJL_ETL_DB
 import sys
+from warnings import filterwarnings
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-
+filterwarnings('ignore', category = pymysql.Warning)
 # 链接数据库
 conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJL_ETL_DB['user'],
                        password=XJL_ETL_DB['password'])

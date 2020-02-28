@@ -337,7 +337,7 @@ SELECT dt,channel_num,revenue_level,newold_state,active_state,'流水' as idx,
 revenue as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and revenue_level!='all'
 union 
 SELECT dt,channel_num,revenue_level,newold_state,active_state,'开播人均流水' as idx,
-round(revenue/live_cnt,0) as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all' and live_cnt>0) t
+round(revenue/live_cnt,0) as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all' and live_cnt>0) t;
 
 
 
