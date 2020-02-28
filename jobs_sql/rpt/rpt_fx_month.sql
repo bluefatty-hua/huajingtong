@@ -13,7 +13,7 @@ SELECT gl.dt,
        SUM(gl.anchor_live_cnt)                 AS live_cnt,
        SUM(gl.anchor_income / 125 / 0.4)       AS revenue,
        SUM(gl.anchor_income)                   AS revenue_orig,
-       SUM(gl.anchor_income / 125 / 0.4 * 0.9) AS guild_income,
+       SUM(gl.anchor_income / 125 / 0.4 * 0.09) AS guild_income,
        SUM(gl.anchor_income)                   AS guild_income_orig,
        SUM(gl.anchor_income / 125)             AS anchor_income,
        SUM(gl.anchor_income)                   AS anchor_income_orig
@@ -79,7 +79,7 @@ SELECT gl.dt,
        gl.anchor_income / 125 / 0.4       AS revenue,
        gl.anchor_income                   AS revenue_orig,
        -- 公会收入
-       gl.anchor_income / 125 / 0.4 * 0.9 AS guild_income,
+       gl.anchor_income / 125 / 0.4 * 0.09 AS guild_income,
        gl.anchor_income                   AS guild_income_orig,
        -- 主播收入
        gl.anchor_income / 125             AS anchor_income,
