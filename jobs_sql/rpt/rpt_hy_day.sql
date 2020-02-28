@@ -364,7 +364,7 @@ from (SELECT dt,
 
 -- 主播数据 --- 
 delete from bireport.`rpt_day_hy_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
-REPLACE INTO bireport.`rpt_day_hy_anchor`
+insert  INTO bireport.`rpt_day_hy_anchor`
 SELECT     `dt`,
   `channel_type`,
   `channel_num`,
@@ -374,7 +374,7 @@ SELECT     `dt`,
   `last_month_duration`/3600 AS duration_lastmonth,
   last_month_live_days AS  live_days_lastmonth,
   `active_state` ,
-  `last_month_revenue`*2/1000 AS revenue_lastmonth,
+  `last_month_revenue` AS revenue_lastmonth,
   `revenue_level`,
   `anchor_uid`,
   `anchor_no`,
