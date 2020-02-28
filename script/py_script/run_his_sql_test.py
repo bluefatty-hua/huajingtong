@@ -1,5 +1,7 @@
 # -*- coding: utf8 -*-
 import argparse
+import time
+
 import pymysql
 from datetime import datetime
 import io
@@ -22,10 +24,10 @@ conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJ
 cursor = conn.cursor()
 
 # 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
-start_date = arrow.now().shift(days=-1).format('YYYY-MM-') + '01'
-end_date = arrow.now().shift(days=-1).format('YYYY-MM-') + '01'
+start_date = arrow.now().shift(days=-1).format('YYYY-MM-01')
+end_date = arrow.now().shift(days=-1).format('YYYY-MM-01')
 cur_date = arrow.now().shift(days=-1).format('YYYY-MM-DD')
-month = arrow.now().shift(days=-1).format('YYYY-MM-') + '01'
+month = arrow.now().shift(days=-1).format('YYYY-MM-01')
 
 # 解析参数
 parser = argparse.ArgumentParser()
@@ -68,8 +70,8 @@ def run_sql(sql_param, file):
 def format_param_dict(args):
     param = {
         'cur_date': cur_date,
-        'start_date': args.start_date,
-        'end_date': args.end_date
+        'start_date': arrow.get(args.start_date).format('YYYY-MM-01'),
+        'end_date': arrow.get(args.end_date).format('YYYY-MM-01')
     }
     logging.info('------------------------------PARAM-----------------------------')
     logging.info(param)
@@ -81,13 +83,11 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 被执行SQL文件
-    # sql_file = PROJECT_TEST_DIR + args.sql_file  # PROJECT_TEST_DIR = '/services/xjl_etl/script/py_script/'
-
     sql_file = PROJECT_DIR + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
     # 格式化参数字典
     param_dic = format_param_dict(args)
-    param_dic['month'] = param_dic['start_date']
+    param_dic['month'] = param_dic['start_date'][:-2] + '01'
     print(param_dic)
     try:
         while 1:
@@ -95,6 +95,7 @@ if __name__ == '__main__':
             run_sql(param_dic, sql_file)
             logging.info('-----------------------{}--DONE------------------------------'.format(
                 param_dic['month']))
+            time.sleep(5)
             # 判断是否终止条件
             if param_dic['month'] == param_dic['end_date']:
                 break
