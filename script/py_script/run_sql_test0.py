@@ -103,8 +103,8 @@ if __name__ == '__main__':
         while 1:
             # 执行SQL脚本
             run_sql(param_dic, sql_file)
-            logging.info('-----------------------{month}--DONE------------------------------').format(
-                param_dic['month'])
+            logging.info('-----------------------{}--DONE------------------------------'.format(
+                param_dic['month']))
             # 判断是否终止条件
             if param_dic['month'] == param_dic['end_date']:
                 break
