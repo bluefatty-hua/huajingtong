@@ -5,7 +5,7 @@
 # CREATE TABLE warehouse.dw_now_month_guild_live_true AS
 DELETE
 FROM warehouse.dw_now_month_guild_live_true
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_now_month_guild_live_true
 SELECT dt,
        platform_id,
@@ -16,7 +16,8 @@ SELECT dt,
        average_anchor_revenue_rmb,
        anchor_live_rate
 FROM warehouse.ods_now_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+WHERE dt >= '{month}'
+  AND dt < '{month}' + INTERVAL 1 MONTH
 ;
 
 
@@ -24,7 +25,7 @@ WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_d
 -- CREATE TABLE warehouse.dw_now_month_guild_live AS
 DELETE
 FROM warehouse.dw_now_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_now_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                               AS dt,
        al.platform_id,
@@ -44,7 +45,8 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_now_day_anchor_live
-      WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          al.platform_id,

@@ -84,7 +84,7 @@
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_bluediamond
 SELECT dt,
        platform_id,
@@ -94,7 +94,8 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+WHERE dt >= '{month}'
+  AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -110,7 +111,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_commission
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_commission
 SELECT dt,
        platform_id,
@@ -120,7 +121,8 @@ SELECT dt,
        anchor_no,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+WHERE dt >= '{month}'
+  AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -138,7 +140,7 @@ GROUP BY dt,
 --  CREATE TABLE warehouse.dw_yy_month_anchor_live_true AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_true
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{monht}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_true
 SELECT ab.dt,
        ab.platform_id,
@@ -151,7 +153,7 @@ SELECT ab.dt,
 FROM warehouse.dw_yy_month_anchor_live_bluediamond ab
          LEFT JOIN warehouse.dw_yy_month_anchor_live_commission ac
                    ON ab.dt = ac.dt AND ab.backend_account_id = ac.backend_account_id AND ab.anchor_no = ac.anchor_no
-WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+WHERE ab.dt = '{month}'
 ;
 
 
@@ -159,7 +161,7 @@ WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 -- CREATE TABLE warehouse.dw_yy_month_anchor_live AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                          AS dt,
        al.platform_id,
@@ -190,8 +192,9 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_yy_day_anchor_live
-      WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
-    ) al
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
+     ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
@@ -213,7 +216,7 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
 -- CREATE TABLE warehouse.dw_yy_month_guild_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_guild_live_bluediamond
 SELECT dt,
        platform_id,
@@ -222,7 +225,8 @@ SELECT dt,
        SUM(anchor_bluediamond) AS anchor_bluediamond,
        SUM(guild_bluediamond)  AS guild_bluediamond
 FROM warehouse.ods_yy_guild_live_bluediamond
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+WHERE dt >= '{month}'
+  AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -237,7 +241,7 @@ GROUP BY dt,
 -- CREATE TABLE warehouse.dw_yy_month_guild_live_commission AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_guild_live_commission
 SELECT dt,
        platform_id,
@@ -246,7 +250,8 @@ SELECT dt,
        channel_num,
        SUM(guild_commission) AS guild_commission
 FROM warehouse.ods_yy_guild_live_commission
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+WHERE dt >= '{month}'
+  AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY dt,
          platform_id,
          platform_name,
@@ -262,7 +267,7 @@ GROUP BY dt,
 --  CREATE TABLE warehouse.dw_yy_month_guild_live_true AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live_true
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_guild_live_true
 SELECT ab.dt,
        ab.platform_id,
@@ -275,7 +280,7 @@ FROM warehouse.dw_yy_month_guild_live_bluediamond ab
          LEFT OUTER JOIN warehouse.dw_yy_month_guild_live_commission ac
                          ON ab.dt = ac.dt AND ab.backend_account_id = ac.backend_account_id
          LEFT JOIN spider_yy_backend.channel_list cl ON ab.backend_account_id = cl.backend_account_id
-WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE ab.dt = '{month}';
 ;
 
 
@@ -283,7 +288,7 @@ WHERE ab.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
 -- CREATE TABLE warehouse.dw_yy_month_guild_live AS
 DELETE
 FROM warehouse.dw_yy_month_guild_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                                    AS dt,
        al.platform_id,
@@ -316,7 +321,8 @@ FROM (SELECT *,
                                                                     ELSE '{cur_date}' END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_yy_day_anchor_live
-      WHERE DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
