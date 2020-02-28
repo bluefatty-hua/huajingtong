@@ -3,7 +3,7 @@ CREATE TABLE stage.rs_test_tmp0_20191229 AS
 SELECT *
 -- 测
 FROM warehouse.ods_now_month_guild_live
-WHERE dt BETWEEN '{month}' AND '{end_date}'
+WHERE dt = '{month}'
 LIMIT 1
 ;
 

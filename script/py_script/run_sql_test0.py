@@ -13,6 +13,7 @@ from config import PROJECT_DIR
 from config import PROJECT_TEST_DIR
 from config import XJL_ETL_DB
 import sys
+import arrow
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -23,10 +24,20 @@ conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJ
 cursor = conn.cursor()
 
 # 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
-start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
-end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
-month = (date.today() + timedelta(days=-1)).strftime('%Y-%m-01')
+# start_date = (date.today() + timedelta(days=-7)).strftime('%Y-%m-%d')
+# end_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+# cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+# month = (date.today() + timedelta(days=-1)).strftime('%Y-%m-01')
+#
+# print(start_date, end_date, cur_date, month)
+
+
+start_date = arrow.now().shift(days=-7).format('YYYY-MM-DD')
+end_date = arrow.now().shift(days=-1).format('YYYY-MM-DD')
+cur_date = arrow.now().shift(days=-1).format('YYYY-MM-DD')
+month = arrow.now().shift(days=-1).format('%Y-%m-01')
+
+print(start_date, end_date, cur_date, month)
 
 # 解析参数
 parser = argparse.ArgumentParser()
@@ -86,21 +97,19 @@ if __name__ == '__main__':
     logging.info('SQl_FILE: {}'.format(sql_file))
     # 格式化参数字典
     param_dic = format_param_dict(args)
-    i = 0
+    param_dic['month'] = param_dic['start_date']
+    print(param_dic)
     try:
         while 1:
-            try:
-                # 执行SQL脚本
-                param_dic['month'] = datetime.date(*map(int, param_dic['start_date'].split('-'))) + timedelta(days=+0)
-                print(param_dic)
-                # run_sql(param_dic, sql_file)
-                if param_dic['month'] == param_dic['end_date']:
-                    break
-                # conn.commit()
-                logging.info('------------------------------DONE------------------------------')
-            except Exception as err:
-                logging.exception(err)
+            # 执行SQL脚本
+            run_sql(param_dic, sql_file)
+            logging.info('------------------------------DONE------------------------------').format(
+                param_dic['month'])
+            # 判断是否终止条件
+            if param_dic['month'] == param_dic['end_date']:
                 break
+            # 执行完，月份加1
+            param_dic['month'] = arrow.get(param_dic['month']).shift(months=+1).format('YYYY-MM-DD')
     except Exception as err:
         logging.exception(err)
     finally:
