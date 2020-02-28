@@ -361,3 +361,24 @@ from (SELECT dt,
         and live_cnt > 0) t
 ;
 
+
+-- 主播数据 --- 
+delete from bireport.`rpt_day_hy_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
+REPLACE INTO bireport.`rpt_day_hy_anchor`
+SELECT     `dt`,
+  `channel_type`,
+  `channel_num`,
+  `min_live_dt` AS first_live_date,
+  `min_sign_dt` AS sign_date,
+  `newold_state`,
+  `last_month_duration`/3600 AS duration_lastmonth,
+  last_month_live_days AS  live_days_lastmonth,
+  `active_state` ,
+  `last_month_revenue`*2/1000 AS revenue_lastmonth,
+  `revenue_level`,
+  `anchor_uid`,
+  `anchor_no`,
+  nick AS `anchor_nick_name`,
+  `duration`/3600 AS  duration,
+  IF(`live_status`=1,'是','否') AS live_status ,
+   revenue  FROM warehouse.dw_huya_day_anchor_live where  dt BETWEEN '{start_date}' AND '{end_date}';
