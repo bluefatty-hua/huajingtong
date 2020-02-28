@@ -338,3 +338,26 @@ revenue as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_d
 union 
 SELECT dt,channel_num,revenue_level,newold_state,active_state,'开播人均流水' as idx,
 round(revenue/live_cnt,0) as val FROM `bireport`.`rpt_day_yy_guild_new` where dt BETWEEN '{start_date}' AND '{end_date}' and  revenue_level!='all' and live_cnt>0) t
+
+
+
+-- 主播数据 --- 
+delete from bireport.`rpt_day_yy_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
+REPLACE INTO bireport.`rpt_day_yy_anchor`
+SELECT   `dt`,
+  `channel_num`,
+  `min_live_dt` AS first_live_date,
+  `min_sign_dt` AS sign_date,
+  `newold_state`,
+  `last_month_duration`/3600 AS duration_lastmonth,
+  `live_days` AS live_days_lastmonth,
+  `active_state` ,
+  `last_month_revenue`*2/1000 AS revenue_lastmonth,
+  `revenue_level`,
+  `anchor_uid`,
+  `anchor_no`,
+  `anchor_nick_name`,
+  `anchor_type_text`,
+  `duration`/3600 AS  duration,
+  IF(`live_status`=1,'是','否') AS live_status ,
+  `bluediamond`*2/1000 AS revenue FROM warehouse.dw_yy_day_anchor_live where  dt BETWEEN '{start_date}' AND '{end_date}';
