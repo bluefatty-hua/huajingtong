@@ -430,17 +430,19 @@ SELECT t1.dt,
 FROM bireport.rpt_day_now_guild_new t1
          LEFT JOIN bireport.rpt_day_now_guild_new t2
                    ON t1.dt - INTERVAL 7 DAY = t2.dt
+                       AND t1.city = t2.city
                        AND t1.backend_account_id = t2.backend_account_id
                        AND t1.revenue_level = t2.revenue_level
                        AND t1.newold_state = t2.newold_state
                        AND t1.active_state = t2.active_state
          LEFT JOIN bireport.rpt_day_now_guild_new t3
                    ON t1.dt - INTERVAL 1 MONTH = t3.dt
+                       AND t1.city = t3.city
                        AND t1.backend_account_id = t3.backend_account_id
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
+# WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
