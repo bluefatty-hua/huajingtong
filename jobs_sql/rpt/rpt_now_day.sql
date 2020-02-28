@@ -502,3 +502,30 @@ FROM (SELECT dt,
         AND dt BETWEEN '{start_date}' AND '{end_date}'
         AND live_cnt > 0) t
 ;
+
+
+
+
+-- 主播数据 --- 
+delete from bireport.`rpt_day_now_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
+INSERT INTO bireport.`rpt_day_now_anchor` 
+SELECT   
+`dt`,
+`backend_account_id`,
+city,
+`min_live_dt` AS first_live_date,
+`min_sign_dt` AS sign_date,
+`newold_state`,
+`last_month_duration`/3600 AS duration_lastmonth,
+`live_days` AS live_days_lastmonth,
+`active_state` ,
+`last_month_revenue`*2/1000 AS revenue_lastmonth,
+`revenue_level`,
+anchor_no AS `anchor_uid`,
+`anchor_no`,
+fans_cnt,
+fans_goup_cnt,
+`anchor_nick_name`,
+`duration`/3600 AS  duration,
+IF(`live_status`=1,'是','否') AS live_status ,
+revenue_rmb AS revenue FROM warehouse.dw_now_day_anchor_live  where  dt BETWEEN '{start_date}' AND '{end_date}';
