@@ -24,10 +24,10 @@ conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJ
 cursor = conn.cursor()
 
 # 设置默认终止日期：前一天, 开始时间：7天前, （t-1）月第一天
-start_date = arrow.now().shift(days=-1).format('YYYY-MM-') + '01'
-end_date = arrow.now().shift(days=-1).format('YYYY-MM-') + '01'
+start_date = arrow.now().shift(days=-1).format('YYYY-MM-01')
+end_date = arrow.now().shift(days=-1).format('YYYY-MM-01')
 cur_date = arrow.now().shift(days=-1).format('YYYY-MM-DD')
-month = arrow.now().shift(days=-1).format('YYYY-MM-') + '01'
+month = arrow.now().shift(days=-1).format('YYYY-MM-01')
 
 # 解析参数
 parser = argparse.ArgumentParser()
@@ -70,8 +70,8 @@ def run_sql(sql_param, file):
 def format_param_dict(args):
     param = {
         'cur_date': cur_date,
-        'start_date': args.start_date,
-        'end_date': args.end_date
+        'start_date': arrow.get(args.start_date).format('YYYY-MM-01'),
+        'end_date': arrow.get(args.end_date).format('YYYY-MM-01')
     }
     logging.info('------------------------------PARAM-----------------------------')
     logging.info(param)
