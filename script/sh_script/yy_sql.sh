@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 /usr/bin/python /services/xjl_etl/script/py_script/run_sql.py -f ods/ods_yy.sql
 
 /usr/bin/python /services/xjl_etl/script/py_script/run_sql.py -f dw/dw_yy_anchor_tags.sql

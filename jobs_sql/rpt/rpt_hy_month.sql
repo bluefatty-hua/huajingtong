@@ -23,7 +23,7 @@ SELECT t0.dt,
        t0.revenue * ig.avg_rate             AS guild_income_orig,
        t0.revenue * ig.avg_rate * 0.7 / 0.3 AS anchor_income,
        t0.revenue * ig.avg_rate             AS anchor_incom_orig
-FROM warehouse.dw_huya_month_guild_live t0
+FROM warehouse.dw_huya_month_guild_live_true t0
          LEFT JOIN (SELECT CONCAT(DATE_FORMAT(t.dt, '%Y-%m'), '-01')                          AS dt,
                            t.channel_id,
                            COUNT(DISTINCT t.anchor_uid)                                       AS anchor_cnt,
@@ -53,7 +53,7 @@ SELECT t0.dt,
        t0.gift_income + t0.guard_income + t0.noble_income                        AS guild_income_orig,
        (t0.gift_income + t0.guard_income + t0.noble_income) * 0.7 / (0.3 * 1000) AS anchor_income,
        t0.gift_income + t0.guard_income + t0.noble_income                        AS anchor_incom_orig
-FROM warehouse.dw_huya_month_guild_live t0
+FROM warehouse.dw_huya_month_guild_live_true t0
          INNER JOIN (SELECT CONCAT(DATE_FORMAT(t.dt, '%Y-%m'), '-01')                          AS dt,
                             t.channel_id,
                             COUNT(DISTINCT t.anchor_uid)                                       AS anchor_cnt,
@@ -71,42 +71,9 @@ FROM warehouse.dw_huya_month_guild_live t0
 
 -- rpt_month_now_guild_new
 REPLACE INTO bireport.rpt_month_hy_guild_new
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01')    AS dt,
-       al.platform_id,
-       al.platform_name                  AS platform,
-       al.channel_type,
-       al.channel_num,
-       al.revenue_level,
-       al.month_newold_state             AS newold_state,
-       al.active_state,
-       COUNT(DISTINCT al.anchor_uid)     AS anchor_cnt,
-       COUNT(DISTINCT CASE
-                          WHEN al.live_status = 1 THEN al.anchor_uid
-                          ELSE NULL END) AS live_cnt,
-       SUM(IFNULL(al.duration, 0))       AS duration,
-       SUM(IFNULL(al.revenue, 0))        AS revenue,
-       SUM(IFNULL(al.revenue, 0))        AS revenune_orig,
-       SUM(0)                            AS guild_income,
-       SUM(0)                            AS guild_income_orig,
-       SUM(0)                            AS anchor_income,
-       SUM(0)                            AS anchor_income_orig
-FROM (SELECT *,
-             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
-                                                                        THEN LAST_DAY(dt)
-                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
-      FROM warehouse.dw_huya_day_anchor_live
-      WHERE dt >= '{month}'
-        AND dt < '{month}' + INTERVAL 1 MONTH
-     ) al
-GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
-         al.platform_id,
-         al.platform_name,
-         al.channel_type,
-         al.channel_num,
-         al.revenue_level,
-         al.month_newold_state,
-         al.active_state
+SELECT *
+FROM warehouse.dw_huya_month_guild_live
+WHERE dt = '{month}'
 ;
 
 
@@ -360,6 +327,52 @@ FROM (
          WITH ROLLUP
      ) t
 WHERE dt IS NOT NULL
+;
+
+
+
+UPDATE bireport.rpt_month_hy_guild_new a
+    INNER JOIN warehouse.dw_huya_month_guild_live_true b
+    ON a.dt = b.dt AND a.channel_num = b.channel_num
+SET a.revenue = b.revenue
+WHERE a.dt <= 20191101
+  AND a.dt = '{month}'
+  AND a.channel_type <> 'all'
+  AND a.channel_num <> 'all'
+  AND a.newold_state = 'all'
+  AND a.active_state = 'all'
+  AND a.revenue_level = 'all'
+;
+
+
+UPDATE bireport.rpt_month_hy_guild_new a
+    INNER JOIN (SELECT gl.dt, ai.channel_type, SUM(gl.revenue) AS revenue
+                FROM warehouse.dw_huya_month_guild_live_true gl
+                         LEFT JOIN warehouse.ods_hy_account_info ai ON gl.channel_id = ai.channel_id
+                GROUP BY gl.dt, ai.channel_type) b
+    ON a.dt = b.dt AND a.channel_type = b.channel_type
+SET a.revenue = b.revenue
+WHERE a.dt <= 20191101
+  AND a.dt = '{month}'
+  AND a.channel_type <> 'all'
+  AND a.channel_num = 'all'
+  AND a.newold_state = 'all'
+  AND a.active_state = 'all'
+  AND a.revenue_level = 'all'
+;
+
+
+UPDATE bireport.rpt_month_hy_guild_new a
+    INNER JOIN (SELECT dt, SUM(revenue) AS revenue FROM warehouse.dw_huya_month_guild_live_true GROUP BY dt) b
+    ON a.dt = b.dt
+SET a.revenue = b.revenue
+WHERE a.dt <= 20191101
+  AND a.dt = '{month}'
+  AND a.channel_type = 'all'
+  AND a.channel_num = 'all'
+  AND a.newold_state = 'all'
+  AND a.active_state = 'all'
+  AND a.revenue_level = 'all'
 ;
 
 

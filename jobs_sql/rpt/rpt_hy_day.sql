@@ -18,7 +18,7 @@ FROM (
                 SUM(t.revenue)                                                            AS revenue,
                 SUM(t.gift_income + t.guard_income + t.noble_income) / 1000               AS guild_income,
                 SUM(t.gift_income + t.guard_income + t.noble_income) * 0.7 / (0.3 * 1000) AS anchor_income
-         FROM warehouse.dw_huya_day_guild_live t
+         FROM warehouse.dw_huya_day_guild_live_true t
          WHERE dt BETWEEN '{start_date}' AND '{end_date}'
          GROUP BY t.dt,
                   t.platform_name) t
@@ -49,7 +49,7 @@ SELECT t.dt,
        t.gift_income + t.guard_income + t.noble_income                         AS guild_income_orig,
        (t.gift_income + t.guard_income + t.noble_income) * 0.7 / (0.3 * 1000)  AS anchor_income,
        t.gift_income + t.guard_income + t.noble_income                         AS anchor_incom_orig
-FROM warehouse.dw_huya_day_guild_live t
+FROM warehouse.dw_huya_day_guild_live_true t
          LEFT JOIN (SELECT dt,
                            t.channel_id,
                            COUNT(DISTINCT t.anchor_uid)                                       AS anchor_cnt,
@@ -363,8 +363,8 @@ from (SELECT dt,
 
 
 -- 主播数据 --- 
-delete from bireport.`rpt_day_hy_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
-insert  INTO bireport.`rpt_day_hy_anchor`
+delete from bireport.rpt_day_hy_anchor where dt BETWEEN '{start_date}' AND '{end_date}';
+insert  INTO bireport.rpt_day_hy_anchor
 SELECT     `dt`,
   `channel_type`,
   `channel_num`,

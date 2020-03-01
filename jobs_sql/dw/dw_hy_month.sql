@@ -96,10 +96,13 @@ INSERT INTO warehouse.dw_huya_month_anchor_live
 SELECT al.dt,
        aci.channel_type,
        al.channel_id,
-       ai.channel_num,
+       al.channel_num,
        al.anchor_uid,
-       ai.anchor_no,
+       al.anchor_no,
        ai.nick,
+       al.newold_state,
+       al.active_state,
+       al.revenue_level,
        ai.comment,
        al.duration,
        al.live_days,
@@ -119,31 +122,49 @@ SELECT al.dt,
        al.vir_coin_rate,
        al.include_pf_amt,
        al.pf_amt_rate
-FROM (SELECT DATE_FORMAT(dt, '%Y-%m-01')           AS dt,
-             anchor_uid,
-             channel_id,
-             SUM(IFNULL(duration, 0))              AS duration,
-             SUM(IFNULL(live_status, 0))           AS live_days,
-             SUM(IFNULL(revenue, 0))               AS revenue,
-             AVG(IF(peak_pcu > 0, peak_pcu, NULL)) AS peak_pcu_avg,
-             MAX(peak_pcu)                         AS peak_pcu_max,
-             MIN(IF(peak_pcu > 0, peak_pcu, NULL)) AS peak_pcu_min,
-             MAX(vir_coin_name)                    AS vir_coin_name,
-             MAX(vir_coin_rate)                    AS vir_coin_rate,
-             MAX(include_pf_amt)                   AS include_pf_amt,
-             MAX(pf_amt_rate)                      AS pf_amt_rate
-      FROM warehouse.dw_huya_day_anchor_live
-      WHERE dt >= '{month}'
-        AND dt < '{month}' + INTERVAL 1 MONTH
-      GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
-               anchor_uid,
-               channel_id) al
+FROM (SELECT DATE_FORMAT(t.dt, '%Y-%m-01')             AS dt,
+             t.channel_id,
+             t.channel_num,
+             t.anchor_uid,
+             t.anchor_no,
+             t.month_newold_state                      AS newold_state,
+             t.active_state,
+             t.revenue_level,
+             SUM(IFNULL(t.duration, 0))                AS duration,
+             SUM(IFNULL(t.live_status, 0))             AS live_days,
+             SUM(IFNULL(t.revenue, 0))                 AS revenue,
+             AVG(IF(t.peak_pcu > 0, t.peak_pcu, NULL)) AS peak_pcu_avg,
+             MAX(t.peak_pcu)                           AS peak_pcu_max,
+             MIN(IF(t.peak_pcu > 0, t.peak_pcu, NULL)) AS peak_pcu_min,
+             MAX(t.vir_coin_name)                      AS vir_coin_name,
+             MAX(t.vir_coin_rate)                      AS vir_coin_rate,
+             MAX(t.include_pf_amt)                     AS include_pf_amt,
+             MAX(t.pf_amt_rate)                        AS pf_amt_rate
+      FROM (SELECT *,
+                   warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
+                                                                          WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
+                                                                              THEN LAST_DAY(dt)
+                                                                          ELSE '{cur_date}' END,
+                                            180) AS month_newold_state
+            FROM warehouse.dw_huya_day_anchor_live
+            WHERE dt >= '{month}'
+              AND dt < '{month}' + INTERVAL 1 MONTH
+           ) t
+      GROUP BY DATE_FORMAT(t.dt, '%Y-%m-01'),
+               t.channel_id,
+               t.channel_num,
+               t.anchor_uid,
+               t.anchor_no,
+               t.month_newold_state,
+               t.active_state,
+               t.revenue_level) al
          LEFT JOIN warehouse.dw_huya_month_anchor_info ai
                    ON al.channel_id = ai.channel_id AND al.anchor_uid = ai.anchor_uid AND ai.dt = al.dt
          LEFT JOIN warehouse.ods_hy_account_info aci ON al.channel_id = aci.channel_id
 ;
 
 
+-- 月公会
 -- DROP TABLE IF EXISTS stage.stage_huya_month_guild_live_revenue;
 -- CREATE TABLE stage.stage_huya_month_guild_live_revenue AS
 DELETE
@@ -153,7 +174,7 @@ INSERT INTO stage.stage_huya_month_guild_live_revenue
 SELECT DATE_FORMAT(dt, '%Y-%m-01'),
        t1.channel_id,
        SUM(IFNULL(revenue, 0)) AS revenue
-FROM warehouse.dw_huya_day_guild_live t1
+FROM warehouse.dw_huya_day_guild_live_true t1
 WHERE t1.dt >= '{month}'
   AND t1.dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
@@ -169,8 +190,8 @@ WHERE dt = '{monht}';
 INSERT INTO stage.stage_huya_month_guild_live_gift_income
 SELECT DATE_FORMAT(dt, '%Y-%m-01') AS dt,
        t1.channel_id,
-       SUM(IFNULL(gift_income, 0))             AS gift_income
-FROM warehouse.dw_huya_day_guild_live t1
+       SUM(IFNULL(gift_income, 0)) AS gift_income
+FROM warehouse.dw_huya_day_guild_live_true t1
 WHERE dt >= '{month}'
   AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
@@ -187,7 +208,7 @@ INSERT INTO stage.stage_huya_month_guild_live_guard_income
 SELECT DATE_FORMAT(dt, '%Y-%m-01')  AS dt,
        t1.channel_id,
        SUM(ifnull(guard_income, 0)) AS guard_income
-FROM warehouse.dw_huya_day_guild_live t1
+FROM warehouse.dw_huya_day_guild_live_true t1
 WHERE dt >= '{month}'
   AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
@@ -205,7 +226,7 @@ INSERT INTO stage.stage_huya_month_guild_live_noble_income
 SELECT DATE_FORMAT(dt, '%Y-%m-01')  AS dt,
        t1.channel_id,
        SUM(IFNULL(noble_income, 0)) AS noble_income
-FROM warehouse.dw_huya_day_guild_live t1
+FROM warehouse.dw_huya_day_guild_live_true t1
 WHERE dt >= '{month}'
   AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
@@ -213,12 +234,12 @@ GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
 ;
 
 
--- DROP TABLE IF EXISTS warehouse.dw_huya_month_guild_live;
--- CREATE TABLE warehouse.dw_huya_month_guild_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_huya_month_guild_live_true;
+-- CREATE TABLE warehouse.dw_huya_month_guild_live_true AS
 DELETE
-FROM warehouse.dw_huya_month_guild_live
+FROM warehouse.dw_huya_month_guild_live_true
 WHERE dt = '{month}';
-INSERT INTO warehouse.dw_huya_month_guild_live
+INSERT INTO warehouse.dw_huya_month_guild_live_true
 SELECT t1.dt AS dt,
        t1.platform_id,
        t1.platform_name,
@@ -246,10 +267,53 @@ FROM warehouse.dw_huya_month_guild_info t1
      ON t3.channel_id = t1.channel_id AND t1.dt = t3.dt
          LEFT JOIN
      stage.stage_huya_month_guild_live_guard_income t4
-     ON t1.channel_id AND t4.dt = t1.dt
+     ON t1.channel_id = t4.channel_id AND t4.dt = t1.dt
          LEFT JOIN stage.stage_huya_month_guild_live_noble_income t5
                    ON t5.channel_id = t1.channel_id AND t5.dt = t1.dt
          LEFT JOIN warehouse.ods_hy_account_info aci ON t1.channel_id = aci.channel_id
-WHERE t1.dt = '{month}'
+# WHERE t1.dt = '{month}'
+;
+
+
+-- dw_huya_month_guild_live
+-- DROP TABLE IF EXISTS warehouse.dw_huya_month_guild_live;
+-- CREATE TABLE warehouse.dw_huya_month_guild_live AS
+REPLACE INTO warehouse.dw_huya_month_guild_live
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01')    AS dt,
+       al.platform_id,
+       al.platform_name                  AS platform,
+       al.channel_type,
+       al.channel_num,
+       al.revenue_level,
+       al.month_newold_state             AS newold_state,
+       al.active_state,
+       COUNT(DISTINCT al.anchor_uid)     AS anchor_cnt,
+       COUNT(DISTINCT CASE
+                          WHEN al.live_status = 1 THEN al.anchor_uid
+                          ELSE NULL END) AS live_cnt,
+       SUM(IFNULL(al.duration, 0))       AS duration,
+       SUM(IFNULL(al.revenue, 0))        AS revenue,
+       SUM(IFNULL(al.revenue, 0))        AS revenune_orig,
+       SUM(0)                            AS guild_income,
+       SUM(0)                            AS guild_income_orig,
+       SUM(0)                            AS anchor_income,
+       SUM(0)                            AS anchor_income_orig
+FROM (SELECT *,
+             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
+                                                                        THEN LAST_DAY(dt)
+                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
+      FROM warehouse.dw_huya_day_anchor_live
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
+     ) al
+GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+         al.platform_id,
+         al.platform_name,
+         al.channel_type,
+         al.channel_num,
+         al.revenue_level,
+         al.month_newold_state,
+         al.active_state
 ;
 
