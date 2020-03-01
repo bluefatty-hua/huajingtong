@@ -48,10 +48,11 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-INSERT IGNORE INTO stage.stage_huya_day_anchor_info (anchor_uid, channel_id, comment, dt)
-SELECT anchor_uid, channel_id, 'from anchor_live_detail_day' AS comment, dt
-FROM warehouse.ods_huya_day_anchor_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+INSERT IGNORE INTO stage.stage_huya_day_anchor_info (anchor_uid, anchor_no, channel_id, comment, dt)
+SELECT al.anchor_uid, ai.anchor_no, al.channel_id, 'from anchor_live_detail_day' AS comment, al.dt
+FROM warehouse.ods_huya_day_anchor_live al
+LEFT JOIN (SELECT DISTINCT anchor_uid, anchor_no FROM stage.stage_huya_day_anchor_info) ai ON al.anchor_uid = ai.anchor_uid
+WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -149,12 +150,12 @@ WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- ===================================================================
 -- 公会收入
--- DROP TABLE IF EXISTS warehouse.dw_huya_day_guild_live;
--- CREATE TABLE warehouse.dw_huya_day_guild_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_huya_day_guild_live_true;
+-- CREATE TABLE warehouse.dw_huya_day_guild_live_true AS
 DELETE
-FROM warehouse.dw_huya_day_guild_live
+FROM warehouse.dw_huya_day_guild_live_true
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO warehouse.dw_huya_day_guild_live
+INSERT INTO warehouse.dw_huya_day_guild_live_true
 SELECT gi.dt,
        gi.platform_id,
        gi.platform_name,
@@ -188,3 +189,32 @@ FROM warehouse.dw_huya_day_guild_info gi
     WHERE gi.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+
+-- DELETE
+-- FROM warehouse.dw_huya_day_guild_live
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.dw_huya_day_guild_live
+SELECT al.dt,
+       al.platform_id,
+       al.platform_name,
+       al.channel_type,
+       al.channel_id,
+       al.channel_num,
+       al.newold_state,
+       al.active_state,
+       al.revenue_level,
+       COUNT(DISTINCT al.anchor_no) AS anchor_cnt,
+       COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS live_cnt,
+       SUM(IFNULL(al.revenue, 0))       AS revenue
+FROM warehouse.dw_huya_day_anchor_live al
+    WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+GROUP BY al.dt,
+       al.platform_id,
+       al.platform_name,
+       al.channel_type,
+       al.channel_id,
+       al.channel_num,
+       al.newold_state,
+       al.active_state,
+       al.revenue_level
+;
