@@ -2,28 +2,28 @@ USE bireport;
 delete from rpt_day_dy_xjl_recruit;
 insert into `rpt_day_dy_xjl_recruit`
 SELECT MIN(dt) AS dt,xjl_week,recruit_team,
-CONCAT('累计主播数:',MAX(anchor_cnt),'\n日均开播数:',ROUND(AVG(live_cnt),1),'\n总新开播:',SUM(new_live_cnt),'\n总短视频:',SUM(aweme_cnt),'\n总流水:',ROUND(SUM(revenue)/10,0))
+CONCAT('累计主播数:',MAX(anchor_cnt),'<br>日均开播数:',ROUND(AVG(live_cnt),1),'<br>总新开播:',SUM(new_live_cnt),'<br>总短视频:',SUM(aweme_cnt),'<br>总流水:',ROUND(SUM(revenue)/10,0))
 AS total,
 MAX(IF(xjl_day_of_week=0,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day1,
 MAX(IF(xjl_day_of_week=1,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day2,
 MAX(IF(xjl_day_of_week=2,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day3,
 MAX(IF(xjl_day_of_week=3,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day4,
 MAX(IF(xjl_day_of_week=4,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day5,
 MAX(IF(xjl_day_of_week=5,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day6,
 MAX(IF(xjl_day_of_week=6,
-CONCAT(dt,'\n','累计主播数:',anchor_cnt,'\n开播数:',live_cnt,'\n新开播:',new_live_cnt,'\n短视频:',aweme_cnt,'\n流水:',ROUND(revenue/10,0)),
+CONCAT(dt,'<br>','累计主播数:',anchor_cnt,'<br>开播数:',live_cnt,'<br>新开播:',new_live_cnt,'<br>短视频:',aweme_cnt,'<br>流水:',ROUND(revenue/10,0)),
 '')) AS day7
 FROM 
 (SELECT 
