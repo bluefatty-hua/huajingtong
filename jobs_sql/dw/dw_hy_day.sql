@@ -199,7 +199,7 @@ SELECT al.dt,
        al.platform_name,
        al.channel_type,
        al.channel_id,
-       al.channel_num,
+       ai.channel_no AS channel_num,
        al.newold_state,
        al.active_state,
        al.revenue_level,
@@ -207,6 +207,7 @@ SELECT al.dt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS live_cnt,
        SUM(IFNULL(al.revenue, 0))       AS revenue
 FROM warehouse.dw_huya_day_anchor_live al
+LEFT JOIN warehouse.ods_hy_account_info ai ON al.channel_id = ai.channel_id
     WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY al.dt,
        al.platform_id,
@@ -218,3 +219,4 @@ GROUP BY al.dt,
        al.active_state,
        al.revenue_level
 ;
+
