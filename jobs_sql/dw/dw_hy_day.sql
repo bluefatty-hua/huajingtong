@@ -190,9 +190,9 @@ FROM warehouse.dw_huya_day_guild_info gi
 ;
 
 
--- DELETE
--- FROM warehouse.dw_huya_day_guild_live
--- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE
+FROM warehouse.dw_huya_day_guild_live
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO warehouse.dw_huya_day_guild_live
 SELECT al.dt,
        al.platform_id,
