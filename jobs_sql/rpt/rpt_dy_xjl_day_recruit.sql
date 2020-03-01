@@ -39,4 +39,82 @@ SUM(IFNULL(revenue,0)) AS revenue
 FROM 
 warehouse.`dw_dy_xjl_day_anchor_live_recruit`
 GROUP BY recruit_team,dt) t
-GROUP BY xjl_week,recruit_team
+GROUP BY xjl_week,recruit_team;
+
+
+delete from rpt_day_dy_xjl_recruit_compare;
+
+insert into rpt_day_dy_xjl_recruit_compare
+SELECT dt,
+'新开播' AS idx,
+SUM(IF(recruit_team='招募一组',new_live_cnt,0)) AS team1,
+SUM(IF(recruit_team='招募二组',new_live_cnt,0)) AS team2,
+SUM(IF(recruit_team='招募三组',new_live_cnt,0)) AS team3,
+SUM(IF(recruit_team='招募四组',new_live_cnt,0)) AS team4,
+SUM(IF(recruit_team='招募五组',new_live_cnt,0)) AS team5,
+SUM(IF(recruit_team='招募六组',new_live_cnt,0)) AS team6,
+SUM(IF(recruit_team='招募七组',new_live_cnt,0)) AS team7,
+SUM(IF(recruit_team='未知',new_live_cnt,0)) AS unknow
+FROM 
+(SELECT 
+dt,
+IFNULL(recruit_team,'未知') AS recruit_team,
+COUNT(anchor_uid) AS anchor_cnt,
+SUM(IF(duration>3600,1,0)) AS live_cnt,
+SUM(IF(first_live_date = dt,1,0)) AS new_live_cnt,
+SUM(IFNULL(aweme_cnt,0)) AS aweme_cnt,
+SUM(IFNULL(revenue,0)) AS revenue
+FROM 
+warehouse.`dw_dy_xjl_day_anchor_live_recruit`
+GROUP BY recruit_team,dt) t
+GROUP BY dt;
+
+insert into rpt_day_dy_xjl_recruit_compare
+SELECT dt,
+'流水' AS idx,
+SUM(IF(recruit_team='招募一组',round(revenue,0),0)) AS team1,
+SUM(IF(recruit_team='招募二组',round(revenue,0),0)) AS team2,
+SUM(IF(recruit_team='招募三组',round(revenue,0),0)) AS team3,
+SUM(IF(recruit_team='招募四组',round(revenue,0),0)) AS team4,
+SUM(IF(recruit_team='招募五组',round(revenue,0),0)) AS team5,
+SUM(IF(recruit_team='招募六组',round(revenue,0),0)) AS team6,
+SUM(IF(recruit_team='招募七组',round(revenue,0),0)) AS team7,
+SUM(IF(recruit_team='未知',round(revenue,0),0)) AS unknow
+FROM 
+(SELECT 
+dt,
+IFNULL(recruit_team,'未知') AS recruit_team,
+COUNT(anchor_uid) AS anchor_cnt,
+SUM(IF(duration>3600,1,0)) AS live_cnt,
+SUM(IF(first_live_date = dt,1,0)) AS new_live_cnt,
+SUM(IFNULL(aweme_cnt,0)) AS aweme_cnt,
+SUM(IFNULL(revenue,0)) AS revenue
+FROM 
+warehouse.`dw_dy_xjl_day_anchor_live_recruit`
+GROUP BY recruit_team,dt) t
+GROUP BY dt;
+
+insert into rpt_day_dy_xjl_recruit_compare
+SELECT dt,
+'短视频数' AS idx,
+SUM(IF(recruit_team='招募一组',aweme_cnt,0)) AS team1,
+SUM(IF(recruit_team='招募二组',aweme_cnt,0)) AS team2,
+SUM(IF(recruit_team='招募三组',aweme_cnt,0)) AS team3,
+SUM(IF(recruit_team='招募四组',aweme_cnt,0)) AS team4,
+SUM(IF(recruit_team='招募五组',aweme_cnt,0)) AS team5,
+SUM(IF(recruit_team='招募六组',aweme_cnt,0)) AS team6,
+SUM(IF(recruit_team='招募七组',aweme_cnt,0)) AS team7,
+SUM(IF(recruit_team='未知',aweme_cnt,0)) AS unknow
+FROM 
+(SELECT 
+dt,
+IFNULL(recruit_team,'未知') AS recruit_team,
+COUNT(anchor_uid) AS anchor_cnt,
+SUM(IF(duration>3600,1,0)) AS live_cnt,
+SUM(IF(first_live_date = dt,1,0)) AS new_live_cnt,
+SUM(IFNULL(aweme_cnt,0)) AS aweme_cnt,
+SUM(IFNULL(revenue,0)) AS revenue
+FROM 
+warehouse.`dw_dy_xjl_day_anchor_live_recruit`
+GROUP BY recruit_team,dt) t
+GROUP BY dt;
