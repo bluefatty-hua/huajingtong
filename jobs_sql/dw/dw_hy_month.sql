@@ -271,7 +271,7 @@ FROM warehouse.dw_huya_month_guild_info t1
          LEFT JOIN stage.stage_huya_month_guild_live_noble_income t5
                    ON t5.channel_id = t1.channel_id AND t5.dt = t1.dt
          LEFT JOIN warehouse.ods_hy_account_info aci ON t1.channel_id = aci.channel_id
-# WHERE t1.dt = '{month}'
+WHERE t1.dt = '{month}'
 ;
 
 
