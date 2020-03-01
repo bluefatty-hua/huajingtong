@@ -243,7 +243,7 @@ FROM warehouse.dw_huya_month_guild_info t1
      ON t2.channel_id = t1.channel_id AND t1.dt = t2.dt
          LEFT JOIN
      stage.stage_huya_month_guild_live_gift_income t3
-     ON t3.channel_id = t1.channel_id AND t1.dt = t3.d
+     ON t3.channel_id = t1.channel_id AND t1.dt = t3.dt
          LEFT JOIN
      stage.stage_huya_month_guild_live_guard_income t4
      ON t1.channel_id AND t4.dt = t1.dt
