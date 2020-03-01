@@ -72,14 +72,14 @@ GROUP BY dt;
 insert into rpt_day_dy_xjl_recruit_compare
 SELECT dt,
 '流水' AS idx,
-SUM(IF(recruit_team='招募一组',round(revenue,0),0)) AS team1,
-SUM(IF(recruit_team='招募二组',round(revenue,0),0)) AS team2,
-SUM(IF(recruit_team='招募三组',round(revenue,0),0)) AS team3,
-SUM(IF(recruit_team='招募四组',round(revenue,0),0)) AS team4,
-SUM(IF(recruit_team='招募五组',round(revenue,0),0)) AS team5,
-SUM(IF(recruit_team='招募六组',round(revenue,0),0)) AS team6,
-SUM(IF(recruit_team='招募七组',round(revenue,0),0)) AS team7,
-SUM(IF(recruit_team='未知',round(revenue,0),0)) AS unknow
+SUM(IF(recruit_team='招募一组',round(revenue/10,0),0)) AS team1,
+SUM(IF(recruit_team='招募二组',round(revenue/10,0),0)) AS team2,
+SUM(IF(recruit_team='招募三组',round(revenue/10,0),0)) AS team3,
+SUM(IF(recruit_team='招募四组',round(revenue/10,0),0)) AS team4,
+SUM(IF(recruit_team='招募五组',round(revenue/10,0),0)) AS team5,
+SUM(IF(recruit_team='招募六组',round(revenue/10,0),0)) AS team6,
+SUM(IF(recruit_team='招募七组',round(revenue/10,0),0)) AS team7,
+SUM(IF(recruit_team='未知',round(revenue/10,0),0)) AS unknow
 FROM 
 (SELECT 
 dt,
