@@ -186,7 +186,7 @@ GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
 -- CREATE TABLE stage.stage_huya_month_guild_live_gift_income AS
 DELETE
 FROM stage.stage_huya_month_guild_live_gift_income
-WHERE dt = '{monht}';
+WHERE dt = '{month}';
 INSERT INTO stage.stage_huya_month_guild_live_gift_income
 SELECT DATE_FORMAT(dt, '%Y-%m-01') AS dt,
        t1.channel_id,
