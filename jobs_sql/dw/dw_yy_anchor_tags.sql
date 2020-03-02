@@ -3,20 +3,21 @@
 -- CREATE TABLE stage.stage_yy_anchor_min_live_dt
 INSERT IGNORE INTO stage.stage_yy_anchor_min_live_dt
 SELECT 1000 AS platform_id,
-       t.anchor_uid,
+       t.anchor_no,
        MIN(t.min_live_dt)
-FROM (SELECT al.anchor_uid,
+FROM (SELECT al.anchor_no,
              MIN(dt) AS min_live_dt
       FROM warehouse.ods_yy_day_anchor_live al
       WHERE al.live_status = 1
-      GROUP BY al.anchor_uid
+      GROUP BY al.anchor_no
       UNION
       SELECT yj.uid             AS anchor_no,
              yj.first_live_time AS min_live_time
       FROM warehouse.ods_yujia_anchor_list yj
       WHERE platform = 'YY'
-        AND first_live_time != '0000-00-00') t
-GROUP BY t.anchor_uid
+        AND first_live_time != '0000-00-00'
+        AND uid <> 0) t
+GROUP BY t.anchor_no
 ;
 
 
