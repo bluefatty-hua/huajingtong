@@ -140,7 +140,7 @@ GROUP BY dt,
 --  CREATE TABLE warehouse.dw_yy_month_anchor_live_true AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_true
-WHERE dt = '{monht}';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_anchor_live_true
 SELECT ab.dt,
        ab.platform_id,
@@ -162,7 +162,7 @@ WHERE ab.dt = '{month}'
 DELETE
 FROM warehouse.dw_yy_month_anchor_live
 WHERE dt = '{month}';
-INSERT INTO warehouse.dw_yy_month_anchor_live
+# INSERT INTO warehouse.dw_yy_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                          AS dt,
        al.platform_id,
        al.platform_name,
