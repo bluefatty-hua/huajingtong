@@ -335,7 +335,7 @@ UPDATE bireport.rpt_month_hy_guild_new a
     INNER JOIN warehouse.dw_huya_month_guild_live_true b
     ON a.dt = b.dt AND a.channel_num = b.channel_num
 SET a.revenue = b.revenue
-WHERE a.dt <= 20191101
+WHERE a.dt <= '2019-11-01'
   AND a.dt = '{month}'
   AND a.channel_type <> 'all'
   AND a.channel_num <> 'all'
@@ -352,7 +352,7 @@ UPDATE bireport.rpt_month_hy_guild_new a
                 GROUP BY gl.dt, ai.channel_type) b
     ON a.dt = b.dt AND a.channel_type = b.channel_type
 SET a.revenue = b.revenue
-WHERE a.dt <= 20191101
+WHERE a.dt <= '2019-11-01'
   AND a.dt = '{month}'
   AND a.channel_type <> 'all'
   AND a.channel_num = 'all'
@@ -366,7 +366,7 @@ UPDATE bireport.rpt_month_hy_guild_new a
     INNER JOIN (SELECT dt, SUM(revenue) AS revenue FROM warehouse.dw_huya_month_guild_live_true GROUP BY dt) b
     ON a.dt = b.dt
 SET a.revenue = b.revenue
-WHERE a.dt <= 20191101
+WHERE a.dt <= '2019-11-01'
   AND a.dt = '{month}'
   AND a.channel_type = 'all'
   AND a.channel_num = 'all'
