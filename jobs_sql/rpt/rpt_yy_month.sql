@@ -112,7 +112,7 @@ WHERE comment = 'orig'
 ;
 
 
-REPLACE into bireport.rpt_month_yy_guild_new (dt, platform_id, platform, channel_num, revenue_level, newold_state,
+REPLACE INTO bireport.rpt_month_yy_guild_new (dt, platform_id, platform, channel_num, revenue_level, newold_state,
                                               active_state,
                                               anchor_cnt, live_cnt, duration, anchor_bluediamond_revenue,
                                               guild_commission_revenue, revenue, revenue_orig, guild_income_bluediamond,
@@ -138,7 +138,7 @@ FROM (SELECT dt,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_month_yy_guild_new
-      WHERE (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -165,7 +165,7 @@ FROM (SELECT dt,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_month_yy_guild_new
-      WHERE (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, revenue_level, newold_state, active_state, channel_num
       WITH ROLLUP
@@ -192,7 +192,7 @@ FROM (SELECT dt,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_month_yy_guild_new
-      WHERE (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, newold_state, active_state, channel_num, revenue_level
       WITH ROLLUP
@@ -219,7 +219,7 @@ FROM (SELECT dt,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_month_yy_guild_new
-      WHERE (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, active_state, channel_num, revenue_level, newold_state
       WITH ROLLUP
@@ -246,7 +246,7 @@ FROM (SELECT dt,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_month_yy_guild_new
-      WHERE (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, active_state, revenue_level, channel_num, newold_state
       WITH ROLLUP
@@ -297,8 +297,8 @@ from (SELECT dt,
              '主播数'      as idx,
              anchor_cnt as val
       FROM bireport.rpt_month_yy_guild_new
-      where dt = '{month}'
-        and revenue_level != 'all'
+      where revenue_level != 'all'
+        and dt = '{month}'
       union
       SELECT dt,
              channel_num,
@@ -308,8 +308,8 @@ from (SELECT dt,
              '开播数'    as idx,
              live_cnt as val
       FROM bireport.rpt_month_yy_guild_new
-      where dt = '{month}'
-        and revenue_level != 'all'
+      where revenue_level != 'all'
+        and dt = '{month}'
       union
       SELECT dt,
              channel_num,
@@ -319,8 +319,8 @@ from (SELECT dt,
              '流水'    as idx,
              revenue as val
       FROM bireport.rpt_month_yy_guild_new
-      where dt = '{month}'
-        and revenue_level != 'all'
+      where revenue_level != 'all'
+        and dt = '{month}'
       union
       SELECT dt,
              channel_num,
@@ -330,8 +330,8 @@ from (SELECT dt,
              '开播人均流水'                     as idx,
              round(revenue / live_cnt, 0) as val
       FROM bireport.rpt_month_yy_guild_new
-      where dt = '{month}'
-        and revenue_level != 'all'
+      where revenue_level != 'all'
+        and dt = '{month}'
         and live_cnt > 0) t
 ;
 
