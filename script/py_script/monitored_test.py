@@ -37,6 +37,7 @@ def run_sql(sql_dic, sql_param):
     judge_sql = sql_dic['judge_sql'].format(cur_date=sql_param['cur_date'])
     insert_sql = sql_dic['insert_sql'].format(cur_date=sql_param['cur_date'])
     i = 0
+    text = ''
     sql = ''
     try:
         sql = judge_sql
@@ -56,14 +57,15 @@ def run_sql(sql_dic, sql_param):
                 pass
             else:
                 i += 1
-                text = 'ERROR:' + t[1] + ('{judge_date}数据有误&{cur_date}数据缺失' if t[2] != 1 and t[3] != 1 else (
+                text += 'ERROR:' + t[1] + ('{judge_date}数据有误&{cur_date}数据缺失' if t[2] != 1 and t[3] != 1 else (
                     '{cur_date}数据缺失' if t[2] == 1 and t[3] != 1 else '{judge_date}数据有误')).format(judge_date=judge_date,
-                                                                                                 cur_date=cur_date)
-                send_email(TO_AGENT['email'], 'monitored.sql', '', text)
+                                                                                                 cur_date=cur_date) + '\n'
         if i == 0:
             sql = insert_sql
             cursor.execute(insert_sql)
             conn.commit()
+        else:
+            send_email(TO_AGENT['email'], 'monitored.sql', '', text)
     except Exception as err:
         logging.exception(err)
         text = '{err}\n{sql}'.format(err=err, sql=sql)
