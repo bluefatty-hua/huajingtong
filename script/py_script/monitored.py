@@ -27,7 +27,7 @@ cursor = conn.cursor()
 def run_sql(sql_param):
     judge_sql = '''SELECT n.dt, m.platform, (n.revenue = m.revenue AND n.anchor_cnt = m.anchor_cnt AND n.live_cnt = m.live_cnt)
              FROM bireport.rpt_day_all_new n
-             INNER JOIN stage.monitored m ON n.dt = m.dt ND n.platform = m.platform
+             INNER JOIN stage.monitored m ON n.dt = m.dt AND n.platform = m.platform
              WHERE newold_state = 'all'
                AND active_state = 'all'
                AND revenue_level = 'all'
@@ -36,13 +36,14 @@ def run_sql(sql_param):
     insert_sql = '''
             REPLACE INTO stage.monitored
             SELECT dt, platform, anchor_cnt, live_cnt, revenue
-            FROM bireport.rpt_day_all_new
+            FROM bireport.rpt_day_all_ne
             WHERE newold_state = 'all'
               AND active_state = 'all'
               AND revenue_level = 'all'
               -- t-1
               AND dt = '{cur_date}';'''.format(cur_date=cur_date)
     i = 0
+    sql = ''
     try:
         sql = judge_sql
         cursor.execute(judge_sql)
@@ -60,7 +61,7 @@ def run_sql(sql_param):
                 pass
             else:
                 i += 1
-                send_email(TO_AGENT['email'], 'monitored.sql', '', 'ERROR:' + t[1])
+                send_email(TO_AGENT['email'], 'monitored.sql', '', 'ERROR:' + t[1] + '数据有误')
         if i == 0:
             sql = insert_sql
             cursor.execute(insert_sql)
