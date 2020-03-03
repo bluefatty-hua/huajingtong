@@ -6,11 +6,10 @@ from datetime import datetime
 import io
 import os
 import logging
-from log import init_logging
-from config import LOG_DIR
-from config import PROJECT_DIR
-from config import PROJECT_TEST_DIR
-from config import XJL_ETL_DB
+from script.py_script.common.log import init_logging
+from script.py_script.common.config import LOG_DIR
+from script.py_script.common.config import PROJECT_DIR
+from script.py_script.common.config import XJL_ETL_DB
 import sys
 import arrow
 
