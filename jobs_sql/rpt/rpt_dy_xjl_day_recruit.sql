@@ -4,7 +4,7 @@ INSERT INTO `rpt_day_dy_xjl_recruit`
 SELECT MIN(dt) AS dt,xjl_week,recruit_team,
 CONCAT('<br><img title="累计主播数" style="height:22px" src="/images/181548.svg">:',MAX(anchor_cnt),'<br><img title="总新开播" style="height:22px" src="/images/181537.svg">:',SUM(new_live_cnt),'<br><img title="总短视频" style="height:22px" src="/images/181538.svg">:',SUM(aweme_cnt),'<br><img title="总流水" style="height:22px" src="/images/181569.svg">:',ROUND(SUM(revenue)/10,0))
 AS total,
-MAX(IF(xjl_day_of_week=1,
+MAX(IF(xjl_day_of_week=0,
 CONCAT(RIGHT(dt,5),'<br>','<img title="" style="height:22px" src="/images/181548.svg">:',anchor_cnt,'<br><img title="" style="height:22px" src="/images/181537.svg">:',new_live_cnt,'<br><img title="" style="height:22px" src="/images/181538.svg">:',aweme_cnt,'<br><img title="" style="height:22px" src="/images/181569.svg">:',ROUND(revenue/10,0)),
 '')) AS day1,
 MAX(IF(xjl_day_of_week=1,
