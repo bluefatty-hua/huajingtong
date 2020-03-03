@@ -57,9 +57,10 @@ def run_sql(sql_dic, sql_param):
                 pass
             else:
                 i += 1
-                text += 'ERROR:' + t[1] + ('\t\t-{judge_date}\数据有误&{\t\t-cur_date}数据缺失' if t[2] != 1 and t[3] != 1 else (
-                    '\t\t-{cur_date}数据缺失' if t[2] == 1 and t[3] != 1 else '\t\t-{judge_date}数据有误')).format(judge_date=judge_date,
-                                                                                                 cur_date=cur_date) + '\n'
+                text += 'ERROR:' + t[1] + ('-{judge_date}-数据有误&{cur_date}-数据缺失' if t[2] != 1 and t[3] != 1 else (
+                    '-{cur_date}-数据缺失' if t[2] == 1 and t[3] != 1 else '-{judge_date}-数据有误')).format(
+                    judge_date=judge_date,
+                    cur_date=cur_date) + '\n'
         if i == 0:
             sql = insert_sql
             cursor.execute(insert_sql)
