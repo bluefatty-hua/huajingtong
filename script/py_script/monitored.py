@@ -37,18 +37,31 @@ def run_sql(sql_param):
     try:
         cursor.execute(sql)
         result = cursor.fetchall()
-        '''((datetime.date(2020, 3, 1), 'all', 1), 
-            (datetime.date(2020, 3, 1), 'bilibili', 1), 
-            (datetime.date(2020, 3, 1), 'DouYin', 1), 
-            (datetime.date(2020, 3, 1), 'FanXing', 1),
-            (datetime.date(2020, 3, 1), 'HUYA', 1), 
-            (datetime.date(2020, 3, 1), 'NOW', 1), 
-            (datetime.date(2020, 3, 1), 'YY', 1))'''
+           # ((datetime.date(2020, 3, 1), 'all', 1),
+           #  (datetime.date(2020, 3, 1), 'bilibili', 1),
+           #  (datetime.date(2020, 3, 1), 'DouYin', 1),
+           #  (datetime.date(2020, 3, 1), 'FanXing', 1),
+           #  (datetime.date(2020, 3, 1), 'HUYA', 1),
+           #  (datetime.date(2020, 3, 1), 'NOW', 1),
+           #  (datetime.date(2020, 3, 1), 'YY', 1))
         for t in result:
             print(t)
-            i += 0 if t[2] == 1 else 1
-        print(i)
-
+            if t[2] == 1:
+                pass
+            else:
+                i += 1
+                send_email(TO_AGENT['email'], 'monitored.sql', '', 'ERROR:' + t[1])
+        if i == 0:
+            cursor.execute('''
+            REPLACE INTO stage.rs_monitored_tmp0
+            SELECT dt, platform, anchor_cnt, live_cnt, revenue
+            FROM bireport.rpt_day_all_new
+            WHERE newold_state = 'all'
+              AND active_state = 'all'
+              AND revenue_level = 'all'
+              -- t-1
+              AND dt = '2020-03-02';
+            ''')
     except Exception as err:
         logging.exception(err)
         text = '{err}\n{sql}'.format(err=err, sql=sql)
