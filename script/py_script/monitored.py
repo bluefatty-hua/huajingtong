@@ -27,7 +27,7 @@ cursor = conn.cursor()
 def run_sql(sql_param):
     judge_sql = '''SELECT n.dt, m.platform, (n.revenue = m.revenue AND n.anchor_cnt = m.anchor_cnt AND n.live_cnt = m.live_cnt)
              FROM bireport.rpt_day_all_new n
-             INNER JOIN stage.monitored m ON n.dt = m.dt AND n.platform = m.platform
+             INNER JOIN stage.monitored m ON n.dt = m.dt ND n.platform = m.platform
              WHERE newold_state = 'all'
                AND active_state = 'all'
                AND revenue_level = 'all'
