@@ -44,21 +44,21 @@ def run_sql(sql_dic, sql_param):
         cursor.execute(judge_sql)
         result = cursor.fetchall()
         logging.info('\n' + str(result).replace('), (', '),\n ('))
-        # ((datetime.date(2020, 3, 1), 'all', 1),
-        #  (datetime.date(2020, 3, 1), 'bilibili', 1),
-        #  (datetime.date(2020, 3, 1), 'DouYin', 1),
-        #  (datetime.date(2020, 3, 1), 'FanXing', 1),
-        #  (datetime.date(2020, 3, 1), 'HUYA', 1),
-        #  (datetime.date(2020, 3, 1), 'NOW', 1),
-        #  (datetime.date(2020, 3, 1), 'YY', 1))
+        # (datetime.date(2020, 3, 1), 'all', 1, 1)
+        # (datetime.date(2020, 3, 1), 'bilibili', 1, 1)
+        # (datetime.date(2020, 3, 1), 'DouYin', 1, 1)
+        # (datetime.date(2020, 3, 1), 'FanXing', 1, 1)
+        # (datetime.date(2020, 3, 1), 'HUYA', 1, 1)
+        # (datetime.date(2020, 3, 1), 'NOW', 1, 1)
+        # (datetime.date(2020, 3, 1), 'YY', 1, 1)
         for t in result:
             print(t)
             if t[2] == 1 and t[3] == 1:
                 pass
             else:
                 i += 1
-                text += 'ERROR:' + t[1] + ('-{judge_date}数据有误&{cur_date}数据缺失' if t[2] != 1 and t[3] != 1 else (
-                    '{cur_date}数据缺失' if t[2] == 1 and t[3] != 1 else '{judge_date}数据有误')).format(judge_date=judge_date,
+                text += 'ERROR:' + t[1] + ('\t\t-{judge_date}\数据有误&{\t\t-cur_date}数据缺失' if t[2] != 1 and t[3] != 1 else (
+                    '\t\t-{cur_date}数据缺失' if t[2] == 1 and t[3] != 1 else '\t\t-{judge_date}数据有误')).format(judge_date=judge_date,
                                                                                                  cur_date=cur_date) + '\n'
         if i == 0:
             sql = insert_sql
