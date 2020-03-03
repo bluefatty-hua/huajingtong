@@ -88,8 +88,8 @@ if __name__ == '__main__':
 
     # 部署项目路径
     # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
-    # sql_file = project_path + args.sql_file
-    sql_file = '/services/xjl_etl/script/py_script/rs_test_sql.sql'  # TEST
+    project_path = '/services/xjl_etl/script/py_script/'  # TEST
+    sql_file = project_path + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
 
     # 格式化参数字典
