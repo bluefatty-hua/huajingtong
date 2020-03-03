@@ -33,6 +33,7 @@ def run_sql(sql_param):
                AND revenue_level = 'all'
                -- t-2
                AND n.dt = '2020-03-02' - INTERVAL 1 DAY;'''
+    i = 0
     try:
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -43,7 +44,11 @@ def run_sql(sql_param):
             (datetime.date(2020, 3, 1), 'HUYA', 1), 
             (datetime.date(2020, 3, 1), 'NOW', 1), 
             (datetime.date(2020, 3, 1), 'YY', 1))'''
-        print(result, type(result))
+        for t in result:
+            print(t)
+            i += 0 if t[2] == 1 else 1
+        print(i)
+
     except Exception as err:
         logging.exception(err)
         text = '{err}\n{sql}'.format(err=err, sql=sql)
