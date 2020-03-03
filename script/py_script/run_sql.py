@@ -9,14 +9,16 @@ import io
 import os
 import logging
 from log import init_logging
+from sent_email import send_email
 from config import LOG_DIR
 from config import XJL_ETL_DB
+from config import TO_AGENT
 import sys
 from warnings import filterwarnings
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-filterwarnings('ignore', category = pymysql.Warning)
+filterwarnings('ignore', category=pymysql.Warning)
 # 链接数据库
 conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJL_ETL_DB['user'],
                        password=XJL_ETL_DB['password'])
@@ -62,6 +64,7 @@ def run_sql(sql_param, file):
             except Exception as err:
                 logging.info('----------------------------ERROR SQL---------------------------\n{}'.format(sql))
                 logging.exception(err)
+                send_email(TO_AGENT['email'], err, '', '')
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
                 break
@@ -97,6 +100,7 @@ if __name__ == '__main__':
         run_sql(param_dic, sql_file)
         conn.commit()
         logging.info('------------------------------DONE------------------------------')
+        send_email(TO_AGENT['email'], 'DONE')
     except Exception as err:
         logging.exception(err)
     finally:

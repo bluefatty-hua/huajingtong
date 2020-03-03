@@ -14,6 +14,10 @@ EMAIL_CONF = {
     'SSL_PORT':465
 }
 
+TO_AGENT = {
+    'email': 'ruansheng@yj543.com'  # 阮胜
+}
+
 
 XJL_ETL_DB = {
     'host':'localhost',
