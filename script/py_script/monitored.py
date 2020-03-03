@@ -54,7 +54,7 @@ def run_sql(sql_param):
         sql = judge_sql
         cursor.execute(judge_sql)
         result = cursor.fetchall()
-        logging.info(str(result).replace('), (', '),\n ('))
+        logging.info('\n' + str(result).replace('), (', '),\n ('))
         # ((datetime.date(2020, 3, 1), 'all', 1),
         #  (datetime.date(2020, 3, 1), 'bilibili', 1),
         #  (datetime.date(2020, 3, 1), 'DouYin', 1),
