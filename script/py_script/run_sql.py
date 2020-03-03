@@ -65,7 +65,7 @@ def run_sql(sql_param, file):
                 logging.info('----------------------------ERROR SQL---------------------------\n{}'.format(sql))
                 logging.exception(err)
                 print('++++++++++++=+=============+=+++=========++++++++++++++=')
-                send_email(TO_AGENT['email'], err, '', '\nsql')
+                send_email(TO_AGENT['email'], file, '', '{err}\n{sql}'.format(err=err, sql=sql))
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
                 break
