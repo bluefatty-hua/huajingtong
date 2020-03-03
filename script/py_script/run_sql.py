@@ -64,7 +64,9 @@ def run_sql(sql_param, file):
             except Exception as err:
                 logging.info('----------------------------ERROR SQL---------------------------\n{}'.format(sql))
                 logging.exception(err)
-                send_email(TO_AGENT['email'], file, '', '{err}\n{sql}'.format(err=err, sql=sql))
+                text = '{err}\n{sql}'.format(err=err, sql=sql)
+                subject = file.split('/')[-1]
+                send_email(TO_AGENT['email'], subject, '', text)
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
                 return
@@ -88,8 +90,8 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
-    project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
-    # project_path = '/services/xjl_etl/script/py_script/'  # TEST
+    # project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
+    project_path = '/services/xjl_etl/script/py_script/'  # TEST
     sql_file = project_path + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
 
