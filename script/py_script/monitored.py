@@ -16,6 +16,12 @@ from common.config import TO_AGENT
 import sys
 from warnings import filterwarnings
 
+
+log_path = LOG_DIR + datetime.now().strftime('%Y%m%d')
+if not os.path.exists(log_path):
+    os.makedirs(log_path)
+log_file = log_path + '/etl_' + 'monitored.log'
+init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO, 'log_file': log_file})
 cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 
 # 连接数据库
@@ -48,6 +54,7 @@ def run_sql(sql_param):
         sql = judge_sql
         cursor.execute(judge_sql)
         result = cursor.fetchall()
+        logging.info(result)
         # ((datetime.date(2020, 3, 1), 'all', 1),
         #  (datetime.date(2020, 3, 1), 'bilibili', 1),
         #  (datetime.date(2020, 3, 1), 'DouYin', 1),
