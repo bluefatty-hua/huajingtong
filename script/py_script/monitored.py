@@ -25,17 +25,27 @@ cursor = conn.cursor()
 
 
 def run_sql(sql_param):
-    sql = '''SELECT n.dt, m.platform, (n.revenue = m.revenue AND n.anchor_cnt = m.anchor_cnt AND n.live_cnt = m.live_cnt)
+    judge_sql = '''SELECT n.dt, m.platform, (n.revenue = m.revenue AND n.anchor_cnt = m.anchor_cnt AND n.live_cnt = m.live_cnt)
              FROM bireport.rpt_day_all_new n
-             INNER JOIN stage.rs_monitored_tmp0 m ON n.dt = m.dt AND n.platform = m.platform
+             INNER JOIN stage.monitored m ON n.dt = m.dt AND n.platform = m.platform
              WHERE newold_state = 'all'
                AND active_state = 'all'
                AND revenue_level = 'all'
                -- t-2
-               AND n.dt = '2020-03-02' - INTERVAL 1 DAY;'''
+               AND n.dt = '{cur_date}' - INTERVAL 1 DAY;'''.format(cur_date=cur_date)
+    insert_sql = '''
+            REPLACE INTO stage.monitored
+            SELECT dt, platform, anchor_cnt, live_cnt, revenue
+            FROM bireport.rpt_day_all_new
+            WHERE newold_state = 'all'
+              AND active_state = 'all'
+              AND revenue_level = 'all'
+              -- t-1
+              AND dt = '{cur_date}';'''.format(cur_date=cur_date)
     i = 0
     try:
-        cursor.execute(sql)
+        sql = judge_sql
+        cursor.execute(judge_sql)
         result = cursor.fetchall()
         # ((datetime.date(2020, 3, 1), 'all', 1),
         #  (datetime.date(2020, 3, 1), 'bilibili', 1),
@@ -52,16 +62,8 @@ def run_sql(sql_param):
                 i += 1
                 send_email(TO_AGENT['email'], 'monitored.sql', '', 'ERROR:' + t[1])
         if i == 0:
-            cursor.execute('''
-            REPLACE INTO stage.rs_monitored_tmp0
-            SELECT dt, platform, anchor_cnt, live_cnt, revenue
-            FROM bireport.rpt_day_all_new
-            WHERE newold_state = 'all'
-              AND active_state = 'all'
-              AND revenue_level = 'all'
-              -- t-1
-              AND dt = '2020-03-02';
-            ''')
+            sql = insert_sql
+            cursor.execute(insert_sql)
             conn.commit()
     except Exception as err:
         logging.exception(err)
