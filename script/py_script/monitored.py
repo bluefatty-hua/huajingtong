@@ -36,7 +36,7 @@ def run_sql(sql_param):
     insert_sql = '''
             REPLACE INTO stage.monitored
             SELECT dt, platform, anchor_cnt, live_cnt, revenue
-            FROM bireport.rpt_day_all_ne
+            FROM bireport.rpt_day_all_new
             WHERE newold_state = 'all'
               AND active_state = 'all'
               AND revenue_level = 'all'
