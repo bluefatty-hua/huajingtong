@@ -164,7 +164,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild_new
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND (channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state
       WITH ROLLUP
 
@@ -191,7 +191,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild_new
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND (channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
       GROUP BY dt, revenue_level, newold_state, active_state, channel_num
       WITH ROLLUP
 
@@ -218,7 +218,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild_new
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND (channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
       GROUP BY dt, newold_state, active_state, channel_num, revenue_level
       WITH ROLLUP
 
@@ -245,7 +245,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild_new
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND (channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
       GROUP BY dt, active_state, channel_num, revenue_level, newold_state
       WITH ROLLUP
 
@@ -272,7 +272,7 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild_new
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND (channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+        AND (channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
       GROUP BY dt, active_state, revenue_level, channel_num, newold_state
       WITH ROLLUP
      ) t

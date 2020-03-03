@@ -121,7 +121,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, channel_type, channel_num, revenue_level, newold_state, active_state
@@ -140,7 +140,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state, channel_type
@@ -159,7 +159,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, newold_state, active_state, channel_type, channel_num
@@ -178,7 +178,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, channel_type, channel_num, revenue_level
@@ -197,7 +197,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, channel_type, channel_num, revenue_level, newold_state
@@ -216,7 +216,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, channel_num, channel_type, active_state, revenue_level, newold_state
@@ -235,7 +235,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, channel_type, channel_num, revenue_level, active_state
@@ -254,7 +254,7 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild_new
-      WHERE (channel_type != 'all' OR channel_num != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR
+      WHERE (channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' OR
              active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, channel_type, newold_state, revenue_level, channel_num

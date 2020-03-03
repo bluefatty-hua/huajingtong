@@ -75,7 +75,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_dy_xjl_guild_new
-      WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
        AND dt = '{month}'
       GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -99,7 +99,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_dy_xjl_guild_new
-      WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
        AND dt = '{month}'
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
@@ -123,7 +123,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_dy_xjl_guild_new
-      WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
        AND dt = '{month}'
       GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
       WITH ROLLUP
@@ -147,7 +147,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_dy_xjl_guild_new
-      WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
        AND dt = '{month}'
       GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
       WITH ROLLUP
@@ -171,7 +171,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_dy_xjl_guild_new
-      WHERE (backend_account_id != 'all' OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
        AND dt = '{month}'
       GROUP BY dt, backend_account_id, newold_state, revenue_level, active_state
       WITH ROLLUP

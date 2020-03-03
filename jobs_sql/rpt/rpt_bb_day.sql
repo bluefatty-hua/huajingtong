@@ -148,7 +148,7 @@ FROM (SELECT dt,
              SUM(anchor_income)            AS anchor_income,
              SUM(anchor_income_orig)       AS anchor_income_orig
       FROM bireport.rpt_day_bb_guild_new
-      WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 0 AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -172,7 +172,7 @@ FROM (SELECT dt,
              SUM(anchor_income)            AS anchor_income,
              SUM(anchor_income_orig)       AS anchor_income_orig
       FROM bireport.rpt_day_bb_guild_new
-      WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 0 AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
@@ -196,7 +196,7 @@ FROM (SELECT dt,
              SUM(anchor_income)            AS anchor_income,
              SUM(anchor_income_orig)       AS anchor_income_orig
       FROM bireport.rpt_day_bb_guild_new
-      WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 0 AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
       WITH ROLLUP
@@ -220,7 +220,7 @@ FROM (SELECT dt,
              SUM(anchor_income)            AS anchor_income,
              SUM(anchor_income_orig)       AS anchor_income_orig
       FROM bireport.rpt_day_bb_guild_new
-      WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 0 AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
       WITH ROLLUP
@@ -243,7 +243,7 @@ FROM (SELECT dt,
              SUM(anchor_income)            AS anchor_income,
              SUM(anchor_income_orig)       AS anchor_income_orig
       FROM bireport.rpt_day_bb_guild_new
-      WHERE (backend_account_id != 0 OR revenue_level != 'all' OR newold_state != 'all' OR active_state != 'all')
+      WHERE (backend_account_id != 0 AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, newold_state, revenue_level, active_state
       WITH ROLLUP
@@ -279,19 +279,19 @@ SELECT t1.dt,
        IF(t2.live_cnt > 0, ROUND(t2.revenue / t2.live_cnt, 0), 0)      AS revenue_per_live_lastweek,
        IF(t3.live_cnt > 0, ROUND(t3.revenue / t3.live_cnt, 0), 0)      AS revenue_per_live_lastmonth
 FROM bireport.rpt_day_bb_guild_new t1
-LEFT JOIN bireport.rpt_day_bb_guild_new t2
-	ON t1.dt - INTERVAL 7 DAY = t2.dt
-	AND t1.remark = t2.remark
-	AND t1.revenue_level = t2.revenue_level
-	AND t1.newold_state = t2.newold_state
-	AND t1.active_state = t2.active_state
-LEFT JOIN bireport.rpt_day_bb_guild_new t3
-	ON t1.dt - INTERVAL 1 MONTH = t3.dt
-	AND t1.remark = t3.remark
-	AND t1.revenue_level = t3.revenue_level
-	AND t1.newold_state = t3.newold_state
-	AND t1.active_state = t3.active_state
-  WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
+         LEFT JOIN bireport.rpt_day_bb_guild_new t2
+                   ON t1.dt - INTERVAL 7 DAY = t2.dt
+                       AND t1.remark = t2.remark
+                       AND t1.revenue_level = t2.revenue_level
+                       AND t1.newold_state = t2.newold_state
+                       AND t1.active_state = t2.active_state
+         LEFT JOIN bireport.rpt_day_bb_guild_new t3
+                   ON t1.dt - INTERVAL 1 MONTH = t3.dt
+                       AND t1.remark = t3.remark
+                       AND t1.revenue_level = t3.revenue_level
+                       AND t1.newold_state = t3.newold_state
+                       AND t1.active_state = t3.active_state
+WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -345,29 +345,32 @@ from (SELECT dt,
 ;
 
 
-
--- 主播数据 --- 
-delete from bireport.`rpt_day_bb_anchor` where dt BETWEEN '{start_date}' AND '{end_date}'; 
-INSERT INTO  bireport.rpt_day_bb_anchor 
-SELECT    
-`dt`,
-t.backend_account_id,
-remark,
-`min_live_dt` AS first_live_date,
-`min_sign_dt` AS sign_date,
-`newold_state`,
-`last_month_duration`/3600 AS duration_lastmonth,
-live_days AS live_days_lastmonth,
-`active_state` ,
-`last_month_revenue`/1000 AS revenue_lastmonth,
-`revenue_level`,
-anchor_no AS `anchor_uid`,
-`anchor_no`,
-dau,max_ppl,fc,
-`anchor_nick_name`,
-anchor_status_text,
-`duration`/3600 AS  duration,
-IF(`live_status`=1,'是','否') AS live_status ,
-anchor_total_coin/1000 AS revenue FROM warehouse.dw_bb_day_anchor_live t
-LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
+-- 主播数据 ---
+delete
+from bireport.rpt_day_bb_anchor
+where dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO bireport.rpt_day_bb_anchor
+SELECT dt,
+       t.backend_account_id,
+       remark,
+       min_live_dt                   AS first_live_date,
+       min_sign_dt                   AS sign_date,
+       newold_state,
+       last_month_duration / 3600    AS duration_lastmonth,
+       live_days                     AS live_days_lastmonth,
+       active_state,
+       last_month_revenue / 1000     AS revenue_lastmonth,
+       revenue_level,
+       anchor_no                     AS anchor_uid,
+       anchor_no,
+       dau,
+       max_ppl,
+       fc,
+       anchor_nick_name,
+       anchor_status_text,
+       duration / 3600               AS duration,
+       IF(live_status = 1, '是', '否') AS live_status,
+       anchor_total_coin / 1000      AS revenue
+FROM warehouse.dw_bb_day_anchor_live t
+         LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
 where dt BETWEEN '{start_date}' AND '{end_date}'; 
