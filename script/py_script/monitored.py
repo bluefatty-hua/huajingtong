@@ -35,8 +35,7 @@ def run_sql(sql_param):
                -- t-2
                AND n.dt = '2020-03-02' - INTERVAL 1 DAY;'''
     try:
-        cursor.execute(
-        )
+        cursor.execute(sql)
         print(cursor.fetchall())
     except Exception as err:
         logging.exception(err)
