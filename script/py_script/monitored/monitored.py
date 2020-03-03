@@ -8,11 +8,11 @@ from datetime import timedelta
 import io
 import os
 import logging
-from script.py_script.common.log import init_logging
-from script.py_script.common.sent_email import send_email
-from script.py_script.common.config import LOG_DIR
-from script.py_script.common.config import XJL_ETL_DB
-from script.py_script.common.config import TO_AGENT
+from ..common.log import init_logging
+from ..common.sent_email import send_email
+from ..common.config import LOG_DIR
+from ..common.config import XJL_ETL_DB
+from ..common.config import TO_AGENT
 import sys
 from warnings import filterwarnings
 
