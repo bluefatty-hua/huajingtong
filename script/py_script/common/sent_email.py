@@ -55,11 +55,11 @@ def send_email(to_addr, subject, qrcode_img='', text=''):
     msg['to'] = _format_addr(u'<%s>' % to_addr)  # 收件人地址
     msg['Subject'] = Header(subject, 'utf-8').encode()
     if qrcode_img:
-        msg.attach(MIMEText('<html><body><h1>%s</h1>' % text +
+        msg.attach(MIMEText('<html><body><h2>%s</h2>' % text +
                             '<p><img src="cid:0"></p>' +
                             '</body></html>', 'html', 'utf-8'))
     else:
-        msg.attach(MIMEText('<html><body><h1>%s</h1>' % text +
+        msg.attach(MIMEText('<html><body><h3>%s</h3>' % text +
                             '</body></html>', 'html', 'utf-8'))
     # 设置附件的MIME和文件名，这里是png类型:
     if qrcode_img:
