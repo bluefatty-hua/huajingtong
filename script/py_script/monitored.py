@@ -16,7 +16,6 @@ from common.config import TO_AGENT
 import sys
 from warnings import filterwarnings
 
-
 cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 
 # 连接数据库
@@ -36,7 +35,15 @@ def run_sql(sql_param):
                AND n.dt = '2020-03-02' - INTERVAL 1 DAY;'''
     try:
         cursor.execute(sql)
-        print(cursor.fetchall())
+        result = cursor.fetchall()
+        '''((datetime.date(2020, 3, 1), 'all', 1), 
+            (datetime.date(2020, 3, 1), 'bilibili', 1), 
+            (datetime.date(2020, 3, 1), 'DouYin', 1), 
+            (datetime.date(2020, 3, 1), 'FanXing', 1),
+            (datetime.date(2020, 3, 1), 'HUYA', 1), 
+            (datetime.date(2020, 3, 1), 'NOW', 1), 
+            (datetime.date(2020, 3, 1), 'YY', 1))'''
+        print(result, type(result))
     except Exception as err:
         logging.exception(err)
         text = '{err}\n{sql}'.format(err=err, sql=sql)
