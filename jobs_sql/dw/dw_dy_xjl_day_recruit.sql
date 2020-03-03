@@ -64,7 +64,7 @@ ON t1.anchor_uid = first_live.anchor_uid
 LEFT OUTER JOIN 
 (SELECT author_id,DATE(create_time) AS aweme_create_date,COUNT(*) AS aweme_cnt
 FROM `aweme`.`aweme`
-where create_time  BETWEEN '{start_date}' AND '{end_date}'
+where create_time  BETWEEN '{start_date}' AND '{end_date} 23:59:59'
 GROUP BY author_id,DATE(create_time)) AS aweme
 ON t1.anchor_uid = aweme.author_id
 AND t1.dt = aweme.aweme_create_date 
