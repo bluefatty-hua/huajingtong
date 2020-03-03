@@ -68,7 +68,7 @@ def run_sql(sql_param, file):
                 send_email(TO_AGENT['email'], file, '', '{err}\n{sql}'.format(err=err, sql=sql))
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
-                break
+                return
     logging.info('------------------------------DONE------------------------------')
 
 
