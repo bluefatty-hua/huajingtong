@@ -23,7 +23,9 @@ if not os.path.exists(log_path):
     os.makedirs(log_path)
 log_file = log_path + '/etl_' + 'monitored.log'
 init_logging({'console_log_level': logging.INFO, 'file_log_level': logging.INFO, 'log_file': log_file})
+
 cur_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
+judge_date = (date.today() + timedelta(days=-1)).strftime('%Y-%m-%d')
 
 # 连接数据库
 conn = pymysql.Connect(host=XJL_ETL_DB['host'], port=XJL_ETL_DB['port'], user=XJL_ETL_DB['user'],
@@ -54,8 +56,9 @@ def run_sql(sql_dic, sql_param):
                 pass
             else:
                 i += 1
-                text = 'ERROR:' + t[1] + sql_param['cur_date'] + ('数据有误&数据缺失' if t[2] != 1 and t[3] != 1 else (
-                    '数据缺失' if t[2] == 1 and t[3] != 1 else '数据有误'))
+                text = 'ERROR:' + t[1] + ('{judge_date}数据有误&{cur_date}数据缺失' if t[2] != 1 and t[3] != 1 else (
+                    '{cur_date}数据缺失' if t[2] == 1 and t[3] != 1 else '{judge_date}数据有误')).format(judge_date=judge_date,
+                                                                                                 cur_date=cur_date)
                 send_email(TO_AGENT['email'], 'monitored.sql', '', text)
         if i == 0:
             sql = insert_sql
