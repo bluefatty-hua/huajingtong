@@ -54,8 +54,8 @@ def run_sql(sql_dic, sql_param):
                 pass
             else:
                 i += 1
-                text = 'ERROR:' + t[1] + sql_param['cur_date'] + '数据有误&数据缺失' if t[2] != 1 and t[3] != 1 else (
-                    '数据缺失' if t[2] == 1 and t[3] != 1 else '数据有误')
+                text = 'ERROR:' + t[1] + sql_param['cur_date'] + ('数据有误&数据缺失' if t[2] != 1 and t[3] != 1 else (
+                    '数据缺失' if t[2] == 1 and t[3] != 1 else '数据有误'))
                 send_email(TO_AGENT['email'], 'monitored.sql', '', text)
         if i == 0:
             sql = insert_sql
