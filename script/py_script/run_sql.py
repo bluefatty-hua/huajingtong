@@ -69,6 +69,7 @@ def run_sql(sql_param, file):
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
                 break
+    logging.info('------------------------------DONE------------------------------')
 
 
 def format_param_dict(args):
@@ -100,8 +101,6 @@ if __name__ == '__main__':
     try:
         run_sql(param_dic, sql_file)
         conn.commit()
-        logging.info('------------------------------DONE------------------------------')
-        send_email(TO_AGENT['email'], 'DONE')
     except Exception as err:
         logging.exception(err)
     finally:
