@@ -75,13 +75,13 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
 FROM (SELECT *,
              -- cur_date: t-1
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('2020-03-01', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
-                                                                    ELSE '2020-03-01' END, 180) AS month_newold_state
+                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_bb_day_anchor_live
       WHERE (contract_status <> 2 OR contract_status IS NULL)
-#         AND dt >= '{month}'
-#         AND dt < '{month}' + INTERVAL 1 MONTH
+        AND dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          al.platform_id,

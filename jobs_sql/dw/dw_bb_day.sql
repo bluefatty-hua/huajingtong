@@ -24,8 +24,8 @@ SELECT al.*,
            WHEN mal.revenue / 1000 / 10000 > 0 THEN '0-3'
            ELSE '0' END     AS revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
-         LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
-         LEFT JOIN stage.stage_bb_anchor_min_sign_dt ams ON al.anchor_uid = ams.anchor_uid
+         LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
+         LEFT JOIN stage.stage_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_bb_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
