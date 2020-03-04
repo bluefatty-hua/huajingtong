@@ -68,7 +68,7 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
-       al.month_newold_state,
+       al.month_newold_state                                                        AS newold_state,
        al.active_state,
        al.revenue_level,
        COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
