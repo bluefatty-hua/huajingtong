@@ -1,88 +1,88 @@
 -- 公会每月流水、公会收入、主播收入
 -- DROP TABLE IF EXISTS bireport.rpt_month_yy_guild;
 -- CREATE TABLE bireport.rpt_month_yy_guild AS
-DELETE
-FROM bireport.rpt_month_yy_guild
-WHERE dt = '{month}';
-INSERT INTO bireport.rpt_month_yy_guild
-SELECT t0.dt,
-       t0.platform_id,
-       pf.platform_name                                                       AS platform,
-       t0.channel_num,
-       t0.anchor_cnt,
-       t0.anchor_live_cnt                                                     AS live_cnt,
-       -- 平台流水
-       t0.anchor_bluediamond                                                  AS anchor_bluediamond_revenue,
-       ROUND(t0.guild_commission / 1000, 2)                                   AS guild_commission_revenue,
-       ROUND((t0.anchor_bluediamond + t0.guild_commission) / 1000 * 2, 2)     AS revenue,
-       t0.anchor_bluediamond + t0.guild_commission                            AS revenue_orig,
-       -- 公会收入
-       t0.guild_income_bluediamond                                            AS guild_income_bluediamond,
-       ROUND((t0.guild_income_bluediamond + t0.guild_commission) / 1000, 2)   AS guild_income,
-       t0.guild_income_bluediamond + t0.guild_commission                      AS guild_income_orig,
-       -- 主播收入
-       ROUND((t0.anchor_bluediamond - t0.guild_income_bluediamond) / 1000, 2) AS anchor_income,
-       t0.anchor_bluediamond - t0.guild_income_bluediamond                    AS anchor_income_orig
-FROM (SELECT dt,
-             platform_id,
-             backend_account_id,
-             channel_num,
-             SUM(anchor_cnt)               AS anchor_cnt,
-             SUM(anchor_live_cnt)          AS anchor_live_cnt,
-             SUM(anchor_bluediamond)       AS anchor_bluediamond,
-             SUM(guild_income_bluediamond) AS guild_income_bluediamond,
-             SUM(guild_commission)         AS guild_commission
-      FROM warehouse.dw_yy_month_guild_live
-      WHERE comment = 'orig'
-        AND dt = '{month}'
-      GROUP BY dt,
-               platform_id,
-               backend_account_id,
-               channel_num
-     ) t0
-         lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
-;
-
-
-DELETE
-FROM bireport.rpt_month_all_guild
-WHERE platform_id = 1000
-  AND dt = '{month}';
-INSERT INTO bireport.rpt_month_all_guild
-SELECT dt,
-       platform_id,
-       platform,
-       channel_num,
-       CASE WHEN anchor_cnt >= 0 THEN anchor_cnt ELSE 0 END                 AS anchor_cnt,
-       CASE WHEN live_cnt >= 0 THEN live_cnt ELSE 0 END                     AS live_cnt,
-       CASE WHEN revenue >= 0 THEN revenue ELSE 0 END                       AS revenue,
-       CASE WHEN revenue_orig >= 0 THEN revenue_orig ELSE 0 END             AS revenue_orig,
-       CASE WHEN guild_income >= 0 THEN guild_income ELSE 0 END             AS guild_income,
-       CASE WHEN guild_income_orig >= 0 THEN guild_income_orig ELSE 0 END   AS guild_income_orig,
-       CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
-       CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
-FROM (SELECT dt,
-             platform_id,
-             platform,
-             channel_num,
-             anchor_cnt,
-             live_cnt,
-             revenue,
-             revenue_orig,
-             guild_income,
-             guild_income_orig,
-             anchor_income,
-             anchor_income_orig
-      FROM bireport.rpt_month_yy_guild) t
-WHERE dt = '{month}'
-;
+-- DELETE
+-- FROM bireport.rpt_month_yy_guild
+-- WHERE dt = '{month}';
+-- INSERT INTO bireport.rpt_month_yy_guild
+-- SELECT t0.dt,
+--        t0.platform_id,
+--        pf.platform_name                                                       AS platform,
+--        t0.channel_num,
+--        t0.anchor_cnt,
+--        t0.anchor_live_cnt                                                     AS live_cnt,
+--        -- 平台流水
+--        t0.anchor_bluediamond                                                  AS anchor_bluediamond_revenue,
+--        ROUND(t0.guild_commission / 1000, 2)                                   AS guild_commission_revenue,
+--        ROUND((t0.anchor_bluediamond + t0.guild_commission) / 1000 * 2, 2)     AS revenue,
+--        t0.anchor_bluediamond + t0.guild_commission                            AS revenue_orig,
+--        -- 公会收入
+--        t0.guild_income_bluediamond                                            AS guild_income_bluediamond,
+--        ROUND((t0.guild_income_bluediamond + t0.guild_commission) / 1000, 2)   AS guild_income,
+--        t0.guild_income_bluediamond + t0.guild_commission                      AS guild_income_orig,
+--        -- 主播收入
+--        ROUND((t0.anchor_bluediamond - t0.guild_income_bluediamond) / 1000, 2) AS anchor_income,
+--        t0.anchor_bluediamond - t0.guild_income_bluediamond                    AS anchor_income_orig
+-- FROM (SELECT dt,
+--              platform_id,
+--              backend_account_id,
+--              channel_num,
+--              SUM(anchor_cnt)               AS anchor_cnt,
+--              SUM(anchor_live_cnt)          AS anchor_live_cnt,
+--              SUM(anchor_bluediamond)       AS anchor_bluediamond,
+--              SUM(guild_income_bluediamond) AS guild_income_bluediamond,
+--              SUM(guild_commission)         AS guild_commission
+--       FROM warehouse.dw_yy_month_guild_live
+--       WHERE comment = 'orig'
+--         AND dt = '{month}'
+--       GROUP BY dt,
+--                platform_id,
+--                backend_account_id,
+--                channel_num
+--      ) t0
+--          lEFT JOIN warehouse.platform pf ON pf.id = t0.platform_id
+-- ;
+-- 
+-- 
+-- DELETE
+-- FROM bireport.rpt_month_all_guild
+-- WHERE platform_id = 1000
+--   AND dt = '{month}';
+-- INSERT INTO bireport.rpt_month_all_guild
+-- SELECT dt,
+--        platform_id,
+--        platform,
+--        channel_num,
+--        CASE WHEN anchor_cnt >= 0 THEN anchor_cnt ELSE 0 END                 AS anchor_cnt,
+--        CASE WHEN live_cnt >= 0 THEN live_cnt ELSE 0 END                     AS live_cnt,
+--        CASE WHEN revenue >= 0 THEN revenue ELSE 0 END                       AS revenue,
+--        CASE WHEN revenue_orig >= 0 THEN revenue_orig ELSE 0 END             AS revenue_orig,
+--        CASE WHEN guild_income >= 0 THEN guild_income ELSE 0 END             AS guild_income,
+--        CASE WHEN guild_income_orig >= 0 THEN guild_income_orig ELSE 0 END   AS guild_income_orig,
+--        CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
+--        CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
+-- FROM (SELECT dt,
+--              platform_id,
+--              platform,
+--              channel_num,
+--              anchor_cnt,
+--              live_cnt,
+--              revenue,
+--              revenue_orig,
+--              guild_income,
+--              guild_income_orig,
+--              anchor_income,
+--              anchor_income_orig
+--       FROM bireport.rpt_month_yy_guild) t
+-- WHERE dt = '{month}'
+-- ;
 
 
 -- rpt_month_yy_guild_new
 DELETE
-FROM bireport.rpt_month_yy_guild_new
+FROM bireport.rpt_month_yy_guild
 WHERE dt = '{month}';
-INSERT INTO bireport.rpt_month_yy_guild_new
+INSERT INTO bireport.rpt_month_yy_guild
 SELECT gl.dt,
        gl.platform_id,
        pf.platform_name                                                       AS platform_name,
@@ -112,11 +112,11 @@ WHERE comment = 'orig'
 ;
 
 
-REPLACE INTO bireport.rpt_month_yy_guild_new (dt, platform_id, platform, channel_num, revenue_level, newold_state,
-                                              active_state,
-                                              anchor_cnt, live_cnt, duration, anchor_bluediamond_revenue,
-                                              guild_commission_revenue, revenue, revenue_orig, guild_income_bluediamond,
-                                              guild_income, guild_income_orig, anchor_income, anchor_income_orig)
+REPLACE INTO bireport.rpt_month_yy_guild (dt, platform_id, platform, channel_num, revenue_level, newold_state,
+                                          active_state,
+                                          anchor_cnt, live_cnt, duration, anchor_bluediamond_revenue,
+                                          guild_commission_revenue, revenue, revenue_orig, guild_income_bluediamond,
+                                          guild_income, guild_income_orig, anchor_income, anchor_income_orig)
 SELECT *
 FROM (SELECT dt,
              MAX(platform_id)                AS platform_id,
@@ -137,8 +137,11 @@ FROM (SELECT dt,
              SUM(guild_income_orig)          AS guild_income_orig,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
-      FROM bireport.rpt_month_yy_guild_new
-      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+      FROM bireport.rpt_month_yy_guild
+      WHERE channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -164,8 +167,11 @@ FROM (SELECT dt,
              SUM(guild_income_orig)          AS guild_income_orig,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
-      FROM bireport.rpt_month_yy_guild_new
-      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+      FROM bireport.rpt_month_yy_guild
+      WHERE channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, revenue_level, newold_state, active_state, channel_num
       WITH ROLLUP
@@ -191,8 +197,11 @@ FROM (SELECT dt,
              SUM(guild_income_orig)          AS guild_income_orig,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
-      FROM bireport.rpt_month_yy_guild_new
-      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+      FROM bireport.rpt_month_yy_guild
+      WHERE channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, newold_state, active_state, channel_num, revenue_level
       WITH ROLLUP
@@ -218,8 +227,11 @@ FROM (SELECT dt,
              SUM(guild_income_orig)          AS guild_income_orig,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
-      FROM bireport.rpt_month_yy_guild_new
-      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+      FROM bireport.rpt_month_yy_guild
+      WHERE channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, active_state, channel_num, revenue_level, newold_state
       WITH ROLLUP
@@ -245,8 +257,11 @@ FROM (SELECT dt,
              SUM(guild_income_orig)          AS guild_income_orig,
              SUM(anchor_income)              AS anchor_income,
              SUM(anchor_income_orig)         AS anchor_income_orig
-      FROM bireport.rpt_month_yy_guild_new
-      WHERE channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+      FROM bireport.rpt_month_yy_guild
+      WHERE channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, active_state, revenue_level, channel_num, newold_state
       WITH ROLLUP
@@ -256,7 +271,10 @@ WHERE dt IS NOT NULL
 
 
 -- 报表用，计算上周、上月同期数据---
-REPLACE INTO bireport.rpt_month_yy_guild_new_view
+DELETE
+FROM bireport.rpt_month_yy_guild_view
+WHERE dt = '{month}';
+REPLACE INTO bireport.rpt_month_yy_guild_view
 SELECT t1.dt,
        t1.channel_num,
        t1.revenue_level,
@@ -276,8 +294,8 @@ SELECT t1.dt,
        IF(t3.live_cnt > 0, ROUND(t3.revenue / t3.live_cnt, 0), 0)      AS revenue_per_live_lastmonth,
        0                                                               AS guild_income,
        0                                                               AS anchor_income
-FROM bireport.rpt_month_yy_guild_new t1
-         LEFT JOIN bireport.rpt_month_yy_guild_new t3
+FROM bireport.rpt_month_yy_guild t1
+         LEFT JOIN bireport.rpt_month_yy_guild t3
                    ON t1.dt - INTERVAL 1 MONTH = t3.dt
                        AND t1.channel_num = t3.channel_num
                        AND t1.revenue_level = t3.revenue_level
@@ -287,51 +305,51 @@ WHERE t1.dt = '{month}';
 
 
 -- 报表用，计算指标占比---
-replace into bireport.rpt_month_yy_guild_new_view_compare
-select *
-from (SELECT dt,
+REPLACE INTO bireport.rpt_month_yy_guild_view_compare
+SELECT *
+FROM (SELECT dt,
              channel_num,
              revenue_level,
              newold_state,
              active_state,
-             '主播数'      as idx,
-             anchor_cnt as val
-      FROM bireport.rpt_month_yy_guild_new
-      where revenue_level != 'all'
-        and dt = '{month}'
-      union
+             '主播数'      AS idx,
+             anchor_cnt AS val
+      FROM bireport.rpt_month_yy_guild
+      WHERE revenue_level != 'all'
+        AND dt = '{month}'
+      UNION
       SELECT dt,
              channel_num,
              revenue_level,
              newold_state,
              active_state,
-             '开播数'    as idx,
-             live_cnt as val
-      FROM bireport.rpt_month_yy_guild_new
-      where revenue_level != 'all'
-        and dt = '{month}'
-      union
+             '开播数'    AS idx,
+             live_cnt AS val
+      FROM bireport.rpt_month_yy_guild
+      WHERE revenue_level != 'all'
+        AND dt = '{month}'
+      UNION
       SELECT dt,
              channel_num,
              revenue_level,
              newold_state,
              active_state,
-             '流水'    as idx,
-             revenue as val
-      FROM bireport.rpt_month_yy_guild_new
-      where revenue_level != 'all'
-        and dt = '{month}'
-      union
+             '流水'    AS idx,
+             revenue AS val
+      FROM bireport.rpt_month_yy_guild
+      WHERE revenue_level != 'all'
+        AND dt = '{month}'
+      UNION
       SELECT dt,
              channel_num,
              revenue_level,
              newold_state,
              active_state,
-             '开播人均流水'                     as idx,
-             round(revenue / live_cnt, 0) as val
-      FROM bireport.rpt_month_yy_guild_new
-      where revenue_level != 'all'
-        and dt = '{month}'
-        and live_cnt > 0) t
+             '开播人均流水'                     AS idx,
+             round(revenue / live_cnt, 0) AS val
+      FROM bireport.rpt_month_yy_guild
+      WHERE revenue_level != 'all'
+        AND dt = '{month}'
+        AND live_cnt > 0) t
 ;
 

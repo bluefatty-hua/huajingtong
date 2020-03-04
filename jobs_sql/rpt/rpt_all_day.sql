@@ -1,5 +1,10 @@
 -- - rpt_day_all_new ----
-REPLACE INTO bireport.rpt_day_all_new
+-- 1、B站
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'bilibili'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -22,13 +27,18 @@ SELECT dt,
        revenue,
        guild_income,
        anchor_income
-FROM bireport.rpt_day_bb_guild_new
+FROM bireport.rpt_day_bb_guild
 WHERE remark = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all_new
+-- 2、抖音
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'DouYin'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -41,7 +51,7 @@ REPLACE INTO bireport.rpt_day_all_new
  guild_income,
  anchor_income)
 SELECT dt,
-       'DouYin' as platform,
+       'DouYin'                 as platform,
        revenue_level,
        newold_state,
        active_state,
@@ -49,15 +59,20 @@ SELECT dt,
        live_cnt,
        duration,
        revenue,
-       IFNULL(guild_income, 0) AS guild_income,
+       IFNULL(guild_income, 0)  AS guild_income,
        IFNULL(anchor_income, 0) AS anchor_income
-FROM bireport.rpt_day_dy_guild_new
+FROM bireport.rpt_day_dy_guild
 WHERE backend_account_id = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all_new
+-- 3、繁星
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'FanXing'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -70,7 +85,7 @@ REPLACE INTO bireport.rpt_day_all_new
  guild_income,
  anchor_income)
 SELECT dt,
-       platform,
+       'FanXing' AS platform,
        revenue_level,
        newold_state,
        active_state,
@@ -80,13 +95,18 @@ SELECT dt,
        revenue,
        guild_income,
        anchor_income
-FROM bireport.rpt_day_fx_guild_new
+FROM bireport.rpt_day_fx_guild
 WHERE backend_account_id = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all_new
+-- 4、虎牙
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'HUYA'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -109,13 +129,18 @@ SELECT dt,
        revenue,
        0      AS guild_income,
        0      AS anchor_income
-FROM bireport.rpt_day_hy_guild_new
+FROM bireport.rpt_day_hy_guild
 WHERE channel_type = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all_new
+-- 5、NOW
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'NOW'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -138,13 +163,19 @@ SELECT dt,
        revenue,
        guild_income,
        anchor_income
-FROM bireport.rpt_day_now_guild_new
-WHERE backend_account_id = 'all' AND city = 'all'
+FROM bireport.rpt_day_now_guild
+WHERE backend_account_id = 'all'
+  AND city = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all_new
+-- 6、YY
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'YY'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -167,14 +198,14 @@ SELECT dt,
        revenue,
        guild_income,
        anchor_income
-FROM bireport.rpt_day_yy_guild_new
+FROM bireport.rpt_day_yy_guild
 WHERE channel_num = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all_new (dt, platform, revenue_level, newold_state, active_state, anchor_cnt, live_cnt,
-                                       duration, revenue, guild_income, anchor_income)
+REPLACE INTO bireport.rpt_day_all (dt, platform, revenue_level, newold_state, active_state, anchor_cnt, live_cnt,
+                                   duration, revenue, guild_income, anchor_income)
 SELECT dt,
        'all'              AS platform,
        revenue_level,
@@ -186,7 +217,7 @@ SELECT dt,
        SUM(revenue)       AS revenue,
        SUM(guild_income)  AS guild_income,
        SUM(anchor_income) AS anchor_income
-FROM bireport.rpt_day_all_new
+FROM bireport.rpt_day_all
 WHERE platform != 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY dt, revenue_level, newold_state, active_state
@@ -194,7 +225,10 @@ GROUP BY dt, revenue_level, newold_state, active_state
 
 
 -- 报表用，计算上周、上月同期数据---
-REPLACE INTO bireport.rpt_day_all_new_view
+DELETE
+FROM bireport.rpt_day_all_view
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+REPLACE INTO bireport.rpt_day_all_view
 SELECT t1.dt,
        t1.platform,
        t1.revenue_level,
@@ -218,14 +252,14 @@ SELECT t1.dt,
        IF(t1.live_cnt > 0, ROUND(t1.revenue / t1.live_cnt, 0), 0)      AS revenue_per_live,
        IF(t2.live_cnt > 0, ROUND(t2.revenue / t2.live_cnt, 0), 0)      AS revenue_per_live_lastweek,
        IF(t3.live_cnt > 0, ROUND(t3.revenue / t3.live_cnt, 0), 0)      AS revenue_per_live_lastmonth
-FROM bireport.rpt_day_all_new t1
-         LEFT JOIN bireport.rpt_day_all_new t2
+FROM bireport.rpt_day_all t1
+         LEFT JOIN bireport.rpt_day_all t2
                    ON t1.dt - INTERVAL 7 DAY = t2.dt
                        AND t1.platform = t2.platform
                        AND t1.revenue_level = t2.revenue_level
                        AND t1.newold_state = t2.newold_state
                        AND t1.active_state = t2.active_state
-         LEFT JOIN bireport.rpt_day_all_new t3
+         LEFT JOIN bireport.rpt_day_all t3
                    ON t1.dt - INTERVAL 1 MONTH = t3.dt
                        AND t1.platform = t3.platform
                        AND t1.revenue_level = t3.revenue_level
