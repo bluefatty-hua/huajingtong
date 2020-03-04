@@ -10,11 +10,11 @@ MONITOR_DIC = {
         # jud1 jud2用于判断数据是否有误
         'judge_sql': '''
                      SELECT n1.dt, 
-                     m.platform, 
-                     (n1.revenue = m.revenue AND n1.anchor_cnt = m.anchor_cnt AND n1.live_cnt = m.live_cnt) AS jud1,
-                     (n2.dt IS NOT NULL AND n2.anchor_cnt > 0 AND n2.live_cnt > 0 AND n2.revenue) AS jud2
+                            m.platform, 
+                            (n1.revenue = m.revenue AND n1.anchor_cnt = m.anchor_cnt AND n1.live_cnt = m.live_cnt) AS jud1,
+                            (n2.dt IS NOT NULL AND n2.anchor_cnt > 0 AND n2.live_cnt > 0 AND n2.revenue) AS jud2
                      FROM bireport.rpt_day_all_new n1
-                     INNER JOIN (SELECT * FROM stage.monitored WHERE table_name = 'rpt_all_day') m ON n1.dt = m.dt AND n1.platform = m.platform
+                     INNER JOIN (SELECT * FROM stage.monitored WHERE table_name = 'rpt_day_all_new') m ON n1.dt = m.dt AND n1.platform = m.platform
                      LEFT JOIN (SELECT * 
                                 FROM bireport.rpt_day_all_new
                                 WHERE newold_state = 'all'
@@ -29,7 +29,7 @@ MONITOR_DIC = {
     ''',
         'result_insert_sql': '''
                      REPLACE INTO stage.monitored_result
-                     SELECT '{cur_date}'      AS dt,
+                     SELECT '{cur_date}'       AS dt,
                              m.platform,
                              n1.dt             AS judge_dt,
                              CASE
@@ -49,7 +49,7 @@ MONITOR_DIC = {
                              n2.revenue,
                              m.table_name
                      FROM bireport.rpt_day_all_new n1
-                     INNER JOIN (SELECT * FROM stage.monitored WHERE table_name = 'rpt_all_day') m ON n1.dt = m.dt AND n1.platform = m.platform
+                     INNER JOIN (SELECT * FROM stage.monitored WHERE table_name = 'rpt_day_all_new') m ON n1.dt = m.dt AND n1.platform = m.platform
                      LEFT JOIN (SELECT *
                                 FROM bireport.rpt_day_all_new
                                 WHERE newold_state = 'all'
@@ -64,7 +64,7 @@ MONITOR_DIC = {
     ''',
         'insert_sql': '''
             REPLACE INTO stage.monitored
-            SELECT dt, platform, anchor_cnt, live_cnt, revenue, 'rpt_all_day' AS table_name
+            SELECT dt, platform, anchor_cnt, live_cnt, revenue, 'rpt_day_all_new' AS table_name
             FROM bireport.rpt_day_all_new
             WHERE newold_state = 'all'
               AND active_state = 'all'

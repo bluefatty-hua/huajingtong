@@ -78,9 +78,9 @@ def run_sql(sql_dic, sql_param):
 
 
 if __name__ == '__main__':
-    logging.info('cur_date: ' + cur_date + 'judge_date' + judge_date)
+    logging.info('cur_date: ' + cur_date + ' judge_date: ' + judge_date)
     for table in MONITOR_TABLE:
-        print(MONITOR_DIC[table])
+        # print(MONITOR_DIC[table])
         param = {'cur_date': cur_date}
         run_sql(MONITOR_DIC[table], param)
     cursor.close()
