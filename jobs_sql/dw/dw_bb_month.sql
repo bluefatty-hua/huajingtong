@@ -8,22 +8,29 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.platform_name,
        al.backend_account_id,
        al.anchor_no,
-       al.newold_state,
+       al.month_newold_state AS newold_state,
        al.active_state,
        al.revenue_level,
        COUNT(CASE WHEN al.live_status = 1 THEN al.dt ELSE NULL END) AS live_days,
        SUM(al.duration)                                             AS duration,
-       SUM(al.anchor_total_coin)                                    AS anchor_virtual_coin
-FROM warehouse.dw_bb_day_anchor_live al
-WHERE (contract_status <> 2 OR contract_status IS NULL)
-  AND dt >= '{month}'
-  AND dt < '{month}' + INTERVAL 1 MONTH
+       SUM(al.anchor_total_coin)                                    AS revenue
+FROM (SELECT *,
+             -- cur_date: t-1
+             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
+                                                                        THEN LAST_DAY(dt)
+                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
+      FROM warehouse.dw_bb_day_anchor_live
+      WHERE (contract_status <> 2 OR contract_status IS NULL)
+        AND dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
+     ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
          al.backend_account_id,
          al.anchor_no,
-         al.newold_state,
+         al.month_newold_state,
          al.active_state,
          al.revenue_level
 ;
