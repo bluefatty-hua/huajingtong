@@ -35,6 +35,7 @@ cursor = conn.cursor()
 
 def run_sql(sql_dic, sql_param):
     judge_sql = sql_dic['judge_sql'].format(cur_date=sql_param['cur_date'])
+    result_insert_sql = sql_dic['result_insert_sql'].format(cur_date=sql_param['cur_date'])
     insert_sql = sql_dic['insert_sql'].format(cur_date=sql_param['cur_date'])
     i = 0
     text = ''
@@ -42,6 +43,7 @@ def run_sql(sql_dic, sql_param):
     try:
         sql = judge_sql
         cursor.execute(judge_sql)
+        cursor.execute(result_insert_sql)
         result = cursor.fetchall()
         logging.info('\n' + str(result).replace('), (', '),\n ('))
         # (datetime.date(2020, 3, 1), 'all', 1, 1)
