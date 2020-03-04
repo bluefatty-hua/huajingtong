@@ -35,7 +35,7 @@ MONITOR_DIC = {
               AND active_state = 'all'
               AND revenue_level = 'all'
               -- t-1
-              AND dt = '2020-03-03';
+              AND dt = '2020-02-29';
     '''
     }
 }
