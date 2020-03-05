@@ -66,7 +66,7 @@ GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
 -- CREATE TABLE warehouse.dw_now_month_anchor_live AS
 DELETE
 FROM warehouse.dw_now_month_anchor_live
-WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_now_month_anchor_live
 SELECT DATE_FORMAT(dt, '%Y-%m-01')                                         AS dt,
        t.platform_id,
@@ -87,7 +87,8 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_now_day_anchor_live
-      WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) t
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          t.platform_id,
