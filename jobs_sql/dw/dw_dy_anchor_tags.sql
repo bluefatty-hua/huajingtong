@@ -13,10 +13,10 @@ FROM (SELECT al.anchor_uid,
       UNION
       SELECT ai.anchor_uid,
              yj.first_live_time AS min_live_time
-      FROM warehouse.delete_ods_yujia_anchor_list yj
-               LEFT JOIN warehouse.ods_dy_day_anchor_info ai ON yj.uid = ai.anchor_no
+      FROM warehouse.ods_yujia_anchor_list yj
+               INNER JOIN warehouse.ods_dy_day_anchor_info ai ON yj.uid = ai.anchor_no
       WHERE platform = '抖音'
-        AND first_live_time != '0000-00-00') t
+        AND first_live_time != '1970-01-01') t
 GROUP BY t.anchor_uid
 ;
 
@@ -36,12 +36,12 @@ FROM (SELECT al.anchor_uid,
         AND al.signing_time <> 0
       GROUP BY al.anchor_uid
       UNION
-      SELECT yj.uid       AS anchor_no,
+      SELECT ai.anchor_uid,
              yj.sign_time AS min_sign_dt
-      FROM warehouse.delete_ods_yujia_anchor_list yj
-               LEFT JOIN warehouse.ods_dy_day_anchor_info ai ON yj.uid = ai.anchor_no
+      FROM warehouse.ods_yujia_anchor_list yj
+               INNER JOIN warehouse.ods_dy_day_anchor_info ai ON yj.uid = ai.anchor_no
       WHERE platform = '抖音'
-        AND yj.sign_time <> '0000-00-00'
+        AND yj.sign_time <> '1970-01-01'
      ) t
 GROUP BY t.anchor_uid
 ;
