@@ -13,7 +13,7 @@ FROM (SELECT al.anchor_no,
       UNION
       SELECT yj.uid             AS anchor_no,
              yj.first_live_time AS min_live_time
-      FROM warehouse.ods_yujia_anchor_list yj
+      FROM warehouse.delete_ods_yujia_anchor_list yj
       WHERE platform = 'NOW'
         AND first_live_time != '0000-00-00') t
 GROUP BY t.anchor_no
@@ -35,7 +35,7 @@ FROM (SELECT al.anchor_no,
       UNION
       SELECT yj.uid       AS anchor_no,
              yj.sign_time AS min_sign_dt
-      FROM warehouse.ods_yujia_anchor_list yj
+      FROM warehouse.delete_ods_yujia_anchor_list yj
       WHERE platform = 'NOW'
         AND yj.sign_time <> '0000-00-00'
      ) t

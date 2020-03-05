@@ -13,7 +13,7 @@ FROM (SELECT al.anchor_uid,
       UNION
       SELECT ai.anchor_uid,
              yj.first_live_time AS min_live_time
-      FROM warehouse.ods_yujia_anchor_list yj
+      FROM warehouse.delete_ods_yujia_anchor_list yj
                INNER JOIN warehouse.ods_dy_xjl_day_anchor_info ai ON yj.uid = ai.anchor_no
       WHERE platform = '抖音'
         AND first_live_time != '0000-00-00') t
@@ -38,7 +38,7 @@ FROM (SELECT al.anchor_uid,
       UNION
       SELECT yj.uid       AS anchor_no,
              yj.sign_time AS min_sign_dt
-      FROM warehouse.ods_yujia_anchor_list yj
+      FROM warehouse.delete_ods_yujia_anchor_list yj
                INNER JOIN warehouse.ods_dy_xjl_day_anchor_info ai ON yj.uid = ai.anchor_no
       WHERE platform = '抖音'
         AND yj.uid <> 0
