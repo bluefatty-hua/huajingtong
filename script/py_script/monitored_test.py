@@ -42,11 +42,11 @@ def run_sql(sql_dic, sql_param):
     sql = ''
     try:
         sql = judge_sql
-        logging.info(sql)
+        logging.info('judge_sql--------/n{}'.format(judge_sql))
         cursor.execute(judge_sql)
         result = cursor.fetchall()
         cursor.execute(result_insert_sql)
-        logging.info(result_insert_sql)
+        logging.info('judge_sql--------/n{}'.format(result_insert_sql))
         logging.info('\n' + str(result).replace('), (', '),\n ('))
         # (datetime.date(2020, 3, 1), 'all', 1, 1)
         # (datetime.date(2020, 3, 1), 'bilibili', 1, 1)
@@ -68,6 +68,7 @@ def run_sql(sql_dic, sql_param):
         if i == 0:
             sql = insert_sql
             cursor.execute(insert_sql)
+            logging.info('judge_sql--------/n{}'.format(insert_sql))
             conn.commit()
         else:
             send_email(TO_AGENT['email'], 'monitored.sql', '', text)
