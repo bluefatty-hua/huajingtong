@@ -20,12 +20,12 @@ MONITOR_DIC = {
                                 WHERE newold_state = 'all'
                                   AND active_state = 'all'
                                   AND revenue_level = 'all'
-                                  AND dt = ''{cur_date}'') n2 ON n1.platform = n2.platform
+                                  AND dt = '{cur_date}') n2 ON n1.platform = n2.platform
                      WHERE n1.newold_state = 'all'
                        AND n1.active_state = 'all'
                        AND n1.revenue_level = 'all'
                         -- t-2
-                       AND n1.dt = ''{cur_date}'' - INTERVAL 1 DAY;
+                       AND n1.dt = '{cur_date}' - INTERVAL 1 DAY;
     ''',
         'result_insert_sql': '''
                      REPLACE INTO stage.monitored_result
