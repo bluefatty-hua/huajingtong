@@ -46,6 +46,7 @@ def run_sql(sql_dic, sql_param):
         cursor.execute(judge_sql)
         result = cursor.fetchall()
         cursor.execute(result_insert_sql)
+        conn.commit()
         logging.info('judge_sql--------/n{}'.format(result_insert_sql))
         logging.info('\n' + str(result).replace('), (', '),\n ('))
         # (datetime.date(2020, 3, 1), 'all', 1, 1)
