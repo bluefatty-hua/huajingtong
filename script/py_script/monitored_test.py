@@ -42,9 +42,11 @@ def run_sql(sql_dic, sql_param):
     sql = ''
     try:
         sql = judge_sql
+        logging.info(sql)
         cursor.execute(judge_sql)
         result = cursor.fetchall()
         cursor.execute(result_insert_sql)
+        logging.info(result_insert_sql)
         logging.info('\n' + str(result).replace('), (', '),\n ('))
         # (datetime.date(2020, 3, 1), 'all', 1, 1)
         # (datetime.date(2020, 3, 1), 'bilibili', 1, 1)
