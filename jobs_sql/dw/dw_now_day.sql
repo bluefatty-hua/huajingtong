@@ -1,5 +1,5 @@
-# DROP TABLE IF EXISTS warehouse.dw_now_day_anchor_live;
-# CREATE TABLE warehouse.dw_now_day_anchor_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_now_day_anchor_live;
+-- CREATE TABLE warehouse.dw_now_day_anchor_live AS
 DELETE
 FROM warehouse.dw_now_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -31,6 +31,7 @@ FROM warehouse.ods_now_day_anchor_live al
                    ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
          LEFT JOIN warehouse.ods_yj_anchor_team at ON al.anchor_no = at.anchor_no
+-- 只取主播入驻公会后的直播数据
 WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
   AND al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;

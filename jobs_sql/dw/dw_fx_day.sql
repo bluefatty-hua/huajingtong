@@ -1,6 +1,6 @@
 -- dw_fx_day_anchor_live
-# DROP TABLE IF EXISTS warehouse.dw_fx_day_anchor_live;
-# CREATE TABLE warehouse.dw_fx_day_anchor_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_fx_day_anchor_live;
+-- CREATE TABLE warehouse.dw_fx_day_anchor_live AS
 DELETE
 FROM warehouse.dw_fx_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
@@ -34,8 +34,8 @@ WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
-# DROP TABLE IF EXISTS warehouse.dw_fx_day_guild_live;
-# CREATE TABLE warehouse.dw_fx_day_guild_live AS
+-- DROP TABLE IF EXISTS warehouse.dw_fx_day_guild_live;
+-- CREATE TABLE warehouse.dw_fx_day_guild_live AS
 DELETE
 FROM warehouse.dw_fx_day_guild_live
 WHERE DATE_FORMAT(dt, '%Y%m') BETWEEN DATE_FORMAT('{start_date}', '%Y%m') AND DATE_FORMAT('{end_date}', '%Y%m');
