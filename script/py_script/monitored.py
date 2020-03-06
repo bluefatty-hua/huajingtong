@@ -66,13 +66,12 @@ def run_sql(sql_dic, sql_param):
                     '-{cur_date}-数据缺失' if t[2] == 1 and t[3] != 1 else '-{judge_date}-数据有误')).format(
                     judge_date=judge_date,
                     cur_date=cur_date) + '\n'
-        if i == 0:
-            sql = insert_sql
-            cursor.execute(insert_sql)
-            logging.info('judge_sql--------/n{}'.format(insert_sql))
-            conn.commit()
-        else:
+        if i <> 1:
             send_email(TO_AGENT['email'], 'monitored.sql', '', text)
+        sql = insert_sql
+        cursor.execute(insert_sql)
+        logging.info('judge_sql--------/n{}'.format(insert_sql))
+        conn.commit()
     except Exception as err:
         logging.exception(err)
         text = '{err}\n{sql}'.format(err=err, sql=sql)
