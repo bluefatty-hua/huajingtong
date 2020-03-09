@@ -277,7 +277,7 @@ FROM rpt_day_dy_xjl_recruit_compare;
 
 INSERT INTO rpt_day_dy_xjl_recruit_compare
 SELECT dt,
-       '&#26032;&#24320;&#25773;'                                           AS idx,
+       '新开播'                                           AS idx,
        SUM(IF(recruit_team = '招募1组', new_live_cnt, 0)) AS team1,
        SUM(IF(recruit_team = '招募2组', new_live_cnt, 0)) AS team2,
        SUM(IF(recruit_team = '招募3组', new_live_cnt, 0)) AS team3,
@@ -299,7 +299,7 @@ GROUP BY dt;
 
 INSERT INTO rpt_day_dy_xjl_recruit_compare
 SELECT dt,
-       '&#27969;&#27700;'                                                      AS idx,
+       '流水'                                                      AS idx,
        SUM(IF(recruit_team = '招募1组', ROUND(revenue / 10, 0), 0)) AS team1,
        SUM(IF(recruit_team = '招募2组', ROUND(revenue / 10, 0), 0)) AS team2,
        SUM(IF(recruit_team = '招募3组', ROUND(revenue / 10, 0), 0)) AS team3,
@@ -321,7 +321,7 @@ GROUP BY dt;
 
 INSERT INTO rpt_day_dy_xjl_recruit_compare
 SELECT dt,
-       '&#30701;&#35270;&#39057;数'                                       AS idx,
+       '短视频数'                                       AS idx,
        SUM(IF(recruit_team = '招募1组', aweme_cnt, 0)) AS team1,
        SUM(IF(recruit_team = '招募2组', aweme_cnt, 0)) AS team2,
        SUM(IF(recruit_team = '招募3组', aweme_cnt, 0)) AS team3,
