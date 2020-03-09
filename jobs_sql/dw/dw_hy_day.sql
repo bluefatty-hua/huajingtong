@@ -140,7 +140,7 @@ FROM warehouse.dw_huya_day_anchor_info ai
          LEFT JOIN stage.stage_hy_anchor_min_live_dt aml ON ai.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_hy_anchor_min_sign_dt ams ON ai.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_hy_month_anchor_live mal
-                   ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
+                   ON mal.dt = DATE_FORMAT(al.dt, INTERVAL 1 MONTH) AND
                       ai.anchor_uid = mal.anchor_uid
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
          LEFT JOIN warehouse.ods_hy_account_info aci ON ai.channel_id = aci.channel_id
