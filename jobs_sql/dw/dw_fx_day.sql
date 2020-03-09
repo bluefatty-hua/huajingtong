@@ -28,7 +28,7 @@ FROM warehouse.ods_fx_day_anchor_live al
          LEFT JOIN stage.stage_fx_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_fx_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_fx_month_anchor_live mal
-                   ON mal.dt = DATE_FORMAT(DATE_SUB(al.dt, INTERVAL 1 MONTH), '%Y-%m-01') AND
+                   ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
