@@ -117,7 +117,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, city, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -142,7 +146,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, city, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
@@ -167,7 +175,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id, city
       WITH ROLLUP
@@ -192,7 +204,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, backend_account_id, city, revenue_level
       WITH ROLLUP
@@ -217,7 +233,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, backend_account_id, city, revenue_level, newold_state
       WITH ROLLUP
@@ -242,7 +262,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, newold_state, revenue_level, city, active_state
       WITH ROLLUP
@@ -267,7 +291,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, city, backend_account_id, newold_state, active_state
       WITH ROLLUP
@@ -292,7 +320,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, city, active_state, newold_state, revenue_level
       WITH ROLLUP
@@ -317,7 +349,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, city, backend_account_id, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -342,7 +378,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, city, newold_state, backend_account_id, active_state, revenue_level
       WITH ROLLUP
@@ -367,7 +407,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, city, active_state, newold_state, backend_account_id, revenue_level
       WITH ROLLUP
@@ -392,7 +436,11 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_now_guild
-      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all' AND city != 'all'
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND city != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, active_state, city, newold_state, backend_account_id
       WITH ROLLUP
@@ -515,25 +563,29 @@ DELETE
 FROM bireport.rpt_day_now_anchor
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_now_anchor
-SELECT dt,
-       backend_account_id,
-       city,
-       min_live_dt                   AS first_live_date,
-       min_sign_dt                   AS sign_date,
-       newold_state,
-       last_month_duration / 3600    AS duration_lastmonth,
-       live_days                     AS live_days_lastmonth,
-       active_state,
-       last_month_revenue            AS revenue_lastmonth,
-       revenue_level,
-       anchor_no                     AS anchor_uid,
-       anchor_no,
-       fans_cnt,
-       fans_goup_cnt,
-       anchor_nick_name,
-       duration / 3600               AS duration,
-       IF(live_status = 1, '是', '否') AS live_status,
-       revenue_rmb                   AS revenue
-FROM warehouse.dw_now_day_anchor_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+SELECT al.dt,
+       al.backend_account_id,
+       al.city,
+       al.min_live_dt                   AS first_live_date,
+       al.min_sign_dt                   AS sign_date,
+       al.newold_state,
+       al1.month_duration / 3600        AS duration_lastmonth,
+       al1.month_live_days              AS live_days_lastmonth,
+       al.active_state,
+       al1.month_revenue                AS revenue_lastmonth,
+       al.revenue_level,
+       al.anchor_no                     AS anchor_uid,
+       al.anchor_no,
+       al.fans_cnt,
+       al.fans_goup_cnt,
+       al.anchor_nick_name,
+       al.duration / 3600               AS duration,
+       IF(al.live_status = 1, '是', '否') AS live_status,
+       al.revenue_rmb                   AS revenue
+FROM warehouse.dw_now_day_anchor_live al
+         LEFT JOIN warehouse.dw_now_day_anchor_live al1
+                   ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND
+                      al.backend_account_id = al1.backend_account_id AND
+                      al.anchor_no = al1.anchor_no
+WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
