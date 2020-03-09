@@ -315,8 +315,8 @@ FROM (SELECT dt,
         AND live_cnt > 0) t
 ;
 
-DELETE FROM rpt_day_dy_anchor  where dt BETWEEN '{start_date}' AND '{end_date}';
-INSERT INTO rpt_day_dy_anchor
+DELETE FROM bireport.rpt_day_dy_anchor  where dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO bireport.rpt_day_dy_anchor
 SELECT
   `dt`,
   `platform_id`,
