@@ -115,13 +115,13 @@ SELECT ai.dt                                                                  AS
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
-       mal.duration                                                           AS last_month_duration,
-       mal.live_days                                                          AS last_month_live_days,
+       mal.duration                                                           AS month_duration,
+       mal.live_days                                                          AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
        CASE
            WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END                                                   AS active_state,
-       mal.revenue                                                            AS last_month_revenue,
+       mal.revenue                                                            AS month_revenue,
        -- 主播流水分级（t-1月）
        CASE
            WHEN mal.revenue / 10000 >= 50 THEN '50+'
