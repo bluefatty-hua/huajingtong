@@ -8,21 +8,21 @@ SELECT al.*,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)    AS newold_state,
-       mal.duration         AS month_duration,
-       mal.live_days,
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
+       mal.duration                                                           AS month_duration,
+       mal.live_days                                                          AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
        CASE
            WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
-           ELSE '非活跃主播' END AS active_state,
-       mal.revenue          AS month_revenue,
+           ELSE '非活跃主播' END                                                   AS active_state,
+       mal.revenue                                                            AS month_revenue,
        -- 主播流水分级（t-1月，单位：万元）
        CASE
            WHEN mal.revenue / 1000 / 10000 >= 50 THEN '50+'
            WHEN mal.revenue / 1000 / 10000 >= 10 THEN '10-50'
            WHEN mal.revenue / 1000 / 10000 >= 3 THEN '3-10'
            WHEN mal.revenue / 1000 / 10000 > 0 THEN '0-3'
-           ELSE '0' END     AS revenue_level
+           ELSE '0' END                                                       AS revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
          LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
