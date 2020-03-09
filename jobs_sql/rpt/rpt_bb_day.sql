@@ -395,6 +395,7 @@ SELECT al.dt,
 FROM warehouse.dw_bb_day_anchor_live al
          LEFT JOIN warehouse.dw_bb_month_anchor_live al1
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND
+                      al.backend_account_id = al1.backend_account_id AND
                       al.anchor_no = al1.anchor_no
          LEFT JOIN spider_bb_backend.account_info ai ON al.backend_account_id = ai.backend_account_id
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
