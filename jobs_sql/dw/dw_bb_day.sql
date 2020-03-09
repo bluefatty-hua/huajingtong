@@ -16,7 +16,7 @@ SELECT al.*,
            WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END AS active_state,
        mal.revenue          AS month_revenue,
-       -- 主播流水分级（t-1月; ）
+       -- 主播流水分级（t-1月，单位：万元）
        CASE
            WHEN mal.revenue / 1000 / 10000 >= 50 THEN '50+'
            WHEN mal.revenue / 1000 / 10000 >= 10 THEN '10-50'
