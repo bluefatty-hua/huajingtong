@@ -31,7 +31,7 @@ FROM (SELECT DISTINCT al.platform_name, al.anchor_no, al.real_name, al.contract_
          LEFT JOIN warehouse.dw_paper_contract_anchor_month_live al4
                    ON al.platform_name = al4.platform_name AND al.anchor_no = al4.anchor_no AND
                       al4.dt = '{month}'
-WHERE al.contract_start_date >= '{month}'
+WHERE al.contract_start_date <= '{month}'
 ;
 
 
