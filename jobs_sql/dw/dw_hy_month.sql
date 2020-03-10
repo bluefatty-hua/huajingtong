@@ -156,7 +156,7 @@ FROM (SELECT DATE_FORMAT(t.dt, '%Y-%m-01')             AS dt,
               AND dt < '{month}' + INTERVAL 1 MONTH
            ) t
                LEFT JOIN stage.stage_hy_month_anchor_live mal
-                         ON mal.dt = DATE_FORMAT(t.dt, '%Y-%m-01') AND
+                         ON mal.dt = t.dt AND
                             t.anchor_uid = mal.anchor_uid
       GROUP BY DATE_FORMAT(t.dt, '%Y-%m-01'),
                t.channel_id,
