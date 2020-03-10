@@ -431,6 +431,7 @@ FROM (SELECT dt,
              anchor_cnt AS val
       FROM bireport.rpt_month_hy_guild
       WHERE revenue_level != 'all'
+        AND channel_type = 'all'
         AND dt = '{month}'
       UNION
       SELECT dt,
@@ -442,6 +443,7 @@ FROM (SELECT dt,
              live_cnt AS val
       FROM bireport.rpt_month_hy_guild
       WHERE revenue_level != 'all'
+        AND channel_type = 'all'
         AND dt = '{month}'
       UNION
       SELECT dt,
@@ -453,6 +455,7 @@ FROM (SELECT dt,
              revenue AS val
       FROM bireport.rpt_month_hy_guild
       WHERE revenue_level != 'all'
+        AND channel_type = 'all'
         AND dt = '{month}'
       UNION
       SELECT dt,
@@ -464,6 +467,7 @@ FROM (SELECT dt,
              round(revenue / live_cnt, 0) AS val
       FROM bireport.rpt_month_hy_guild
       WHERE revenue_level != 'all'
+        AND channel_type = 'all'
         AND dt = '{month}'
         AND live_cnt > 0
      ) t
