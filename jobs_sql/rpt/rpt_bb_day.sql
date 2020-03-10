@@ -357,7 +357,7 @@ FROM (SELECT dt,
              revenue_level,
              newold_state,
              active_state,
-             '开播数'                        AS idx,
+             '开播人均流水'                        AS idx,
              round(revenue / live_cnt, 0) AS val
       FROM bireport.rpt_day_bb_guild
       WHERE revenue_level != 'all'
