@@ -3,6 +3,10 @@
 DELETE
 FROM warehouse.dw_now_day_anchor_live
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE
+FROM warehouse.dw_now_day_anchor_live
+WHERE dt >= '{month}'
+  AND dt < '{month}' + INTERVAL 1 MONTH;
 INSERT INTO warehouse.dw_now_day_anchor_live
 SELECT al.*,
        IFNULL(at.city, '未知')                                                  AS city,
