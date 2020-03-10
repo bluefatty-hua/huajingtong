@@ -35,6 +35,15 @@ WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
+-- 刷新主播活跃及流水分档(按月)
+UPDATE
+    warehouse.dw_dy_day_anchor_live al
+INNER JOIN stage.stage_dy_month_anchor_live mal ON al.anchor_uid = mal.anchor_uid AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
+    SET al.active_state = mal.active_state AND al.revenue_level = mal.revenue_level
+WHERE DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+;
+
+
 -- DROP TABLE IF EXISTS warehouse.dw_dy_day_guild_live;
 -- CREATE TABLE warehouse.dw_dy_day_guild_live AS
 DELETE

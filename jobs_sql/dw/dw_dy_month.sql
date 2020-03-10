@@ -50,12 +50,7 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                      AS dt,
        al.platform_name,
        al.backend_account_id,
        al.anchor_uid,
-       CASE
-           WHEN mal.revenue / 10000 >= 50 THEN '50+'
-           WHEN mal.revenue / 10000 >= 10 THEN '10-50'
-           WHEN mal.revenue / 10000 >= 3 THEN '3-10'
-           WHEN mal.revenue / 10000 > 0 THEN '0-3'
-           ELSE '0' END                                    AS revenue_level,
+       al.revenue_level,
        al.month_newold_state                               AS newold_state,
        al.active_state,
        SUM(IF(al.duration >= 0, al.duration, 0))           AS duration,
@@ -72,19 +67,12 @@ FROM (SELECT *,
       WHERE dt >= '{month}'
         AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
-         LEFT JOIN stage.stage_dy_month_anchor_live mal
-                   ON mal.dt = al.dt AND al.anchor_uid = mal.anchor_uid
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
          al.backend_account_id,
          al.anchor_uid,
-         CASE
-             WHEN mal.revenue / 10000 >= 50 THEN '50+'
-             WHEN mal.revenue / 10000 >= 10 THEN '10-50'
-             WHEN mal.revenue / 10000 >= 3 THEN '3-10'
-             WHEN mal.revenue / 10000 > 0 THEN '0-3'
-             ELSE '0' END,
+         al.revenue_level,
          al.month_newold_state,
          al.active_state
 ;
