@@ -383,7 +383,7 @@ WHERE a.dt <= '2019-11-01'
 DELETE
 FROM bireport.rpt_month_hy_guild_view
 WHERE dt = '{month}';
-REPLACE INTO bireport.rpt_month_hy_guild_view
+INSERT INTO bireport.rpt_month_hy_guild_view
 SELECT t1.dt,
        t1.channel_type,
        t1.channel_num,
@@ -420,7 +420,7 @@ WHERE t1.dt = '{month}'
 DELETE
 FROM bireport.rpt_month_hy_guild_view_compare
 WHERE dt = '{month}';
-REPLACE INTO bireport.rpt_month_hy_guild_view_compare
+INSERT INTO bireport.rpt_month_hy_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              channel_num,
