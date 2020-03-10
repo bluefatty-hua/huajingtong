@@ -119,17 +119,10 @@ SELECT ai.dt                                                                  AS
        mal.duration                                                           AS month_duration,
        mal.live_days                                                          AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
-       CASE
-           WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
-           ELSE '非活跃主播' END                                                   AS active_state,
+       mal.active_state,
        mal.revenue                                                            AS month_revenue,
        -- 主播流水分级（t-1月）
-       CASE
-           WHEN mal.revenue / 10000 >= 50 THEN '50+'
-           WHEN mal.revenue / 10000 >= 10 THEN '10-50'
-           WHEN mal.revenue / 10000 >= 3 THEN '3-10'
-           WHEN mal.revenue / 10000 > 0 THEN '0-3'
-           ELSE '0' END                                                       AS revenue_level,
+       mal.revenue_level,
        pf.vir_coin_name,
        pf.vir_coin_rate,
        pf.include_pf_amt,
@@ -146,6 +139,21 @@ FROM warehouse.dw_huya_day_anchor_info ai
          LEFT JOIN warehouse.platform pf ON ai.platform_id = pf.id
          LEFT JOIN warehouse.ods_hy_account_info aci ON ai.channel_id = aci.channel_id
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+UPDATE
+    warehouse.dw_huya_day_anchor_live al, stage.stage_hy_month_anchor_live mal
+SET al.active_state    = mal.active_state,
+    al.month_duration  = mal.duration,
+    al.month_live_days = mal.live_days,
+    al.revenue_level   = mal.revenue_level,
+    al.month_revenue   = mal.revenue
+WHERE al.anchor_uid = mal.anchor_uid
+  AND al.dt >= mal.dt
+  AND al.dt < mal.dt + INTERVAL 1 MONTH
+  AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+--   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
 
