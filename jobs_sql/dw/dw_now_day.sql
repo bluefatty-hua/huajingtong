@@ -1,8 +1,8 @@
 -- DROP TABLE IF EXISTS warehouse.dw_now_day_anchor_live;
 -- CREATE TABLE warehouse.dw_now_day_anchor_live AS
-DELETE
-FROM warehouse.dw_now_day_anchor_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+-- DELETE
+-- FROM warehouse.dw_now_day_anchor_live
+-- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 DELETE
 FROM warehouse.dw_now_day_anchor_live
 WHERE dt >= '{month}'
