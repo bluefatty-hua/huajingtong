@@ -129,12 +129,7 @@ FROM (SELECT DATE_FORMAT(t.dt, '%Y-%m-01')             AS dt,
              t.anchor_no,
              t.month_newold_state                      AS newold_state,
              t.active_state,
-             CASE
-                 WHEN mal.revenue / 10000 >= 50 THEN '50+'
-                 WHEN mal.revenue / 10000 >= 10 THEN '10-50'
-                 WHEN mal.revenue / 10000 >= 3 THEN '3-10'
-                 WHEN mal.revenue / 10000 > 0 THEN '0-3'
-                 ELSE '0' END                          AS revenue_level,
+             t.revenue_level,
              SUM(IFNULL(t.duration, 0))                AS duration,
              SUM(IFNULL(t.live_status, 0))             AS live_days,
              SUM(IFNULL(t.revenue, 0))                 AS revenue,
@@ -155,9 +150,6 @@ FROM (SELECT DATE_FORMAT(t.dt, '%Y-%m-01')             AS dt,
             WHERE dt >= '{month}'
               AND dt < '{month}' + INTERVAL 1 MONTH
            ) t
-               LEFT JOIN stage.stage_hy_month_anchor_live mal
-                         ON mal.dt = t.dt AND
-                            t.anchor_uid = mal.anchor_uid
       GROUP BY DATE_FORMAT(t.dt, '%Y-%m-01'),
                t.channel_id,
                t.channel_num,
@@ -165,12 +157,7 @@ FROM (SELECT DATE_FORMAT(t.dt, '%Y-%m-01')             AS dt,
                t.anchor_no,
                t.month_newold_state,
                t.active_state,
-               CASE
-                   WHEN mal.revenue / 10000 >= 50 THEN '50+'
-                   WHEN mal.revenue / 10000 >= 10 THEN '10-50'
-                   WHEN mal.revenue / 10000 >= 3 THEN '3-10'
-                   WHEN mal.revenue / 10000 > 0 THEN '0-3'
-                   ELSE '0' END) al
+               t.revenue_level) al
          LEFT JOIN warehouse.dw_huya_month_anchor_info ai
                    ON al.channel_id = ai.channel_id AND al.anchor_uid = ai.anchor_uid AND ai.dt = al.dt
          LEFT JOIN warehouse.ods_hy_account_info aci ON al.channel_id = aci.channel_id
