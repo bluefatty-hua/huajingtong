@@ -73,7 +73,7 @@
 DELETE
 FROM bireport.rpt_month_hy_guild
 WHERE dt = '{month}';
-REPLACE INTO bireport.rpt_month_hy_guild
+INSERT INTO bireport.rpt_month_hy_guild
 SELECT *
 FROM warehouse.dw_huya_month_guild_live
 WHERE dt = '{month}'
