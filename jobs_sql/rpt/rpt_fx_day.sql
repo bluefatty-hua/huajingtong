@@ -112,7 +112,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -136,7 +136,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
@@ -160,7 +160,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
       WITH ROLLUP
@@ -184,7 +184,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
       WITH ROLLUP
@@ -208,7 +208,7 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_day_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
         AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, backend_account_id, newold_state, revenue_level, active_state
       WITH ROLLUP
@@ -221,7 +221,7 @@ WHERE t.dt IS NOT NULL
 DELETE
 FROM bireport.rpt_day_fx_guild_view
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_fx_guild_view
+INSERT INTO bireport.rpt_day_fx_guild_view
 SELECT t1.dt,
        t1.backend_account_id,
        t1.revenue_level,
@@ -266,7 +266,7 @@ WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 DELETE
 FROM bireport.rpt_day_fx_guild_view_compare
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_fx_guild_view_compare
+INSERT INTO bireport.rpt_day_fx_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              backend_account_id,

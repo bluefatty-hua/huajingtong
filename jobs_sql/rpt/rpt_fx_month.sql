@@ -76,13 +76,10 @@ SELECT gl.dt,
        gl.anchor_cnt,
        gl.anchor_live_cnt                  AS live_cnt,
        gl.duration,
-       -- 平台流水
        gl.anchor_income / 125 / 0.4        AS revenue,
        gl.anchor_income                    AS revenue_orig,
-       -- 公会收入
        gl.anchor_income / 125 / 0.4 * 0.09 AS guild_income,
        gl.anchor_income                    AS guild_income_orig,
-       -- 主播收入
        gl.anchor_income / 125              AS anchor_income,
        gl.anchor_income                    AS anchor_income_orig
 FROM warehouse.dw_fx_month_guild_live gl
@@ -112,7 +109,10 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, backend_account_id, revenue_level, newold_state, active_state
       WITH ROLLUP
@@ -136,7 +136,10 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, revenue_level, newold_state, active_state, backend_account_id
       WITH ROLLUP
@@ -160,7 +163,10 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, newold_state, active_state, backend_account_id, revenue_level
       WITH ROLLUP
@@ -184,7 +190,10 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, active_state, backend_account_id, revenue_level, newold_state
       WITH ROLLUP
@@ -208,7 +217,10 @@ FROM (SELECT dt,
              SUM(anchor_income)                AS anchor_income,
              SUM(anchor_income_orig)           AS anchor_income_orig
       FROM bireport.rpt_month_fx_guild
-      WHERE (backend_account_id != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all')
+      WHERE backend_account_id != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
         AND dt = '{month}'
       GROUP BY dt, backend_account_id, newold_state, revenue_level, active_state
       WITH ROLLUP
@@ -218,7 +230,10 @@ WHERE dt IS NOT NULL
 
 
 -- 报表用，计算上周、上月同期数据---
-REPLACE INTO bireport.rpt_month_fx_guild_view
+DELETE
+FROM bireport.rpt_month_fx_guild_view
+WHERE dt = '{month}';
+INSERT INTO bireport.rpt_month_fx_guild_view
 SELECT t1.dt,
        t1.backend_account_id,
        t1.revenue_level,
@@ -250,7 +265,10 @@ WHERE t1.dt = '{month}'
 
 
 -- 报表用，计算指标占比---
-REPLACE INTO bireport.rpt_month_fx_guild_view_compare
+DELETE
+FROM bireport.rpt_month_fx_guild_view_compare
+WHERE dt = '{month}';
+INSERT INTO bireport.rpt_month_fx_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              backend_account_id,
