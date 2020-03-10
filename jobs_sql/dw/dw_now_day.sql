@@ -1,13 +1,9 @@
 -- DROP TABLE IF EXISTS warehouse.dw_now_day_anchor_live;
 -- CREATE TABLE warehouse.dw_now_day_anchor_live AS
--- DELETE
--- FROM warehouse.dw_now_day_anchor_live
--- WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 DELETE
 FROM warehouse.dw_now_day_anchor_live
-WHERE dt >= '{month}'
-  AND dt < '{month}' + INTERVAL 1 MONTH;
-INSERT INTO warehouse.dw_now_day_anchor_live
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT ignore INTO warehouse.dw_now_day_anchor_live
 SELECT al.*,
        IFNULL(at.city, '未知')                                                  AS city,
        aml.min_live_dt,
@@ -37,9 +33,7 @@ FROM warehouse.ods_now_day_anchor_live al
          LEFT JOIN warehouse.ods_yj_anchor_team at ON al.anchor_no = at.anchor_no
 -- 只取主播入驻公会后的直播数据
 WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
-  -- AND al.dt BETWEEN '{start_date}' AND '{end_date}'
-  AND al.dt >= '{month}'
-  AND al.dt < '{month}' + INTERVAL 1 MONTH
+  AND al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 

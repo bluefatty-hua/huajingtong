@@ -43,7 +43,7 @@ SELECT DATE_FORMAT(date, '%Y-%m-%d') AS dt,
        nowid,
        'from'                        AS comment
 FROM spider_now_backend.anchor_income
-WHERE DATE_FORMAT(date, '%Y-%m-%d') BETWEEN '{start_date}' AND '{end_date}'
+WHERE DATE_FORMAT(date, '%Y-%m-%d') BETWEEN '2020-01-01' AND '2020-03-09'
 ;
 
 
