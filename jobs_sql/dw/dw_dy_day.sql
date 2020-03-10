@@ -38,11 +38,14 @@ WHERE al.dt >= '{month}'
 
 
 -- 刷新主播活跃及流水分档(按月)
--- UPDATE
---     warehouse.dw_dy_day_anchor_live al
--- INNER JOIN stage.stage_dy_month_anchor_live mal ON al.anchor_uid = mal.anchor_uid AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
---     SET al.active_state = mal.active_state AND al.revenue_level = mal.revenue_level
--- WHERE DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('2020-03-01', '%Y-%m-01') AND DATE_FORMAT('2020-03-02', '%Y-%m-01')
+UPDATE
+    warehouse.dw_dy_day_anchor_live al, stage.stage_dy_month_anchor_live mal
+SET al.active_state  = mal.active_state,
+    al.revenue_level = mal.revenue_level
+WHERE al.anchor_uid = mal.anchor_uid
+  AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
+  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('end_date', '%Y-%m-01')
+--   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
 
