@@ -222,7 +222,7 @@ WHERE t.dt IS NOT NULL
 DELETE
 FROM bireport.rpt_day_dy_guild_view
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_dy_guild_view
+INSERT INTO bireport.rpt_day_dy_guild_view
 SELECT t1.dt,
        t1.backend_account_id,
        t1.revenue_level,
@@ -267,7 +267,7 @@ WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 DELETE
 FROM bireport.rpt_day_dy_guild_view_compare
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_dy_guild_view_compare
+INSERT INTO bireport.rpt_day_dy_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              backend_account_id,
@@ -315,45 +315,46 @@ FROM (SELECT dt,
         AND live_cnt > 0) t
 ;
 
-DELETE FROM bireport.rpt_day_dy_anchor  where dt BETWEEN '{start_date}' AND '{end_date}';
+DELETE
+FROM bireport.rpt_day_dy_anchor
+where dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_dy_anchor
-SELECT
-  `dt`,
-  `platform_id`,
-  `platform_name`,
-  `backend_account_id`,
-  `guild_name`,
-  `anchor_uid`,
-  `anchor_short_id`,
-  `anchor_no`,
-  `anchor_nick_name`,
-  `last_live_time`,
-  `follower_count`,
-  `total_diamond`,
-  `live_status`,
-  `duration`,
-  `revenue`,
-  `live_revenue`,
-  `prop_revenue`,
-  `act_revenue`,
-  `fan_rise`,
-  `signing_type`,
-  `signing_time`,
-  `sign_time`,
-  `anchor_settle_rate`,
-  `gender`,
-  `agent_id`,
-  `agent_name`,
-  `logo`,
-  `anchor_income`,
-  `guild_income`,
-  `min_live_dt`,
-  `min_sign_dt`,
-  `newold_state`,
-  `month_duration`,
-  `month_live_days`,
-  `active_state`,
-  `month_revenue`,
-  `revenue_level`
+SELECT `dt`,
+       `platform_id`,
+       `platform_name`,
+       `backend_account_id`,
+       `guild_name`,
+       `anchor_uid`,
+       `anchor_short_id`,
+       `anchor_no`,
+       `anchor_nick_name`,
+       `last_live_time`,
+       `follower_count`,
+       `total_diamond`,
+       `live_status`,
+       `duration`,
+       `revenue`,
+       `live_revenue`,
+       `prop_revenue`,
+       `act_revenue`,
+       `fan_rise`,
+       `signing_type`,
+       `signing_time`,
+       `sign_time`,
+       `anchor_settle_rate`,
+       `gender`,
+       `agent_id`,
+       `agent_name`,
+       `logo`,
+       `anchor_income`,
+       `guild_income`,
+       `min_live_dt`,
+       `min_sign_dt`,
+       `newold_state`,
+       `month_duration`,
+       `month_live_days`,
+       `active_state`,
+       `month_revenue`,
+       `revenue_level`
 FROM `warehouse`.`dw_dy_day_anchor_live`
- where dt BETWEEN '{start_date}' AND '{end_date}';
+where dt BETWEEN '{start_date}' AND '{end_date}';
