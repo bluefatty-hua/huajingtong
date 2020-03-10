@@ -53,6 +53,22 @@ DELETE
 FROM stage.stage_yy_month_anchor_live
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO stage.stage_yy_month_anchor_live
+SELECT t.dt,
+       t.platform_id,
+       t.anchor_uid,
+       t.revenue,
+       CASE
+           WHEN t.revenue * 2 / 1000 / 10000 >= 50 THEN '50+'
+           WHEN t.revenue * 2 / 1000 / 10000 >= 10 THEN '10-50'
+           WHEN t.revenue * 2 / 1000 / 10000 >= 3 THEN '3-10'
+           WHEN t.revenue * 2 / 1000 / 10000 > 0 THEN '0-3'
+           ELSE '0' END     AS revenue_level,
+       t.live_days,
+       t.duration,
+       CASE
+           WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
+           ELSE '非活跃主播' END AS active_state
+FROM (
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
        al.platform_id,
        al.anchor_uid,
@@ -64,6 +80,6 @@ WHERE comment = 'orig'
   AND DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
-         al.anchor_uid
+         al.anchor_uid) t
 ;
 
