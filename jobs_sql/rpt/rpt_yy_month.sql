@@ -274,7 +274,7 @@ WHERE dt IS NOT NULL
 DELETE
 FROM bireport.rpt_month_yy_guild_view
 WHERE dt = '{month}';
-REPLACE INTO bireport.rpt_month_yy_guild_view
+INSERT INTO bireport.rpt_month_yy_guild_view
 SELECT t1.dt,
        t1.channel_num,
        t1.revenue_level,
@@ -305,7 +305,10 @@ WHERE t1.dt = '{month}';
 
 
 -- 报表用，计算指标占比---
-REPLACE INTO bireport.rpt_month_yy_guild_view_compare
+DELETE
+FROM bireport.rpt_month_yy_guild_view_compare
+WHERE dt = '{month}';
+INSERT INTO bireport.rpt_month_yy_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              channel_num,

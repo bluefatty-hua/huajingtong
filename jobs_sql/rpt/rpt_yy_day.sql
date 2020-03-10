@@ -329,7 +329,7 @@ WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}';
 DELETE
 FROM bireport.rpt_day_yy_guild_view_compare
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_yy_guild_view_compare
+INSERT INTO bireport.rpt_day_yy_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              channel_num,
@@ -381,7 +381,7 @@ FROM (SELECT dt,
 DELETE
 FROM bireport.rpt_day_yy_anchor
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_yy_anchor
+INSERT INTO bireport.rpt_day_yy_anchor
 SELECT al.dt,
        al.channel_num,
        al.min_live_dt                   AS first_live_date,
