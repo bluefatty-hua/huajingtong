@@ -48,7 +48,7 @@ GROUP BY t.anchor_no
 -- CREATE TABLE stage.stage_fx_month_anchor_live
 DELETE
 FROM stage.stage_fx_month_anchor_live
-WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
+WHERE dt = '{month}';
 INSERT INTO stage.stage_fx_month_anchor_live
 SELECT t.dt,
        t.platform_id,
@@ -66,15 +66,16 @@ SELECT t.dt,
            WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END AS active_state
 FROM (
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
-       al.platform_id,
-       al.anchor_no,
-       SUM(anchor_income / 0.4)                                           AS revenue,
-       COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
-       SUM(al.duration)                                                   AS duration
-FROM warehouse.ods_fx_day_anchor_live al
-WHERE al.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
-GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
-         al.platform_id,
-         al.anchor_no) t
+         SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
+                al.platform_id,
+                al.anchor_no,
+                SUM(anchor_income / 0.4)                                           AS revenue,
+                COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
+                SUM(al.duration)                                                   AS duration
+         FROM warehouse.ods_fx_day_anchor_live al
+         WHERE dt >= '{month}'
+           AND dt < '{month}' + INTERVAL 1 MONTH
+         GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+                  al.platform_id,
+                  al.anchor_no) t
 ;
