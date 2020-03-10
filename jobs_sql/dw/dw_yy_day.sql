@@ -59,7 +59,7 @@ SELECT al.*,
        IFNULL(mal.active_state, '非活跃主播'),
        IFNULL(mal.revenue, 0)                                                 AS month_revenue,
        -- 主播流水分级（t-1月）
-       IFNULL(mal.revenue_level)                                              AS revenue_level
+       IFNULL(mal.revenue_level, 0)                                              AS revenue_level
 FROM warehouse.ods_yy_day_anchor_live al
          LEFT JOIN stage.stage_yy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_yy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
