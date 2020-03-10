@@ -1,5 +1,8 @@
 -- 公会列表
-REPLACE INTO warehouse.ods_bb_account_info
+DELETE
+FROM warehouse.ods_bb_account_info
+WHERE 1;
+INSERT INTO warehouse.ods_bb_account_info
 SELECT *
 FROM spider_bb_backend.account_info
 ;
@@ -10,7 +13,8 @@ FROM spider_bb_backend.account_info
 -- 主播信息
 -- DROP TABLE IF EXISTS stage.bb_guild_anchor_dt;
 -- CREATE TABLE stage.bb_guild_anchor_dt AS
-REPLACE INTO stage.bb_guild_anchor_dt
+DELETE FROM stage.bb_guild_anchor_dt WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO stage.bb_guild_anchor_dt
 SELECT backend_account_id,
        uid,
        dt
@@ -27,6 +31,7 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 
 -- DROP TABLE IF EXISTS warehouse.ods_bb_day_anchor_live;
 -- CREATE TABLE warehouse.ods_bb_day_anchor_live AS
+DELETE FROM warehouse.ods_bb_day_anchor_live WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 REPLACE INTO warehouse.ods_bb_day_anchor_live
 SELECT 1001                                                                    AS platform_id,
        'bilibili'                                                              AS platform_name,
@@ -76,6 +81,7 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 -- 公会月收入
 -- DROP TABLE IF EXISTS warehouse.ods_bbmonth_guild_live;
 -- CREATE TABLE warehouse.ods_bbmonth_guild_live AS
+DELETE FROM warehouse.ods_bb_month_guild_live WHERE dt = '{month}';
 REPLACE INTO warehouse.ods_bb_month_guild_live
 SELECT CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
        gs.backend_account_id,

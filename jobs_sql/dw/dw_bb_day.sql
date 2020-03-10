@@ -38,7 +38,10 @@ WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 -- 汇总指标 开播天数，开播时长，虚拟币收入
 -- DROP TABLE IF EXISTS warehouse.dw_bb_day_guild_live;
 -- CREATE TABLE warehouse.dw_bb_day_guild_live AS
-REPLACE INTO warehouse.dw_bb_day_guild_live
+DELETE
+FROM warehouse.dw_bb_day_guild_live
+WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO warehouse.dw_bb_day_guild_live
 SELECT t.dt,
        t.platform_id,
        t.platform_name,

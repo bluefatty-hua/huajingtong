@@ -45,7 +45,10 @@ GROUP BY t.anchor_no
 -- 计算每月主播开播天数，开播时长，流水
 -- DROP TABLE IF EXISTS stage.stage_bb_month_anchor_live;
 -- CREATE TABLE stage.stage_bb_month_anchor_live
-REPLACE INTO stage.stage_bb_month_anchor_live
+DELETE
+FROM stage.stage_bb_month_anchor_live
+WHERE dt = '{month}';
+INSERT INTO stage.stage_bb_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
        al.platform_id,
        al.anchor_uid,

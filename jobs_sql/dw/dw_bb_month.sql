@@ -2,13 +2,16 @@
 -- 汇总指标 开播天数，开播时长，虚拟币收入
 -- DROP TABLE IF EXISTS warehouse.dw_month_bb_anchor_live;
 -- CREATE TABLE warehouse.dw_month_bb_anchor_live AS
-REPLACE INTO warehouse.dw_bb_month_anchor_live
+DELETE
+FROM warehouse.dw_bb_month_anchor_live
+WHERE dt = '{month}';
+INSERT INTO warehouse.dw_bb_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
        al.anchor_no,
-       al.month_newold_state AS newold_state,
+       al.month_newold_state                                        AS newold_state,
        al.active_state,
        al.revenue_level,
        COUNT(CASE WHEN al.live_status = 1 THEN al.dt ELSE NULL END) AS live_days,
@@ -40,7 +43,10 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
 -- 汇总指标 主播数，开播主播数，虚拟币收入
 -- DROP TABLE IF EXISTS warehouse.dw_bb_month_guild_live_true;
 -- CREATE TABLE warehouse.dw_bb_month_guild_live_true AS
-REPLACE INTO warehouse.dw_bb_month_guild_live_true
+DELETE
+FROM warehouse.dw_bb_month_guild_live_true
+WHERE dt = '{month}';
+INSERT INTO warehouse.dw_bb_month_guild_live_true
 SELECT dt,
        backend_account_id,
        guild_salart_rmb   AS guild_salart_rmb_true,
@@ -63,7 +69,10 @@ WHERE type = '公会总收益'
 -- 注意backend_account_id = 3  数据中没有主播收入
 -- DROP TABLE IF EXISTS warehouse.dw_bb_month_guild_live;
 -- CREATE TABLE warehouse.dw_bb_month_guild_live AS
-REPLACE INTO warehouse.dw_bb_month_guild_live
+DELETE
+FROM warehouse.dw_bb_month_guild_live
+WHERE dt = '{month}';
+INSERT INTO warehouse.dw_bb_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                               AS dt,
        al.platform_id,
        al.platform_name,
