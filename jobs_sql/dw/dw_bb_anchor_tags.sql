@@ -49,16 +49,32 @@ DELETE
 FROM stage.stage_bb_month_anchor_live
 WHERE dt = '{month}';
 INSERT INTO stage.stage_bb_month_anchor_live
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
-       al.platform_id,
-       al.anchor_uid,
-       SUM(anchor_total_coin)                                             AS revenue,
-       COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
-       SUM(al.duration)                                                   AS duration
-FROM warehouse.ods_bb_day_anchor_live al
-WHERE al.dt >= '{month}'
-  AND al.dt < '{month}' + INTERVAL 1 MONTH
-GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
-         al.platform_id,
-         al.anchor_uid
+SELECT t.dt,
+       t.platform_id,
+       t.anchor_uid,
+       t.revenue,
+       CASE
+           WHEN t.revenue / 1000 / 10000 >= 50 THEN '50+'
+           WHEN t.revenue / 1000 / 10000 >= 10 THEN '10-50'
+           WHEN t.revenue / 1000 / 10000 >= 3 THEN '3-10'
+           WHEN t.revenue / 1000 / 10000 > 0 THEN '0-3'
+           ELSE '0' END     AS revenue_level,
+       t.live_days,
+       t.duration,
+       CASE
+           WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
+           ELSE '非活跃主播' END AS active_state
+FROM (
+         SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
+                al.platform_id,
+                al.anchor_uid,
+                SUM(anchor_total_coin)                                             AS revenue,
+                COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
+                SUM(al.duration)                                                   AS duration
+         FROM warehouse.ods_bb_day_anchor_live al
+         WHERE al.dt >= '{month}'
+           AND al.dt < '{month}' + INTERVAL 1 MONTH
+         GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+                  al.platform_id,
+                  al.anchor_uid) t
 ;
