@@ -40,7 +40,7 @@ GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
 DELETE
 FROM warehouse.dw_fx_month_anchor_live
 WHERE dt = '{month}';
-INSERT INTO warehouse.dw_fx_month_anchor_live
+INSERT IGNORE INTO warehouse.dw_fx_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.platform_id,
        al.platform_name,
