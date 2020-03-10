@@ -91,7 +91,7 @@ DELETE
 FROM bireport.rpt_month_all
 WHERE platform = 'bilibili'
   AND dt = '{month}';
-REPLACE INTO bireport.rpt_month_all
+INSERT INTO bireport.rpt_month_all
 (dt,
  platform,
  revenue_level,
@@ -121,8 +121,11 @@ WHERE backend_account_id = 0
 
 
 -- 2、抖音
-DELETE FROM bireport.rpt_month_all WHERE platform = 'DouYin' AND dt = '{month}';
-REPLACE INTO bireport.rpt_month_all
+DELETE
+FROM bireport.rpt_month_all
+WHERE platform = 'DouYin'
+  AND dt = '{month}';
+INSERT INTO bireport.rpt_month_all
 (dt,
  platform,
  revenue_level,
@@ -152,8 +155,11 @@ WHERE backend_account_id = 'all'
 
 
 -- 3、繁星
-DELETE FROM bireport.rpt_month_all WHERE platform = 'FanXing' AND dt = '{month}';
-REPLACE INTO bireport.rpt_month_all
+DELETE
+FROM bireport.rpt_month_all
+WHERE platform = 'FanXing'
+  AND dt = '{month}';
+INSERT INTO bireport.rpt_month_all
 (dt,
  platform,
  revenue_level,
@@ -183,8 +189,11 @@ WHERE backend_account_id = 'all'
 
 
 -- 4、虎牙
-DELETE FROM bireport.rpt_month_all WHERE platform = '虎牙' AND dt = '{month}';
-REPLACE INTO bireport.rpt_month_all
+DELETE
+FROM bireport.rpt_month_all
+WHERE platform = '虎牙'
+  AND dt = '{month}';
+INSERT INTO bireport.rpt_month_all
 (dt,
  platform,
  revenue_level,
@@ -214,8 +223,11 @@ WHERE channel_type = 'all'
 
 
 -- 5、NOW
-DELETE FROM bireport.rpt_month_all WHERE platform = 'NOW' AND dt = '{month}';
-REPLACE INTO bireport.rpt_month_all
+DELETE
+FROM bireport.rpt_month_all
+WHERE platform = 'NOW'
+  AND dt = '{month}';
+INSERT INTO bireport.rpt_month_all
 (dt,
  platform,
  revenue_level,
@@ -246,8 +258,11 @@ WHERE backend_account_id = 'all'
 
 
 -- 6、YY
-DELETE FROM bireport.rpt_month_all WHERE platform = 'YY' AND dt = '{month}';
-REPLACE INTO bireport.rpt_month_all
+DELETE
+FROM bireport.rpt_month_all
+WHERE platform = 'YY'
+  AND dt = '{month}';
+INSERT INTO bireport.rpt_month_all
 (dt,
  platform,
  revenue_level,
@@ -277,7 +292,11 @@ WHERE channel_num = 'all'
 
 
 -- ALL
-REPLACE INTO bireport.rpt_month_all
+DELETE
+FROM bireport.rpt_month_all
+WHERE platform != 'all'
+  AND dt = '{month}';
+INSERT INTO bireport.rpt_month_all
 SELECT dt,
        'all'              AS platform,
        revenue_level,
@@ -296,7 +315,10 @@ GROUP BY dt, revenue_level, newold_state, active_state
 ;
 
 -- 报表用，计算上周、上月同期数据---
-REPLACE INTO bireport.rpt_month_all_view
+DELETE
+FROM bireport.rpt_month_all_view
+WHERE dt = '{month}';
+INSERT INTO bireport.rpt_month_all_view
 SELECT t1.dt,
        t1.platform,
        t1.revenue_level,

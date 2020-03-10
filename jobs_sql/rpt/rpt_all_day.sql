@@ -4,7 +4,7 @@ DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'bilibili'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all
+INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -38,7 +38,7 @@ DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'DouYin'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all
+INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -72,7 +72,7 @@ DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'FanXing'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all
+INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -106,7 +106,7 @@ DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'HUYA'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all
+INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -140,7 +140,7 @@ DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'NOW'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all
+INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -175,7 +175,7 @@ DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'YY'
   AND dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all
+INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
  revenue_level,
@@ -228,7 +228,7 @@ GROUP BY dt, revenue_level, newold_state, active_state
 DELETE
 FROM bireport.rpt_day_all_view
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_all_view
+INSERT INTO bireport.rpt_day_all_view
 SELECT t1.dt,
        t1.platform,
        t1.revenue_level,
