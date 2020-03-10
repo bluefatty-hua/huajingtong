@@ -453,7 +453,7 @@ WHERE t.dt IS NOT NULL
 DELETE
 FROM bireport.rpt_day_now_guild_view
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_now_guild_view
+INSERT INTO bireport.rpt_day_now_guild_view
 SELECT t1.dt,
        t1.backend_account_id,
        t1.city,
@@ -501,7 +501,7 @@ WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 DELETE
 FROM bireport.rpt_day_now_guild_view_compare
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
-REPLACE INTO bireport.rpt_day_now_guild_view_compare
+INSERT INTO bireport.rpt_day_now_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              backend_account_id,

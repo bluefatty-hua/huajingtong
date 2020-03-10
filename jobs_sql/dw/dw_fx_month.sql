@@ -1,7 +1,10 @@
 -- dw_fx_month_anchor_live
 -- DROP TABLE IF EXISTS warehouse.dw_fx_month_guild_live;
 -- CREATE TABLE warehouse.dw_fx_month_guild_live AS
-REPLACE INTO warehouse.dw_fx_month_guild_live
+DELETE
+FROM warehouse.dw_fx_month_guild_live
+WHERE dt = '{month}';
+INSERT INTO warehouse.dw_fx_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                               AS dt,
        al.platform_id,
        al.platform_name,
@@ -34,7 +37,10 @@ GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
 ;
 
 
-REPLACE INTO warehouse.dw_fx_month_anchor_live
+DELETE
+FROM warehouse.dw_fx_month_anchor_live
+WHERE dt = '{month}';
+INSERT INTO warehouse.dw_fx_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.platform_id,
        al.platform_name,

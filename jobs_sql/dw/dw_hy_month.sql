@@ -291,7 +291,10 @@ WHERE t1.dt = '{month}'
 -- dw_huya_month_guild_live
 -- DROP TABLE IF EXISTS warehouse.dw_huya_month_guild_live;
 -- CREATE TABLE warehouse.dw_huya_month_guild_live AS
-REPLACE INTO warehouse.dw_huya_month_guild_live
+DELETE
+FROM warehouse.dw_huya_month_guild_live
+WHERE dt = '{month}';
+INSERT INTO warehouse.dw_huya_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')    AS dt,
        al.platform_id,
        al.platform_name                  AS platform,

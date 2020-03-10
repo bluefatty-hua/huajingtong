@@ -33,7 +33,9 @@ FROM warehouse.ods_now_day_anchor_live al
          LEFT JOIN warehouse.ods_yj_anchor_team at ON al.anchor_no = at.anchor_no
 -- 只取主播入驻公会后的直播数据
 WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
-  AND al.dt BETWEEN '{start_date}' AND '{end_date}'
+  -- AND al.dt BETWEEN '{start_date}' AND '{end_date}'
+  AND al.dt >= '{month}'
+  AND al.dt < '{month}' + INTERVAL 1 MONTH
 ;
 
 

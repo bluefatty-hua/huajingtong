@@ -31,16 +31,18 @@ FROM warehouse.ods_dy_day_anchor_live al
          LEFT JOIN stage.stage_dy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
-WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE al.dt >= '{month}'
+  AND al.dt < '{month}' + INTERVAL 1 MONTH
+-- WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
 -- 刷新主播活跃及流水分档(按月)
-UPDATE
-    warehouse.dw_dy_day_anchor_live al
-INNER JOIN stage.stage_dy_month_anchor_live mal ON al.anchor_uid = mal.anchor_uid AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
-    SET al.active_state = mal.active_state AND al.revenue_level = mal.revenue_level
-WHERE DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+-- UPDATE
+--     warehouse.dw_dy_day_anchor_live al
+-- INNER JOIN stage.stage_dy_month_anchor_live mal ON al.anchor_uid = mal.anchor_uid AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
+--     SET al.active_state = mal.active_state AND al.revenue_level = mal.revenue_level
+-- WHERE DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('2020-03-01', '%Y-%m-01') AND DATE_FORMAT('2020-03-02', '%Y-%m-01')
 ;
 
 
