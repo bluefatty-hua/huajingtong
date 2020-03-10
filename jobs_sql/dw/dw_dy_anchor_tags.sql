@@ -79,7 +79,7 @@ FROM (
                 SUM(al.duration)                                                   AS duration
          FROM warehouse.ods_dy_day_anchor_live al
          WHERE dt >= '{month}'
-           AND dt < 'month' + INTERVAL 1 MONTH
+           AND dt < '{month}' + INTERVAL 1 MONTH
          GROUP BY CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01'),
                   al.platform_id,
                   al.anchor_uid) t
