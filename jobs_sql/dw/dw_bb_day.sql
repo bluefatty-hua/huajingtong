@@ -11,10 +11,10 @@ SELECT al.*,
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
        mal.duration                                                           AS month_duration,
        mal.live_days                                                          AS month_live_days,
-       -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
+       -- 开播天数大于等于20天且开播时长大于等于60小时（t月累计）
        mal.active_state,
        mal.revenue                                                            AS month_revenue,
-       -- 主播流水分级（t-1月，单位：万元）
+       -- 主播流水分级（t月，单位：万元）
        mal.revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
          LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
@@ -33,7 +33,7 @@ SET al.active_state  = mal.active_state,
 WHERE al.anchor_uid = mal.anchor_uid
   AND al.dt >= mal.dt
   AND al.dt < mal.dt + INTERVAL 1 MONTH
-  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+  AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 --   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
