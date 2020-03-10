@@ -85,7 +85,7 @@ WHERE gat.dt BETWEEN '{start_date}' AND '{end_date}'
 -- CREATE TABLE warehouse.ods_bbmonth_guild_live AS
 DELETE
 FROM warehouse.ods_bb_month_guild_live
-WHERE dt = '{month}';
+WHERE DATE_FORMAT(dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO warehouse.ods_bb_month_guild_live
 SELECT CONCAT(LEFT(gs.month, 4), '-', RIGHT(gs.month, 2), '-01') AS dt,
        gs.backend_account_id,
