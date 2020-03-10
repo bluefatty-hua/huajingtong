@@ -44,12 +44,28 @@ GROUP BY t.anchor_no
 
 
 -- 计算每月主播开播天数，开播时长，流水
-# DROP TABLE IF EXISTS stage.stage_fx_month_anchor_live;
-# CREATE TABLE stage.stage_fx_month_anchor_live
+-- DROP TABLE IF EXISTS stage.stage_fx_month_anchor_live;
+-- CREATE TABLE stage.stage_fx_month_anchor_live
 DELETE
 FROM stage.stage_fx_month_anchor_live
 WHERE dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01');
 INSERT INTO stage.stage_fx_month_anchor_live
+SELECT t.dt,
+       t.platform_id,
+       t.anchor_no,
+       t.revenue,
+       CASE
+           WHEN t.revenue / 1000 / 10000 >= 50 THEN '50+'
+           WHEN t.revenue / 1000 / 10000 >= 10 THEN '10-50'
+           WHEN t.revenue / 1000 / 10000 >= 3 THEN '3-10'
+           WHEN t.revenue / 1000 / 10000 > 0 THEN '0-3'
+           ELSE '0' END     AS revenue_level,
+       t.live_days,
+       t.duration,
+       CASE
+           WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
+           ELSE '非活跃主播' END AS active_state
+FROM (
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
        al.platform_id,
        al.anchor_no,
@@ -60,5 +76,5 @@ FROM warehouse.ods_fx_day_anchor_live al
 WHERE al.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
-         al.anchor_no
+         al.anchor_no) t
 ;

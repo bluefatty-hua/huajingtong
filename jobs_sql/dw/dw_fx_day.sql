@@ -10,20 +10,13 @@ SELECT al.*,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
-       mal.duration                                                           AS last_month_duration,
+       mal.duration                                                           AS month_duration,
        mal.live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
-       CASE
-           WHEN mal.live_days >= 20 AND mal.duration >= 60 * 60 * 60 THEN '活跃主播'
-           ELSE '非活跃主播' END                                                   AS active_state,
-       mal.revenue                                                            AS last_month_revenue,
+       mal.active_state,
+       mal.revenue                                                            AS month_revenue,
        -- 主播流水分级（t-1月）
-       CASE
-           WHEN mal.revenue / 1000 / 10000 >= 50 THEN '50+'
-           WHEN mal.revenue / 1000 / 10000 >= 10 THEN '10-50'
-           WHEN mal.revenue / 1000 / 10000 >= 3 THEN '3-10'
-           WHEN mal.revenue / 1000 / 10000 > 0 THEN '0-3'
-           ELSE '0' END                                                       AS revenue_level
+       mal.revenue_level
 FROM warehouse.ods_fx_day_anchor_live al
          LEFT JOIN stage.stage_fx_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_fx_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
@@ -31,6 +24,21 @@ FROM warehouse.ods_fx_day_anchor_live al
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
+;
+
+
+UPDATE
+    warehouse.dw_fx_day_anchor_live al, stage.stage_fx_month_anchor_live mal
+SET al.active_state    = mal.active_state,
+    al.month_duration  = mal.duration,
+    al.month_live_days = mal.live_days,
+    al.revenue_level   = mal.revenue_level,
+    al.month_revenue   = mal.revenue
+WHERE al.anchor_no = mal.anchor_no
+  AND al.dt >= mal.dt
+  AND al.dt < mal.dt + INTERVAL 1 MONTH
+  AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+--   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
 
