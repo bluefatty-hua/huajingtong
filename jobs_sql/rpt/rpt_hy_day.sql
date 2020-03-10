@@ -85,7 +85,7 @@ DELETE
 FROM bireport.rpt_day_hy_guild
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_hy_guild
-SLEECT dt,
+SELECT dt,
        channel_type,
        channel_num,
        revenue_level,
