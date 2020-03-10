@@ -32,7 +32,10 @@ WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 UPDATE
     warehouse.dw_dy_day_anchor_live al, stage.stage_dy_month_anchor_live mal
 SET al.active_state  = mal.active_state,
-    al.revenue_level = mal.revenue_level
+    al.month_duration = mal.duration,
+    al.month_live_days = mal.live_days,
+    al.revenue_level = mal.revenue_level,
+    al.month_revenue = mal.revenue
 WHERE al.anchor_uid = mal.anchor_uid
   AND al.dt >= mal.dt
   AND al.dt < mal.dt + INTERVAL 1 MONTH
