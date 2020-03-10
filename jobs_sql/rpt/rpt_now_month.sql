@@ -312,7 +312,7 @@ WHERE dt IS NOT NULL
 DELETE
 FROM bireport.rpt_month_now_guild_view
 WHERE dt = '{month}';
-REPLACE INTO bireport.rpt_month_now_guild_view
+INSERT INTO bireport.rpt_month_now_guild_view
 SELECT t1.dt,
        t1.backend_account_id,
        t1.city,
@@ -349,7 +349,7 @@ WHERE t1.dt = '{month}'
 DELETE
 FROM bireport.rpt_month_now_guild_view_compare
 WHERE dt = '{month}';
-REPLACE INTO bireport.rpt_month_now_guild_view_compare
+INSERT INTO bireport.rpt_month_now_guild_view_compare
 SELECT *
 FROM (SELECT dt,
              backend_account_id,

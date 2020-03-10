@@ -121,9 +121,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, channel_type, channel_num, revenue_level, newold_state, active_state
       WITH ROLLUP
 
@@ -140,9 +143,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state, channel_type
       WITH ROLLUP
 
@@ -159,9 +165,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, revenue_level, newold_state, active_state, channel_type, channel_num
       WITH ROLLUP
 
@@ -178,9 +187,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, active_state, channel_type, channel_num, revenue_level
       WITH ROLLUP
 
@@ -197,9 +209,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, channel_type, channel_num, revenue_level, newold_state
       WITH ROLLUP
 
@@ -216,9 +231,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, channel_num, channel_type, active_state, revenue_level, newold_state
       WITH ROLLUP
 
@@ -235,9 +253,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, newold_state, channel_type, channel_num, revenue_level, active_state
       WITH ROLLUP
 
@@ -254,9 +275,12 @@ FROM (SELECT dt,
              SUM(duration)                AS duration,
              SUM(revenue)                 AS revenue
       FROM bireport.rpt_day_hy_guild
-      WHERE channel_type != 'all' AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all'
-         AND active_state != 'all'
-          AND dt BETWEEN '{start_date}' AND '{end_date}'
+      WHERE channel_type != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
+        AND dt BETWEEN '{start_date}' AND '{end_date}'
       GROUP BY dt, active_state, channel_type, newold_state, revenue_level, channel_num
       WITH ROLLUP
      ) t

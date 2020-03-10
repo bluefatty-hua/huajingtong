@@ -29,12 +29,15 @@ WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
   AND al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+
 -- 刷新主播活跃及流水分档(按月)
-EXPLAIN
 UPDATE
     warehouse.dw_now_day_anchor_live al, stage.stage_now_month_anchor_live mal
-SET al.active_state  = mal.active_state,
-    al.revenue_level = mal.revenue_level
+SET al.active_state    = mal.active_state,
+    al.month_duration  = mal.duration,
+    al.month_live_days = mal.live_days,
+    al.revenue_level   = mal.revenue_level,
+    al.month_revenue   = mal.revenue
 WHERE al.anchor_no = mal.anchor_no
   AND al.dt >= mal.dt
   AND al.dt < mal.dt + INTERVAL 1 MONTH
