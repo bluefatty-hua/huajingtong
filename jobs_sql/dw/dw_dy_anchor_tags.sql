@@ -71,7 +71,7 @@ SELECT t.dt,
            WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END AS active_state
 FROM (
-         SELECT CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01')                         AS dt,
+         SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                         AS dt,
                 al.platform_id,
                 al.anchor_uid,
                 SUM(revenue)                                                       AS revenue,
@@ -80,7 +80,7 @@ FROM (
          FROM warehouse.ods_dy_day_anchor_live al
          WHERE dt >= '{month}'
            AND dt < '{month}' + INTERVAL 1 MONTH
-         GROUP BY CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01'),
+         GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
                   al.platform_id,
                   al.anchor_uid) t
 ;

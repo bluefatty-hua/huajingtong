@@ -31,8 +31,6 @@ FROM warehouse.ods_dy_day_anchor_live al
          LEFT JOIN stage.stage_dy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
-# WHERE al.dt >= '{month}'
-#   AND al.dt < '{month}' + INTERVAL 1 MONTH
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
@@ -44,7 +42,7 @@ SET al.active_state  = mal.active_state,
     al.revenue_level = mal.revenue_level
 WHERE al.anchor_uid = mal.anchor_uid
   AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
-  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
+  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 --   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
