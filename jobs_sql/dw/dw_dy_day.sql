@@ -44,7 +44,7 @@ SET al.active_state  = mal.active_state,
     al.revenue_level = mal.revenue_level
 WHERE al.anchor_uid = mal.anchor_uid
   AND DATE_FORMAT(al.dt, '%Y-%m-01') = mal.dt
-  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('end_date', '%Y-%m-01')
+  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND DATE_FORMAT('{end_date}', '%Y-%m-01')
 --   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
