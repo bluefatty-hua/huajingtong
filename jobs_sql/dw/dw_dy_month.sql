@@ -2,7 +2,7 @@
 -- CREATE TABLE warehouse.dw_dy_month_guild_live AS
 DELETE
 FROM warehouse.dw_dy_month_guild_live
-WHERE dt = '2020-03-01';
+WHERE dt = '{month}';
 INSERT INTO warehouse.dw_dy_month_guild_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                       AS dt,
        al.platform_id,
@@ -21,13 +21,13 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                       AS d
 FROM (SELECT *,
              -- cur_date: t-1
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('2020-03-09', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
-                                                                    ELSE '2020-03-09' END, 180
+                                                                    ELSE '{cur_date}' END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_dy_day_anchor_live
-      WHERE dt >= '2020-03-01'
-        AND dt < '2020-03-01' + INTERVAL 1 MONTH
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
@@ -64,13 +64,13 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                      AS dt,
        SUM(IF(al.guild_income >= 0, al.guild_income, 0))   AS guild_income
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('2020-03-09', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
-                                                                    ELSE '2020-03-09' END, 180
+                                                                    ELSE '{cur_date}' END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_dy_day_anchor_live
-      WHERE dt >= '2020-03-01'
-        AND dt < '2020-03-01' + INTERVAL 1 MONTH
+      WHERE dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
          LEFT JOIN stage.stage_dy_month_anchor_live mal
                    ON mal.dt = al.dt AND al.anchor_uid = mal.anchor_uid
