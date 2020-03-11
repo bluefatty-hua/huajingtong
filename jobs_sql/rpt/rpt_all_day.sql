@@ -131,6 +131,7 @@ SELECT dt,
        0      AS anchor_income
 FROM bireport.rpt_day_hy_guild
 WHERE channel_type = 'all'
+  AND channel_num = 'all'
   AND dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
