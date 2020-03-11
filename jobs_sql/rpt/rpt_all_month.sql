@@ -295,7 +295,7 @@ WHERE channel_num = 'all'
 -- ALL
 DELETE
 FROM bireport.rpt_month_all
-WHERE platform != 'all'
+WHERE platform = 'all'
   AND dt = '{month}';
 INSERT INTO bireport.rpt_month_all
 SELECT dt,

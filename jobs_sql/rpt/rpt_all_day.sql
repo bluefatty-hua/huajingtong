@@ -205,8 +205,11 @@ WHERE channel_num = 'all'
 ;
 
 
-REPLACE INTO bireport.rpt_day_all (dt, platform, revenue_level, newold_state, active_state, anchor_cnt, live_cnt,
-                                   duration, revenue, guild_income, anchor_income)
+DELETE
+FROM bireport.rpt_day_all
+WHERE platform = 'all'
+  AND dt BETWEEN '{start_date}' AND '{end_date}';
+INSERT INTO bireport.rpt_day_all
 SELECT dt,
        'all'              AS platform,
        revenue_level,
