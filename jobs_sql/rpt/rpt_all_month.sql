@@ -218,6 +218,7 @@ SELECT dt,
        anchor_income
 FROM bireport.rpt_month_hy_guild
 WHERE channel_type = 'all'
+  AND channel_num = 'all'
   AND dt = '{month}'
 ;
 
