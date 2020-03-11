@@ -41,7 +41,7 @@ SET al.active_state    = mal.active_state,
 WHERE al.anchor_no = mal.anchor_no
   AND al.dt >= mal.dt
   AND al.dt < mal.dt + INTERVAL 1 MONTH
-  AND DATE_FORMAT(al.dt, '%Y-%m-01') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+  AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 --   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
