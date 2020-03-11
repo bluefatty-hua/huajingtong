@@ -45,7 +45,7 @@ SET al.active_state  = mal.active_state,
 WHERE al.anchor_uid = mal.anchor_uid
   AND al.dt >= mal.dt
   AND al.dt < mal.dt + INTERVAL 1 MONTH
-  AND mal.dt BETWEEN DATE_FORMAT('2020-03-01', '%Y-%m-01') AND '2020-03-10'
+  AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 --   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 
