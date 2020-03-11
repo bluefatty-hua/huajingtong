@@ -34,6 +34,21 @@ FROM warehouse.ods_dy_xjl_day_anchor_live al
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
+-- 刷新主播活跃及流水分档(按月)
+UPDATE
+    warehouse.dw_dy_xjl_day_anchor_live al, stage.stage_dy_xjl_month_anchor_live mal
+SET al.active_state  = mal.active_state,
+    al.month_duration = IFNULL(mal.duration, 0),
+    al.month_live_days = IFNULL(mal.live_days, 0),
+    al.revenue_level = mal.revenue_level,
+    al.month_revenue = IFNULL(mal.revenue, 0)
+WHERE al.anchor_uid = mal.anchor_uid
+  AND al.dt >= mal.dt
+  AND al.dt < mal.dt + INTERVAL 1 MONTH
+  AND mal.dt BETWEEN DATE_FORMAT('2020-03-01', '%Y-%m-01') AND '2020-03-10'
+--   AND '{end_date}' = LAST_DAY('{end_date}')
+;
+
 
 -- DROP TABLE IF EXISTS warehouse.dw_dy_xjl_day_guild_live;
 -- CREATE TABLE warehouse.dw_dy_xjl_day_guild_live AS

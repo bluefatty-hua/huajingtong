@@ -55,7 +55,23 @@ DELETE
 FROM stage.stage_dy_xjl_month_anchor_live
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m');
 INSERT INTO stage.stage_dy_xjl_month_anchor_live
-SELECT CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01')                         AS dt,
+SELECT t.dt,
+       t.platform_id,
+       t.anchor_uid,
+       t.revenue,
+       CASE
+           WHEN t.revenue / 10 / 10000 >= 50 THEN '50+'
+           WHEN t.revenue / 10 / 10000 >= 10 THEN '10-50'
+           WHEN t.revenue / 10 / 10000 >= 3 THEN '3-10'
+           WHEN t.revenue / 10 / 10000 > 0 THEN '0-3'
+           ELSE '0' END     AS revenue_level,
+       t.live_days,
+       t.duration,
+       CASE
+           WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
+           ELSE '非活跃主播' END AS active_state
+FROM (
+         SELECT CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01')                         AS dt,
        al.platform_id,
        al.anchor_uid,
        SUM(revenue)                                                       AS revenue,
@@ -65,5 +81,5 @@ FROM warehouse.ods_dy_xjl_day_anchor_live al
 WHERE DATE_FORMAT(dt, '%Y-%m') BETWEEN DATE_FORMAT('{start_date}', '%Y-%m') AND DATE_FORMAT('{end_date}', '%Y-%m')
 GROUP BY CONCAT(DATE_FORMAT(al.dt, '%Y-%m'), '-01'),
          al.platform_id,
-         al.anchor_uid
+         al.anchor_uid) t
 ;
