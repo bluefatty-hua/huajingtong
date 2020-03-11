@@ -25,7 +25,7 @@ INSERT INTO bireport.rpt_paper_contract_anchor
 SELECT '{month}'                                                                 AS dt,
        al.platform_name,
        al.id_card,
-       al.anchor_no,
+       IF(al.anchor_no = '' OR al.anchor_no = '无', '未知')                         AS anchor_no,
        al.real_name,
        al.contract_start_date,
        al.contract_end_date,
