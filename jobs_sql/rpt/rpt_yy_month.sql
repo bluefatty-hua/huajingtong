@@ -85,26 +85,26 @@ WHERE dt = '{month}';
 INSERT INTO bireport.rpt_month_yy_guild
 SELECT gl.dt,
        gl.platform_id,
-       pf.platform_name                                                       AS platform_name,
+       pf.platform_name                                             AS platform_name,
        gl.channel_num,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
        gl.anchor_cnt,
-       gl.anchor_live_cnt                                                     AS live_cnt,
+       gl.anchor_live_cnt                                           AS live_cnt,
        gl.duration,
        -- 平台流水
-       gl.anchor_bluediamond                                                  AS anchor_bluediamond_revenue,
-       ROUND(gl.guild_commission / 1000, 2)                                   AS guild_commssion_revenue,
-       ROUND((gl.anchor_bluediamond + gl.guild_commission) * 2 / 1000, 2)     AS revenue,
-       gl.anchor_bluediamond + gl.guild_commission                            AS revenue_orig,
+       gl.anchor_bluediamond                                        AS anchor_bluediamond_revenue,
+       gl.guild_commission / 1000                                   AS guild_commssion_revenue,
+       (gl.anchor_bluediamond + gl.guild_commission) * 2 / 1000     AS revenue,
+       gl.anchor_bluediamond + gl.guild_commission                  AS revenue_orig,
        -- 公会收入
        gl.guild_income_bluediamond,
-       ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
-       gl.guild_income_bluediamond + gl.guild_commission                      AS guild_income_orig,
+       (gl.guild_income_bluediamond + gl.guild_commission) / 1000   AS guild_income,
+       gl.guild_income_bluediamond + gl.guild_commission            AS guild_income_orig,
        -- 主播收入
-       ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
-       gl.anchor_income_bluediamond + gl.anchor_commission                    AS anchor_income_orig
+       (gl.anchor_income_bluediamond + gl.anchor_commission) / 1000 AS anchor_income,
+       gl.anchor_income_bluediamond + gl.anchor_commission          AS anchor_income_orig
 FROM warehouse.dw_yy_month_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
 WHERE comment = 'orig'

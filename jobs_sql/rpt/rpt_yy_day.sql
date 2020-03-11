@@ -91,28 +91,28 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_yy_guild
 SELECT gl.dt,
        gl.platform_id,
-       pf.platform_name                                            AS platform_name,
+       pf.platform_name                                    AS platform_name,
        gl.channel_num,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
        gl.anchor_cnt,
-       gl.anchor_live_cnt                                          AS live_cnt,
+       gl.anchor_live_cnt                                  AS live_cnt,
        gl.duration,
        -- 平台流水
-       gl.bluediamond                                              AS anchor_bluediamond_revenue,
-       ROUND(gl.guild_commission / 1000, 2)                        AS guild_commssion_revenue,
-       ROUND((gl.bluediamond + gl.guild_commission) * 2 / 1000, 2) AS revenue,
-       gl.bluediamond + gl.guild_commission                        AS revenue_orig,
+       gl.bluediamond                                      AS anchor_bluediamond_revenue,
+       gl.guild_commission / 1000                          AS guild_commssion_revenue,
+       (gl.bluediamond + gl.guild_commission) * 2 / 1000   AS revenue,
+       gl.bluediamond + gl.guild_commission                AS revenue_orig,
        -- 公会收入
        gl.guild_income_bluediamond,
-       0                                                           as guild_income,
+       0                                                   as guild_income,
        -- ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
-       gl.guild_income_bluediamond + gl.guild_commission           AS guild_income_orig,
+       gl.guild_income_bluediamond + gl.guild_commission   AS guild_income_orig,
        -- 主播收入
-       0                                                           as anchor_income,
+       0                                                   as anchor_income,
        -- ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
-       gl.anchor_income_bluediamond + gl.anchor_commission         AS anchor_income_orig
+       gl.anchor_income_bluediamond + gl.anchor_commission AS anchor_income_orig
 FROM warehouse.dw_yy_day_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
 WHERE comment = 'orig'
@@ -163,7 +163,10 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state
       WITH ROLLUP
 
@@ -190,7 +193,10 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
       GROUP BY dt, revenue_level, newold_state, active_state, channel_num
       WITH ROLLUP
 
@@ -217,7 +223,10 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
       GROUP BY dt, newold_state, active_state, channel_num, revenue_level
       WITH ROLLUP
 
@@ -244,7 +253,10 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
       GROUP BY dt, active_state, channel_num, revenue_level, newold_state
       WITH ROLLUP
 
@@ -271,7 +283,10 @@ FROM (SELECT dt,
              SUM(anchor_income_orig)         AS anchor_income_orig
       FROM bireport.rpt_day_yy_guild
       WHERE dt BETWEEN '{start_date}' AND '{end_date}'
-        AND channel_num != 'all' AND revenue_level != 'all' AND newold_state != 'all' AND active_state != 'all'
+        AND channel_num != 'all'
+        AND revenue_level != 'all'
+        AND newold_state != 'all'
+        AND active_state != 'all'
       GROUP BY dt, active_state, revenue_level, channel_num, newold_state
       WITH ROLLUP
      ) t
@@ -387,10 +402,10 @@ SELECT al.dt,
        al.min_live_dt                   AS first_live_date,
        al.min_sign_dt                   AS sign_date,
        al.newold_state,
-       al1.month_duration / 3600    AS duration_lastmonth,
-       al1.month_live_days          AS live_days_lastmonth,
+       al1.month_duration / 3600        AS duration_lastmonth,
+       al1.month_live_days              AS live_days_lastmonth,
        al.active_state,
-       al1.month_revenue * 2 / 1000 AS revenue_lastmonth,
+       al1.month_revenue * 2 / 1000     AS revenue_lastmonth,
        al.revenue_level,
        al.anchor_uid,
        al.anchor_no,
@@ -400,7 +415,7 @@ SELECT al.dt,
        IF(al.live_status = 1, '是', '否') AS live_status,
        al.bluediamond * 2 / 1000        AS revenue
 FROM warehouse.dw_yy_day_anchor_live al
-LEFT JOIN warehouse.dw_yy_day_anchor_live al1
+         LEFT JOIN warehouse.dw_yy_day_anchor_live al1
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND
                       al.channel_num = al1.channel_num AND
                       al.anchor_no = al1.anchor_no
