@@ -31,7 +31,7 @@ SELECT '{month}'                                                                
        al.contract_end_date,
        IFNULL(al1.dt, '{month}' - INTERVAL 3 MONTH)                              AS dt_t3,
        IFNULL(al1.live_days, 0)                                                  AS live_days_t3,
-       ROUND(IFNULL(al1.revenue_rmb, 0), 0)                                      AS revenue_t3,
+       IFNULL(al1.revenue_rmb, 0)                                                AS revenue_t3,
        DATEDIFF(LAST_DAY(al1.dt), al1.dt) + 1 - al1.live_days                    AS unlive_days_t3,
 
        IFNULL(al2.dt, '{month}' - INTERVAL 2 MONTH)                              AS dt_t2,
