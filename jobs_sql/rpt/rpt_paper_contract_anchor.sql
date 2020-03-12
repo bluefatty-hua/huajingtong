@@ -28,6 +28,7 @@ SELECT '{month}'                                                                
        al.id_card,
        al.anchor_no,
        al.real_name,
+       al.contract_no,
        al.contract_start_date,
        al.contract_end_date,
        IFNULL(al3.dt, '{month}' - INTERVAL 3 MONTH)                                         AS dt_t3,
@@ -66,6 +67,7 @@ FROM (SELECT DISTINCT al.platform_name,
                       al.id_card,
                       al.anchor_no,
                       al.real_name,
+                      al.contract_no,
                       al.contract_start_date,
                       al.contract_end_date
       FROM warehouse.dw_paper_contract_anchor_month_live al
