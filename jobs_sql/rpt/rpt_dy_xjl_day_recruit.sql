@@ -1,8 +1,8 @@
 SET NAMES utf8;
 USE bireport;
-DELETE
-FROM rpt_day_dy_xjl_recruit;
-INSERT INTO rpt_day_dy_xjl_recruit
+--DELETE
+--FROM rpt_day_dy_xjl_recruit;
+--INSERT INTO rpt_day_dy_xjl_recruit
 SELECT MIN(dt)     AS dt,
        xjl_week,
        recruit_team,
