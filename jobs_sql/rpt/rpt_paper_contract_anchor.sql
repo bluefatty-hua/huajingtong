@@ -11,7 +11,7 @@ SELECT '{month}'                               AS dt,
        SUM(revenue_rmb)                        AS revenue
 FROM warehouse.dw_paper_contract_anchor_month_live
 WHERE dt <= '{month}'
-  -- AND live_days > 0
+      -- AND live_days > 0
 GROUP BY platform_name,
          id_card,
          anchor_no
@@ -33,17 +33,17 @@ SELECT '{month}'                                                                
        IFNULL(al3.dt, '{month}' - INTERVAL 3 MONTH)                              AS dt_t3,
        IFNULL(al3.live_days, 0)                                                  AS live_days_t3,
        ROUND(IFNULL(al3.revenue_rmb, 0), 0)                                      AS revenue_t3,
-       DATEDIFF(LAST_DAY(al3.dt), al3.dt) + 1 - al3.live_days                    AS unlive_days_t3,
+       DATEDIFF(LAST_DAY(al3.dt), al3.dt) + 1 - IFNULL(al3.live_days, 0)         AS unlive_days_t3,
 
        IFNULL(al2.dt, '{month}' - INTERVAL 2 MONTH)                              AS dt_t2,
        IFNULL(al2.live_days, 0)                                                  AS live_days_t2,
        ROUND(IFNULL(al2.revenue_rmb, 0), 0)                                      AS revenue_rmb_t2,
-       DATEDIFF(LAST_DAY(al2.dt), al2.dt) + 1 - al2.live_days                    AS unlive_days_t2,
+       DATEDIFF(LAST_DAY(al2.dt), al2.dt) + 1 - IFNULL(al2.live_days, 0)         AS unlive_days_t2,
 
        IFNULL(al1.dt, '{month}' - INTERVAL 1 MONTH)                              AS dt_t1,
        IFNULL(al1.live_days, 0)                                                  AS live_days_t1,
        ROUND(IFNULL(al1.revenue_rmb, 0), 0)                                      AS revenue_rmb_t1,
-       DATEDIFF(LAST_DAY(al1.dt), al3.dt) + 1 - al1.live_days                    AS unlive_days_t1,
+       DATEDIFF(LAST_DAY(al1.dt), al1.dt) + 1 - IFNULL(al1.live_days, 0)         AS unlive_days_t1,
 
        IFNULL(al0.dt, '{month}')                                                 AS dt_t,
        IFNULL(al0.live_days, 0)                                                  AS live_days_t,
