@@ -11,7 +11,7 @@ SELECT '{month}'                               AS dt,
        SUM(revenue_rmb)                        AS revenue
 FROM warehouse.dw_paper_contract_anchor_month_live
 WHERE dt <= '{month}'
-  AND live_days > 0
+  -- AND live_days > 0
 GROUP BY platform_name,
          id_card,
          anchor_no
