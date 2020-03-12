@@ -7,7 +7,7 @@ SELECT '{month}'                               AS dt,
        platform_name,
        id_card,
        anchor_no,
-       COUNT(DISTINCT DATE_FORMAT(dt, '%Y%m')) AS month_cnt,
+       COUNT(DISTINCT dt) AS month_cnt,
        SUM(revenue_rmb)                        AS revenue
 FROM warehouse.dw_paper_contract_anchor_month_live
 WHERE dt <= '{month}'
