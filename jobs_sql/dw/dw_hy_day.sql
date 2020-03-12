@@ -25,31 +25,45 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}'
 
 
 -- 主播信息
+-- 主播列表数据中，同一天可能会出现多条记录（同一主播出现在多个公会，通过时间戳取最新记录）
 -- DROP TABLE IF EXISTS stage.stage_huya_day_anchor_info;
 -- CREATE TABLE stage.stage_huya_day_anchor_info AS
 DELETE
 FROM stage.stage_huya_day_anchor_info
 WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO stage.stage_huya_day_anchor_info
-SELECT dt,
-       anchor_uid,
-       anchor_no,
-       channel_id,
+SELECT ai.dt,
+       ai.anchor_uid,
+       ai.anchor_no,
+       ai.channel_id,
        'orig' AS comment,
-       nick,
-       activity_days,
-       months,
-       ow_percent,
-       sign_time,
-       surplus_days,
-       avatar
-FROM warehouse.ods_huya_day_anchor_info
-WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+       ai.nick,
+       ai.activity_days,
+       ai.months,
+       ai.ow_percent,
+       ai.sign_time,
+       ai.surplus_days,
+       ai.avatar
+FROM warehouse.ods_huya_day_anchor_info ai
+         INNER JOIN (SELECT dt,
+                            anchor_uid,
+                            anchor_no,
+                            MAX(timestamp) AS max_timestamp
+                     FROM warehouse.ods_huya_day_anchor_info
+                     WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+                     GROUP BY dt,
+                              anchor_uid,
+                              anchor_no
+) mai ON ai.dt = mai.dt AND ai.anchor_uid = mai.anchor_uid AND ai.timestamp = mai.max_timestamp
+WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
-
 INSERT IGNORE INTO stage.stage_huya_day_anchor_info (anchor_uid, anchor_no, channel_id, comment, dt)
-SELECT al.anchor_uid, ai.anchor_no, al.channel_id, 'from anchor_live_detail_day' AS comment, al.dt
+SELECT al.anchor_uid,
+       ai.anchor_no,
+       al.channel_id,
+       'from anchor_live_detail_day' AS comment,
+       al.dt
 FROM warehouse.ods_huya_day_anchor_live al
          LEFT JOIN (SELECT DISTINCT anchor_uid, anchor_no FROM stage.stage_huya_day_anchor_info) ai
                    ON al.anchor_uid = ai.anchor_uid
@@ -141,7 +155,7 @@ FROM warehouse.dw_huya_day_anchor_info ai
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
-
+EXPLAIN
 UPDATE
     warehouse.dw_huya_day_anchor_live al, stage.stage_hy_month_anchor_live mal
 SET al.active_state    = mal.active_state,
@@ -153,6 +167,7 @@ WHERE al.anchor_uid = mal.anchor_uid
   AND al.dt >= mal.dt
   AND al.dt < mal.dt + INTERVAL 1 MONTH
   AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
+  AND al.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
 --   AND '{end_date}' = LAST_DAY('{end_date}')
 ;
 

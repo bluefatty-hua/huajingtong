@@ -54,7 +54,7 @@ SELECT t.dt,
        1002 AS platform_id,
        t.anchor_uid,
        t.revenue,
-       -- income是rmb
+       -- revenue、income是rmb
        CASE
            WHEN t.revenue / 10000 >= 50 THEN '50+'
            WHEN t.revenue / 10000 >= 10 THEN '10-50'
