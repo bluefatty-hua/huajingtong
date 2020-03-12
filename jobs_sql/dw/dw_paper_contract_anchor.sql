@@ -263,7 +263,7 @@ FROM warehouse.dw_paper_contract_anchor_month_live
 WHERE 1;
 INSERT INTO warehouse.dw_paper_contract_anchor_month_live
 SELECT ca.platform_name,
-       ca.anchor_no,
+       IF((ca.anchor_no = '' OR ca.anchor_no rlike '无'), '未知', ca.anchor_no) AS anchor_no,
        ca.id_card,
        ca.nick_name,
        ca.real_name,
