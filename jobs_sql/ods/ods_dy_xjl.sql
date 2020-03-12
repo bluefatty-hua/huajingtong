@@ -92,7 +92,8 @@ SELECT ai.dt,
        ai.gender,
        ai.agent_id,
        ai.agent_name,
-       ai.logo
+       ai.logo,
+       ai.notes
 FROM warehouse.ods_dy_xjl_day_anchor_info ai
          LEFT JOIN warehouse.ods_dy_xjl_day_anchor_live_duration al
                    ON ai.dt = al.dt AND ai.backend_account_id = al.backend_account_id AND ai.anchor_uid = al.anchor_uid
