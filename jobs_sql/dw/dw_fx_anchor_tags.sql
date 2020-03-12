@@ -55,10 +55,10 @@ SELECT t.dt,
        t.anchor_no,
        t.revenue,
        CASE
-           WHEN t.revenue / 1000 / 10000 >= 50 THEN '50+'
-           WHEN t.revenue / 1000 / 10000 >= 10 THEN '10-50'
-           WHEN t.revenue / 1000 / 10000 >= 3 THEN '3-10'
-           WHEN t.revenue / 1000 / 10000 > 0 THEN '0-3'
+           WHEN t.revenue / 125 / 10000 >= 50 THEN '50+'
+           WHEN t.revenue / 125 / 10000 >= 10 THEN '10-50'
+           WHEN t.revenue / 125 / 10000 >= 3 THEN '3-10'
+           WHEN t.revenue / 125 / 10000 > 0 THEN '0-3'
            ELSE '0' END     AS revenue_level,
        t.live_days,
        t.duration,
