@@ -155,7 +155,7 @@ FROM warehouse.dw_huya_day_anchor_info ai
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
-EXPLAIN
+
 UPDATE
     warehouse.dw_huya_day_anchor_live al, stage.stage_hy_month_anchor_live mal
 SET al.active_state    = mal.active_state,
