@@ -50,7 +50,7 @@ SELECT '{month}'                                                                
        ROUND(IFNULL(al0.revenue_rmb, 0), 0)                                      AS revenue_rmb_t,
        DATEDIFF(CASE
                     WHEN DATE_FORMAT('{cur_date}', '%Y-%m-01') = '{month}' THEN '{cur_date}' -- 判断是否当前月，当月数据以t-1计算
-                    ELSE LAST_DAY('{month}') END, '{month}') + 1 - al0.live_days AS unlive_days_t,
+                    ELSE LAST_DAY('{month}') END, '{month}') + 1 - IFNULL(al0.live_days, 0) AS unlive_days_t,
        CASE
            WHEN (DATEDIFF(CASE
                               WHEN DATE_FORMAT('{cur_date}', '%Y-%m-01') = '{month}' THEN '{cur_date}'
