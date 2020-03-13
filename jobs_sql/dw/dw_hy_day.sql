@@ -65,6 +65,13 @@ SELECT al.anchor_uid,
        'from anchor_live_detail_day' AS comment,
        al.dt
 FROM warehouse.ods_huya_day_anchor_live al
+         -- 主播转签问题，当主播发生转签时: 1、一主播列表为准；2、补充数据时以主播最新记录为准（时间戳最新）
+         INNER JOIN (SELECT dt, anchor_uid, MAX(timestamp) AS max_timestamp
+                     FROM warehouse.ods_huya_day_anchor_live
+                     WHERE dt BETWEEN '{start_date}' AND '{end_date}'
+                     GROUP BY dt, anchor_uid
+) mal
+                    ON al.dt = mal.dt AND al.anchor_uid = mal.anchor_uid AND al.timestamp = mal.max_timestamp
          LEFT JOIN (SELECT DISTINCT anchor_uid, anchor_no FROM stage.stage_huya_day_anchor_info) ai
                    ON al.anchor_uid = ai.anchor_uid
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
@@ -168,7 +175,7 @@ WHERE al.anchor_uid = mal.anchor_uid
   AND al.dt < mal.dt + INTERVAL 1 MONTH
   AND mal.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
   AND al.dt BETWEEN DATE_FORMAT('{start_date}', '%Y-%m-01') AND '{end_date}'
---   AND '{end_date}' = LAST_DAY('{end_date}')
+  AND mal.dt = DATE_FORMAT('{cur_date}', '%Y-%m-01')
 ;
 
 
