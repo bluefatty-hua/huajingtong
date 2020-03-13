@@ -18,7 +18,7 @@ FROM (SELECT ai.anchor_no,
              yj.first_live_time AS min_live_time
       FROM warehouse.ods_yujia_anchor_list yj
       WHERE platform = '虎牙'
-        AND first_live_time <> '2019-01-01') t
+        AND first_live_time <> '2070-01-01') t
 GROUP BY anchor_no
 ;
 
@@ -38,7 +38,7 @@ FROM (SELECT al.anchor_no,
              yj.sign_time AS min_sign_dt
       FROM warehouse.ods_yujia_anchor_list yj
       WHERE platform = '虎牙'
-        AND yj.sign_time <> '2019-01-01') t
+        AND yj.sign_time <> '2070-01-01') t
 GROUP BY t.anchor_no
 ;
 
