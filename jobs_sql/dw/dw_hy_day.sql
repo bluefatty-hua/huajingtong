@@ -58,10 +58,11 @@ FROM warehouse.ods_huya_day_anchor_info ai
 WHERE ai.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
-INSERT IGNORE INTO stage.stage_huya_day_anchor_info (anchor_uid, anchor_no, channel_id, comment, dt)
+INSERT IGNORE INTO stage.stage_huya_day_anchor_info (anchor_uid, anchor_no, channel_id, comment, nick, dt)
 SELECT al.anchor_uid,
        ai.anchor_no,
        al.channel_id,
+       al.nick,
        'from anchor_live_detail_day' AS comment,
        al.dt
 FROM warehouse.ods_huya_day_anchor_live al
