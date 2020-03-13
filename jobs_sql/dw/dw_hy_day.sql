@@ -65,13 +65,13 @@ SELECT al.anchor_uid,
        'from anchor_live_detail_day' AS comment,
        al.dt
 FROM warehouse.ods_huya_day_anchor_live al
-         -- 主播转签问题，当主播发生转签时: 1、一主播列表为准；2、补充数据时以主播最新记录为准（时间戳最新）
-         INNER JOIN (SELECT dt, anchor_uid, MAX(timestamp) AS max_timestamp
+         -- 主播转签问题，当主播发生转签时: 1、一主播列表为准；2、补充数据时以主播旧记录为准（时间戳最小）
+         INNER JOIN (SELECT dt, anchor_uid, MIN(timestamp) AS min_timestamp
                      FROM warehouse.ods_huya_day_anchor_live
                      WHERE dt BETWEEN '{start_date}' AND '{end_date}'
                      GROUP BY dt, anchor_uid
 ) mal
-                    ON al.dt = mal.dt AND al.anchor_uid = mal.anchor_uid AND al.timestamp = mal.max_timestamp
+                    ON al.dt = mal.dt AND al.anchor_uid = mal.anchor_uid AND al.timestamp = mal.min_timestamp
          LEFT JOIN (SELECT DISTINCT anchor_uid, anchor_no FROM stage.stage_huya_day_anchor_info) ai
                    ON al.anchor_uid = ai.anchor_uid
 WHERE al.dt BETWEEN '{start_date}' AND '{end_date}'
