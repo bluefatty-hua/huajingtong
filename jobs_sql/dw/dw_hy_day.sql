@@ -91,7 +91,7 @@ SELECT al.anchor_uid,
        'from anchor_live_detail_day' AS comment,
        al.dt
 FROM stage.stage_huya_day_anchor_live al
-         LEFT JOIN (SELECT DISTINCT anchor_uid, anchor_no FROM stage.stage_huya_day_anchor_info) ai
+         LEFT JOIN (SELECT DISTINCT anchor_uid, anchor_no FROM warehouse.ods_huya_day_anchor_info) ai
                    ON al.anchor_uid = ai.anchor_uid
 WHERE al.dt >= '{month}'
   AND al.dt < '{month}' + INTERVAL 1 MONTH
@@ -244,10 +244,10 @@ SELECT ai.dt                                                                  AS
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
        IFNULL(mal.duration, 0)                                                AS month_duration,
        IFNULL(mal.live_days, 0)                                               AS month_live_days,
-       -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
+       -- 开播天数大于等于20天且开播时长大于等于60小时（t月累计）
        IFNULL(mal.active_state, '非活跃主播')                                      AS active_state,
        IFNULL(mal.revenue, 0)                                                 AS month_revenue,
-       -- 主播流水分级（t-1月）
+       -- 主播流水分级（t月）
        IFNULL(mal.revenue_level, 0)                                           AS revenue_level,
        pf.vir_coin_name,
        pf.vir_coin_rate,
