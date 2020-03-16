@@ -191,17 +191,23 @@ SELECT al.platform_id,
        mal.active_state,
        mal.revenue                                                            AS month_revenue,
        -- 主播流水分级（t月，单位：万元）
-       mal.revenue_level
+       mal.revenue_level,
+       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
 FROM warehouse.ods_bb_day_anchor_live al
          LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_bb_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
+         LEFT JOIN stage.stage_bb_day_anchor_add_loss aal ON al.dt = aal.dt AND al.anchor_no = aal.anchor_no
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
   AND mal.dt = '{month}'
+  AND aal.dt >= '{month}'
+  AND aal.dt <= LAST_DAY('{month}')
+--   AND aal.add_loss_state IS NOT NULL
 ;
+
 
 -- 刷新主播活跃及流水分档(按月)
 -- UPDATE
