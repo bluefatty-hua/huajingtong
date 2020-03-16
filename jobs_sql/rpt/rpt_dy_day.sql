@@ -115,6 +115,10 @@ WHERE al2.anchor_uid IS NULL
 ;
 
 
+DELETE
+FROM stage.stage_rpt_dy_day_guild_live
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO stage.stage_rpt_dy_day_guild_live
 SELECT al.dt,
        al.platform_id,
