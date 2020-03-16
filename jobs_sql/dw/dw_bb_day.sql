@@ -203,8 +203,6 @@ FROM warehouse.ods_bb_day_anchor_live al
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
   AND mal.dt = '{month}'
-  AND aal.dt >= '{month}'
-  AND aal.dt <= LAST_DAY('{month}')
 --   AND aal.add_loss_state IS NOT NULL
 ;
 
