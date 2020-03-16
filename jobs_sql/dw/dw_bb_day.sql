@@ -89,7 +89,7 @@ DELETE
 FROM stage.stage_ods_bb_day_anchor_live_last_day
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}');
-INSERT INTO stage.stage_ods_bb_day_anchor_live_last_day
+INSERT IGNORE INTO stage.stage_ods_bb_day_anchor_live_last_day
 SELECT dt,
        platform_name,
        platform_id,
