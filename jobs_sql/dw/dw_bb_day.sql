@@ -87,8 +87,8 @@ FROM (
 -- CREATE TABLE stage.stage_ods_bb_day_anchor_live_last_day AS
 DELETE
 FROM stage.stage_ods_bb_day_anchor_live_last_day
-WHERE dt >= '2020-03-01'
-  AND dt <= LAST_DAY('2020-03-01');
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO stage.stage_ods_bb_day_anchor_live_last_day
 SELECT dt,
        platform_name,
@@ -99,8 +99,8 @@ SELECT dt,
        dt - INTERVAL 1 DAY AS next_dt
 FROM warehouse.ods_bb_day_anchor_live
 WHERE (contract_status <> 2 OR contract_status IS NULL)
-  AND dt >= '2020-02-01'
-  AND dt <= LAST_DAY('2020-03-01')
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}')
 ;
 
 
@@ -109,34 +109,34 @@ WHERE (contract_status <> 2 OR contract_status IS NULL)
 DELETE
 FROM stage.stage_bb_day_anchor_add_loss
 WHERE add_loss_state = 'add'
-  AND dt >= '2020-03-01'
-  AND dt <= LAST_DAY('2020-03-01');
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO stage.stage_bb_day_anchor_add_loss
 SELECT al1.dt, al1.platform_name, al1.platform_id, al1.anchor_no, 'add' AS add_loss_state
 FROM stage.stage_ods_bb_day_anchor_live_last_day al1
          LEFT JOIN stage.stage_ods_bb_day_anchor_live_last_day al2
                    ON al1.dt = al2.last_dt AND al1.anchor_no = al2.anchor_no
 WHERE al2.anchor_no IS NULL
-  AND al1.dt >= '2020-03-01'
-  AND al1.dt <= LAST_DAY('2020-03-01')
+  AND al1.dt >= '{month}'
+  AND al1.dt <= LAST_DAY('{month}')
 ;
 
 
--- 流水主播（在t-2天主播列表，不在t-1天的列表）
+-- 流失主播（在t-2天主播列表，不在t-1天的列表）
 DELETE
 FROM stage.stage_bb_day_anchor_add_loss
 WHERE add_loss_state = 'loss'
-  AND dt >= '2020-03-01'
-  AND dt <= LAST_DAY('2020-03-01');
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO stage.stage_bb_day_anchor_add_loss
 SELECT al1.last_dt, al1.platform_name, al1.platform_id, al1.anchor_no, 'loss' AS add_loss_state
 FROM stage.stage_ods_bb_day_anchor_live_last_day al1
          LEFT JOIN stage.stage_ods_bb_day_anchor_live_last_day al2
                    ON al1.dt = al2.next_dt AND al1.anchor_no = al2.anchor_no
-WHERE al1.dt >= '2020-03-01'
-  AND al1.dt <= LAST_DAY('2020-03-01')
+WHERE al1.dt >= '{month}'
+  AND al1.dt <= LAST_DAY('{month}')
   AND al2.anchor_no IS NULL
-  AND al1.last_dt <> '2020-03-15'
+  AND al1.last_dt <> '{cur_date}'
 ;
 
 
