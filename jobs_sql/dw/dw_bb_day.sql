@@ -226,7 +226,8 @@ WHERE al.dt >= '{month}'
 -- CREATE TABLE warehouse.dw_bb_day_guild_live AS
 DELETE
 FROM warehouse.dw_bb_day_guild_live
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO warehouse.dw_bb_day_guild_live
 SELECT t.dt,
        t.platform_id,
@@ -245,7 +246,8 @@ SELECT t.dt,
        SUM(t.anchor_income)                                                       AS anchor_income
 FROM warehouse.dw_bb_day_anchor_live t
 WHERE (t.contract_status <> 2 OR t.contract_status IS NULL)
-  AND t.dt BETWEEN '{start_date}' AND '{end_date}'
+  AND t.dt >= '{month}'
+  AND t.dt <= LAST_DAY('{month}')
 GROUP BY t.dt,
          t.platform_id,
          t.platform_name,
