@@ -44,7 +44,7 @@ GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
 DELETE
 FROM warehouse.dw_dy_month_anchor_live
 WHERE dt = '{month}';
-# INSERT INTO warehouse.dw_dy_month_anchor_live
+INSERT INTO warehouse.dw_dy_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.platform_id,
        al.platform_name,
@@ -55,14 +55,15 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.active_state,
        COUNT(CASE WHEN al.live_status = 1 THEN al.dt ELSE NULL END) AS live_days,
        SUM(IF(al.duration >= 0, al.duration, 0))                    AS duration,
-       SUM(IF(al.revenue_orig >= 0, al.revenue_orig, 0))            AS revenue,
+       SUM(IF(al.revenue_orig >= 0, al.revenue_orig, 0)) / 10       AS revenue,
+       SUM(IF(al.revenue_orig >= 0, al.revenue_orig, 0))            AS revenue_orig,
        SUM(IF(al.anchor_income >= 0, al.anchor_income, 0))          AS anchor_income,
        SUM(IF(al.guild_income >= 0, al.guild_income, 0))            AS guild_income
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('2020-03-10', '%Y-%m-01')
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
                                                                         THEN LAST_DAY(dt)
-                                                                    ELSE '2020-03-10' END, 180
+                                                                    ELSE '{cur_date}' END, 180
                  ) AS month_newold_state
       FROM warehouse.dw_dy_day_anchor_live
       WHERE dt >= '{month}'
