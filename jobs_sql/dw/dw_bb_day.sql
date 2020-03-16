@@ -72,8 +72,10 @@ FROM (
                 COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
                 SUM(al.duration)                                                   AS duration
          FROM warehouse.ods_bb_day_anchor_live al
-         WHERE (contract_status <> 2 OR contract_status IS NULL)
-           AND al.dt >= '{month}'
+         WHERE
+#                (contract_status <> 2 OR contract_status IS NULL)
+#            AND
+             al.dt >= '{month}'
            AND al.dt <= LAST_DAY('{month}')
          GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
                   al.platform_id,
@@ -169,7 +171,8 @@ SELECT al.platform_id,
        al.ios_coin,
        al.android_coin,
        al.pc_coin,
-       al.anchor_total_coin                                                   AS revenue,
+       al.anchor_total_coin / 1000                                              AS revenue,
+       al.anchor_total_coin                                                     AS revenue_orig,
        al.anchor_income,
        al.special_coin,
        al.send_coin,
@@ -177,19 +180,19 @@ SELECT al.platform_id,
        al.DAU,
        al.max_ppl,
        al.fc,
-       al.contract_status,
-       al.contract_status_text,
+       IFNULL(al.contract_status, ''),
+       IFNULL(al.contract_status_text, ''),
        al.contract_signtime,
        al.contract_endtime,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
-       mal.duration                                                           AS month_duration,
-       mal.live_days                                                          AS month_live_days,
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)   AS newold_state,
+       mal.duration                                                             AS month_duration,
+       mal.live_days                                                            AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t月累计）
        mal.active_state,
-       mal.revenue                                                            AS month_revenue,
+       mal.revenue                                                              AS month_revenue,
        -- 主播流水分级（t月，单位：万元）
        mal.revenue_level,
        CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
@@ -240,17 +243,20 @@ SELECT t.dt,
        t.newold_state,
        t.active_state,
        t.revenue_level,
+       t.contract_status,
+       t.add_loss_state,
        COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS live_cnt,
        SUM(t.duration)                                                            AS duration,
-       SUM(t.anchor_total_coin)                                                   AS revenue,
+       SUM(t.revenue_orig) / 1000                                                 AS revenue,
+       SUM(t.revenue_orig)                                                        AS revenue_orig,
        SUM(t.special_coin)                                                        AS special_coin,
        SUM(t.send_coin)                                                           AS send_coin,
        SUM(t.anchor_base_coin)                                                    AS anchor_base_coin,
        SUM(t.anchor_income)                                                       AS anchor_income
 FROM warehouse.dw_bb_day_anchor_live t
-WHERE (t.contract_status <> 2 OR t.contract_status IS NULL)
-  AND t.dt >= '{month}'
+-- WHERE (t.contract_status <> 2 OR t.contract_status IS NULL)
+WHERE t.dt >= '{month}'
   AND t.dt <= LAST_DAY('{month}')
 GROUP BY t.dt,
          t.platform_id,
@@ -258,6 +264,7 @@ GROUP BY t.dt,
          t.backend_account_id,
          t.newold_state,
          t.active_state,
-         t.revenue_level
+         t.revenue_level,
+         t.contract_status,
+         t.add_loss_state
 ;
-

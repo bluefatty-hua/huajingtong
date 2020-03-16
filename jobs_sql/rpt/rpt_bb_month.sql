@@ -88,21 +88,21 @@ WHERE dt = '{month}';
 INSERT INTO bireport.rpt_month_bb_guild
 SELECT gl.dt,
        gl.platform_id,
-       pf.platform_name                            AS platform,
+       pf.platform_name                                 AS platform,
        gl.backend_account_id,
        ai.remark,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
        gl.anchor_cnt,
-       gl.anchor_live_cnt                          AS live_cnt,
+       gl.anchor_live_cnt                               AS live_cnt,
        gl.duration,
-       gl.revenue / 1000                           AS revenue,
-       gl.revenue                                  AS revenune_orig,
-       (gl.revenue * ig.guild_income_rate) / 1000  AS guild_income,
-       gl.revenue * ig.guild_income_rate           AS guild_income_orig,
-       (gl.revenue * ig.anchor_income_rate) / 1000 AS anchor_income,
-       gl.revenue * ig.anchor_income_rate          AS anchor_income_orig
+       gl.revenue_orig / 1000                           AS revenue,
+       gl.revenue_orig                                  AS revenune_orig,
+       (gl.revenue_orig * ig.guild_income_rate) / 1000  AS guild_income,
+       gl.revenue_orig * ig.guild_income_rate           AS guild_income_orig,
+       (gl.revenue_orig * ig.anchor_income_rate) / 1000 AS anchor_income,
+       gl.revenue_orig * ig.anchor_income_rate          AS anchor_income_orig
 FROM warehouse.dw_bb_month_guild_live gl
          LEFT JOIN spider_bb_backend.account_info ai ON gl.backend_account_id = ai.backend_account_id
          LEFT JOIN stage.bb_guild_income_rate ig ON gl.backend_account_id = ig.backend_account_id

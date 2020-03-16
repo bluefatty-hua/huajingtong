@@ -76,29 +76,40 @@ WHERE dt BETWEEN '{start_date}' AND '{end_date}';
 INSERT INTO bireport.rpt_day_bb_guild
 SELECT t.dt,
        t.platform_id,
-       t.platform_name                                                         AS platform,
+       t.platform_name                                                                   AS platform,
        t.backend_account_id,
        ai.remark,
        t.revenue_level,
        t.newold_state,
        t.active_state,
-       SUM(t.anchor_cnt)                                                       AS anchor_cnt,
-       SUM(t.live_cnt)                                                         AS live_cnt,
-       SUM(t.duration)                                                         AS duration,
-       SUM(t.revenue) / 1000                                                   AS revenue,
-       SUM(t.revenue)                                                          AS revenue_orig,
-       SUM(t.revenue * gr.guild_income_rate) / 1000                            AS guild_income,
-       SUM(t.revenue * gr.guild_income_rate)                                   AS guild_income_orig,
-       SUM(CASE
-               WHEN t.backend_account_id = 3 THEN t.revenue * gr.anchor_income_rate + t.send_coin + t.special_coin
-               ELSE t.anchor_income + t.send_coin + t.special_coin END) / 1000 AS anchor_income,
-       SUM(CASE
-               WHEN t.backend_account_id = 3 THEN t.revenue * gr.anchor_income_rate + t.send_coin + t.special_coin
-               ELSE t.anchor_income END)                                       AS anchor_income_orig
+       SUM(IF(add_loss_state <> 'loss', t.anchor_cnt, 0))                                AS anchor_cnt,
+       SUM(IF(add_loss_state = 'add', anchor_cnt, 0))                                    AS add_anchor_cnt,
+       SUM(IF(add_loss_state = 'loss', anchor_cnt, 0))                                   AS loss_anchor_cnt,
+       SUM(IF(add_loss_state = 'add', anchor_cnt, 0) -
+           IF(add_loss_state = 'loss', anchor_cnt, 0))                                   AS increase_anchor_cnt,
+       SUM(IF(t.add_loss_state <> 'loss', t.live_cnt, 0))                                AS live_cnt,
+       SUM(IF(t.add_loss_state <> 'loss', t.duration, 0))                                AS duration,
+       SUM(IF(t.add_loss_state <> 'loss', t.revenue_orig, 0)) / 1000                     AS revenue,
+       SUM(IF(t.add_loss_state <> 'loss', t.revenue_orig, 0))                            AS revenue_orig,
+       SUM(IF(t.add_loss_state <> 'loss', t.revenue_orig * gr.guild_income_rate, 0)) /
+       1000                                                                              AS guild_income,
+       SUM(
+               IF(t.add_loss_state <> 'loss', t.revenue_orig * gr.guild_income_rate, 0)) AS guild_income_orig,
+       SUM(IF(t.add_loss_state <> 'loss', CASE
+                                              WHEN t.backend_account_id = 3
+                                                  THEN t.revenue_orig * gr.anchor_income_rate + t.send_coin + t.special_coin
+                                              ELSE t.anchor_income + t.send_coin + t.special_coin END, 0)) /
+       1000                                                                              AS anchor_income,
+       SUM(IF(t.add_loss_state <> 'loss', CASE
+                                              WHEN t.backend_account_id = 3
+                                                  THEN t.revenue_orig * gr.anchor_income_rate + t.send_coin + t.special_coin
+                                              ELSE t.anchor_income END,
+              0))                                                                        AS anchor_income_orig
 FROM warehouse.dw_bb_day_guild_live t
          LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
          LEFT JOIN stage.bb_guild_income_rate gr ON t.backend_account_id = gr.backend_account_id
-WHERE t.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE (add_loss_state = 'loss' OR contract_status <> 2)
+  AND t.dt BETWEEN '{start_date}' AND '{end_date}'
 GROUP BY t.dt,
          t.platform_id,
          t.platform_name,
@@ -111,9 +122,9 @@ GROUP BY t.dt,
 
 
 REPLACE INTO bireport.rpt_day_bb_guild (dt, platform_id, platform, backend_account_id, remark, revenue_level,
-                                        newold_state, active_state, anchor_cnt, live_cnt, duration, revenue,
-                                        revenue_orig, guild_income, guild_income_orig, anchor_income,
-                                        anchor_income_orig)
+                                        newold_state, active_state, anchor_cnt, add_anchor_cnt, loss_anchor_cnt,
+                                        increase_anchor_cnt, live_cnt, duration, revenue, revenue_orig, guild_income,
+                                        guild_income_orig, anchor_income, anchor_income_orig)
 SELECT t.dt,
        t.platform_id,
        t.platform,
@@ -123,6 +134,9 @@ SELECT t.dt,
        t.newold_state,
        t.active_state,
        t.anchor_cnt,
+       t.add_anchor_cnt,
+       t.loss_anchor_cnt,
+       t.increase_anchor_cnt,
        t.live_cnt,
        t.duration,
        t.revenue,
@@ -139,6 +153,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')   AS newold_state,
              IFNULL(active_state, 'all')   AS active_state,
              SUM(anchor_cnt)               AS anchor_cnt,
+             SUM(add_anchor_cnt)           AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)          AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)      AS increase_anchor_cnt,
              SUM(live_cnt)                 AS live_cnt,
              SUM(duration)                 AS duration,
              SUM(revenue)                  AS revenue,
@@ -166,6 +183,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')   AS newold_state,
              IFNULL(active_state, 'all')   AS active_state,
              SUM(anchor_cnt)               AS anchor_cnt,
+             SUM(add_anchor_cnt)           AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)          AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)      AS increase_anchor_cnt,
              SUM(live_cnt)                 AS live_cnt,
              SUM(duration)                 AS duration,
              SUM(revenue)                  AS revenue,
@@ -193,6 +213,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')   AS newold_state,
              IFNULL(active_state, 'all')   AS active_state,
              SUM(anchor_cnt)               AS anchor_cnt,
+             SUM(add_anchor_cnt)           AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)          AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)      AS increase_anchor_cnt,
              SUM(live_cnt)                 AS live_cnt,
              SUM(duration)                 AS duration,
              SUM(revenue)                  AS revenue,
@@ -220,6 +243,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')   AS newold_state,
              IFNULL(active_state, 'all')   AS active_state,
              SUM(anchor_cnt)               AS anchor_cnt,
+             SUM(add_anchor_cnt)           AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)          AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)      AS increase_anchor_cnt,
              SUM(live_cnt)                 AS live_cnt,
              SUM(duration)                 AS duration,
              SUM(revenue)                  AS revenue,
@@ -246,6 +272,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')   AS newold_state,
              IFNULL(active_state, 'all')   AS active_state,
              SUM(anchor_cnt)               AS anchor_cnt,
+             SUM(add_anchor_cnt)           AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)          AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)      AS increase_anchor_cnt,
              SUM(live_cnt)                 AS live_cnt,
              SUM(duration)                 AS duration,
              SUM(revenue)                  AS revenue,
@@ -279,6 +308,9 @@ SELECT t1.dt,
        t1.newold_state,
        t1.active_state,
        t1.anchor_cnt,
+       t1.add_anchor_cnt,
+       t1.loss_anchor_cnt,
+       t1.increase_anchor_cnt,
        t2.anchor_cnt                                                   AS anchor_cnt_lastweek,
        t3.anchor_cnt                                                   AS anchor_cnt_lastmonth,
        t1.live_cnt,
@@ -309,7 +341,7 @@ FROM bireport.rpt_day_bb_guild t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
+# WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
@@ -357,7 +389,7 @@ FROM (SELECT dt,
              revenue_level,
              newold_state,
              active_state,
-             '开播人均流水'                        AS idx,
+             '开播人均流水'                     AS idx,
              round(revenue / live_cnt, 0) AS val
       FROM bireport.rpt_day_bb_guild
       WHERE revenue_level != 'all'
@@ -380,7 +412,7 @@ SELECT al.dt,
        al1.duration / 3600              AS duration_lastmonth,
        al1.live_days                    AS live_days_lastmonth,
        al.active_state,
-       al1.revenue / 1000               AS revenue_lastmonth,
+       al1.revenue_orig / 1000          AS revenue_lastmonth,
        al.revenue_level,
        al.anchor_no                     AS anchor_uid,
        al.anchor_no,
@@ -391,7 +423,7 @@ SELECT al.dt,
        al.anchor_status_text,
        al.duration / 3600               AS duration,
        IF(al.live_status = 1, '是', '否') AS live_status,
-       al.anchor_total_coin / 1000      AS revenue
+       al.revenue_orig / 1000           AS revenue
 FROM warehouse.dw_bb_day_anchor_live al
          LEFT JOIN warehouse.dw_bb_month_anchor_live al1
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND

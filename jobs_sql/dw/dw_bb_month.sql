@@ -16,7 +16,8 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.revenue_level,
        COUNT(CASE WHEN al.live_status = 1 THEN al.dt ELSE NULL END) AS live_days,
        SUM(al.duration)                                             AS duration,
-       SUM(al.anchor_total_coin)                                    AS revenue
+       SUM(al.revenue_orig) / 1000                                  AS revenue,
+       SUM(al.revenue_orig)                                         AS revenue_orig
 FROM (SELECT *,
              -- cur_date: t-1
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
@@ -24,7 +25,7 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_bb_day_anchor_live
-      WHERE (contract_status <> 2 OR contract_status IS NULL)
+      WHERE (add_loss_state <> 'loss' OR contract_status <> 2)
         AND dt >= '{month}'
         AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
@@ -83,7 +84,8 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS anchor_live_cnt,
        SUM(al.duration)                                                             AS duration,
-       SUM(al.anchor_total_coin)                                                    AS revenue,
+       SUM(al.revenue_orig) / 1000                                                  AS revenue,
+       SUM(al.revenue_orig)                                                         AS revenue_orig,
        SUM(al.anchor_income)                                                        AS anchor_income,
        SUM(al.send_coin)                                                            AS operate_award_punish_coin,
        SUM(al.anchor_base_coin)                                                     AS anchor_base_coin,
@@ -95,7 +97,7 @@ FROM (SELECT *,
                                                                         THEN LAST_DAY(dt)
                                                                     ELSE '{cur_date}' END, 180) AS month_newold_state
       FROM warehouse.dw_bb_day_anchor_live
-      WHERE (contract_status <> 2 OR contract_status IS NULL)
+      WHERE (add_loss_state <> 'loss' OR contract_status <> 2)
         AND dt >= '{month}'
         AND dt < '{month}' + INTERVAL 1 MONTH
      ) al
