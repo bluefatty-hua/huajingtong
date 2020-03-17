@@ -179,7 +179,8 @@ SELECT al.dt,
        COUNT(DISTINCT al.anchor_uid)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_uid ELSE NULL END) AS anchor_live_cnt,
        SUM(IF(al.duration > 0, al.duration, 0))                                      AS duration,
-       SUM(IF(al.revenue_orig > 0, al.revenue_orig, 0))                              AS revenue,
+       SUM(IF(al.revenue > 0, al.revenue, 0))                                        AS revenue,
+       SUM(IF(al.revenue_orig > 0, al.revenue_orig, 0))                              AS revenue_orig,
        SUM(IF(al.anchor_income > 0, al.anchor_income, 0))                            AS anchor_income,
        SUM(IF(al.guild_income > 0, al.guild_income, 0))                              AS guild_income
 FROM warehouse.dw_dy_day_anchor_live al
