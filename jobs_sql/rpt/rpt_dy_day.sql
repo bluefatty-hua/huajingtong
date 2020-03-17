@@ -136,8 +136,10 @@ SELECT al.dt,
        SUM(IF(add_loss_state <> 'loss' AND al.duration > 0, al.duration, 0))                    AS duration,
        SUM(IF(add_loss_state <> 'loss' AND al.revenue > 0, al.revenue, 0))                      AS revenue,
        SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0))            AS revenue_orig,
-       SUM(IF(add_loss_state <> 'loss' AND al.anchor_income > 0, al.anchor_income, 0))          AS anchor_income,
-       SUM(IF(add_loss_state <> 'loss' AND al.guild_income > 0, al.guild_income, 0))            AS guild_income
+       SUM(IF(add_loss_state <> 'loss' AND al.anchor_income > 0, al.anchor_income, 0)) / 10     AS anchor_income,
+       SUM(IF(add_loss_state <> 'loss' AND al.anchor_income > 0, al.anchor_income, 0))          AS anchor_income_orig,
+       SUM(IF(add_loss_state <> 'loss' AND al.guild_income > 0, al.guild_income, 0)) / 10       AS guild_income,
+       SUM(IF(add_loss_state <> 'loss' AND al.guild_income > 0, al.guild_income, 0))            AS guild_income_orig
 FROM (
          SELECT al.*, CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
          FROM warehouse.dw_dy_day_anchor_live al
@@ -223,10 +225,10 @@ SELECT t.dt,
        SUM(t.duration)            AS duration,
        SUM(t.revenue)             AS revenue,
        SUM(t.revenue_orig)        AS revenue_orig,
-       SUM(t.guild_income) / 10   AS guild_income,
-       SUM(t.guild_income)        AS guild_income_orig,
-       SUM(t.anchor_income) / 10  AS anchor_income,
-       SUM(t.anchor_income)       AS anchor_income_orig
+       SUM(t.guild_income)        AS guild_income,
+       SUM(t.guild_income_orig)        AS guild_income_orig,
+       SUM(t.anchor_income)       AS anchor_income,
+       SUM(t.anchor_income_orig)       AS anchor_income_orig
 FROM stage.stage_rpt_dy_day_guild_live t
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}')
