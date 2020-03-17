@@ -84,7 +84,7 @@
 DELETE
 FROM bireport.rpt_day_hy_guild
 WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month');
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_hy_guild
 SELECT dt,
        channel_type,
