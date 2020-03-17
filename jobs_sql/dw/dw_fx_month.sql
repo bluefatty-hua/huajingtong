@@ -15,9 +15,10 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS anchor_live_cnt,
        SUM(duration)                                                                AS duration,
-       SUM(al.anchor_income / 0.4)                                                  AS revenue,
+       SUM(al.revenue)                                                              AS revenue,
+       SUM(al.revenue_orig)                                                         AS revenue_orig,
        SUM(al.anchor_income)                                                        AS anchor_income,
-       SUM(al.anchor_income / 0.4 * 0.09)                                           AS guild_income
+       SUM(al.guild_income)                                                         AS guild_income
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
@@ -40,7 +41,7 @@ GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
 DELETE
 FROM warehouse.dw_fx_month_anchor_live
 WHERE dt = '{month}';
-INSERT IGNORE INTO warehouse.dw_fx_month_anchor_live
+INSERT INTO warehouse.dw_fx_month_anchor_live
 SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.platform_id,
        al.platform_name,
@@ -51,9 +52,10 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                               AS dt,
        al.revenue_level,
        COUNT(CASE WHEN al.live_status = 1 THEN al.dt ELSE NULL END) AS live_days,
        SUM(duration)                                                AS duration,
-       SUM(al.anchor_income / 0.4)                                  AS revenue,
+       SUM(al.revenue)                                              AS revenue,
+       SUM(al.revenue_orig)                                         AS revenue_orig,
        SUM(al.anchor_income)                                        AS anchor_income,
-       SUM(al.anchor_income / 0.4 * 0.09)                           AS guild_income
+       SUM(al.guild_income)                                         AS guild_income
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
