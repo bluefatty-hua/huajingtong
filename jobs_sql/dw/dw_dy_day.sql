@@ -129,10 +129,10 @@ SELECT al.dt,
        warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
        IFNULL(mal.duration, 0)                                                AS month_duration,
        IFNULL(mal.live_days, 0)                                               AS month_live_days,
-       -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
+       -- 开播天数大于等于20天且开播时长大于等于60小时（t月累计）
        mal.active_state,
        IFNULL(mal.revenue, 0)                                                 AS month_revenue,
-       -- 主播流水分级（t-1月，单位：万元）
+       -- 主播流水分级（t月，单位：万元）
        mal.revenue_level
 FROM warehouse.ods_dy_day_anchor_live al
          LEFT JOIN stage.stage_dy_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
