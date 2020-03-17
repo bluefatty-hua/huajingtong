@@ -192,12 +192,12 @@ SELECT gl.dt,
        gl.increase_anchor_cnt,
        gl.anchor_live_cnt    AS live_cnt,
        gl.duration,
-       gl.revenue            AS revenue,
-       gl.revenue_orig       AS revenue_orig,
-       gl.guild_income / 10  AS guild_income,
-       gl.revenue_orig       AS guild_income_orig,
-       gl.anchor_income / 10 AS anchor_income,
-       gl.revenue_orig       AS anchor_income_orig
+       gl.revenue,
+       gl.revenue_orig,
+       gl.guild_income,
+       gl.guild_income_orig,
+       gl.anchor_income,
+       gl.anchor_income_orig
 # FROM warehouse.dw_dy_month_guild_live gl
 FROM stage.stage_rpt_dy_month_guild_live gl
 WHERE dt >= '{month}'
