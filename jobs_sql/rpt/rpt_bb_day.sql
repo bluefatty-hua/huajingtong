@@ -341,7 +341,7 @@ FROM bireport.rpt_day_bb_guild t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-# WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
 ;
 
 
