@@ -458,7 +458,8 @@ WHERE t1.dt >= '{month}'
 -- 报表用，计算指标占比---
 DELETE
 FROM bireport.rpt_day_fx_guild_view_compare
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_fx_guild_view_compare
 SELECT *
 FROM (SELECT dt,
@@ -538,6 +539,6 @@ FROM warehouse.dw_fx_day_anchor_live al
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND
                       al.backend_account_id = al1.backend_account_id AND
                       al.anchor_no = al1.anchor_no
- WHERE al.dt >= '{month}'
+WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
 ;
