@@ -230,6 +230,7 @@ SELECT ai.dt                                                                  AS
        al.duration,
        al.live_status,
        al.income                                                              AS revenue,
+       al.income                                                              AS revenue_orig,
        al.peak_pcu,
        ai.activity_days,
        ai.months,
@@ -345,7 +346,8 @@ SELECT al.dt,
        al.revenue_level,
        COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS live_cnt,
-       SUM(IFNULL(al.revenue, 0))                                                   AS revenue
+       SUM(IFNULL(al.revenue, 0))                                                   AS revenue,
+       SUM(IFNULL(al.revenue, 0))                                                   AS revenue_orig
 FROM warehouse.dw_huya_day_anchor_live al
          LEFT JOIN warehouse.ods_hy_account_info ai ON al.channel_id = ai.channel_id
 WHERE al.dt >= '{month}'
