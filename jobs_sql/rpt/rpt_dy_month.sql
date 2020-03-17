@@ -130,12 +130,12 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        COUNT(DISTINCT IF(add_loss_state = 'loss', al.anchor_uid, NULL))                      AS increase_anchor_cnt,
        COUNT(DISTINCT IF(add_loss_state <> 'loss' AND al.duration > 0, al.anchor_uid, NULL)) AS anchor_live_cnt,
        SUM(IF(add_loss_state <> 'loss' AND al.duration > 0, al.duration, 0))                 AS duration,
-       SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0)) / 10    AS revenue,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue > 0, al.revenue, 0))                   AS revenue,
        SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0))         AS revenue_orig,
        SUM(IF(add_loss_state <> 'loss' AND al.anchor_income > 0, al.anchor_income, 0)) / 10  AS anchor_income,
-       SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0)) / 10    AS anchor_income_orig,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0))         AS anchor_income_orig,
        SUM(IF(add_loss_state <> 'loss' AND al.guild_income > 0, al.guild_income, 0)) / 10    AS guild_income,
-       SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0)) / 10    AS guild_income_orig
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0))         AS guild_income_orig
 FROM (
          SELECT al.*, CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
          FROM warehouse.dw_dy_month_anchor_live al
