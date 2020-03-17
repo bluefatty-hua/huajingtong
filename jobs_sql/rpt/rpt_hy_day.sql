@@ -102,7 +102,7 @@ SELECT dt,
        SUM(revenue_orig)        AS revenue_orig
 FROM stage.stage_rpt_hy_day_guild_live
 WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month')
+  AND dt <= LAST_DAY('{month}')
 GROUP BY dt,
          channel_type,
          channel_num,
@@ -138,7 +138,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, channel_type, channel_num, revenue_level, newold_state, active_state
       WITH ROLLUP
 
@@ -165,7 +165,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, channel_num, revenue_level, newold_state, active_state, channel_type
       WITH ROLLUP
 
@@ -192,7 +192,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, revenue_level, newold_state, active_state, channel_type, channel_num
       WITH ROLLUP
 
@@ -219,7 +219,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, newold_state, active_state, channel_type, channel_num, revenue_level
       WITH ROLLUP
 
@@ -246,7 +246,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, active_state, channel_type, channel_num, revenue_level, newold_state
       WITH ROLLUP
 
@@ -273,7 +273,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, channel_num, channel_type, active_state, revenue_level, newold_state
       WITH ROLLUP
 
@@ -300,7 +300,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, newold_state, channel_type, channel_num, revenue_level, active_state
       WITH ROLLUP
 
@@ -327,7 +327,7 @@ FROM (SELECT dt,
         AND newold_state != 'all'
         AND active_state != 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       GROUP BY dt, active_state, channel_type, newold_state, revenue_level, channel_num
       WITH ROLLUP
      ) t
@@ -339,7 +339,7 @@ WHERE dt IS NOT NULL
 DELETE
 FROM bireport.rpt_day_hy_guild_view
 WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month');
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_hy_guild_view
 SELECT t1.dt,
        t1.channel_type,
@@ -384,7 +384,7 @@ FROM bireport.rpt_day_hy_guild t1
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
 WHERE t1.dt >= '{month}'
-  AND t1.dt <= LAST_DAY('{month')
+  AND t1.dt <= LAST_DAY('{month}')
 ;
 
 
@@ -392,7 +392,7 @@ WHERE t1.dt >= '{month}'
 DELETE
 FROM bireport.rpt_day_hy_guild_view_compare
 WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month');
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_hy_guild_view_compare
 SELECT *
 FROM (SELECT dt,
@@ -406,7 +406,7 @@ FROM (SELECT dt,
       where revenue_level != 'all'
         AND channel_type = 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       UNION
       SELECT dt,
              channel_num,
@@ -419,7 +419,7 @@ FROM (SELECT dt,
       WHERE revenue_level != 'all'
         AND channel_type = 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       UNION
       SELECT dt,
              channel_num,
@@ -432,7 +432,7 @@ FROM (SELECT dt,
       WHERE revenue_level != 'all'
         AND channel_type = 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
       UNION
       SELECT dt,
              channel_num,
@@ -445,7 +445,7 @@ FROM (SELECT dt,
       WHERE revenue_level != 'all'
         AND channel_type = 'all'
         AND dt >= '{month}'
-        AND dt <= LAST_DAY('{month')
+        AND dt <= LAST_DAY('{month}')
         AND live_cnt > 0) t
 ;
 
@@ -454,7 +454,7 @@ FROM (SELECT dt,
 DELETE
 FROM bireport.rpt_day_hy_anchor
 WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month');
+  AND dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_hy_anchor
 SELECT al.dt,
        al.channel_type,
@@ -479,5 +479,5 @@ FROM warehouse.dw_huya_day_anchor_live al
                       al.channel_id = al1.channel_id AND
                       al.anchor_no = al1.anchor_no
 WHERE al.dt >= '{month}'
-  AND al.dt <= LAST_DAY('{month')
+  AND al.dt <= LAST_DAY('{month}')
 ;
