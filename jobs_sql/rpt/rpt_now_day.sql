@@ -2,7 +2,7 @@
 -- FROM bireport.rpt_day_all
 -- WHERE platform = 'NOW'
 --   AND dt >= '{month}'
-AND dt <= LAST_DAY('{month}');
+-- AND dt <= LAST_DAY('{month}');
 -- INSERT INTO bireport.rpt_day_all
 -- SELECT t.dt,
 --        t.platform_name                AS platform,
@@ -13,7 +13,7 @@ AND dt <= LAST_DAY('{month}');
 --        SUM(t.revenue_rmb) * 0.6 * 0.5 AS anchor_income
 -- FROM warehouse.dw_now_day_guild_live t
 -- WHERE dt >= '{month}'
-AND dt <= LAST_DAY('{month}')
+-- AND dt <= LAST_DAY('{month}')
 -- GROUP BY t.dt,
 --          t.platform_name
 -- ;
@@ -22,7 +22,7 @@ AND dt <= LAST_DAY('{month}')
 -- DELETE
 -- FROM bireport.rpt_day_now_guild
 -- WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
+--   AND dt <= LAST_DAY('{month}');
 -- INSERT INTO bireport.rpt_day_now_guild
 -- SELECT t.dt,
 --        t.platform_id,
@@ -38,7 +38,7 @@ AND dt <= LAST_DAY('{month}')
 --        SUM(t.revenue_rmb) * 0.6 * 0.5 AS anchor_income_orig
 -- FROM warehouse.dw_now_day_guild_live t
 -- WHERE dt >= '{month}'
-AND dt <= LAST_DAY('{month}')
+-- AND dt <= LAST_DAY('{month}')
 -- GROUP BY t.dt,
 --          t.platform_id,
 --          t.platform_name,
@@ -59,7 +59,7 @@ AND dt <= LAST_DAY('{month}')
 -- FROM bireport.rpt_day_all
 -- WHERE platform = 'NOW'
 --   AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}')
+--   AND dt <= LAST_DAY('{month}')
 -- ;
 
 
