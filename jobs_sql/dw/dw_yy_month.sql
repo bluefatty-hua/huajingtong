@@ -176,7 +176,7 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                          A
        al.comment,
        COUNT(CASE WHEN live_status = 1 THEN dt ELSE NULL END)                  AS live_days,
        SUM(CASE WHEN duration >= 0 THEN duration ELSE 0 END)                   AS duration,
-       SUM(CASE WHEN bluediamond >= 0 THEN bluediamond ELSE 0 END)             AS anchor_bluediamond,
+       SUM(CASE WHEN bluediamond >= 0 THEN bluediamond ELSE 0 END)             AS bluediamond,
        SUM(CASE
                WHEN bluediamond > 0 THEN bluediamond * anchor_settle_rate
                ELSE 0 END)                                                     AS anchor_income_bluediamond,
