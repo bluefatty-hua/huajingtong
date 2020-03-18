@@ -42,8 +42,7 @@ FROM stage.stage_rpt_now_month_anchor_live_contrast al1
          LEFT JOIN stage.stage_rpt_now_month_anchor_live_contrast al2
                    ON al1.dt = al2.next_dt AND al1.anchor_no = al2.anchor_no
 WHERE al2.anchor_no IS NULL
-  AND al1.last_dt <= '{cur_date}'
-  AND al1.dt = '{month}'
+  AND al1.last_dt = '{month}'
 ;
 
 

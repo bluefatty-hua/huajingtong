@@ -112,7 +112,6 @@ FROM stage.stage_rpt_hy_month_anchor_live_contrast al1
          LEFT JOIN stage.stage_rpt_hy_month_anchor_live_contrast al2
                    ON al1.dt = al2.next_dt AND al1.anchor_uid = al2.anchor_uid
 WHERE al2.anchor_uid IS NULL
-  AND al1.last_dt <= '{cur_date}'
   AND al1.last_dt = '{month}'
 ;
 
@@ -180,7 +179,7 @@ FROM (
                   INNER JOIN stage.stage_rpt_hy_month_anchor_add_loss aal
                              ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_uid = aal.anchor_uid
          WHERE aal.add_loss_state = 'loss'
-           AND al.dt = '{month}'
+#            AND al.dt = '{month}'
      ) al
 GROUP BY al.dt,
          al.platform_id,
