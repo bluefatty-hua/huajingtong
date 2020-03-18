@@ -1,77 +1,116 @@
--- 公会每月流水、公会收入、主播收入
--- DROP TABLE IF EXISTS bireport.rpt_month_now_guild;
--- CREATE TABLE bireport.rpt_month_now_guild AS
--- DELETE
--- FROM bireport.rpt_month_now_guild
--- WHERE dt = '{month}';
--- INSERT INTO bireport.rpt_month_now_guild
--- SELECT gl.dt,
---        gl.platform_id,
---        gl.platform_name                     AS platform,
---        gl.backend_account_id,
---        gr.anchor_cnt_true                   AS anchor_cnt,
---        gl.live_cnt,
---        gl.revenue_rmb                       AS revenue,
---        gl.revenue_rmb                       AS revenue_orig,
---        ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS guild_income,
---        gl.revenue_rmb * 0.6 * 0.5           AS guild_income_orig,
---        ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
---        gl.revenue_rmb * 0.6 * 0.5           AS anchor_income_orig
--- FROM (SELECT gl.dt,
---              gl.platform_id,
---              pf.platform_name,
---              gl.backend_account_id,
---              SUM(anchor_cnt)      AS anchor_cnt,
---              SUM(anchor_live_cnt) AS live_cnt,
---              SUM(revenue_rmb)     AS revenue_rmb
---       FROM warehouse.dw_now_month_guild_live gl
---                lEFT JOIN warehouse.platform pf ON pf.id = gl.platform_id
---       WHERE gl.dt >= '{month}'
---         AND gl.dt < '{month}' + INTERVAL 1 MONTH
---       GROUP BY gl.dt,
---                gl.platform_id,
---                pf.platform_name,
---                gl.backend_account_id) gl
---          LEFT JOIN warehouse.dw_now_month_guild_live_true gr
---                    ON gl.dt = gr.dt AND gl.backend_account_id = gr.backend_account_id
--- ;
--- 
--- 
--- DELETE
--- FROM bireport.rpt_month_all_guild
--- WHERE platform_id = 1003
---   AND dt = '{month}';
--- INSERT INTO bireport.rpt_month_all_guild
--- SELECT dt,
---        platform_id,
---        platform,
---        channel_num,
---        CASE WHEN anchor_cnt >= 0 THEN anchor_cnt ELSE 0 END                 AS anchor_cnt,
---        CASE WHEN live_cnt >= 0 THEN live_cnt ELSE 0 END                     AS live_cnt,
---        CASE WHEN revenue >= 0 THEN revenue ELSE 0 END                       AS revenue,
---        CASE WHEN revenue_orig >= 0 THEN revenue_orig ELSE 0 END             AS revenue_orig,
---        CASE WHEN guild_income >= 0 THEN guild_income ELSE 0 END             AS guild_income,
---        CASE WHEN guild_income_orig >= 0 THEN guild_income_orig ELSE 0 END   AS guild_income_orig,
---        CASE WHEN anchor_income >= 0 THEN anchor_income ELSE 0 END           AS anchor_income,
---        CASE WHEN anchor_income_orig >= 0 THEN anchor_income_orig ELSE 0 END AS anchor_income_orig
--- FROM (SELECT dt,
---              platform_id,
---              platform,
---              backend_account_id AS channel_num,
---              anchor_cnt,
---              live_cnt,
---              revenue,
---              revenue_orig,
---              guild_income,
---              guild_income_orig,
---              anchor_income,
---              anchor_income_orig
---       FROM bireport.rpt_month_now_guild
---       WHERE dt >= '{month}'
---         AND dt < '{month}' + INTERVAL 1 MONTH
---      ) t
--- ;
+-- =======================================================================
+-- 计算每月相对前一月新增主播数。流失主播数、净增长主播数
+DELETE
+FROM stage.stage_rpt_now_month_anchor_live_contrast
+WHERE dt = '{month}';
+INSERT IGNORE INTO stage.stage_rpt_now_month_anchor_live_contrast
+SELECT dt,
+       platform_name,
+       platform_id,
+       anchor_no,
+       dt + INTERVAL 1 MONTH AS last_dt,
+       dt - INTERVAL 1 MONTH AS next_dt
+FROM warehouse.dw_now_month_anchor_live al
+WHERE dt = '{month}'
+;
 
+
+-- 新增主播（在t-1天主播列表，不在t-2天的列表）
+-- CREATE TABLE stage.stage_now_day_anchor_add_loss AS
+DELETE
+FROM stage.stage_rpt_now_month_anchor_add_loss
+WHERE add_loss_state = 'add'
+  AND dt = '{month}';
+INSERT INTO stage.stage_rpt_now_month_anchor_add_loss
+SELECT al1.dt, al1.platform_name, al1.platform_id, al1.anchor_no, 'add' AS add_loss_state
+FROM stage.stage_rpt_now_month_anchor_live_contrast al1
+         LEFT JOIN stage.stage_rpt_now_month_anchor_live_contrast al2
+                   ON al1.dt = al2.last_dt AND al1.anchor_no = al2.anchor_no
+WHERE al2.anchor_no IS NULL
+  AND al1.dt = '{month}'
+;
+
+
+-- 流失主播（在t-2天主播列表，不在t-1天的列表）
+DELETE
+FROM stage.stage_rpt_now_month_anchor_add_loss
+WHERE add_loss_state = 'loss'
+  AND dt = '{month}';
+INSERT INTO stage.stage_rpt_now_month_anchor_add_loss
+SELECT al1.last_dt, al1.platform_name, al1.platform_id, al1.anchor_no, 'loss' AS add_loss_state
+FROM stage.stage_rpt_now_month_anchor_live_contrast al1
+         LEFT JOIN stage.stage_rpt_now_month_anchor_live_contrast al2
+                   ON al1.dt = al2.next_dt AND al1.anchor_no = al2.anchor_no
+WHERE al2.anchor_no IS NULL
+  AND al1.last_dt <= '{cur_date}'
+  AND al1.dt = '{month}'
+;
+
+
+# CREATE TABLE stage.stage_rpt_now_month_guild_live
+DELETE
+FROM stage.stage_rpt_now_month_guild_live
+WHERE dt = '{month}';
+INSERT INTO stage.stage_rpt_now_month_guild_live
+SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                                              AS dt,
+       al.platform_id,
+       al.platform_name,
+       al.backend_account_id,
+       al.city,
+       al.newold_state,
+       al.active_state,
+       al.revenue_level,
+       COUNT(DISTINCT IF(add_loss_state <> 'loss', al.anchor_no, NULL))                            AS anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state = 'add', al.anchor_no, NULL))                              AS add_anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state = 'loss', al.anchor_no, NULL))                             AS loss_anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state = 'add', al.anchor_no, NULL)) -
+       COUNT(DISTINCT IF(add_loss_state = 'loss', al.anchor_no, NULL))                             AS increase_anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state <> 'loss' AND al.duration > 0, al.anchor_no, NULL))        AS anchor_live_cnt,
+       SUM(IF(add_loss_state <> 'loss' AND al.duration > 0, al.duration, 0))                       AS duration,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue > 0, al.revenue, 0))                         AS revenue,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue > 0, al.revenue, 0))                         AS revenue_orig,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue * 0.6 * 0.5 > 0, al.revenue * 0.6 * 0.5,
+              0))                                                                                  AS anchor_income,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue * 0.6 * 0.5 > 0, al.revenue * 0.6 * 0.5,
+              0))                                                                                  AS anchor_income_orig,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue * 0.6 * 0.5 > 0, al.revenue * 0.6 * 0.5, 0)) AS guild_income,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue * 0.6 * 0.5 > 0, al.revenue * 0.6 * 0.5,
+              0))                                                                                  AS guild_income_orig
+FROM (
+         SELECT al.*, CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+         FROM warehouse.dw_now_month_anchor_live al
+                  LEFT JOIN stage.stage_rpt_now_month_anchor_add_loss aal
+                            ON al.dt = aal.dt AND al.anchor_no = aal.anchor_no
+         WHERE al.dt = '{month}'
+         UNION ALL
+         SELECT al.dt + INTERVAL 1 MONTH                                                 AS dt,
+                al.platform_id,
+                al.platform_name,
+                al.backend_account_id,
+                al.city,
+                al.active_state,
+                al.newold_state,
+                al.revenue_level,
+                al.anchor_no,
+                al.live_days,
+                al.duration,
+                al.revenue,
+                CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+         FROM warehouse.dw_now_month_anchor_live al
+                  INNER JOIN stage.stage_rpt_now_month_anchor_add_loss aal
+                             ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_no = aal.anchor_no
+         WHERE aal.add_loss_state = 'loss'
+           AND al.dt = '{month}'
+     ) al
+GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+         al.platform_id,
+         al.platform_name,
+         al.backend_account_id,
+         al.city,
+         al.newold_state,
+         al.active_state,
+         al.revenue_level
+;
 
 -- rpt_month_yy_guild_new
 DELETE
@@ -80,25 +119,29 @@ WHERE dt = '{month}';
 INSERT INTO bireport.rpt_month_now_guild
 SELECT gl.dt,
        gl.platform_id,
-       pf.platform_name                     AS platform,
+       pf.platform_name   AS platform,
        gl.backend_account_id,
        gl.city,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
        gl.anchor_cnt,
-       gl.anchor_live_cnt                   AS live_cnt,
+       gl.add_anchor_cnt,
+       gl.loss_anchor_cnt,
+       gl.increase_anchor_cnt,
+       gl.anchor_live_cnt AS live_cnt,
        gl.duration,
        -- 平台流水
-       gl.revenue_rmb                       AS revenue,
-       gl.revenue_rmb                       AS revenue_orig,
+       gl.revenue,
+       gl.revenue         AS revenue_orig,
        -- 公会收入
-       ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS guild_income,
-       ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS guild_income_orig,
+       gl.guild_income,
+       gl.guild_income_orig,
        -- 主播收入
-       ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income,
-       ROUND(gl.revenue_rmb * 0.6 * 0.5, 2) AS anchor_income_orig
-FROM warehouse.dw_now_month_guild_live gl
+       gl.anchor_income,
+       gl.anchor_income_orig
+# FROM warehouse.dw_now_month_guild_live gl
+FROM stage.stage_rpt_now_month_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
 WHERE gl.dt = '{month}'
 ;
@@ -106,9 +149,9 @@ WHERE gl.dt = '{month}'
 
 
 REPLACE INTO bireport.rpt_month_now_guild (dt, platform_id, platform, backend_account_id, city, revenue_level,
-                                           newold_state, active_state, anchor_cnt, live_cnt, duration, revenue,
-                                           revenue_orig, guild_income, guild_income_orig, anchor_income,
-                                           anchor_income_orig)
+                                           newold_state, active_state, anchor_cnt, add_anchor_cnt, loss_anchor_cnt,
+                                           increase_anchor_cnt, live_cnt, duration, revenue, revenue_orig, guild_income,
+                                           guild_income_orig, anchor_income, anchor_income_orig)
 SELECT *
 FROM (SELECT dt,
              MAX(platform_id)                  AS platform_id,
@@ -119,6 +162,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -147,6 +193,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -175,6 +224,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -203,6 +255,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -231,6 +286,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -259,6 +317,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -287,6 +348,9 @@ FROM (SELECT dt,
              IFNULL(newold_state, 'all')       AS newold_state,
              IFNULL(active_state, 'all')       AS active_state,
              SUM(anchor_cnt)                   AS anchor_cnt,
+             SUM(add_anchor_cnt)               AS add_anchor_cnt,
+             SUM(loss_anchor_cnt)              AS loss_anchor_cnt,
+             SUM(increase_anchor_cnt)          AS increase_anchor_cnt,
              SUM(live_cnt)                     AS live_cnt,
              SUM(duration)                     AS duration,
              SUM(revenue)                      AS revenue,
@@ -320,6 +384,9 @@ SELECT t1.dt,
        t1.newold_state,
        t1.active_state,
        t1.anchor_cnt,
+       t1.add_anchor_cnt,
+       t1.loss_anchor_cnt,
+       t1.increase_anchor_cnt,
        t3.anchor_cnt                                                   AS anchor_cnt_lastmonth,
        t1.live_cnt,
        t3.live_cnt                                                     AS live_cnt_lastmonth,

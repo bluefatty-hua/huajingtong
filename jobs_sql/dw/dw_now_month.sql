@@ -38,7 +38,7 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS anchor_live_cnt,
        SUM(duration)                                                                AS duration,
-       SUM(al.revenue_rmb)                                                          AS revenue_rmb
+       SUM(al.revenue)                                                          AS revenue_rmb
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
@@ -79,7 +79,7 @@ SELECT DATE_FORMAT(dt, '%Y-%m-01')                                         AS dt
        t.anchor_no,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.dt ELSE NULL END) AS live_days,
        SUM(t.duration)                                                     AS duration,
-       SUM(t.revenue_rmb)                                                  AS revenue_rmb
+       SUM(t.revenue)                                                  AS revenue_rmb
 -- cur_date: t-1
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
