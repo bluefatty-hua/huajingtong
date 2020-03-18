@@ -183,7 +183,7 @@ FROM (
                   INNER JOIN stage.stage_rpt_yy_month_anchor_add_loss aal
                              ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_uid = aal.anchor_uid
          WHERE aal.add_loss_state = 'loss'
-           AND al.dt = '{month}'
+           AND al.dt + INTERVAL 1 MONTH = '{month}'
      ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
