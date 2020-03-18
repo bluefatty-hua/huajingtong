@@ -112,6 +112,7 @@ FROM warehouse.ods_now_day_anchor_live al
 WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
   AND al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
+  AND mal.dt = '{month}'
 ;
 
 
