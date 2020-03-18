@@ -491,7 +491,7 @@ FROM bireport.rpt_day_bb_guild t1
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
 WHERE t1.dt >= '{month}'
-  AND dt <= LAST_DAY('{month}')
+  AND t1.dt <= LAST_DAY('{month}')
 ;
 
 
