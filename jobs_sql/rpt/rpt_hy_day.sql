@@ -78,6 +78,140 @@
 -- WHERE platform = '虎牙'
 --   AND dt BETWEEN '{start_date}' AND '{end_date}'
 -- ;
+-- =======================================================================
+-- 计算每日相对前一天新增主播,;
+-- 1、取出上月最后一天到当月倒数第二天数据
+# DROP TABLE stage.stage_rpt_hy_day_anchor_live_contrast;
+# CREATE TABLE stage.stage_rpt_hy_day_anchor_live_contrast AS
+DELETE
+FROM stage.stage_rpt_hy_day_anchor_live_contrast
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+INSERT IGNORE INTO stage.stage_rpt_hy_day_anchor_live_contrast
+SELECT dt,
+       platform_name,
+       platform_id,
+       anchor_uid,
+       dt + INTERVAL 1 DAY AS last_dt,
+       dt - INTERVAL 1 DAY AS next_dt
+FROM warehouse.dw_huya_day_anchor_live al
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}')
+;
+
+
+-- 新增主播（在t-1天主播列表，不在t-2天的列表）
+-- CREATE TABLE stage.stage_hy_day_anchor_add_loss AS
+DELETE
+FROM stage.stage_rpt_hy_day_anchor_add_loss
+WHERE add_loss_state = 'add'
+  AND dt >= '{month}';
+INSERT INTO stage.stage_rpt_hy_day_anchor_add_loss
+SELECT al1.dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'add' AS add_loss_state
+FROM stage.stage_rpt_hy_day_anchor_live_contrast al1
+         LEFT JOIN stage.stage_rpt_hy_day_anchor_live_contrast al2
+                   ON al1.dt = al2.last_dt AND al1.anchor_uid = al2.anchor_uid
+WHERE al2.anchor_uid IS NULL
+  AND al1.dt >= '{month}'
+  AND al1.dt <= LAST_DAY('{month}')
+;
+
+
+-- 流失主播（在t-2天主播列表，不在t-1天的列表）
+DELETE
+FROM stage.stage_rpt_hy_day_anchor_add_loss
+WHERE add_loss_state = 'loss'
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+INSERT INTO stage.stage_rpt_hy_day_anchor_add_loss
+SELECT al1.last_dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'loss' AS add_loss_state
+FROM stage.stage_rpt_hy_day_anchor_live_contrast al1
+         LEFT JOIN stage.stage_rpt_hy_day_anchor_live_contrast al2
+                   ON al1.dt = al2.next_dt AND al1.anchor_uid = al2.anchor_uid
+WHERE al2.anchor_uid IS NULL
+  AND al1.last_dt <= '2020-03-16'
+  AND al1.dt >= '{month}'
+  AND al1.dt <= LAST_DAY('{month}')
+;
+
+
+DELETE
+FROM stage.stage_rpt_hy_day_guild_live
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+INSERT INTO stage.stage_rpt_hy_day_guild_live
+SELECT dt,
+       channel_type,
+       channel_num,
+       revenue_level,
+       newold_state,
+       active_state,
+       COUNT(DISTINCT IF(add_loss_state <> 'loss', al.anchor_uid, NULL))                        AS anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state = 'add', al.anchor_uid, NULL))                          AS add_anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state = 'loss', al.anchor_uid, NULL))                         AS loss_anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state = 'add', al.anchor_uid, NULL)) -
+       COUNT(DISTINCT IF(add_loss_state = 'loss', al.anchor_uid, NULL))                         AS increase_anchor_cnt,
+       COUNT(DISTINCT IF(add_loss_state <> 'loss' AND al.live_status = 1, al.anchor_uid, NULL)) AS anchor_live_cnt,
+       SUM(IF(add_loss_state <> 'loss' AND al.duration > 0, al.duration, 0))                    AS duration,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue > 0, al.revenue, 0))                      AS revenue,
+       SUM(IF(add_loss_state <> 'loss' AND al.revenue_orig > 0, al.revenue_orig, 0))            AS revenue_orig
+FROM (
+         SELECT al.*, CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+         FROM warehouse.dw_huya_day_anchor_live al
+                  LEFT JOIN stage.stage_rpt_hy_day_anchor_add_loss aal
+                            ON al.dt = aal.dt AND al.anchor_uid = aal.anchor_uid
+         WHERE al.dt >= '{month}'
+           AND al.dt <= LAST_DAY('{month}')
+         UNION ALL
+         SELECT al.dt + INTERVAL 1 DAY                                                   AS dt,
+                al.platform_id,
+                al.platform_name,
+                al.channel_type,
+                al.channel_id,
+                al.channel_num,
+                al.anchor_uid,
+                al.anchor_no,
+                al.nick,
+                al.comment,
+                al.duration,
+                al.live_status,
+                al.revenue,
+                al.revenue_orig,
+                al.peak_pcu,
+                al.activity_days,
+                al.months,
+                al.ow_percent,
+                al.sign_time,
+                al.sign_date,
+                al.surplus_days,
+                al.avatar,
+                al.min_live_dt,
+                al.min_sign_dt,
+                al.newold_state,
+                al.month_duration,
+                al.month_live_days,
+                al.active_state,
+                al.month_revenue,
+                al.revenue_level,
+                al.vir_coin_name,
+                al.vir_coin_rate,
+                al.include_pf_amt,
+                al.pf_amt_rate,
+                CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+         FROM warehouse.dw_huya_day_anchor_live al
+                  INNER JOIN stage.stage_rpt_hy_day_anchor_add_loss aal
+                             ON al.dt + INTERVAL 1 DAY = aal.dt AND al.anchor_uid = aal.anchor_uid
+         WHERE aal.add_loss_state = 'loss'
+           AND al.dt >= '{month}'
+           AND al.dt <= LAST_DAY('{month}')
+     ) al
+GROUP BY dt,
+         channel_type,
+         channel_num,
+         revenue_level,
+         newold_state,
+         active_state
+;
 
 
 -- rpt_day_hy_guild_new
