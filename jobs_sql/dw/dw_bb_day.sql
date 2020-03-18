@@ -72,73 +72,11 @@ FROM (
                 COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
                 SUM(al.duration)                                                   AS duration
          FROM warehouse.ods_bb_day_anchor_live al
-         WHERE
-#                (contract_status <> 2 OR contract_status IS NULL)
-#            AND
-             al.dt >= '{month}'
+         WHERE al.dt >= '{month}'
            AND al.dt <= LAST_DAY('{month}')
          GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
                   al.platform_id,
                   al.anchor_no) t
-;
-
-
--- =======================================================================
--- 计算每日相对前一天新增主播,;
--- 1、取出上月最后一天到当月倒数第二天数据
--- CREATE TABLE stage.stage_ods_bb_day_anchor_live_last_day AS
-DELETE
-FROM stage.stage_ods_bb_day_anchor_live_last_day
-WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT IGNORE INTO stage.stage_ods_bb_day_anchor_live_last_day
-SELECT dt,
-       platform_name,
-       platform_id,
-       backend_account_id,
-       anchor_no,
-       dt + INTERVAL 1 DAY AS last_dt,
-       dt - INTERVAL 1 DAY AS next_dt
-FROM warehouse.ods_bb_day_anchor_live
-WHERE (contract_status <> 2 OR contract_status IS NULL)
-  AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}')
-;
-
-
--- 新增主播（在t-1天主播列表，不在t-2天的列表）
--- CREATE TABLE stage.stage_bb_day_anchor_add_loss AS
-DELETE
-FROM stage.stage_bb_day_anchor_add_loss
-WHERE add_loss_state = 'add'
-  AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO stage.stage_bb_day_anchor_add_loss
-SELECT al1.dt, al1.platform_name, al1.platform_id, al1.anchor_no, 'add' AS add_loss_state
-FROM stage.stage_ods_bb_day_anchor_live_last_day al1
-         LEFT JOIN stage.stage_ods_bb_day_anchor_live_last_day al2
-                   ON al1.dt = al2.last_dt AND al1.anchor_no = al2.anchor_no
-WHERE al2.anchor_no IS NULL
-  AND al1.dt >= '{month}'
-  AND al1.dt <= LAST_DAY('{month}')
-;
-
-
--- 流失主播（在t-2天主播列表，不在t-1天的列表）
-DELETE
-FROM stage.stage_bb_day_anchor_add_loss
-WHERE add_loss_state = 'loss'
-  AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO stage.stage_bb_day_anchor_add_loss
-SELECT al1.last_dt, al1.platform_name, al1.platform_id, al1.anchor_no, 'loss' AS add_loss_state
-FROM stage.stage_ods_bb_day_anchor_live_last_day al1
-         LEFT JOIN stage.stage_ods_bb_day_anchor_live_last_day al2
-                   ON al1.dt = al2.next_dt AND al1.anchor_no = al2.anchor_no
-WHERE al1.dt >= '{month}'
-  AND al1.dt <= LAST_DAY('{month}')
-  AND al2.anchor_no IS NULL
-  AND al1.last_dt <> '{cur_date}'
 ;
 
 
@@ -171,8 +109,8 @@ SELECT al.platform_id,
        al.ios_coin,
        al.android_coin,
        al.pc_coin,
-       al.anchor_total_coin / 1000                                              AS revenue,
-       al.anchor_total_coin                                                     AS revenue_orig,
+       ROUND(al.anchor_total_coin / 1000, 2)                                  AS revenue,
+       al.anchor_total_coin                                                   AS revenue_orig,
        al.anchor_income,
        al.special_coin,
        al.send_coin,
@@ -180,33 +118,30 @@ SELECT al.platform_id,
        al.DAU,
        al.max_ppl,
        al.fc,
-       IFNULL(al.contract_status, ''),
-       IFNULL(al.contract_status_text, ''),
+       IFNULL(al.contract_status, '')                                         AS contract_status,
+       IFNULL(al.contract_status_text, '')                                    AS contract_status_text,
        al.contract_signtime,
        al.contract_endtime,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)   AS newold_state,
-       mal.duration                                                             AS month_duration,
-       mal.live_days                                                            AS month_live_days,
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
+       mal.duration                                                           AS month_duration,
+       mal.live_days                                                          AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t月累计）
        mal.active_state,
-       mal.revenue                                                              AS month_revenue,
+       mal.revenue                                                            AS month_revenue,
        -- 主播流水分级（t月，单位：万元）
-       mal.revenue_level,
-       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+       mal.revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
          LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_bb_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
-         LEFT JOIN stage.stage_bb_day_anchor_add_loss aal ON al.dt = aal.dt AND al.anchor_no = aal.anchor_no
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
   AND mal.dt = '{month}'
---   AND aal.add_loss_state IS NOT NULL
 ;
 
 
@@ -244,11 +179,10 @@ SELECT t.dt,
        t.active_state,
        t.revenue_level,
        t.contract_status,
-       t.add_loss_state,
        COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
        COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS live_cnt,
        SUM(t.duration)                                                            AS duration,
-       SUM(t.revenue_orig) / 1000                                                 AS revenue,
+       ROUND(SUM(t.revenue), 2)                                                   AS revenue,
        SUM(t.revenue_orig)                                                        AS revenue_orig,
        SUM(t.special_coin)                                                        AS special_coin,
        SUM(t.send_coin)                                                           AS send_coin,
@@ -265,6 +199,5 @@ GROUP BY t.dt,
          t.newold_state,
          t.active_state,
          t.revenue_level,
-         t.contract_status,
-         t.add_loss_state
+         t.contract_status
 ;
