@@ -42,7 +42,7 @@ FROM stage.stage_rpt_now_month_anchor_live_contrast al1
          LEFT JOIN stage.stage_rpt_now_month_anchor_live_contrast al2
                    ON al1.dt = al2.next_dt AND al1.anchor_no = al2.anchor_no
 WHERE al2.anchor_no IS NULL
-  AND al1.last_dt = '{month}'
+  AND al1.last_dt = '2020-03-01'
 ;
 
 
@@ -99,7 +99,7 @@ FROM (
                   INNER JOIN stage.stage_rpt_now_month_anchor_add_loss aal
                              ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_no = aal.anchor_no
          WHERE aal.add_loss_state = 'loss'
-           AND al.dt = '{month}'
+           AND al.dt + INTERVAL 1 MONTH = '{month}'
      ) al
 GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
          al.platform_id,
