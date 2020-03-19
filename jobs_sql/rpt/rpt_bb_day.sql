@@ -250,7 +250,6 @@ SELECT t.dt,
        t.anchor_income_orig
 FROM stage.stage_rpt_bb_day_guild_live t
          LEFT JOIN spider_bb_backend.account_info ai ON t.backend_account_id = ai.backend_account_id
-         LEFT JOIN stage.delete_bb_guild_income_rate gr ON t.backend_account_id = gr.backend_account_id
 WHERE t.dt >= '{month}'
   AND t.dt <= LAST_DAY('{month}')
 GROUP BY t.dt,
