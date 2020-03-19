@@ -617,6 +617,7 @@ FROM warehouse.dw_yy_day_anchor_live al
          LEFT JOIN warehouse.dw_yy_day_anchor_live al1
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND
                       al.channel_num = al1.channel_num AND
+                      al.backend_account_id = al1.backend_account_id AND
                       al.anchor_no = al1.anchor_no
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
