@@ -136,7 +136,7 @@ FROM stage.stage_dw_yy_day_anchor_live_contrast al1
          LEFT JOIN stage.stage_dw_yy_day_anchor_live_contrast al2
                    ON al1.dt = al2.next_dt AND al1.anchor_uid = al2.anchor_uid
 WHERE al2.anchor_uid IS NULL
-  AND al1.last_dt <= '{cur_date}'
+  AND al1.last_dt <= (SELECT MAX(dt) FROM warehouse.ods_yy_day_anchor_live)
   AND al1.dt >= '{month}'
   AND al1.dt <= LAST_DAY('{month}')
 ;
