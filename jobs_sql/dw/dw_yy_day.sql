@@ -1,7 +1,3 @@
--- warehouse.dw_yy_day_anchor_live_duration
--- warehouse.dw_yy_day_anchor_live_commission
--- warehouse.dw_yy_day_anchor_live_bluediamond
--- warehouse.dw_yy_day_anchor_live
 -- 主播最早开播时间（基于现有数据）
 -- DROP TABLE IF EXISTS stage.stage_yy_anchor_min_live_dt;
 -- CREATE TABLE stage.stage_yy_anchor_min_live_dt
@@ -89,7 +85,65 @@ FROM (
 ;
 
 
+-- =====================================================================================================================
+-- 计算每日相对前一天新增主播,;
+-- 取出上月最后一天到当月倒数第二天数据
+-- DROP TABLE stage.stage_rpt_yy_day_anchor_live_contrast;
+-- CREATE TABLE stage.stage_rpt_yy_day_anchor_live_contrast AS
+DELETE
+FROM stage.stage_dw_yy_day_anchor_live_contrast
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+INSERT IGNORE INTO stage.stage_dw_yy_day_anchor_live_contrast
+SELECT dt,
+       platform_name,
+       platform_id,
+       anchor_uid,
+       dt + INTERVAL 1 DAY AS last_dt,
+       dt - INTERVAL 1 DAY AS next_dt
+FROM warehouse.ods_yy_day_anchor_live al
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}')
+;
 
+
+-- 新增主播（在t-1天主播列表，不在t-2天的列表）
+-- CREATE TABLE stage.stage_yy_day_anchor_add_loss AS
+DELETE
+FROM stage.stage_dw_yy_day_anchor_add_loss
+WHERE add_loss_state = 'add'
+  AND dt >= '{month}';
+INSERT INTO stage.stage_dw_yy_day_anchor_add_loss
+SELECT al1.dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'add' AS add_loss_state
+FROM stage.stage_dw_yy_day_anchor_live_contrast al1
+         LEFT JOIN stage.stage_dw_yy_day_anchor_live_contrast al2
+                   ON al1.dt = al2.last_dt AND al1.anchor_uid = al2.anchor_uid
+WHERE al2.anchor_uid IS NULL
+  AND al1.dt >= '{month}'
+  AND al1.dt <= LAST_DAY('{month}')
+;
+
+
+-- 流失主播（在t-2天主播列表，不在t-1天的列表）。备注：不在主播表中标志
+DELETE
+FROM stage.stage_dw_yy_day_anchor_add_loss
+WHERE add_loss_state = 'loss'
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+INSERT INTO stage.stage_dw_yy_day_anchor_add_loss
+SELECT al1.last_dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'loss' AS add_loss_state
+FROM stage.stage_dw_yy_day_anchor_live_contrast al1
+         LEFT JOIN stage.stage_dw_yy_day_anchor_live_contrast al2
+                   ON al1.dt = al2.next_dt AND al1.anchor_uid = al2.anchor_uid
+WHERE al2.anchor_uid IS NULL
+  AND al1.last_dt <= '{cur_date}'
+  AND al1.dt >= '{month}'
+  AND al1.dt <= LAST_DAY('{month}')
+;
+
+
+-- =====================================================================================================================
+-- 主播开播数据
 -- DROP TABLE IF EXISTS warehouse.dw_yy_day_anchor_live_duration;
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live_duration AS
 DELETE
@@ -134,6 +188,8 @@ WHERE dt >= '{month}'
 ;
 
 
+-- =====================================================================================================================
+-- 合并主播信息（主播列表）与开播数据
 -- DROP TABLE IF EXISTS warehouse.dw_yy_day_anchor_live;
 -- CREATE TABLE warehouse.dw_yy_day_anchor_live AS
 DELETE
@@ -145,22 +201,26 @@ SELECT al.*,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
-       IFNULL(mal.duration, 0)                                                AS month_duration,
-       IFNULL(mal.live_days, 0)                                               AS month_live_days,
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)   AS newold_state,
+       IFNULL(mal.duration, 0)                                                  AS month_duration,
+       IFNULL(mal.live_days, 0)                                                 AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
        IFNULL(mal.active_state, '非活跃主播'),
-       IFNULL(mal.revenue, 0)                                                 AS month_revenue,
+       IFNULL(mal.revenue, 0)                                                   AS month_revenue,
        -- 主播流水分级（t-1月）
-       IFNULL(mal.revenue_level, 0)                                           AS revenue_level
+       IFNULL(mal.revenue_level, 0)                                             AS revenue_level,
+       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
 FROM warehouse.ods_yy_day_anchor_live al
          LEFT JOIN stage.stage_yy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_yy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_yy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
+         LEFT JOIN stage.stage_dw_yy_day_anchor_add_loss aal
+                   ON al.dt = aal.dt AND al.anchor_uid = aal.anchor_uid
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
+  AND mal.dt = '{month}'
 ;
 
 
