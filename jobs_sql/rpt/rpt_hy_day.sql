@@ -129,7 +129,7 @@ FROM stage.stage_rpt_hy_day_anchor_live_contrast al1
          LEFT JOIN stage.stage_rpt_hy_day_anchor_live_contrast al2
                    ON al1.dt = al2.next_dt AND al1.anchor_uid = al2.anchor_uid
 WHERE al2.anchor_uid IS NULL
-  AND al1.last_dt <= '2020-03-16'
+  AND al1.last_dt <= '{cur_date}'
   AND al1.dt >= '{month}'
   AND al1.dt <= LAST_DAY('{month}')
 ;
