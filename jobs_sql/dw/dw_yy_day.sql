@@ -153,6 +153,10 @@ WHERE al1.max_dt <= '{cur_date}'
 -- =====================================================================================================================
 -- 计算新主播留存
 -- 1、计算主播新增日后一天起往后4个30天的开播情况
+DELETE
+FROM stage.stage_dw_yy_anchor_retain_live
+WHERE add_dt >= '{month}'
+  AND add_dt <= LAST_DAY('{month}');
 INSERT INTO stage.stage_dw_yy_anchor_retain_live
 SELECT al1.platform_id,
        al1.platform_name,
@@ -187,6 +191,9 @@ GROUP BY al1.dt,
 
 
 -- 2、结合主播是否流失数据判断主播留存标签（retain_state）
+DELETE
+FROM stage.stage_dw_yy_anchor_retain
+WHERE 1;
 INSERT INTO stage.stage_dw_yy_anchor_retain
 SELECT ar.platform_id,
        ar.platform_name,
@@ -278,22 +285,22 @@ SELECT al.*,
        aml.min_live_dt,
        ams.min_sign_dt,
        -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180)   AS newold_state,
-       IFNULL(mal.duration, 0)                                                  AS month_duration,
-       IFNULL(mal.live_days, 0)                                                 AS month_live_days,
+       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
+       IFNULL(mal.duration, 0)                                                AS month_duration,
+       IFNULL(mal.live_days, 0)                                               AS month_live_days,
        -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
        IFNULL(mal.active_state, '非活跃主播'),
-       IFNULL(mal.revenue, 0)                                                   AS month_revenue,
+       IFNULL(mal.revenue, 0)                                                 AS month_revenue,
        -- 主播流水分级（t-1月）
-       IFNULL(mal.revenue_level, 0)                                             AS revenue_level,
+       IFNULL(mal.revenue_level, 0)                                           AS revenue_level,
        ar.add_dt,
-       CASE WHEN al.dt = ar.add_dt THEN 'add' ELSE '' END AS add_loss_state,
+       CASE WHEN al.dt = ar.add_dt THEN 'add' ELSE '' END                     AS add_loss_state,
        CASE
            WHEN ar.retain_state_120 <> '' THEN ar.retain_state_120
            WHEN ar.retain_state_90 <> '' THEN ar.retain_state_90
            WHEN ar.retain_state_60 <> '' THEN ar.retain_state_60
            WHEN ar.retain_state_30 <> '' THEN ar.retain_state_30
-           ELSE '' END AS retain_state
+           ELSE '' END                                                        AS retain_state
 FROM warehouse.ods_yy_day_anchor_live al
          LEFT JOIN stage.stage_dw_yy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_dw_yy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
