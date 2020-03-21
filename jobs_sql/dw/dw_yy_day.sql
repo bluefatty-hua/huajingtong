@@ -144,7 +144,7 @@ WHERE add_loss_state = 'loss'
 INSERT INTO stage.stage_dw_yy_day_anchor_add_loss
 SELECT al1.max_dt + INTERVAL 1 DAY AS dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'loss' AS add_loss_state
 FROM stage.stage_dw_yy_day_anchor_live_contrast al1
-WHERE al1.max_dt < '{cur_date}'
+WHERE al1.max_dt < '{cur_date}' - INTERVAL 1 DAY
   AND al1.max_dt >= '{month}'
   AND al1.max_dt <= LAST_DAY('{month}')
 ;
