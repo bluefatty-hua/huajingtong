@@ -309,9 +309,9 @@ FROM warehouse.ods_yy_day_anchor_live al
                       al.anchor_uid = mal.anchor_uid
          LEFT JOIN stage.stage_dw_yy_anchor_retain ar
                    ON al.anchor_uid = ar.anchor_uid AND al.dt = ar.add_dt
-# WHERE al.dt >= '{month}'
-#   AND al.dt <= LAST_DAY('{month}')
-#   AND mal.dt = '{month}'
+WHERE al.dt >= '{month}'
+  AND al.dt <= LAST_DAY('{month}')
+  AND mal.dt = '{month}'
 ;
 
 
