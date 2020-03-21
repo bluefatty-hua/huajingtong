@@ -146,8 +146,8 @@ WHERE dt >= '{month}'
 INSERT INTO stage.stage_rpt_yy_day_anchor_live
 SELECT al.*
 FROM warehouse.dw_yy_day_anchor_live al
-WHERE al.dt >= '{month}'
-  AND al.dt <= LAST_DAY('{month}')
+# WHERE al.dt >= '{month}'
+#   AND al.dt <= LAST_DAY('{month}')
 UNION ALL
 SELECT al.dt + INTERVAL 1 DAY                                                   AS dt,
        al.platform_id,
@@ -188,14 +188,16 @@ SELECT al.dt + INTERVAL 1 DAY                                                   
        al.active_state,
        al.month_revenue,
        al.revenue_level,
-       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+       al.add_dt,
+       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state,
+       al.retain_state
 FROM warehouse.dw_yy_day_anchor_live al
 --          INNER JOIN stage.delete_stage_rpt_yy_day_anchor_add_loss aal
          INNER JOIN stage.stage_dw_yy_day_anchor_add_loss aal
                     ON al.dt + INTERVAL 1 DAY = aal.dt AND al.anchor_uid = aal.anchor_uid
 WHERE aal.add_loss_state = 'loss'
-  AND al.dt >= '{month}'
-  AND al.dt <= LAST_DAY('{month}')
+#   AND al.dt >= '{month}'
+#   AND al.dt <= LAST_DAY('{month}')
 ;
 
 
@@ -213,6 +215,7 @@ SELECT al.dt,
        al.newold_state,
        al.active_state,
        al.revenue_level,
+       al.retain_state,
        COUNT(DISTINCT IF(add_loss_state <> 'loss', al.anchor_uid, NULL))                        AS anchor_cnt,
        COUNT(DISTINCT IF(add_loss_state = 'add', al.anchor_uid, NULL))                          AS add_anchor_cnt,
        COUNT(DISTINCT IF(add_loss_state = 'loss', al.anchor_uid, NULL))                         AS loss_anchor_cnt,
@@ -238,7 +241,8 @@ GROUP BY al.dt,
          al.comment,
          al.newold_state,
          al.active_state,
-         al.revenue_level
+         al.revenue_level,
+         al.retain_state
 ;
 
 
@@ -250,37 +254,47 @@ WHERE dt >= '{month}'
 INSERT INTO bireport.rpt_day_yy_guild
 SELECT gl.dt,
        gl.platform_id,
-       pf.platform_name                                    AS platform_name,
+       pf.platform_name                                         AS platform_name,
        gl.channel_num,
        gl.revenue_level,
        gl.newold_state,
        gl.active_state,
-       gl.anchor_cnt,
-       gl.add_anchor_cnt,
-       gl.loss_anchor_cnt,
-       gl.increase_anchor_cnt,
-       gl.anchor_live_cnt                                  AS live_cnt,
-       gl.duration,
+--         gl.retain_state,
+       SUM(gl.anchor_cnt),
+       SUM(gl.add_anchor_cnt),
+       SUM(gl.loss_anchor_cnt),
+       SUM(gl.increase_anchor_cnt),
+       SUM(gl.anchor_live_cnt)                                  AS live_cnt,
+       SUM(gl.duration),
        -- 平台流水
-       gl.bluediamond                                      AS anchor_bluediamond_revenue,
-       gl.guild_commission / 1000                          AS guild_commssion_revenue,
-       (gl.bluediamond + gl.guild_commission) * 2 / 1000   AS revenue,
-       gl.bluediamond + gl.guild_commission                AS revenue_orig,
+       SUM(gl.bluediamond)                                      AS anchor_bluediamond_revenue,
+       SUM(gl.guild_commission) / 1000                          AS guild_commssion_revenue,
+       SUM(gl.bluediamond + gl.guild_commission) * 2 / 1000     AS revenue,
+       SUM(gl.bluediamond + gl.guild_commission)                AS revenue_orig,
        -- 公会收入
-       gl.guild_income_bluediamond,
-       0                                                   as guild_income,
+       SUM(gl.guild_income_bluediamond),
+       SUM(0)                                                   as guild_income,
        -- ROUND((gl.guild_income_bluediamond + gl.guild_commission) / 1000, 2)   AS guild_income,
-       gl.guild_income_bluediamond + gl.guild_commission   AS guild_income_orig,
+       SUM(gl.guild_income_bluediamond + gl.guild_commission)   AS guild_income_orig,
        -- 主播收入
-       0                                                   as anchor_income,
+       SUM(0)                                                   as anchor_income,
        -- ROUND((gl.anchor_income_bluediamond + gl.anchor_commission) / 1000, 2) AS anchor_income,
-       gl.anchor_income_bluediamond + gl.anchor_commission AS anchor_income_orig
+       SUM(gl.anchor_income_bluediamond + gl.anchor_commission) AS anchor_income_orig
 -- FROM warehouse.dw_yy_day_guild_live gl
 FROM stage.stage_rpt_yy_day_guild_live gl
          LEFT JOIN warehouse.platform pf ON gl.platform_id = pf.id
 WHERE comment = 'orig'
   AND gl.dt >= '{month}'
   AND dt <= LAST_DAY('{month}')
+GROUP BY gl.dt,
+         gl.platform_id,
+         pf.platform_name,
+         gl.channel_num,
+         gl.revenue_level,
+         gl.newold_state,
+         gl.active_state
+--           ,
+--           gl.retain_state
 ;
 
 
