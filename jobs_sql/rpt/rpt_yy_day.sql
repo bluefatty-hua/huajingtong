@@ -146,8 +146,8 @@ WHERE dt >= '{month}'
 INSERT INTO stage.stage_rpt_yy_day_anchor_live
 SELECT al.*
 FROM warehouse.dw_yy_day_anchor_live al
-# WHERE al.dt >= '{month}'
-#   AND al.dt <= LAST_DAY('{month}')
+WHERE al.dt >= '{month}'
+  AND al.dt <= LAST_DAY('{month}')
 UNION ALL
 SELECT al.dt + INTERVAL 1 DAY                                                   AS dt,
        al.platform_id,
@@ -196,8 +196,8 @@ FROM warehouse.dw_yy_day_anchor_live al
          INNER JOIN stage.stage_dw_yy_day_anchor_add_loss aal
                     ON al.dt + INTERVAL 1 DAY = aal.dt AND al.anchor_uid = aal.anchor_uid
 WHERE aal.add_loss_state = 'loss'
-#   AND al.dt >= '{month}'
-#   AND al.dt <= LAST_DAY('{month}')
+  AND al.dt >= '{month}'
+  AND al.dt <= LAST_DAY('{month}')
 ;
 
 
