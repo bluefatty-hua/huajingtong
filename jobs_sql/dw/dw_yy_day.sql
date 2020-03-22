@@ -110,14 +110,14 @@ FROM (
 -- 计算每日新增主播以及流失主播
 -- 1、取出主播首次出现在列表的时间，以及最后出现在主播列表的时间
 -- 首次出现在列表的记为新增，最后一天+1则记为流失
-INSERT IGNORE INTO stage.stage_dw_yy_day_anchor_live_contrast
+DELETE
+FROM stage.stage_dw_yy_day_anchor_live_contrast
+WHERE 1;
+INSERT INTO stage.stage_dw_yy_day_anchor_live_contrast
 SELECT platform_name, platform_id, anchor_uid, MIN(dt) AS min_dt, MAX(dt) AS max_dt
 FROM warehouse.ods_yy_day_anchor_live
-WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}')
 GROUP BY platform_name, platform_id, anchor_uid
 ;
-
 
 
 -- 新增主播（在t-1天主播列表，不在t-2天的列表）
