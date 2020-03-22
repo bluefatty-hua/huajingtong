@@ -85,145 +85,6 @@ FROM (
 ;
 
 
--- =====================================================================================================================
--- 计算每日相对前一天新增主播,;
--- 取出上月最后一天到当月倒数第二天数据
--- DROP TABLE stage.stage_rpt_yy_day_anchor_live_contrast;
--- CREATE TABLE stage.stage_rpt_yy_day_anchor_live_contrast AS
--- DELETE
--- FROM stage.stage_dw_yy_day_anchor_live_contrast
--- WHERE dt >= '{month}'
---   AND dt <= LAST_DAY('{month}');
--- INSERT IGNORE INTO stage.stage_dw_yy_day_anchor_live_contrast
--- SELECT dt,
---        platform_name,
---        platform_id,
---        anchor_uid,
---        dt + INTERVAL 1 DAY AS last_dt,
---        dt - INTERVAL 1 DAY AS next_dt
--- FROM warehouse.ods_yy_day_anchor_live al
--- WHERE dt >= '{month}'
---   AND dt <= LAST_DAY('{month}')
--- ;
-
-
--- 计算每日新增主播以及流失主播
--- 1、取出主播首次出现在列表的时间，以及最后出现在主播列表的时间
--- 首次出现在列表的记为新增，最后一天+1则记为流失
-DELETE
-FROM stage.stage_dw_yy_day_anchor_live_contrast
-WHERE 1;
-INSERT INTO stage.stage_dw_yy_day_anchor_live_contrast
-SELECT platform_name, platform_id, anchor_uid, MIN(dt) AS min_dt, MAX(dt) AS max_dt
-FROM warehouse.ods_yy_day_anchor_live
-GROUP BY platform_name, platform_id, anchor_uid
-;
-
-
--- 新增主播（在t-1天主播列表，不在t-2天的列表）
--- CREATE TABLE stage.stage_yy_day_anchor_add_loss AS
-DELETE
-FROM stage.stage_dw_yy_day_anchor_add_loss
-WHERE add_loss_state = 'add'
-  AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO stage.stage_dw_yy_day_anchor_add_loss
-SELECT al1.min_dt AS dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'add' AS add_loss_state
-FROM stage.stage_dw_yy_day_anchor_live_contrast al1
-WHERE al1.min_dt >= '{month}'
-  AND al1.min_dt <= LAST_DAY('{month}')
-;
-
-
--- 流失主播（在t-2天主播列表，不在t-1天的列表）。备注：不在主播表中标志
-DELETE
-FROM stage.stage_dw_yy_day_anchor_add_loss
-WHERE add_loss_state = 'loss'
-  AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO stage.stage_dw_yy_day_anchor_add_loss
-SELECT al1.max_dt + INTERVAL 1 DAY AS dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'loss' AS add_loss_state
-FROM stage.stage_dw_yy_day_anchor_live_contrast al1
-WHERE al1.max_dt < '{cur_date}'
-  AND al1.max_dt >= '{month}'
-  AND al1.max_dt <= LAST_DAY('{month}')
-;
-
-
--- =====================================================================================================================
--- 计算新主播留存
--- 1、计算主播新增日后一天起往后4个30天的开播情况
-DELETE
-FROM stage.stage_dw_yy_anchor_retain_live
-WHERE add_dt >= '{month}'
-  AND add_dt <= LAST_DAY('{month}');
-INSERT INTO stage.stage_dw_yy_anchor_retain_live
-SELECT al1.platform_id,
-       al1.platform_name,
-       al1.anchor_uid,
-       al1.dt                            AS add_dt,
-       COUNT(DISTINCT CASE
-                          WHEN al2.live_status = 1 AND al2.dt > al1.dt AND
-                               al2.dt <= al1.dt + INTERVAL 30 DAY THEN al2.dt
-                          ELSE NULL END) AS live_days_30,
-       COUNT(DISTINCT CASE
-                          WHEN al2.live_status = 1 AND al2.dt > al1.dt + INTERVAL 30 DAY AND
-                               al2.dt <= al1.dt + INTERVAL 60 DAY THEN al2.dt
-                          ELSE NULL END) AS live_days_60,
-       COUNT(DISTINCT CASE
-                          WHEN al2.live_status = 1 AND al2.dt > al1.dt + INTERVAL 60 DAY AND
-                               al2.dt <= al1.dt + INTERVAL 90 DAY THEN al2.dt
-                          ELSE NULL END) AS live_days_90,
-       COUNT(DISTINCT CASE
-                          WHEN al2.live_status = 1 AND al2.dt > al1.dt + INTERVAL 90 DAY AND
-                               al2.dt <= al1.dt + INTERVAL 120 DAY THEN al2.dt
-                          ELSE NULL END) AS live_days_120
-FROM stage.stage_dw_yy_day_anchor_add_loss al1
-         LEFT JOIN warehouse.ods_yy_day_anchor_live al2 ON al1.anchor_uid = al2.anchor_uid AND al2.dt >= al1.dt
-WHERE al1.add_loss_state = 'add'
-  AND al1.dt >= '{month}'
-  AND al1.dt <= LAST_DAY('{month}')
-  AND al2.dt > '{month}'
-  AND al2.dt <= LAST_DAY('{month}') + INTERVAL 120 DAY
-GROUP BY al1.dt,
-         al1.anchor_uid
-;
-
-
--- 2、结合主播是否流失数据判断主播留存标签（retain_state）
-DELETE
-FROM stage.stage_dw_yy_anchor_retain
-WHERE 1;
-INSERT INTO stage.stage_dw_yy_anchor_retain
-SELECT ar.platform_id,
-       ar.platform_name,
-       ar.add_dt,
-       ar.anchor_uid,
-       al1.dt          AS loss_dt,
-       ar.live_days_30,
-       CASE
-           WHEN (al1.dt IS NULL OR al1.dt > ar.add_dt + INTERVAL 30 DAY) AND
-                live_days_30 >= 15 THEN 'retain_30'
-           ELSE '' END AS retain_state_30,
-       ar.live_days_60,
-       CASE
-           WHEN (al1.dt IS NULL OR al1.dt > ar.add_dt + INTERVAL 60 DAY) AND
-                live_days_60 >= 15 THEN 'retain_60'
-           ELSE '' END AS retain_state_60,
-       ar.live_days_90,
-       CASE
-           WHEN (al1.dt IS NULL OR al1.dt > ar.add_dt + INTERVAL 90 DAY) AND
-                live_days_90 >= 15 THEN 'retain_90'
-           ELSE '' END AS retain_state_90,
-       ar.live_days_120,
-       CASE
-           WHEN (al1.dt IS NULL OR al1.dt > ar.add_dt + INTERVAL 120 DAY) AND
-                live_days_90 >= 15 THEN 'retain_120'
-           ELSE '' END AS retain_state_120
-FROM stage.stage_dw_yy_anchor_retain_live ar
-         LEFT JOIN stage.stage_dw_yy_day_anchor_add_loss al1
-                   ON ar.anchor_uid = al1.anchor_uid AND al1.add_loss_state = 'loss'
-;
 
 
 -- =====================================================================================================================
@@ -281,6 +142,46 @@ FROM warehouse.dw_yy_day_anchor_live
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}');
 INSERT INTO warehouse.dw_yy_day_anchor_live
+(
+  `dt`,
+  `platform_id`,
+  `platform_name`,
+  `backend_account_id`,
+  `channel_num`,
+  `anchor_uid`,
+  `anchor_no`,
+  `anchor_nick_name`,
+  `anchor_type`,
+  `anchor_type_text`,
+  `live_room_id`,
+  `channel_id`,
+  `duration`,
+  `mob_duration`,
+  `pc_duration`,
+  `live_status`,
+  `bluediamond`,
+  `anchor_commission`,
+  `guild_commission`,
+  `vir_coin_name`,
+  `vir_coin_rate`,
+  `include_pf_amt`,
+  `pf_amt_rate`,
+  `contract_id`,
+  `contract_signtime`,
+  `contract_endtime`,
+  `settle_method_code`,
+  `settle_method_text`,
+  `anchor_settle_rate`,
+  `logo`,
+  `comment`,
+  `min_live_dt`,
+  `min_sign_dt`,
+  `newold_state`,
+  `month_duration`,
+  `month_live_days`,
+  `active_state`,
+  `month_revenue`,
+  `revenue_level`)
 SELECT al.*,
        aml.min_live_dt,
        ams.min_sign_dt,
@@ -293,22 +194,12 @@ SELECT al.*,
        IFNULL(mal.revenue, 0)                                                 AS month_revenue,
        -- 主播流水分级（t-1月）
        IFNULL(mal.revenue_level, 0)                                           AS revenue_level,
-       ar.add_dt,
-       CASE WHEN al.dt = ar.add_dt THEN 'add' ELSE '' END                     AS add_loss_state,
-       CASE
-           WHEN ar.retain_state_120 <> '' THEN ar.retain_state_120
-           WHEN ar.retain_state_90 <> '' THEN ar.retain_state_90
-           WHEN ar.retain_state_60 <> '' THEN ar.retain_state_60
-           WHEN ar.retain_state_30 <> '' THEN ar.retain_state_30
-           ELSE '' END                                                        AS retain_state
 FROM warehouse.ods_yy_day_anchor_live al
          LEFT JOIN stage.stage_dw_yy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_dw_yy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_dw_yy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid
-         LEFT JOIN stage.stage_dw_yy_anchor_retain ar
-                   ON al.anchor_uid = ar.anchor_uid AND al.dt = ar.add_dt
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
   AND mal.dt = '{month}'
