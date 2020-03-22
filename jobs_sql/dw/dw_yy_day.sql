@@ -182,18 +182,48 @@ INSERT INTO warehouse.dw_yy_day_anchor_live
   `active_state`,
   `month_revenue`,
   `revenue_level`)
-SELECT al.*,
-       aml.min_live_dt,
-       ams.min_sign_dt,
-       -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
-       warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
-       IFNULL(mal.duration, 0)                                                AS month_duration,
-       IFNULL(mal.live_days, 0)                                               AS month_live_days,
-       -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
-       IFNULL(mal.active_state, '非活跃主播'),
-       IFNULL(mal.revenue, 0)                                                 AS month_revenue,
-       -- 主播流水分级（t-1月）
-       IFNULL(mal.revenue_level, 0)                                           AS revenue_level,
+SELECT al.`dt`,
+      al.`platform_id`,
+      al.`platform_name`,
+      al.`backend_account_id`,
+      al.`channel_num`,
+      al.`anchor_uid`,
+      al.`anchor_no`,
+      al.`anchor_nick_name`,
+      al.`anchor_type`,
+      al.`anchor_type_text`,
+      al.`live_room_id`,
+      al.`channel_id`,
+      al.`duration`,
+      al.`mob_duration`,
+      al.`pc_duration`,
+      al.`live_status`,
+      al.`bluediamond`,
+      al.`anchor_commission`,
+      al.`guild_commission`,
+      al.`vir_coin_name`,
+      al.`vir_coin_rate`,
+      al.`include_pf_amt`,
+      al.`pf_amt_rate`,
+      al.`contract_id`,
+      al.`contract_signtime`,
+      al.`contract_endtime`,
+      al.`settle_method_code`,
+      al.`settle_method_text`,
+      al.`anchor_settle_rate`,
+      al.`logo`,
+      al.`comment`,
+      aml.min_live_dt,
+      ams.min_sign_dt,
+      -- 通过判断主播最小注册时间和最小开播时间，取两者之间最小的时间作为判断新老主播条件，两者为NULL则为‘未知’
+      warehouse.ANCHOR_NEW_OLD(aml.min_live_dt, ams.min_sign_dt, al.dt, 180) AS newold_state,
+      IFNULL(mal.duration, 0)                                                AS month_duration,
+      IFNULL(mal.live_days, 0)                                               AS month_live_days,
+      -- 开播天数大于等于20天且开播时长大于等于60小时（t-1月累计）
+      IFNULL(mal.active_state, '非活跃主播'),
+      IFNULL(mal.revenue, 0)                                                 AS month_revenue,
+      -- 主播流水分级（t-1月）
+      IFNULL(mal.revenue_level, 0)                                           AS revenue_level
 FROM warehouse.ods_yy_day_anchor_live al
          LEFT JOIN stage.stage_dw_yy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_dw_yy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
