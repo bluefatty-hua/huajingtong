@@ -113,7 +113,7 @@ WHERE add_loss_state = 'add'
 DELETE
 FROM stage.stage_rpt_yy_month_anchor_add_loss
 WHERE add_loss_state = 'loss'
-  AND dt = '{moth}';
+  AND dt = '{month}';
 INSERT INTO stage.stage_rpt_yy_month_anchor_add_loss
 SELECT DATE_FORMAT(dt, '%Y-%m-01') AS dt, platform_name, platform_id, anchor_uid, add_loss_state
 FROM stage.stage_rpt_yy_day_anchor_live
