@@ -21,7 +21,7 @@ GROUP BY platform_name,
 DELETE
 FROM bireport.rpt_paper_contract_anchor
 WHERE dt = '{month}';
-# INSERT INTO bireport.rpt_paper_contract_anchor
+INSERT INTO bireport.rpt_paper_contract_anchor
 -- EXPLAIN
 SELECT '{month}'                                                                            AS dt,
        al.platform_name,
