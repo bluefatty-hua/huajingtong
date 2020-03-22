@@ -1,8 +1,8 @@
 -- 计算主播累计开播月数，累计流水
 DELETE
-FROM stage.stage_paper_contract_anchor_month_live
+FROM stage.stage_rpt_paper_contract_anchor_month_live
 WHERE dt = '{month}';
-INSERT INTO stage.stage_paper_contract_anchor_month_live
+INSERT INTO stage.stage_rpt_paper_contract_anchor_month_live
 SELECT '{month}'                               AS dt,
        platform_name,
        id_card,
@@ -21,7 +21,7 @@ GROUP BY platform_name,
 DELETE
 FROM bireport.rpt_paper_contract_anchor
 WHERE dt = '{month}';
-INSERT INTO bireport.rpt_paper_contract_anchor
+# INSERT INTO bireport.rpt_paper_contract_anchor
 -- EXPLAIN
 SELECT '{month}'                                                                            AS dt,
        al.platform_name,
@@ -53,11 +53,11 @@ SELECT '{month}'                                                                
        IFNULL(al0.live_days, 0)                                                             AS live_days_t,
        ROUND(IFNULL(al0.revenue_rmb, 0), 0)                                                 AS revenue_rmb_t,
        DATEDIFF(CASE
-                    WHEN DATE_FORMAT('{cur_date}', '%Y-%m-01') = '{month}' THEN '{cur_date}' -- 判断是否当前月，当月数据以t-1计算
+                    WHEN DATE_FORMAT('{month}', '%Y-%m-01') = '{month}' THEN '{cur_date}' -- 判断是否当前月，当月数据以t-1计算
                     ELSE LAST_DAY('{month}') END, '{month}') + 1 - IFNULL(al0.live_days, 0) AS unlive_days_t,
        CASE
            WHEN (DATEDIFF(CASE
-                              WHEN DATE_FORMAT('{cur_date}', '%Y-%m-01') = '{month}' THEN '{cur_date}'
+                              WHEN DATE_FORMAT('{month}', '%Y-%m-01') = '{month}' THEN '{cur_date}'
                               ELSE LAST_DAY('{month}') END, '{month}') + 1 - al0.live_days) >= 10 THEN '开播异常'
            ELSE '' END                                                                      AS live_comment,
        aml.month_cnt                                                                        AS month_cnt_t,
@@ -87,7 +87,7 @@ FROM (SELECT DISTINCT al.platform_name,
          LEFT JOIN warehouse.dw_paper_contract_anchor_month_live al0
                    ON al.platform_name = al0.platform_name AND al.anchor_no = al0.anchor_no AND
                       al0.dt = '{month}'
-         LEFT JOIN stage.stage_paper_contract_anchor_month_live aml
+         LEFT JOIN stage.stage_rpt_paper_contract_anchor_month_live aml
                    ON al0.dt = aml.dt AND al0.platform_name = aml.platform_name AND aml.id_card = al.id_card AND
                       aml.anchor_no = al.anchor_no
 ;
