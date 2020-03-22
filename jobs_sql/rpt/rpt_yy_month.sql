@@ -154,7 +154,7 @@ FROM warehouse.dw_yy_month_anchor_live al
          INNER JOIN stage.stage_rpt_yy_month_anchor_add_loss aal
                     ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_uid = aal.anchor_uid
 WHERE aal.add_loss_state = 'loss'
-  AND al.dt = '{month}'
+  AND aal.dt = '{month}'
 ;
 
 
