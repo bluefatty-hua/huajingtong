@@ -78,19 +78,19 @@
 -- ;
 -- =======================================================================
 -- 计算每月相对前一月新增主播数。流失主播数、净增长主播数
-DELETE
-FROM stage.stage_rpt_yy_month_anchor_live_contrast
-WHERE dt = '{month}';
-INSERT IGNORE INTO stage.stage_rpt_yy_month_anchor_live_contrast
-SELECT dt,
-       platform_name,
-       platform_id,
-       anchor_uid,
-       dt + INTERVAL 1 MONTH AS last_dt,
-       dt - INTERVAL 1 MONTH AS next_dt
-FROM warehouse.dw_yy_month_anchor_live al
-WHERE dt = '{month}'
-;
+-- DELETE
+-- FROM stage.delete_stage_rpt_yy_month_anchor_live_contrast
+-- WHERE dt = '{month}';
+-- INSERT IGNORE INTO stage.delete_stage_rpt_yy_month_anchor_live_contrast
+-- SELECT dt,
+--        platform_name,
+--        platform_id,
+--        anchor_uid,
+--        dt + INTERVAL 1 MONTH AS last_dt,
+--        dt - INTERVAL 1 MONTH AS next_dt
+-- FROM warehouse.dw_yy_month_anchor_live al
+-- WHERE dt = '{month}'
+-- ;
 
 
 -- 新增主播（在t-1天主播列表，不在t-2天的列表）
@@ -99,13 +99,13 @@ DELETE
 FROM stage.stage_rpt_yy_month_anchor_add_loss
 WHERE add_loss_state = 'add'
   AND dt = '{month}';
-INSERT INTO stage.stage_rpt_yy_month_anchor_add_loss
-SELECT al1.dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'add' AS add_loss_state
-FROM stage.stage_rpt_yy_month_anchor_live_contrast al1
-         LEFT JOIN stage.stage_rpt_yy_month_anchor_live_contrast al2
-                   ON al1.dt = al2.last_dt AND al1.anchor_uid = al2.anchor_uid
-WHERE al2.anchor_uid IS NULL
-  AND al1.dt = '{month}'
+INSERT IGNORE INTO stage.stage_rpt_yy_month_anchor_add_loss
+-- 存在同一个主播出现在同一个频道
+SELECT DATE_FORMAT(dt, '%Y-%m-01') AS dt, platform_name, platform_id, anchor_uid, add_loss_state
+FROM stage.stage_rpt_yy_day_anchor_live
+WHERE add_loss_state = 'add'
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}')
 ;
 
 
@@ -115,12 +115,11 @@ FROM stage.stage_rpt_yy_month_anchor_add_loss
 WHERE add_loss_state = 'loss'
   AND dt = '{month}';
 INSERT INTO stage.stage_rpt_yy_month_anchor_add_loss
-SELECT al1.last_dt, al1.platform_name, al1.platform_id, al1.anchor_uid, 'loss' AS add_loss_state
-FROM stage.stage_rpt_yy_month_anchor_live_contrast al1
-         LEFT JOIN stage.stage_rpt_yy_month_anchor_live_contrast al2
-                   ON al1.dt = al2.next_dt AND al1.anchor_uid = al2.anchor_uid
-WHERE al2.anchor_uid IS NULL
-  AND al1.last_dt = '{month}'
+SELECT DATE_FORMAT(dt, '%Y-%m-01') + INTERVAL 1 MONTH AS dt, platform_name, platform_id, anchor_uid, add_loss_state
+FROM stage.stage_rpt_yy_day_anchor_live
+WHERE add_loss_state = 'loss'
+  AND dt >= '{month}'
+  AND dt <= LAST_DAY('{month}')
 ;
 
 
