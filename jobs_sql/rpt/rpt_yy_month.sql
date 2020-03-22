@@ -115,11 +115,11 @@ FROM stage.stage_rpt_yy_month_anchor_add_loss
 WHERE add_loss_state = 'loss'
   AND dt = '{month}';
 INSERT INTO stage.stage_rpt_yy_month_anchor_add_loss
-SELECT DATE_FORMAT(dt, '%Y-%m-01') AS dt, platform_name, platform_id, anchor_uid, add_loss_state
+SELECT DATE_FORMAT(dt, '%Y-%m-01') + INTERVAL 1 MONTH AS dt, platform_name, platform_id, anchor_uid, add_loss_state
 FROM stage.stage_rpt_yy_day_anchor_live
 WHERE add_loss_state = 'loss'
-  AND dt >= '{month}'
-  AND dt <= LAST_DAY('{month}')
+  AND dt >= '{month}' - INTERVAL 1 MONTH
+  AND dt <= LAST_DAY('{month}') - INTERVAL  1 MONTH
 ;
 
 
@@ -132,32 +132,32 @@ FROM warehouse.dw_yy_month_anchor_live al
          LEFT JOIN stage.stage_rpt_yy_month_anchor_add_loss aal
                    ON al.dt = aal.dt AND al.anchor_uid = aal.anchor_uid
 WHERE al.dt = '{month}'
--- UNION ALL
--- SELECT al.dt + INTERVAL 1 MONTH                                                 AS dt,
---        al.platform_id,
---        al.platform_name,
---        al.backend_account_id,
---        al.channel_num,
---        al.anchor_no,
---        al.anchor_uid,
---        al.revenue_level,
---        al.newold_state,
---        al.active_state,
---        al.comment,
---        al.live_days,
---        al.duration,
---        al.bluediamond,
---        al.anchor_income_bluediamond,
---        al.guild_income_bluediamond,
---        al.anchor_commission,
---        al.guild_commission,
---        al.dt_cnt,
---        CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
--- FROM warehouse.dw_yy_month_anchor_live al
-         -- INNER JOIN stage.stage_rpt_yy_month_anchor_add_loss aal
-                    -- ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_uid = aal.anchor_uid
--- WHERE aal.add_loss_state = 'loss'
---   AND al.dt + INTERVAL 1 MONTH = '{month}'
+UNION ALL
+SELECT al.dt + INTERVAL 1 MONTH                                                 AS dt,
+       al.platform_id,
+       al.platform_name,
+       al.backend_account_id,
+       al.channel_num,
+       al.anchor_no,
+       al.anchor_uid,
+       al.revenue_level,
+       al.newold_state,
+       al.active_state,
+       al.comment,
+       al.live_days,
+       al.duration,
+       al.bluediamond,
+       al.anchor_income_bluediamond,
+       al.guild_income_bluediamond,
+       al.anchor_commission,
+       al.guild_commission,
+       al.dt_cnt,
+       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
+FROM warehouse.dw_yy_month_anchor_live al
+         INNER JOIN stage.stage_rpt_yy_month_anchor_add_loss aal
+                    ON al.dt + INTERVAL 1 MONTH = aal.dt AND al.anchor_uid = aal.anchor_uid
+WHERE aal.add_loss_state = 'loss'
+  AND al.dt = '{month}'
 ;
 
 
