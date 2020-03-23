@@ -144,7 +144,47 @@ FROM stage.stage_rpt_yy_day_anchor_live
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}');
 INSERT INTO stage.stage_rpt_yy_day_anchor_live
-SELECT al.*
+SELECT al.dt,
+       al.platform_id,
+       al.platform_name,
+       al.backend_account_id,
+       al.channel_num,
+       al.anchor_uid,
+       al.anchor_no,
+       al.anchor_nick_name,
+       al.anchor_type,
+       al.anchor_type_text,
+       al.live_room_id,
+       al.channel_id,
+       al.duration,
+       al.mob_duration,
+       al.pc_duration,
+       al.live_status,
+       al.bluediamond,
+       al.anchor_commission,
+       al.guild_commission,
+       al.vir_coin_name,
+       al.vir_coin_rate,
+       al.include_pf_amt,
+       al.pf_amt_rate,
+       al.contract_id,
+       al.contract_signtime,
+       al.contract_endtime,
+       al.settle_method_code,
+       al.settle_method_text,
+       al.anchor_settle_rate,
+       al.logo,
+       al.comment,
+       al.min_live_dt,
+       al.min_sign_dt,
+       al.newold_state,
+       al.month_duration,
+       al.month_live_days,
+       al.active_state,
+       al.month_revenue,
+       al.revenue_level,
+       al.add_dt,
+       al.add_loss_state
 FROM warehouse.dw_yy_day_anchor_live al
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
@@ -189,8 +229,7 @@ SELECT al.dt + INTERVAL 1 DAY                                                   
        al.month_revenue,
        al.revenue_level,
        al.add_dt,
-       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state,
-       al.retain_state
+       CASE WHEN aal.add_loss_state IS NULL THEN '' ELSE aal.add_loss_state END AS add_loss_state
 FROM warehouse.dw_yy_day_anchor_live al
 --          INNER JOIN stage.delete_stage_rpt_yy_day_anchor_add_loss aal
          INNER JOIN stage.stage_dw_yy_day_anchor_add_loss aal
