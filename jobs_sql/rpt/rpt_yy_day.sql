@@ -280,8 +280,7 @@ GROUP BY al.dt,
          al.comment,
          al.newold_state,
          al.active_state,
-         al.revenue_level,
-         al.retain_state
+         al.revenue_level
 ;
 
 
