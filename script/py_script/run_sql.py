@@ -13,6 +13,8 @@ from common.sent_email import send_email
 from common.config import LOG_DIR
 from common.config import XJL_ETL_DB
 from common.config import TO_AGENT
+from common.config import PROJECT_DIR
+from common.config import DEBUG
 import sys
 from warnings import filterwarnings
 
@@ -58,15 +60,18 @@ def run_sql(sql_param, file):
             try:
                 if len(sql) > 10:
                     sql = (sql + ';').replace('/n', '').format(**sql_param) + '\n'
+                    logging.info('-----------------------------RUNNING----------------------------\n{}'.format(sql))
                     cursor.execute(sql)
                     conn.commit()
-                    logging.info('-----------------------------SUCCESS----------------------------\n{}'.format(sql))
+                    logging.info('-----------------------------SUCCESS----------------------------')
             except Exception as err:
-                logging.info('----------------------------ERROR SQL---------------------------\n{}'.format(sql))
-                logging.exception(err)
-                text = '{err}\n{sql}'.format(err=err, sql=sql)
-                subject = file.split('/')[-1]
-                send_email(TO_AGENT['email'], subject, '', text)
+                logging.error('----------------------------ERROR SQL---------------------------\n{}\n'.format(sql))
+                logging.error('----------------------------ERROR Info--------------------------')
+                logging.error(err)
+                if DEBUG==False:
+                    text = '{err}\n{sql}'.format(err=err, sql=sql)
+                    subject = file.split('/')[-1]
+                    send_email(TO_AGENT['email'], subject, '', text)
                 logging.info('ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>>>>...')
                 conn.rollback()
                 return
@@ -90,7 +95,7 @@ if __name__ == '__main__':
     logging.info('start_time: {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     # 部署项目路径
-    project_path = '/services/xjl_etl/jobs_sql/'  # 项目跟目录/repo/xjl_etl/jobs_sql/
+    project_path = PROJECT_DIR  # 项目跟目录/repo/xjl_etl/jobs_sql/
     # project_path = '/services/xjl_etl/script/py_script/'  # TEST
     sql_file = project_path + args.sql_file
     logging.info('SQl_FILE: {}'.format(sql_file))
