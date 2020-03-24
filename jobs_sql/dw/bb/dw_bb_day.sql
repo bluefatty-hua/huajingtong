@@ -1,7 +1,13 @@
 -- 主播最早开播时间（基于现有数据）
--- DROP TABLE IF EXISTS stage.stage_bb_anchor_min_live_dt;
--- CREATE TABLE stage.stage_bb_anchor_min_live_dt
-INSERT IGNORE INTO stage.stage_bb_anchor_min_live_dt
+-- DROP TABLE IF EXISTS stage.stage_bb_bb_anchor_min_live_dt;
+CREATE TABLE if not EXISTS stage.stage_bb_bb_anchor_min_live_dt
+(
+  platform_id INT,
+  anchor_no bigint,
+  min_live_dt date
+);
+delete from  stage.stage_bb_bb_anchor_min_live_dt;
+INSERT IGNORE INTO stage.stage_bb_bb_anchor_min_live_dt
 SELECT 1001 AS platform_id,
        t.anchor_no,
        MIN(t.min_live_dt)
@@ -21,9 +27,16 @@ GROUP BY t.anchor_no
 
 
 -- 主播最早签约时间（基于现有数据）,后期结合公司现有主播的签约时间
--- DROP TABLE IF EXISTS stage.stage_bb_anchor_min_sign_dt;
--- CREATE TABLE stage.stage_bb_anchor_min_sign_dt
-INSERT IGNORE INTO stage.stage_bb_anchor_min_sign_dt
+-- DROP TABLE IF EXISTS stage.stage_bb_bb_anchor_min_sign_dt;
+-- CREATE TABLE stage.stage_bb_bb_anchor_min_sign_dt
+CREATE TABLE if not EXISTS stage.stage_bb_bb_anchor_min_sign_dt
+(
+  platform_id INT,
+  anchor_no bigint,
+  min_sign_dt date
+);
+delete from  stage.stage_bb_bb_anchor_min_sign_dt;
+INSERT IGNORE INTO stage.stage_bb_bb_anchor_min_sign_dt
 SELECT 1001             AS platform_id,
        t.anchor_no,
        MIN(min_sign_dt) AS min_sign_dt
@@ -43,12 +56,23 @@ GROUP BY t.anchor_no
 ;
 
 -- 计算每月主播开播天数，开播时长，流水
--- DROP TABLE IF EXISTS stage.stage_bb_month_anchor_live;
--- CREATE TABLE stage.stage_bb_month_anchor_live
+-- DROP TABLE IF EXISTS stage.stage_bb_bb_month_anchor_live;
+-- CREATE TABLE stage.stage_bb_bb_month_anchor_live
+CREATE TABLE if not EXISTS stage.stage_bb_bb_month_anchor_live
+(
+  dt date,
+  platform_id INT,
+  anchor_no bigint,
+  revenue decimal(20,1),
+  revenue_level varchar(10),
+  live_days int,
+  duration int,
+  active_state varchar(30)
+);
 DELETE
-FROM stage.stage_bb_month_anchor_live
+FROM stage.stage_bb_bb_month_anchor_live
 WHERE dt = '{month}';
-INSERT INTO stage.stage_bb_month_anchor_live
+INSERT INTO stage.stage_bb_bb_month_anchor_live
 SELECT t.dt,
        t.platform_id,
        t.anchor_no,
@@ -160,7 +184,7 @@ SELECT al.platform_id,
        al.DAU,
        al.max_ppl,
        al.fc,
-       IFNULL(al.contract_status, '')                                         AS contract_status,
+       IFNULL(al.contract_status, '-1')                                         AS contract_status,
        IFNULL(al.contract_status_text, '')                                    AS contract_status_text,
        al.contract_signtime,
        al.contract_endtime,
@@ -176,9 +200,9 @@ SELECT al.platform_id,
        -- 主播流水分级（t月，单位：万元）
        mal.revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
-         LEFT JOIN stage.stage_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
-         LEFT JOIN stage.stage_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
-         LEFT JOIN stage.stage_bb_month_anchor_live mal
+         LEFT JOIN stage.stage_bb_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
+         LEFT JOIN stage.stage_bb_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
+         LEFT JOIN stage.stage_bb_bb_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_no = mal.anchor_no
 WHERE al.dt >= '{month}'
@@ -189,7 +213,7 @@ WHERE al.dt >= '{month}'
 
 -- 刷新主播活跃及流水分档(按月)
 -- UPDATE
---     warehouse.dw_bb_day_anchor_live al, stage.stage_bb_month_anchor_live mal
+--     warehouse.dw_bb_day_anchor_live al, stage.stage_bb_bb_month_anchor_live mal
 -- SET al.active_state    = mal.active_state,
 --     al.month_duration  = mal.duration,
 --     al.month_live_days = mal.live_days,
@@ -208,38 +232,4 @@ WHERE al.dt >= '{month}'
 -- 汇总指标 开播天数，开播时长，虚拟币收入
 -- DROP TABLE IF EXISTS warehouse.dw_bb_day_guild_live;
 -- CREATE TABLE warehouse.dw_bb_day_guild_live AS
-DELETE
-FROM warehouse.dw_bb_day_guild_live
-WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO warehouse.dw_bb_day_guild_live
-SELECT t.dt,
-       t.platform_id,
-       t.platform_name,
-       t.backend_account_id,
-       t.newold_state,
-       t.active_state,
-       t.revenue_level,
-       t.contract_status,
-       COUNT(DISTINCT t.anchor_no)                                                AS anchor_cnt,
-       COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS live_cnt,
-       SUM(t.duration)                                                            AS duration,
-       ROUND(SUM(t.revenue), 2)                                                   AS revenue,
-       SUM(t.revenue_orig)                                                        AS revenue_orig,
-       SUM(t.special_coin)                                                        AS special_coin,
-       SUM(t.send_coin)                                                           AS send_coin,
-       SUM(t.anchor_base_coin)                                                    AS anchor_base_coin,
-       SUM(t.anchor_income)                                                       AS anchor_income
-FROM warehouse.dw_bb_day_anchor_live t
--- WHERE (t.contract_status <> 2 OR t.contract_status IS NULL)
-WHERE t.dt >= '{month}'
-  AND t.dt <= LAST_DAY('{month}')
-GROUP BY t.dt,
-         t.platform_id,
-         t.platform_name,
-         t.backend_account_id,
-         t.newold_state,
-         t.active_state,
-         t.revenue_level,
-         t.contract_status
-;
+
