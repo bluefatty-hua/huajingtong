@@ -1,87 +1,4 @@
--- table list
--- 月-公会-主播
--- warehouse.dw_yy_month_anchor_live_bluediamond
--- warehouse.dw_yy_month_anchor_live_commission
--- warehouse.dw_yy_month_anchor_live
--- 月-公会
--- warehouse.dw_yy_month_guild_live_bluediamond
--- warehouse.dw_yy_month_guild_live_commission
--- warehouse.dw_yy_month_guild_live
 
-
--- 取出每月主播数（以每个月最后一天为准）
--- DROP TABLE IF EXISTS stage.stage_yy_month_guild_info_max_day;
--- CREATE TABLE stage.stage_yy_month_guild_info_max_day AS
--- SELECT CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01') AS dt,
---        backend_account_id,
---        MAX(dt)                                 AS max_dt
--- FROM warehouse.dw_yy_day_anchor_live
--- WHERE comment = 'orig'
---   AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
---                              '%Y-%m-%d') AND '{end_date}'
--- GROUP BY CONCAT(DATE_FORMAT(dt, '%Y-%m'), '-01'),
---          backend_account_id
--- ;
-
-
--- DROP TABLE IF EXISTS stage.stage_yy_month_anchor_info;
--- CREATE TABLE stage.stage_yy_month_anchor_info AS
--- DELETE
--- FROM stage.stage_yy_month_anchor_info
--- WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
---                              '%Y-%m-%d') AND '{end_date}';
--- INSERT INTO stage.stage_yy_month_anchor_info
--- SELECT t0.dt, t0.backend_account_id, anchor_uid
--- FROM stage.stage_yy_month_guild_info_max_day t0
---          LEFT JOIN (SELECT dt, backend_account_id, anchor_uid
---                     FROM warehouse.dw_yy_day_anchor_live
---                     WHERE comment = 'orig'
---                       AND dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
---                                                  '%Y-%m-%d') AND '{end_date}') t1
---                    ON t0.backend_account_id = t1.backend_account_id AND t0.max_dt = t1.dt
--- ;
-
-
--- 取出每日主播数（以每个月最后一天为准）
--- DROP TABLE IF EXISTS stage.stage_yy_day_anchor_live;
--- CREATE TABLE stage.stage_yy_day_anchor_live
--- DELETE
--- FROM stage.stage_yy_day_anchor_live
--- WHERE dt BETWEEN DATE_FORMAT(CONCAT(YEAR('{start_date}'), '-', MONTH('{start_date}'), '-01'),
---                              '%Y-%m-%d') AND '{end_date}';
--- INSERT INTO stage.stage_yy_day_anchor_live
--- SELECT al.dt,
---        al.platform_id,
---        al.platform_name,
---        ai.backend_account_id,
---        al.channel_num,
---        al.anchor_uid,
---        al.anchor_no,
---        al.anchor_nick_name,
---        al.anchor_type,
---        al.anchor_type_text,
---        al.duration,
---        al.live_status,
---        al.bluediamond,
---        al.anchor_commission,
---        al.guild_commission,
---        al.anchor_settle_rate,
---        al.comment
--- FROM warehouse.dw_yy_day_anchor_live al
---          INNER JOIN stage.stage_yy_month_anchor_info ai ON DATE_FORMAT(ai.dt, '%Y-%m') = DATE_FORMAT(al.dt, '%Y-%m') AND
---                                                          ai.backend_account_id = al.backend_account_id AND
---                                                          ai.anchor_uid = al.anchor_uid
--- WHERE ai.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND '{end_date}'
---   AND al.dt BETWEEN CONCAT(DATE_FORMAT('{start_date}', '%Y-%m'), '-01') AND '{end_date}'
--- ;
-
-
--- 公会
--- 公会蓝钻收入
--- 汇总维度 月-公会-主播
--- 汇总指标 主播总蓝钻 公会分成蓝钻
--- DROP TABLE IF EXISTS warehouse.dw_yy_month_anchor_live_bluediamond;
--- CREATE TABLE warehouse.dw_yy_month_anchor_live_bluediamond AS
 DELETE
 FROM warehouse.dw_yy_month_anchor_live_bluediamond
 WHERE dt = '{month}';
@@ -163,7 +80,34 @@ DELETE
 FROM warehouse.dw_yy_month_anchor_live
 WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_anchor_live
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                          AS dt,
+(
+  `dt`,
+  `platform_id`,
+  `platform_name`,
+  `backend_account_id`,
+  `channel_num`,
+  `anchor_no`,
+  `anchor_uid`,
+  `revenue_level`,
+  `newold_state`,
+  `active_state`,
+  `comment`,
+  `live_days`,
+  `duration`,
+  `bluediamond`,
+  `anchor_income_bluediamond`,
+  `guild_income_bluediamond`,
+  `anchor_commission`,
+  `guild_commission`,
+  `dt_cnt`,
+  `add_loss_state`,
+  `retention_r30`,
+  `retention_r60`,
+  `retention_r90`,
+  `retention_r120`
+
+)
+SELECT '{month}'                                         AS dt,
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
@@ -185,7 +129,12 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                          A
                ELSE 0 END)                                                     AS guild_income_bluediamond,
        SUM(CASE WHEN anchor_commission >= 0 THEN anchor_commission ELSE 0 END) AS anchor_commission,
        SUM(CASE WHEN guild_commission >= 0 THEN guild_commission ELSE 0 END)   AS guild_commission,
-       COUNT(DISTINCT dt)                                                      AS dt_cnt
+       COUNT(DISTINCT dt)                                                      AS dt_cnt,
+       if(sum(if(add_loss_state='new',1,0))>0,'new','old')                     as add_loss_state,
+       if(sum(ifnull(retention_r30,0))>0,1,0)                                  as retention_r30,
+       if(sum(ifnull(retention_r60,0))>0,1,0)                                  as retention_r60,
+       if(sum(ifnull(retention_r90,0))>0,1,0)                                  as retention_r90,
+       if(sum(ifnull(retention_r120,0))>0,1,0)                                  as retention_r120
 FROM (SELECT *,
              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
                                                                     WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
@@ -290,48 +239,74 @@ DELETE
 FROM warehouse.dw_yy_month_guild_live
 WHERE dt = '{month}';
 INSERT INTO warehouse.dw_yy_month_guild_live
-SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                                    AS dt,
+(
+  `dt`,
+  `platform_id`,
+  `platform_name`,
+  `backend_account_id`,
+  `channel_num`,
+  `comment`,
+  `revenue_level`,
+  `newold_state`,
+  `active_state`,
+  `anchor_cnt`,
+  `new_anchor_cnt`,
+  `new_r30_cnt`,
+  `new_r60_cnt`,
+  `new_r90_cnt`,
+  `new_r120_cnt`,
+  `anchor_live_cnt`,
+  `duration`,
+  `anchor_bluediamond`,
+  `anchor_income_bluediamond`,
+  `guild_income_bluediamond`,
+  `anchor_commission`,
+  `guild_commission`
+)
+SELECT '{month}'                                                                         AS dt,
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
        al.channel_num,
        al.comment,
        al.revenue_level,
-       al.month_newold_state                                                             AS newold_state,
+       al.newold_state                                                                   AS newold_state,
        al.active_state,
-       COUNT(DISTINCT al.anchor_no)                                                      AS anchor_cnt,
-       COUNT(DISTINCT
-             CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END)               AS anchor_live_cnt,
+       COUNT(DISTINCT al.anchor_uid)                                                      AS anchor_cnt,
+       sum(if(add_loss_state='new',1,0)) as new_anchor_cnt,
+       sum(retention_r30) as new_r30_cnt,
+       sum(retention_r60) as new_r60_cnt,
+       sum(retention_r90) as new_r90_cnt,
+       sum(retention_r120) as new_r120_cnt,
+       COUNT(DISTINCT CASE WHEN al.live_days > 0 THEN al.anchor_uid ELSE NULL END)        AS anchor_live_cnt,
        SUM(al.duration)                                                                  AS duration,
-       SUM(CASE WHEN al.bluediamond >= 0 THEN al.bluediamond ELSE 0 END)                 AS anchor_bluediamond,
-       SUM(CASE
-               WHEN al.bluediamond >= 0 THEN al.bluediamond * IFNULL(al.anchor_settle_rate, 0)
-               ELSE 0 END)                                                               AS anchor_income_bluediamond,
-       SUM(CASE
-               WHEN al.bluediamond >= 0 THEN al.bluediamond * (1 - IFNULL(al.anchor_settle_rate, 1))
-               ELSE 0 END)                                                               AS guild_income_bluediamond,
-       SUM(
-               CASE WHEN al.anchor_commission >= 0 THEN al.anchor_commission ELSE 0 END) AS anchor_commission,
-       SUM(
-               CASE WHEN al.guild_commission >= 0 THEN al.guild_commission ELSE 0 END)   AS guild_commission
-FROM (SELECT *,
-             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
-                                                                        THEN LAST_DAY(dt)
-                                                                    ELSE '{cur_date}' END, 180
-                 ) AS month_newold_state
-      FROM warehouse.dw_yy_day_anchor_live
-      WHERE dt >= '{month}'
-        AND dt < '{month}' + INTERVAL 1 MONTH
-     ) al
-GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+       SUM(ifnull(al.bluediamond,0))                                                     AS anchor_bluediamond,
+       0 AS anchor_income_bluediamond,
+       0 AS guild_income_bluediamond,
+       0 AS anchor_commission,
+       0 AS guild_commission
+FROM 
+       warehouse.dw_yy_month_anchor_live al where dt = '{month}'
+  
+
+-- (SELECT *,
+--              warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
+--                                                                     WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
+--                                                                         THEN LAST_DAY(dt)
+--                                                                     ELSE '{cur_date}' END, 180
+--                  ) AS month_newold_state
+--       FROM warehouse.dw_yy_day_anchor_live
+--       WHERE dt >= '{month}'
+--         AND dt < '{month}' + INTERVAL 1 MONTH
+--      ) al
+GROUP BY 
          al.platform_id,
          al.platform_name,
          al.backend_account_id,
          al.channel_num,
          al.comment,
          al.revenue_level,
-         al.month_newold_state,
+         al.newold_state,
          al.active_state
 ;
 

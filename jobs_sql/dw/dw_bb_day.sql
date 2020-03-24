@@ -1,4 +1,4 @@
--- 主播最早开播时间（基于现有数据）
+- 主播最早开播时间（基于现有数据）
 -- DROP TABLE IF EXISTS stage.stage_bb_anchor_min_live_dt;
 -- CREATE TABLE stage.stage_bb_anchor_min_live_dt
 INSERT IGNORE INTO stage.stage_bb_anchor_min_live_dt
