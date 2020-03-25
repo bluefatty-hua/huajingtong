@@ -143,8 +143,7 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        0                                                                            AS anchor_base_coin,
        0                                                                            AS special_coin
 FROM warehouse.dw_bb_month_anchor_live al
-WHERE contract_status <> 2
-        AND dt >= '{month}'
+WHERE dt >= '{month}'
         AND dt < '{month}' + INTERVAL 1 MONTH
 -- (SELECT *,
 --              -- cur_date: t-1

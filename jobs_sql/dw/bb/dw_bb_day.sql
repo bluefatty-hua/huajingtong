@@ -203,11 +203,10 @@ FROM warehouse.ods_bb_day_anchor_live al
          LEFT JOIN stage.stage_bb_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_bb_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_bb_bb_month_anchor_live mal
-                   ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
+                   ON mal.dt = '{month}' AND
                       al.anchor_no = mal.anchor_no
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
-  AND mal.dt = '{month}'
 ;
 
 

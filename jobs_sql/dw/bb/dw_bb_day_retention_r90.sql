@@ -69,3 +69,115 @@ UPDATE warehouse.dw_bb_day_anchor_live
 SET retention_r90 = 0
 where dt  >='{month}' and dt <= LAST_DAY('{month}')
 and retention_r90_lives<15 or retention_r90_missing=1 ; 
+
+
+-- 回写anchor month表
+
+update  warehouse.dw_bb_month_anchor_live
+	set retention_r90 = 0
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+
+INSERT INTO warehouse.dw_bb_month_anchor_live
+(
+  `dt`,
+  `backend_account_id`,
+  `anchor_no`,
+  `newold_state`,
+  `active_state`,
+  `revenue_level`,
+  `retention_r90`
+)
+SELECT '{month}'                                                    AS dt,
+       al.backend_account_id,
+       al.anchor_no,
+       al.month_newold_state                                        AS newold_state,
+       al.active_state,
+       al.revenue_level,
+       if(sum(ifnull(retention_r90,0))>0,1,0)                                  as retention_r90
+FROM (SELECT *,
+             -- cur_date: t-1
+             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
+                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
+                                                                        THEN LAST_DAY(dt)
+                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
+      FROM warehouse.dw_bb_day_anchor_live
+      WHERE  dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
+     ) al group by
+         al.backend_account_id,
+         al.anchor_no,
+         al.month_newold_state,
+         al.active_state,
+         al.revenue_level
+
+ON DUPLICATE KEY UPDATE `retention_r90`=values(retention_r90);
+
+
+-- 回写留存数据到guild表
+
+update  warehouse.dw_bb_day_guild_live
+	set new_r90_cnt = 0
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+
+
+INSERT INTO warehouse.dw_bb_day_guild_live
+(
+  `dt`,
+  `backend_account_id`,
+  `newold_state`,
+  `active_state`,
+  `revenue_level`,
+  `new_r90_cnt`
+)
+SELECT t.dt,
+       t.backend_account_id,
+       t.newold_state,
+       t.active_state,
+       t.revenue_level,
+       sum(retention_r90)  as new_r90_cnt
+FROM warehouse.dw_bb_day_anchor_live t
+WHERE 
+t.dt >= '{month}' AND t.dt <= LAST_DAY('{month}')
+GROUP BY t.dt,
+         t.backend_account_id,
+         t.newold_state,
+         t.active_state,
+         t.revenue_level
+ON DUPLICATE KEY UPDATE `new_r90_cnt`=values(new_r90_cnt);
+
+
+-- 回写留存数据到guild month表
+
+
+update  warehouse.dw_bb_month_guild_live
+	set new_r90_cnt = 0
+WHERE dt >= '{month}'
+  AND dt <= LAST_DAY('{month}');
+  
+INSERT INTO warehouse.dw_bb_month_guild_live
+(
+  `dt`,
+  `backend_account_id`,
+  `newold_state`,
+  `active_state`,
+  `revenue_level`,
+  `new_r90_cnt`
+)
+SELECT '{month}' AS dt,
+       al.backend_account_id,
+       al.newold_state AS newold_state,
+       al.active_state,
+       al.revenue_level,
+       sum(retention_r90) as new_r90_cnt
+FROM warehouse.dw_bb_month_anchor_live al
+WHERE  dt >= '{month}'
+        AND dt <= LAST_DAY('{month}')
+
+GROUP BY 
+         al.backend_account_id,
+         al.newold_state,
+         al.active_state,
+         al.revenue_level
+ON DUPLICATE KEY UPDATE `new_r90_cnt`=values(new_r90_cnt);

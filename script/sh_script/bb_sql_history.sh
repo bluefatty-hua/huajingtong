@@ -1,21 +1,19 @@
-
-#新老用户
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2018-09-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2018-10-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2018-11-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2018-12-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-01-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-02-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-03-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-04-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-05-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-06-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-07-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-08-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-09-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-10-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-11-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2019-12-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2020-01-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2020-02-01
-/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m 2020-03-01
+bash script/sh_script/bb_sql.sh 20180901
+bash script/sh_script/bb_sql.sh 20181001
+bash script/sh_script/bb_sql.sh 20181101
+bash script/sh_script/bb_sql.sh 20181201
+bash script/sh_script/bb_sql.sh 20190101
+bash script/sh_script/bb_sql.sh 20190201
+bash script/sh_script/bb_sql.sh 20190301
+bash script/sh_script/bb_sql.sh 20190401
+bash script/sh_script/bb_sql.sh 20190501
+bash script/sh_script/bb_sql.sh 20190601
+bash script/sh_script/bb_sql.sh 20190701
+bash script/sh_script/bb_sql.sh 20190801
+bash script/sh_script/bb_sql.sh 20190901
+bash script/sh_script/bb_sql.sh 20191001
+bash script/sh_script/bb_sql.sh 20191101
+bash script/sh_script/bb_sql.sh 20191201
+bash script/sh_script/bb_sql.sh 20200101
+bash script/sh_script/bb_sql.sh 20200201
+bash script/sh_script/bb_sql.sh 20200301
