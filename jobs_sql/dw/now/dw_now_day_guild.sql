@@ -43,7 +43,7 @@ SELECT al.dt,
        SUM(IF(al.anchor_commission > 0, al.anchor_commission, 0))                    AS anchor_commission,
        SUM(IF(al.guild_commission > 0, al.guild_commission, 0))                      AS guild_commission,
        sum(if(al.add_loss_state='new',1,0))                                          as new_anchor_cnt
-FROM warehouse.dw_yy_day_anchor_live al
+FROM warehouse.dw_now_day_anchor_live al
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
 -- where comment <> 'from guild_anchor_sign_tran'

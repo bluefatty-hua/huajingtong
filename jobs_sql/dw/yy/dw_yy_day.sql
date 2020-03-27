@@ -1,23 +1,15 @@
 -- 主播最早开播时间（基于现有数据）
 -- DROP TABLE IF EXISTS stage.stage_yy_anchor_min_live_dt;
 -- CREATE TABLE stage.stage_yy_anchor_min_live_dt
+delete from stage.stage_dw_yy_anchor_min_live_dt;
 INSERT IGNORE INTO stage.stage_dw_yy_anchor_min_live_dt
-SELECT 1000 AS platform_id,
-       t.anchor_no,
-       MIN(t.min_live_dt)
-FROM (SELECT al.anchor_no,
-             MIN(dt) AS min_live_dt
-      FROM warehouse.ods_yy_day_anchor_live al
-      WHERE al.live_status = 1
-      GROUP BY al.anchor_no
-      UNION
-      SELECT yj.uid             AS anchor_no,
-             yj.first_live_time AS min_live_time
-      FROM warehouse.ods_yujia_anchor_list yj
-      WHERE platform = 'YY'
-        AND first_live_time != '1970-01-01'
-        AND uid = '') t
-GROUP BY t.anchor_no
+(anchor_uid,min_live_dt)
+SELECT 
+al.anchor_uid,
+MIN(dt) AS min_live_dt
+FROM warehouse.ods_yy_day_anchor_live al
+WHERE al.live_status = 1
+GROUP BY al.anchor_uid
 ;
 
 
@@ -25,25 +17,27 @@ GROUP BY t.anchor_no
 -- DROP TABLE IF EXISTS stage.stage_yy_anchor_min_sign_dt;
 -- CREATE TABLE stage.stage_yy_anchor_min_sign_dt
 INSERT IGNORE INTO stage.stage_dw_yy_anchor_min_sign_dt
-SELECT 1000             AS platform_id,
-       t.anchor_no,
-       MIN(min_sign_dt) AS min_sign_dt
-FROM (SELECT al.anchor_no,
-             MIN(contract_signtime) AS min_sign_dt
-      FROM warehouse.ods_yy_day_anchor_live al
-      WHERE al.contract_signtime IS NOT NULL
---   AND al.comment = 'orig'
-      GROUP BY al.platform_id,
-               al.anchor_no
-      UNION
-      SELECT yj.uid       AS anchor_no,
-             yj.sign_time AS min_sign_dt
-      FROM warehouse.ods_yujia_anchor_list yj
-      WHERE platform = 'YY'
-        AND yj.sign_time <> '1970-01-01'
-     ) t
-GROUP BY t.anchor_no
-;
+(anchor_uid,min_sign_dt)
+SELECT anchor_uid,MIN(min_sign_dt) AS min_sign_dt FROM
+(
+SELECT al.anchor_uid,
+MIN(contract_signtime) AS min_sign_dt
+FROM warehouse.ods_yy_day_anchor_live al
+WHERE al.contract_signtime IS NOT NULL
+GROUP BY al.anchor_uid
+UNION 
+SELECT anchor_uid,min_sign_dt FROM 
+(SELECT anchor_no,anchor_uid FROM warehouse.ods_yy_day_anchor_live
+GROUP BY anchor_no,anchor_uid) t1
+JOIN 
+(SELECT yj.uid       AS anchor_no,
+yj.sign_time AS min_sign_dt
+FROM warehouse.ods_yujia_anchor_list yj
+WHERE platform = 'YY'
+AND yj.sign_time <> '1970-01-01') t2
+ON t1.anchor_no = t2.anchor_no
+)t
+GROUP BY anchor_uid;
 
 
 -- 计算每月主播开播天数，开播时长，流水
@@ -225,8 +219,8 @@ SELECT al.`dt`,
       -- 主播流水分级（t-1月）
       IFNULL(mal.revenue_level, 0)                                           AS revenue_level
 FROM warehouse.ods_yy_day_anchor_live al
-         LEFT JOIN stage.stage_dw_yy_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
-         LEFT JOIN stage.stage_dw_yy_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
+         LEFT JOIN stage.stage_dw_yy_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
+         LEFT JOIN stage.stage_dw_yy_anchor_min_sign_dt ams ON al.anchor_uid = ams.anchor_uid
          LEFT JOIN stage.stage_dw_yy_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
                       al.anchor_uid = mal.anchor_uid

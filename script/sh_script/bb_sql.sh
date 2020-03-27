@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -n "$1" ] ;then
-    now=$(date +%Y-%m-01)
+    now=$(date +%Y-%m-%d)
     this_month=`date -d "$now 1 days ago" +%Y-%m-01`
 else
     this_month=$(date +%Y-%m-01  --date=$1)
@@ -24,7 +24,6 @@ cd /services/xjl_etl
 /usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_day.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_month.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_anchor.sql -m $this_month
-
 
 
 

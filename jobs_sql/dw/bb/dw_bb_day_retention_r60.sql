@@ -75,7 +75,7 @@ and retention_r60_lives<15 or retention_r60_missing=1 ;
 -- 回写anchor month表
 
 update  warehouse.dw_bb_month_anchor_live
-	set retention_r60 = 0
+  set retention_r60 = 0
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}');
 
@@ -84,36 +84,20 @@ INSERT INTO warehouse.dw_bb_month_anchor_live
   `dt`,
   `backend_account_id`,
   `anchor_no`,
-  `newold_state`,
-  `active_state`,
-  `revenue_level`,
   `retention_r60`
 )
 SELECT '{month}'                                                    AS dt,
-       al.backend_account_id,
-       al.anchor_no,
-       al.month_newold_state                                        AS newold_state,
-       al.active_state,
-       al.revenue_level,
+       backend_account_id,
+       anchor_no,
        if(sum(ifnull(retention_r60,0))>0,1,0)                                  as retention_r60
-FROM (SELECT *,
-             -- cur_date: t-1
-             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, CASE
-                                                                    WHEN dt < DATE_FORMAT('{cur_date}', '%Y-%m-01')
-                                                                        THEN LAST_DAY(dt)
-                                                                    ELSE '{cur_date}' END, 180) AS month_newold_state
-      FROM warehouse.dw_bb_day_anchor_live
+FROM  warehouse.dw_bb_day_anchor_live
       WHERE  dt >= '{month}'
         AND dt < '{month}' + INTERVAL 1 MONTH
-     ) al group by
-         al.backend_account_id,
-         al.anchor_no,
-         al.month_newold_state,
-         al.active_state,
-         al.revenue_level
+group by
+      backend_account_id,
+      anchor_no
 
 ON DUPLICATE KEY UPDATE `retention_r60`=values(retention_r60);
-
 
 
 -- 回写留存数据到guild表
