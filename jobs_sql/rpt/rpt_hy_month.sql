@@ -303,6 +303,38 @@ FROM (
            AND newold_state != 'all'
            AND active_state != 'all'
            AND dt = '{month}'
+         GROUP BY dt, channel_type, revenue_level ,channel_num, newold_state, active_state
+         WITH ROLLUP
+
+         UNION
+
+         SELECT dt,
+                MAX(platform_id)             AS platform_id,
+                MAX(platform)                AS platform,
+                IFNULL(channel_type, 'all')  AS channel_type,
+                IFNULL(channel_num, 'all')   AS channel_num,
+                IFNULL(revenue_level, 'all') AS revenue_level,
+                IFNULL(newold_state, 'all')  AS newold_state,
+                IFNULL(active_state, 'all')  AS active_state,
+                SUM(anchor_cnt)              AS anchor_cnt,
+                SUM(add_anchor_cnt)          AS add_anchor_cnt,
+                SUM(loss_anchor_cnt)         AS loss_anchor_cnt,
+                SUM(increase_anchor_cnt)     AS increase_anchor_cnt,
+                SUM(live_cnt)                AS live_cnt,
+                SUM(duration)                AS duration,
+                SUM(revenue)                 AS revenue,
+                SUM(revenue_orig)            AS revenue_orig,
+                SUM(guild_income)            AS guild_income,
+                SUM(guild_income_orig)       AS guild_income_orig,
+                SUM(anchor_income)           AS anchor_income,
+                SUM(anchor_income_orig)      AS anchor_income_orig
+         FROM bireport.rpt_month_hy_guild
+         WHERE channel_type != 'all'
+           AND channel_num != 'all'
+           AND revenue_level != 'all'
+           AND newold_state != 'all'
+           AND active_state != 'all'
+           AND dt = '{month}'
          GROUP BY dt, channel_num, revenue_level, newold_state, active_state, channel_type
          WITH ROLLUP
 
