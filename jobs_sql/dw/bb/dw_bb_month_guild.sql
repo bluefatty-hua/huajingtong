@@ -42,6 +42,7 @@ INSERT INTO warehouse.dw_bb_month_guild_live
   `active_state`,
   `revenue_level`,
   `anchor_cnt`,
+  `new_anchor_cnt`,
   `anchor_live_cnt`,
   `duration`,
   `revenue`,
@@ -55,11 +56,12 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        al.platform_id,
        al.platform_name,
        al.backend_account_id,
-       al.month_newold_state                                                        AS newold_state,
+       al.newold_state                                                              AS newold_state,
        al.active_state,
        al.revenue_level,
-       sum(if(contract_status<>2,1,0)) as anchor_cnt, -- 只要有一天是有效签约都算到本月主播数
-       COUNT(DISTINCT CASE WHEN al.live_days > 0 THEN al.anchor_no ELSE NULL END)   AS anchor_live_cnt,
+       COUNT(DISTINCT if(contract_status!=2,anchor_uid,null))                       as anchor_cnt, 
+       sum(if(add_loss_state='new',1,0))                                            as new_anchor_cnt,
+       COUNT(DISTINCT CASE WHEN al.live_days > 0 THEN al.anchor_uid ELSE NULL END)  AS anchor_live_cnt,
        SUM(al.duration)                                                             AS duration,
        sum(al.revenue)                                                              AS revenue,
        SUM(al.revenue_orig)                                                         AS revenue_orig,
@@ -67,21 +69,15 @@ SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                           
        0                                                                            AS operate_award_punish_coin,
        0                                                                            AS anchor_base_coin,
        0                                                                            AS special_coin
-(SELECT *,
-             -- cur_date: t-1
-             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, LAST_DAY(dt), 180) AS month_newold_state
-      FROM warehouse.dw_bb_day_guild_live
-      WHERE contract_status <> 2
-        AND dt >= '{month}'
-        AND dt < '{month}' + INTERVAL 1 MONTH
-     ) al
-WHERE dt >= '{month}'
-        AND dt < '{month}' + INTERVAL 1 MONTH
+      FROM warehouse.dw_bb_month_anchor_live al
+      WHERE
+      dt >= '{month}'
+      AND dt < '{month}' + INTERVAL 1 MONTH
 GROUP BY DATE_FORMAT(dt, '%Y-%m-01'),
          al.platform_id,
          al.platform_name,
          al.backend_account_id,
-         al.month_newold_state,
+         al.newold_state,
          al.active_state,
          al.revenue_level
 ;

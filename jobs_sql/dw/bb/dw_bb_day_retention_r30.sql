@@ -91,19 +91,19 @@ INSERT INTO warehouse.dw_bb_month_anchor_live
 (
   `dt`,
   `backend_account_id`,
-  `anchor_no`,
+  `anchor_uid`,
   `retention_r30`
 )
 SELECT '{month}'                                                    AS dt,
        backend_account_id,
-       anchor_no,
+       anchor_uid,
        if(sum(ifnull(retention_r30,0))>0,1,0)                                  as retention_r30
 FROM  warehouse.dw_bb_day_anchor_live
       WHERE  dt >= '{month}'
         AND dt < '{month}' + INTERVAL 1 MONTH
 group by
       backend_account_id,
-      anchor_no
+      anchor_uid
 
 ON DUPLICATE KEY UPDATE `retention_r30`=values(retention_r30);
 
@@ -170,7 +170,7 @@ SELECT '{month}' AS dt,
        sum(retention_r30) as new_r30_cnt
 FROM warehouse.dw_bb_month_anchor_live al
 WHERE  dt >= '{month}'
-        AND dt <= LAST_DAY('{month}')
+        AND dt <= LAST_DAY('{month}') and add_loss_state = 'new'
 
 GROUP BY 
          al.backend_account_id,

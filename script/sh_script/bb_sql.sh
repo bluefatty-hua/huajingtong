@@ -20,10 +20,14 @@ cd /services/xjl_etl
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_new.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_guild.sql -m $this_month
+
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_month.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_month_new.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_month_guild.sql -m $this_month
+
 /usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_day.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_month.sql -m $this_month
-/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_anchor.sql -m $this_month
+# /usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_anchor.sql -m $this_month
 
 
 
@@ -32,12 +36,17 @@ cd /services/xjl_etl
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_retention_r90.sql -m $r90_month
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day_retention_r120.sql -m $r120_month
 
+# #留存数据更新了，全部报表都要刷一遍
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_day.sql -m $r30_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_month.sql -m $r30_month
 
-/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_retention_r30.sql -m $r30_month
-/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_retention_r60.sql -m $r60_month
-/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_retention_r90.sql -m $r90_month
-/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_retention_r120.sql -m $r120_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_day.sql -m $r60_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_month.sql -m $r60_month
 
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_day.sql -m $r90_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_month.sql -m $r90_month
 
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_day.sql -m $r120_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/bb/rpt_bb_month.sql -m $r120_month
 
 

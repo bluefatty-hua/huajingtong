@@ -28,8 +28,7 @@ cd /services/xjl_etl
 
 /usr/bin/python script/py_script/run_sql.py -f rpt/yy/rpt_yy_day.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f rpt/yy/rpt_yy_month.sql -m $this_month
-
-# /usr/bin/python script/py_script/run_sql.py -f rpt/yy/rpt_yy_anchor.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/yy/rpt_yy_anchor.sql -m $this_month
 
 
 

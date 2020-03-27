@@ -2,27 +2,17 @@
 -- DROP TABLE IF EXISTS stage.stage_bb_bb_anchor_min_live_dt;
 CREATE TABLE if not EXISTS stage.stage_bb_bb_anchor_min_live_dt
 (
-  platform_id INT,
-  anchor_no bigint,
-  min_live_dt date
+  anchor_uid bigint,
+  min_live_dt date,
+  PRIMARY KEY (`anchor_uid`)
 );
 delete from  stage.stage_bb_bb_anchor_min_live_dt;
 INSERT IGNORE INTO stage.stage_bb_bb_anchor_min_live_dt
-SELECT 1001 AS platform_id,
-       t.anchor_no,
-       MIN(t.min_live_dt)
-FROM (SELECT al.anchor_no,
-             MIN(dt) AS min_live_dt
-      FROM warehouse.ods_bb_day_anchor_live al
-      WHERE al.live_status = 1
-      GROUP BY al.anchor_no
-      UNION
-      SELECT yj.uid             AS anchor_no,
-             yj.first_live_time AS min_live_time
-      FROM warehouse.ods_yujia_anchor_list yj
-      WHERE platform = 'B站'
-        AND first_live_time != '1970-01-01') t
-GROUP BY t.anchor_no
+SELECT al.anchor_uid,
+       MIN(dt) AS min_live_dt
+FROM warehouse.ods_bb_day_anchor_live al
+WHERE al.live_status = 1
+GROUP BY al.anchor_uid
 ;
 
 
@@ -31,28 +21,28 @@ GROUP BY t.anchor_no
 -- CREATE TABLE stage.stage_bb_bb_anchor_min_sign_dt
 CREATE TABLE if not EXISTS stage.stage_bb_bb_anchor_min_sign_dt
 (
-  platform_id INT,
-  anchor_no bigint,
-  min_sign_dt date
+  anchor_uid bigint,
+  min_sign_dt date,
+  PRIMARY KEY (`anchor_uid`)
 );
 delete from  stage.stage_bb_bb_anchor_min_sign_dt;
 INSERT IGNORE INTO stage.stage_bb_bb_anchor_min_sign_dt
-SELECT 1001             AS platform_id,
-       t.anchor_no,
+SELECT 
+       t.anchor_uid,
        MIN(min_sign_dt) AS min_sign_dt
-FROM (SELECT al.anchor_no,
+FROM (SELECT al.anchor_uid,
              MIN(DATE(contract_signtime)) AS min_sign_dt
       FROM warehouse.ods_bb_day_anchor_live al
       WHERE al.contract_signtime IS NOT NULL
-      GROUP BY al.anchor_no
-      UNION
-      SELECT yj.uid       AS anchor_no,
+      GROUP BY al.anchor_uid
+      UNION all
+      SELECT yj.uid       AS anchor_uid,
              yj.sign_time AS min_sign_dt
       FROM warehouse.ods_yujia_anchor_list yj
       WHERE platform = 'B站'
         AND yj.sign_time <> '1970-01-01'
      ) t
-GROUP BY t.anchor_no
+GROUP BY t.anchor_uid
 ;
 
 -- 计算每月主播开播天数，开播时长，流水
@@ -62,7 +52,7 @@ CREATE TABLE if not EXISTS stage.stage_bb_bb_month_anchor_live
 (
   dt date,
   platform_id INT,
-  anchor_no bigint,
+  anchor_uid bigint,
   revenue decimal(20,1),
   revenue_level varchar(10),
   live_days int,
@@ -75,7 +65,7 @@ WHERE dt = '{month}';
 INSERT INTO stage.stage_bb_bb_month_anchor_live
 SELECT t.dt,
        t.platform_id,
-       t.anchor_no,
+       t.anchor_uid,
        t.revenue,
        CASE
            WHEN t.revenue / 1000 / 10000 >= 50 THEN '50+'
@@ -91,7 +81,7 @@ SELECT t.dt,
 FROM (
          SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
                 al.platform_id,
-                al.anchor_no,
+                al.anchor_uid,
                 SUM(anchor_total_coin)                                             AS revenue,
                 COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN dt ELSE NULL END) AS live_days,
                 SUM(al.duration)                                                   AS duration
@@ -100,7 +90,7 @@ FROM (
            AND al.dt <= LAST_DAY('{month}')
          GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
                   al.platform_id,
-                  al.anchor_no) t
+                  al.anchor_uid) t
 ;
 
 
@@ -200,11 +190,11 @@ SELECT al.platform_id,
        -- 主播流水分级（t月，单位：万元）
        mal.revenue_level
 FROM warehouse.ods_bb_day_anchor_live al
-         LEFT JOIN stage.stage_bb_bb_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
-         LEFT JOIN stage.stage_bb_bb_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
+         LEFT JOIN stage.stage_bb_bb_anchor_min_live_dt aml ON al.anchor_uid = aml.anchor_uid
+         LEFT JOIN stage.stage_bb_bb_anchor_min_sign_dt ams ON al.anchor_uid = ams.anchor_uid
          LEFT JOIN stage.stage_bb_bb_month_anchor_live mal
                    ON mal.dt = '{month}' AND
-                      al.anchor_no = mal.anchor_no
+                      al.anchor_uid = mal.anchor_uid
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
 ;

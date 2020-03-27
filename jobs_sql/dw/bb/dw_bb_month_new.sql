@@ -6,7 +6,7 @@ UPDATE warehouse.dw_bb_month_anchor_live t1,
 warehouse.dw_bb_month_anchor_live t2
 SET t1.add_loss_state = 'old'
 WHERE t1.anchor_uid = t2.anchor_uid
-AND t1.dt = t2.dt + INTERVAL 1 DAY
+AND t1.dt = t2.dt + INTERVAL 1 MONTH
 AND t1.dt  ='{month}' and t1.dt>=20200101;
 
 
