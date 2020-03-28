@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -n "$1" ] ;then
-    now=$(date +%Y-%m-01)
+    now=$(date +%Y-%m-%d)
     this_month=`date -d "$now 1 days ago" +%Y-%m-01`
 else
     this_month=$(date +%Y-%m-01  --date=$1)
@@ -14,17 +14,24 @@ cd /services/xjl_etl
 
 
 
-# /usr/bin/python script/py_script/run_sql.py -f ods/ods_now.sql 
+/usr/bin/python script/py_script/run_sql.py -f ods/ods_now.sql 
 
 
-# /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day.sql -m $this_month
-# /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_new.sql -m $this_month
-# /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_guild.sql -m $this_month
-# /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_month.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_new.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_guild.sql -m $this_month
+
+
+/usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_month.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_month_new.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_month_guild.sql -m $this_month
+
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $this_month
 # /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_anchor.sql -m $this_month
 
 
-# # 更新留存数据
+# # # 更新留存数据
 /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_retention_r30.sql -m $r30_month
 /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_retention_r60.sql -m $r60_month
 /usr/bin/python script/py_script/run_sql.py -f dw/now/dw_now_day_retention_r90.sql -m $r90_month
@@ -33,14 +40,14 @@ cd /services/xjl_etl
 
 
 # # #留存数据更新了，全部报表都要刷一遍
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r120_month
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r120_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r120_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r120_month
 
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r90_month
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r90_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r90_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r90_month
 
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r60_month
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r60_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r60_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r60_month
 
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r30_month
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r30_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $r30_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $r30_month

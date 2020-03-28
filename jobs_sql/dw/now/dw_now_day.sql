@@ -50,7 +50,7 @@ DELETE
 FROM stage.stage_now_month_anchor_live
 WHERE dt = '{month}';
 INSERT INTO stage.stage_now_month_anchor_live
-SELECT t.dt,
+SELECT '{month}' as dt,
        t.platform_id,
        t.anchor_no,
        t.revenue, -- 注意人民币
@@ -66,7 +66,7 @@ SELECT t.dt,
            WHEN t.live_days >= 20 AND t.duration >= 60 * 60 * 60 THEN '活跃主播'
            ELSE '非活跃主播' END AS active_state
 FROM (
-         SELECT DATE_FORMAT(al.dt, '%Y-%m-01')                                     AS dt,
+         SELECT 
                 al.platform_id,
                 al.anchor_no,
                 SUM(revenue_rmb)                                                   AS revenue,
@@ -75,7 +75,7 @@ FROM (
          FROM warehouse.ods_now_day_anchor_live al
          WHERE dt >= '{month}'
            AND dt <= LAST_DAY('{month}')
-         GROUP BY DATE_FORMAT(al.dt, '%Y-%m-01'),
+         GROUP BY 
                   al.platform_id,
                   al.anchor_no) t
 ;
@@ -88,7 +88,50 @@ FROM warehouse.dw_now_day_anchor_live
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}');
 INSERT INTO warehouse.dw_now_day_anchor_live
-SELECT al.*,
+(
+  `backend_account_id`,
+  `anchor_uid`,
+  `anchor_qq_no`,
+  `anchor_no`,
+  `anchor_nick_name`,
+  `anchor_name`,
+  `fans_cnt`,
+  `fans_goup_cnt`,
+  `live_status`,
+  `duration_hour`,
+  `duration`,
+  `revenue`,
+  `contract_sign_time`,
+  `settle_method_code`,
+  `settle_method_text`,
+  `dt`,
+  `city`,
+  `min_live_dt`,
+  `min_sign_dt`,
+  `newold_state`,
+  `month_duration`,
+  `month_live_days`,
+  `active_state`,
+  `month_revenue`,
+  `revenue_level`
+)
+SELECT 
+    al.`backend_account_id`,
+    al.`anchor_uid`,
+    al.`anchor_qq_no`,
+    al.`anchor_no`,
+    al.`anchor_nick_name`,
+    al.`anchor_name`,
+    al.`fans_cnt`,
+    al.`fans_goup_cnt`,
+    al.`live_status`,
+    al.`duration_hour`,
+    al.`duration`,
+    al.`revenue_rmb` AS `revenue`,
+    al.`contract_sign_time`,
+    al.`settle_method_code`,
+    al.`settle_method_text`,
+    al.`dt`,
        IFNULL(at.city, '未知')                                                  AS city,
        aml.min_live_dt,
        ams.min_sign_dt,
@@ -105,14 +148,13 @@ FROM warehouse.ods_now_day_anchor_live al
          LEFT JOIN stage.stage_now_anchor_min_live_dt aml ON al.anchor_no = aml.anchor_no
          LEFT JOIN stage.stage_now_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_now_month_anchor_live mal
-                   ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
+                   ON mal.dt ='{month}' AND
                       al.anchor_no = mal.anchor_no
          LEFT JOIN warehouse.ods_yj_anchor_team at ON al.anchor_no = at.anchor_no
 -- 只取主播入驻公会后的直播数据
 WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
   AND al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
-  AND mal.dt = '{month}'
 ;
 
 
@@ -132,53 +174,3 @@ WHERE (aml.min_live_dt <= al.dt OR al.contract_sign_time <= al.dt)
 -- ;
 
 
--- 汇总维度 日-公会
--- 汇总指标 开播天数，开播时长，主播流水，公会流水，公会收入
--- DROP TABLE IF EXISTS warehouse.dw_now_day_guild_live;
--- CREATE TABLE warehouse.dw_now_day_guild_live AS
-DELETE
-FROM warehouse.dw_now_day_guild_live
-WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO warehouse.dw_now_day_guild_live
-SELECT al.dt,
-       al.platform_id,
-       al.platform_name,
-       al.backend_account_id,
-       al.active_state,
-       al.newold_state,
-       al.revenue_level,
-       al.city,
-       al.anchor_cnt,
-       al.anchor_live_cnt,
-       ac.anchor_live_cnt  AS anchor_live_cnt_true,
-       al.duration,
-       al.revenue_rmb,
-       ac.revenue_rmb      AS revenue_rmb_true,
-       ac.guild_income_rmb AS guild_income_rmb_true
-FROM (SELECT t.dt,
-             t.platform_id,
-             t.platform_name,
-             t.backend_account_id,
-             t.city,
-             t.active_state,
-             t.newold_state,
-             t.revenue_level,
-             COUNT(t.anchor_no)                                                         AS anchor_cnt,
-             COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
-             SUM(t.duration)                                                            AS duration,
-             SUM(t.revenue)                                                         AS revenue_rmb
-      FROM warehouse.dw_now_day_anchor_live t
-      WHERE t.dt >= '{month}'
-        AND t.dt <= LAST_DAY('{month}')
-      GROUP BY t.dt,
-               t.platform_id,
-               t.platform_name,
-               t.backend_account_id,
-               t.city,
-               t.active_state,
-               t.newold_state,
-               t.revenue_level) al
-         LEFT JOIN warehouse.ods_now_day_guild_live ac
-                   ON al.dt = ac.dt AND al.backend_account_id = ac.backend_account_id
-;

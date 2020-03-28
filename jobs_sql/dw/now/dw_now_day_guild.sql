@@ -1,58 +1,43 @@
--- 维度 日-公会
--- 指标 主播数、开播主播数、主播流水、
--- DROP TABLE IF EXISTS warehouse.dw_yy_day_guild_live;
--- CREATE TABLE warehouse.dw_yy_day_guild_live AS
+-- 汇总维度 日-公会
+-- 汇总指标 开播天数，开播时长，主播流水，公会流水，公会收入
+-- DROP TABLE IF EXISTS warehouse.dw_now_day_guild_live;
+-- CREATE TABLE warehouse.dw_now_day_guild_live AS
 DELETE
-FROM warehouse.dw_yy_day_guild_live
+FROM warehouse.dw_now_day_guild_live
 WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');;
-INSERT INTO warehouse.dw_yy_day_guild_live
+  AND dt <= LAST_DAY('{month}');
+INSERT INTO warehouse.dw_now_day_guild_live
 (
-  `dt`,
-  `platform_id`,
-  `backend_account_id`,
-  `channel_num`,
-  `comment`,
-  `newold_state`,
-  `active_state`,
-  `revenue_level`,
-  `anchor_cnt`,
-  `anchor_live_cnt`,
-  `duration`,
-  `bluediamond`,
-  `anchor_income_bluediamond`,
-  `guild_income_bluediamond`,
-  `anchor_commission`,
-  `guild_commission`,
-  `new_anchor_cnt`
+      `dt`,
+      `backend_account_id`,
+      `active_state`,
+      `newold_state`,
+      `revenue_level`,
+      `city`,
+      `anchor_cnt`,
+      `anchor_live_cnt`,
+      `duration`,
+      `revenue`,
+      `new_anchor_cnt`
 )
-SELECT al.dt,
-       al.platform_id,
-       al.backend_account_id,
-       al.channel_num,
-       al.comment,
-       al.newold_state,
-       al.active_state,
-       al.revenue_level,
-       COUNT(DISTINCT al.anchor_uid)                                                 AS anchor_cnt,
-       COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_uid ELSE NULL END) AS anchor_live_cnt,
-       SUM(IF(al.duration > 0, al.duration, 0))                                      AS duration,
-       SUM(IF(al.bluediamond > 0, al.bluediamond, 0))                                AS bluediamond,
-       SUM(IF(al.bluediamond > 0, al.bluediamond * al.anchor_settle_rate, 0))        AS anchor_income_bluediamond,
-       SUM(IF(al.bluediamond > 0, al.bluediamond * (1 - al.anchor_settle_rate), 0))  AS guild_income_bluediamond,
-       SUM(IF(al.anchor_commission > 0, al.anchor_commission, 0))                    AS anchor_commission,
-       SUM(IF(al.guild_commission > 0, al.guild_commission, 0))                      AS guild_commission,
-       sum(if(al.add_loss_state='new',1,0))                                          as new_anchor_cnt
-FROM warehouse.dw_now_day_anchor_live al
-WHERE al.dt >= '{month}'
-  AND al.dt <= LAST_DAY('{month}')
--- where comment <> 'from guild_anchor_sign_tran'
-GROUP BY al.dt,
-         al.platform_id,
-         al.backend_account_id,
-         al.channel_num,
-         al.comment,
-         al.newold_state,
-         al.active_state,
-         al.revenue_level
+SELECT t.dt,
+       t.backend_account_id,
+       t.active_state,
+       t.newold_state,
+       t.revenue_level,
+       t.city,
+       COUNT(t.anchor_no)                                                         AS anchor_cnt,
+       COUNT(DISTINCT CASE WHEN t.live_status = 1 THEN t.anchor_no ELSE NULL END) AS anchor_live_cnt,
+       SUM(t.duration)                                                            AS duration,
+       SUM(t.revenue)                                                             AS revenue,
+       sum(if(add_loss_state='new',1,0))                                       as new_anchor_cnt
+FROM warehouse.dw_now_day_anchor_live t
+WHERE t.dt >= '{month}'
+  AND t.dt <= LAST_DAY('{month}')
+GROUP BY t.dt,
+         t.backend_account_id,
+         t.city,
+         t.active_state,
+         t.newold_state,
+         t.revenue_level
 ;

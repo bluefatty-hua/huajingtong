@@ -50,7 +50,7 @@ AND t2.dt IS NULL;
 
 
 
--- 回写anchor day表
+
 UPDATE warehouse.dw_now_day_anchor_live
 SET retention_r30_lives = 0,retention_r30_missing = 0,retention_r30=1
 where dt  >='{month}' and dt <= LAST_DAY('{month}');
@@ -79,9 +79,8 @@ and retention_r30_lives<15 or retention_r30_missing=1 ;
 
 
 
-
-
 -- 回写anchor month表
+
 
 update  warehouse.dw_now_month_anchor_live
   set retention_r30 = 0
@@ -98,18 +97,15 @@ INSERT INTO warehouse.dw_now_month_anchor_live
 SELECT '{month}'                                                    AS dt,
        backend_account_id,
        anchor_no,
-       if(sum(ifnull(retention_r30,0))>0,1,0)                       as retention_r30
-FROM warehouse.dw_now_day_anchor_live
-WHERE  dt >= '{month}'
-  AND dt <= LAST_DAY('{month}')
-group by 
-  backend_account_id,
-  anchor_no
+       if(sum(ifnull(retention_r30,0))>0,1,0)                                  as retention_r30
+FROM  warehouse.dw_now_day_anchor_live
+      WHERE  dt >= '{month}'
+        AND dt < '{month}' + INTERVAL 1 MONTH
+group by
+      backend_account_id,
+      anchor_no
+
 ON DUPLICATE KEY UPDATE `retention_r30`=values(retention_r30);
-
-
-
-
 
 
 
@@ -123,30 +119,30 @@ WHERE dt >= '{month}'
 
 INSERT INTO warehouse.dw_now_day_guild_live
 (
-  dt,
-  backend_account_id,
-  city,
-  newold_state,
-  active_state,
-  revenue_level,
+  `dt`,
+  `backend_account_id`,
+  `newold_state`,
+  `active_state`,
+  `revenue_level`,
+  `city`,
   `new_r30_cnt`
 )
-SELECT dt,
-        backend_account_id,
-        city,
-        newold_state,
-        active_state,
-        revenue_level,
+SELECT t.dt,
+       t.backend_account_id,
+       t.newold_state,
+       t.active_state,
+       t.revenue_level,
+       t.city,
        sum(retention_r30)  as new_r30_cnt
 FROM warehouse.dw_now_day_anchor_live t
 WHERE 
 t.dt >= '{month}' AND t.dt <= LAST_DAY('{month}')
-GROUP BY dt,
-         backend_account_id,
-         city,
-         newold_state,
-         active_state,
-         revenue_level
+GROUP BY t.dt,
+         t.backend_account_id,
+         t.newold_state,
+         t.active_state,
+         t.revenue_level,
+         t.city
 ON DUPLICATE KEY UPDATE `new_r30_cnt`=values(new_r30_cnt);
 
 
@@ -162,31 +158,32 @@ WHERE dt >= '{month}'
 
 INSERT INTO warehouse.dw_now_month_guild_live
 (
-        `dt`,
-        backend_account_id,
-        city,
-        newold_state,
-        active_state,
-        revenue_level,
-        `new_r30_cnt`
+  `dt`,
+  `backend_account_id`,
+  `newold_state`,
+  `active_state`,
+  `revenue_level`,
+  `city`,
+  `new_r30_cnt`
 )
 SELECT '{month}' AS dt,
-        backend_account_id,
-        city,
-        newold_state,
-        active_state,
-        revenue_level,
-        sum(retention_r30) as new_r30_cnt
+       al.backend_account_id,
+       al.newold_state AS newold_state,
+       al.active_state,
+       al.revenue_level,
+       al.city,
+       sum(retention_r30) as new_r30_cnt
 FROM warehouse.dw_now_month_anchor_live al
 WHERE  dt >= '{month}'
-        AND dt <= LAST_DAY('{month}')
+        AND dt <= LAST_DAY('{month}') and add_loss_state = 'new'
 
 GROUP BY 
-        backend_account_id,
-        city,
-        newold_state,
-        active_state,
-        revenue_level
+         al.backend_account_id,
+         al.newold_state,
+         al.active_state,
+         al.revenue_level,
+         al.city
 ON DUPLICATE KEY UPDATE `new_r30_cnt`=values(new_r30_cnt);
+
 
 
