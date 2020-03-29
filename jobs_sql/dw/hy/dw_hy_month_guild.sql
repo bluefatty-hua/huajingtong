@@ -135,27 +135,21 @@ SELECT '{month}'    AS dt,
        al.channel_id,
        al.channel_num,
        al.revenue_level,
-       al.month_newold_state             AS newold_state,
+       al.newold_state             AS newold_state,
        al.active_state,
        COUNT(DISTINCT al.anchor_uid)     AS anchor_cnt,
-       sum(if(add_loss_state='new',1,0))                                            as new_anchor_cnt,
-       COUNT(DISTINCT CASE
-                          WHEN al.live_status = 1 THEN al.anchor_uid
-                          ELSE NULL END) AS live_cnt,
+       sum(if(add_loss_state='new',1,0)) as new_anchor_cnt,
+       sum(if(live_days>0,1,0))          AS live_cnt,
        SUM(IFNULL(al.duration, 0))       AS duration,
        SUM(IFNULL(al.revenue, 0))        AS revenue
-FROM (SELECT *,
-             warehouse.ANCHOR_NEW_OLD(min_live_dt, min_sign_dt, LAST_DAY(dt),180) AS month_newold_state
-      FROM warehouse.dw_huya_day_anchor_live
-      WHERE dt >= '{month}'
-        AND dt < '{month}' + INTERVAL 1 MONTH
-     ) al
+FROM  warehouse.dw_huya_month_anchor_live al
+      WHERE dt = '{month}'
 GROUP BY al.platform_id,
          al.platform_name,
          al.channel_type,
          al.channel_id,
          al.channel_num,
          al.revenue_level,
-         al.month_newold_state,
+         al.newold_state,
          al.active_state
 ;
