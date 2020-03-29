@@ -89,9 +89,49 @@ FROM warehouse.dw_fx_day_anchor_live
 WHERE dt >= '{month}'
   AND dt <= LAST_DAY('{month}');
 INSERT INTO warehouse.dw_fx_day_anchor_live
+(
+  `dt`,
+  `backend_account_id`,
+  `anchor_no`,
+  `anchor_nick_name`,
+  `gender`,
+  `level`,
+  `star_level`,
+  `group_name`,
+  `contract_sign_type`,
+  `sign_time`,
+  `latest_time`,
+  `live_status`,
+  `total_live_time`,
+  `duration`,
+  `pc_live_time`,
+  `pc_duration`,
+  `mobile_live_time`,
+  `mob_duration`,
+  `voice_live_time`,
+  `voi_duration`,
+  `game_live_time`,
+  `game_duration`,
+  `dual_cam_live_time`,
+  `dual_duration`,
+  `revenue`,
+  `revenue_orig`,
+  `anchor_income`,
+  `guild_income`,
+  `bean_to_coin_num`,
+  `bean_to_rmb`,
+  `clan_share_bean_num`,
+  `avatar_url`,
+  `min_live_dt`,
+  `min_sign_dt`,
+  `newold_state`,
+  `month_duration`,
+  `month_live_days`,
+  `active_state`,
+  `month_revenue`,
+  `revenue_level`
+)
 SELECT al.dt,
-       al.platform_id,
-       al.platform_name,
        al.backend_account_id,
        al.anchor_no,
        al.anchor_nick_name,
@@ -139,10 +179,9 @@ FROM warehouse.ods_fx_day_anchor_live al
          LEFT JOIN stage.stage_fx_anchor_min_sign_dt ams ON al.anchor_no = ams.anchor_no
          LEFT JOIN stage.stage_fx_month_anchor_live mal
                    ON mal.dt = DATE_FORMAT(al.dt, '%Y-%m-01') AND
-                      al.anchor_no = mal.anchor_no
+                      al.anchor_no = mal.anchor_no and mal.dt = '{month}'
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
-  AND mal.dt = '{month}'
 ;
 
 
@@ -162,35 +201,3 @@ WHERE al.dt >= '{month}'
 -- ;
 
 
--- DROP TABLE IF EXISTS warehouse.dw_fx_day_guild_live;
--- CREATE TABLE warehouse.dw_fx_day_guild_live AS
-DELETE
-FROM warehouse.dw_fx_day_guild_live
-WHERE dt >= '{month}'
-  AND dt <= LAST_DAY('{month}');
-INSERT INTO warehouse.dw_fx_day_guild_live
-SELECT al.dt,
-       al.platform_id,
-       al.platform_name,
-       al.backend_account_id,
-       al.newold_state,
-       al.active_state,
-       al.revenue_level,
-       COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
-       COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS live_cnt,
-       SUM(al.duration)                                                             AS duration,
-       SUM(al.revenue)                                                              AS revenue,
-       SUM(al.revenue_orig)                                                         AS revenue_orig,
-       SUM(al.anchor_income)                                                        AS anchor_income,
-       SUM(al.guild_income)                                                         AS guild_income
-FROM warehouse.dw_fx_day_anchor_live al
-WHERE al.dt >= '{month}'
-  AND al.dt <= LAST_DAY('{month}')
-GROUP BY al.dt,
-         al.platform_id,
-         al.platform_name,
-         al.backend_account_id,
-         al.newold_state,
-         al.active_state,
-         al.revenue_level
-;
