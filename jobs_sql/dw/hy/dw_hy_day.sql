@@ -50,17 +50,13 @@ SELECT ai.dt,
 FROM warehouse.ods_huya_day_anchor_info ai
          INNER JOIN (SELECT dt,
                             anchor_uid,
-                            anchor_no,
                             MAX(timestamp) AS max_timestamp
                      FROM warehouse.ods_huya_day_anchor_info
                      WHERE dt >= '{month}'
                        AND dt < '{month}' + INTERVAL 1 MONTH
-                     GROUP BY dt,
-                              anchor_uid,
-                              anchor_no
+                     GROUP BY dt,anchor_uid
 ) mai ON ai.dt = mai.dt AND ai.anchor_uid = mai.anchor_uid AND ai.timestamp = mai.max_timestamp
-WHERE ai.dt >= '{month}'
-  AND ai.dt < '{month}' + INTERVAL 1 MONTH
+WHERE ai.dt >= '{month}' AND ai.dt < '{month}' + INTERVAL 1 MONTH
 ;
 
 
@@ -78,7 +74,8 @@ FROM warehouse.ods_huya_day_anchor_live al
                        AND dt < '{month}' + INTERVAL 1 MONTH
                      GROUP BY dt, anchor_uid
 ) mal
-                    ON al.dt = mal.dt AND al.anchor_uid = mal.anchor_uid AND al.timestamp = mal.min_timestamp
+ON al.dt = mal.dt AND al.anchor_uid = mal.anchor_uid AND al.timestamp = mal.min_timestamp
+WHERE al.dt >= '{month}' AND al.dt < '{month}' + INTERVAL 1 MONTH
 ;
 
 
@@ -217,9 +214,40 @@ FROM warehouse.dw_huya_day_anchor_live
 WHERE dt >= '{month}'
   AND dt < '{month}' + INTERVAL 1 MONTH;
 INSERT INTO warehouse.dw_huya_day_anchor_live
+(
+  `dt`,
+  `channel_type`,
+  `channel_id`,
+  `channel_num`,
+  `anchor_uid`,
+  `anchor_no`,
+  `nick`,
+  `comment`,
+  `duration`,
+  `live_status`,
+  `revenue`,
+  `peak_pcu`,
+  `activity_days`,
+  `months`,
+  `ow_percent`,
+  `sign_time`,
+  `sign_date`,
+  `surplus_days`,
+  `avatar`,
+  `min_live_dt`,
+  `min_sign_dt`,
+  `newold_state`,
+  `month_duration`,
+  `month_live_days`,
+  `active_state`,
+  `month_revenue`,
+  `revenue_level`,
+  `vir_coin_name`,
+  `vir_coin_rate`,
+  `include_pf_amt`,
+  `pf_amt_rate`
+)
 SELECT ai.dt                                                                  AS dt,
-       ai.platform_id,
-       ai.platform_name,
        aci.channel_type,
        ai.channel_id,
        ai.channel_num,
@@ -230,7 +258,6 @@ SELECT ai.dt                                                                  AS
        al.duration,
        al.live_status,
        al.income                                                              AS revenue,
-       al.income                                                              AS revenue_orig,
        al.peak_pcu,
        ai.activity_days,
        ai.months,
@@ -286,80 +313,5 @@ WHERE ai.dt >= '{month}'
 -- ;
 
 
--- ===================================================================
--- 公会收入
--- DROP TABLE IF EXISTS warehouse.dw_huya_day_guild_live_true;
--- CREATE TABLE warehouse.dw_huya_day_guild_live_true AS
-DELETE
-FROM warehouse.dw_huya_day_guild_live_true
-WHERE dt >= '{month}'
-  AND dt < '{month}' + INTERVAL 1 MONTH;
-INSERT INTO warehouse.dw_huya_day_guild_live_true
-SELECT gi.dt,
-       gi.platform_id,
-       gi.platform_name,
-       ai.channel_type,
-       gi.channel_id,
-       gi.channel_num              AS channel_num,
-       gi.ow                       AS ow,
-       gi.channel_name             AS channel_name,
-       gi.is_platinum,
-       gi.sign_count,
-       gi.sign_limit,
-       cr.live_cnt,
-       IFNULL(cr.revenue, 0)       AS revenue,
-       IFNULL(cgi.gift_income, 0)  AS gift_income,
-       IFNULL(cgu.guard_income, 0) AS guard_income,
-       IFNULL(cn.noble_income, 0)  AS noble_income,
-       gi.logo,
-       gi.desc,
-       gi.create_time,
-       cgi.calc_month              AS gift_calc_month,
-       cgu.calc_month              AS guard_calc_month,
-       cn.calc_month               AS noble_calc_month
-FROM warehouse.dw_huya_day_guild_info gi
-         LEFT JOIN warehouse.ods_huya_day_guild_live_revenue cr ON gi.dt = cr.dt AND gi.channel_id = cr.channel_id
-         LEFT JOIN warehouse.ods_huya_day_guild_live_income_gift cgi
-                   ON gi.dt = cgi.dt AND gi.channel_id = cgi.channel_id
-         LEFT JOIN warehouse.ods_huya_day_guild_live_income_guard cgu
-                   ON gi.dt = cgu.dt AND gi.channel_id = cgu.channel_id
-         LEFT JOIN warehouse.ods_huya_day_guild_live_income_noble cn ON gi.dt = cn.dt AND gi.channel_id = cn.channel_id
-         LEFT JOIN warehouse.ods_hy_account_info ai ON gi.channel_id = ai.channel_id
-WHERE gi.dt >= '{month}'
-  AND gi.dt < '{month}' + INTERVAL 1 MONTH
-;
 
-
-DELETE
-FROM warehouse.dw_huya_day_guild_live
-WHERE dt >= '{month}'
-  AND dt < '{month}' + INTERVAL 1 MONTH;
-INSERT INTO warehouse.dw_huya_day_guild_live
-SELECT al.dt,
-       al.platform_id,
-       al.platform_name,
-       al.channel_type,
-       al.channel_id,
-       ai.channel_no                                                                AS channel_num,
-       al.newold_state,
-       al.active_state,
-       al.revenue_level,
-       COUNT(DISTINCT al.anchor_no)                                                 AS anchor_cnt,
-       COUNT(DISTINCT CASE WHEN al.live_status = 1 THEN al.anchor_no ELSE NULL END) AS live_cnt,
-       SUM(IFNULL(al.revenue, 0))                                                   AS revenue,
-       SUM(IFNULL(al.revenue, 0))                                                   AS revenue_orig
-FROM warehouse.dw_huya_day_anchor_live al
-         LEFT JOIN warehouse.ods_hy_account_info ai ON al.channel_id = ai.channel_id
-WHERE al.dt >= '{month}'
-  AND al.dt < '{month}' + INTERVAL 1 MONTH
-GROUP BY al.dt,
-         al.platform_id,
-         al.platform_name,
-         al.channel_type,
-         al.channel_id,
-         al.channel_num,
-         al.newold_state,
-         al.active_state,
-         al.revenue_level
-;
 
