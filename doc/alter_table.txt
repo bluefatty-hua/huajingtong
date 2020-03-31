@@ -1,0 +1,38 @@
+ALTER TABLE `bireport`.`rpt_month_hy_guild_view`
+ ADD COLUMN `new_anchor_cnt` INT NULL AFTER `anchor_cnt`, 
+ ADD COLUMN `new_r30_ratio` VARCHAR(10) NULL AFTER `new_anchor_cnt`, 
+ ADD COLUMN `new_r60_ratio` VARCHAR(10) NULL AFTER `new_r30_ratio`, 
+ ADD COLUMN `new_r90_ratio` VARCHAR(10) NULL AFTER `new_r60_ratio`, 
+ ADD COLUMN `new_r120_ratio` VARCHAR(10) NULL AFTER `new_r90_ratio`; 
+
+
+ ALTER TABLE `bireport`.`rpt_month_fx_guild` 
+DROP COLUMN `add_anchor_cnt`, 
+DROP COLUMN `loss_anchor_cnt`, 
+DROP COLUMN `increase_anchor_cnt`; 
+
+
+
+ALTER TABLE `bireport`.`rpt_month_fx_guild` 
+CHANGE `anchor_cnt` `anchor_cnt` INT(21) DEFAULT 0 NULL, 
+ADD COLUMN `new_anchor_cnt` INT NULL AFTER `anchor_cnt`,
+ ADD COLUMN `new_r30_cnt` INT NULL AFTER `new_anchor_cnt`,
+  ADD COLUMN `new_r60_cnt` INT NULL AFTER `new_r30_cnt`, 
+  ADD COLUMN `new_r90_cnt` INT NULL AFTER `new_r60_cnt`, 
+  ADD COLUMN `new_r120_cnt` INT NULL AFTER `new_r90_cnt`, 
+  CHANGE `live_cnt` `live_cnt` BIGINT(21) DEFAULT 0 NULL, 
+  CHANGE `duration` `duration` DECIMAL(41,0) NULL, 
+CHANGE `revenue` `revenue` DECIMAL(20,0) NULL; 
+
+
+
+ALTER TABLE `warehouse`.`dw_fx_month_anchor_live` ADD COLUMN `add_loss_state` VARCHAR(10) NULL AFTER `revenue_level`, ADD COLUMN `retention_r30` TINYINT NULL AFTER `add_loss_state`, ADD COLUMN `retention_r60` TINYINT NULL AFTER `retention_r30`, ADD COLUMN `retention_r90` TINYINT NULL AFTER `retention_r60`, ADD COLUMN `retention_r120` TINYINT NULL AFTER `retention_r90`; 
+
+
+ALTER TABLE `warehouse`.`dw_fx_month_anchor_live` ADD COLUMN `retention_r30_lives` INT NULL AFTER `retention_r30`, ADD COLUMN `retention_r30_missing` TINYINT NULL AFTER `retention_r30_lives`, ADD COLUMN `retention_r60_lives` INT NULL AFTER `retention_r60`, ADD COLUMN `retention_r60_missing` TINYINT NULL AFTER `retention_r60_lives`, ADD COLUMN `retention_r90_lives` INT NULL AFTER `retention_r90`, ADD COLUMN `retention_r90_missing` TINYINT NULL AFTER `retention_r90_lives`, ADD COLUMN `retention_r120_lives` INT NULL AFTER `retention_r120`, ADD COLUMN `retention_r120_missing` TINYINT NULL AFTER `retention_r120_lives`;
+
+
+
+ALTER TABLE `warehouse`.`dw_fx_day_guild_live` ADD COLUMN `new_anchor_cnt` INT NULL AFTER `anchor_cnt`, ADD COLUMN `new_r30_cnt` INT NULL AFTER `new_anchor_cnt`, ADD COLUMN `new_r60_cnt` INT NULL AFTER `new_r30_cnt`, ADD COLUMN `new_r90_cnt` INT NULL AFTER `new_r60_cnt`, ADD COLUMN `new_r120_cnt` INT NULL AFTER `new_r90_cnt`; 
+
+ALTER TABLE `warehouse`.`dw_fx_month_guild_live` ADD COLUMN `new_anchor_cnt` INT NULL AFTER `anchor_cnt`, ADD COLUMN `new_r30_cnt` INT NULL AFTER `new_anchor_cnt`, ADD COLUMN `new_r60_cnt` INT NULL AFTER `new_r30_cnt`, ADD COLUMN `new_r90_cnt` INT NULL AFTER `new_r60_cnt`, ADD COLUMN `new_r120_cnt` INT NULL AFTER `new_r90_cnt`; 

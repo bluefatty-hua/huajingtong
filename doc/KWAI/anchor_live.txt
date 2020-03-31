@@ -1,0 +1,23 @@
+数据样本
+"dateTime": 1585497600000,
+"liveMonthDuration": 193,
+"liveValidDays": 8,
+"amount": 3303,
+"orgName": "娱加娱乐",
+"orgRatio": 0,
+"taskAmount": 3303,
+"userName": "依安妞儿",
+"userId": 424001020,
+"memberRatio": 50
+
+
+字段说明
+liveMonthDuration: 直播时长（单位分钟）,
+"liveValidDays": 直播有效天（暂时无用）,
+"amount": 流水（单位元）,
+"orgName": 公会,
+"orgRatio": 公会分成,
+"taskAmount": 任务流水（单位元）（暂时无用）,
+"userName": "依安妞儿",
+"userId": 快手id,
+"memberRatio": 主播分成比例

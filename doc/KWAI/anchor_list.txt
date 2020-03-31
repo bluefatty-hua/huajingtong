@@ -1,0 +1,21 @@
+数据样本
+"followUserCnt": 157,
+"displayFanCnt": "34506",
+"displayPlayCnt": 73827,
+"userHead": "https://tx2.a.yximgs.com/uhead/AB/2020/02/18/20/BMjAyMDAyMTgyMDIyMjdfMzM2ODYyNzQ0XzJfaGQ1M181MzQ=_s.jpg",
+"photoCnt": 18,
+"userName": "【大_王】",
+"displayLikeCnt": 1747,
+"userId": 336862744
+
+
+字段说明
+userId 快手id
+followUserCnt 作品直接涨粉
+displayFanCnt 粉丝数
+displayPlayCnt 作品播放数
+displayLikeCnt 作品点赞数
+photoCnt 作品数
+userHead 快手头像
+timestamp 数据写入时间
+
