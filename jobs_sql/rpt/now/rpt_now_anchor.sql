@@ -22,7 +22,7 @@ SELECT al.dt,
        al.anchor_nick_name,
        al.duration / 3600               AS duration,
        IF(al.live_status = 1, '是', '否') AS live_status,
-       al.revenue_rmb                   AS revenue
+       al.revenue                   AS revenue
 FROM warehouse.dw_now_day_anchor_live al
          LEFT JOIN warehouse.dw_now_day_anchor_live al1
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND

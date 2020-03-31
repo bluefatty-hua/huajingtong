@@ -15,7 +15,7 @@ SELECT al.dt,
        al.active_state,
        al1.revenue_orig / 1000          AS revenue_lastmonth,
        al.revenue_level,
-       al.anchor_no                     AS anchor_uid,
+       al.anchor_uid                     AS anchor_uid,
        al.anchor_no,
        al.dau,
        al.max_ppl,
@@ -29,7 +29,7 @@ FROM warehouse.dw_bb_day_anchor_live al
          LEFT JOIN warehouse.dw_bb_month_anchor_live al1
                    ON al1.dt = DATE_FORMAT(al.dt - INTERVAL 1 MONTH, '%Y-%m-01') AND
                       al.backend_account_id = al1.backend_account_id AND
-                      al.anchor_no = al1.anchor_no
+                      al.anchor_uid = al1.anchor_uid
          LEFT JOIN spider_bb_backend.account_info ai ON al.backend_account_id = ai.backend_account_id
 WHERE al.dt >= '{month}'
   AND al.dt <= LAST_DAY('{month}')
