@@ -28,7 +28,7 @@ cd /services/xjl_etl
 
 /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_day.sql -m $this_month
 /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_month.sql -m $this_month
-# /usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_anchor.sql -m $this_month
+/usr/bin/python script/py_script/run_sql.py -f rpt/now/rpt_now_anchor.sql -m $this_month
 
 
 # # # 更新留存数据
