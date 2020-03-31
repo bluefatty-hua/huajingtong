@@ -104,7 +104,7 @@ INSERT INTO bireport.rpt_month_all
  guild_income,
  anchor_income)
 SELECT dt,
-       platform,
+       'bilibili' as platform,
        revenue_level,
        newold_state,
        active_state,
@@ -138,7 +138,7 @@ INSERT INTO bireport.rpt_month_all
  guild_income,
  anchor_income)
 SELECT dt,
-       Platform,
+       'DouYin' as Platform,
        revenue_level,
        newold_state,
        active_state,
@@ -172,7 +172,7 @@ INSERT INTO bireport.rpt_month_all
  guild_income,
  anchor_income)
 SELECT dt,
-       platform,
+       'FanXing' as platform,
        revenue_level,
        newold_state,
        active_state,
@@ -206,7 +206,7 @@ INSERT INTO bireport.rpt_month_all
  guild_income,
  anchor_income)
 SELECT dt,
-       platform,
+       '虎牙' as platform,
        revenue_level,
        newold_state,
        active_state,
@@ -241,7 +241,7 @@ INSERT INTO bireport.rpt_month_all
  guild_income,
  anchor_income)
 SELECT dt,
-       platform,
+       'NOW' as platform,
        revenue_level,
        newold_state,
        active_state,
@@ -276,7 +276,7 @@ INSERT INTO bireport.rpt_month_all
  guild_income,
  anchor_income)
 SELECT dt,
-       platform,
+       'YY' as platform,
        revenue_level,
        newold_state,
        active_state,
