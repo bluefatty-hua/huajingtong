@@ -1,14 +1,22 @@
 # -*- coding: utf8 -*-
 import logging
 from datetime import datetime
+from datetime import timedelta
 import pymysql
 from common.log import init_logging
 from common.sent_email import send_email
 from common.config import LOG_DIR
 from common.config import XJL_ETL_DB
 from common.config import RADAR_DB
-
-
+import argparse
+# 解析参数
+parser = argparse.ArgumentParser()
+parser.add_argument("-s", "--start_date", help="开始时间")
+args = parser.parse_args()
+if args.start_date!=None:
+  begin_dt = datetime.strptime(args.start_date, '%Y%m%d').strftime("%Y-%m-%d")
+else:
+  begin_dt = (datetime.now()+timedelta(days=-1)).strftime("%Y-%m-%d")
 
 source_db = pymysql.connect(
 		host=RADAR_DB['host'],
@@ -77,7 +85,7 @@ etl_db = pymysql.connect(
 )
 etl_cursor = etl_db.cursor(cursor=pymysql.cursors.DictCursor)  # 返回字典数据类型
 delete_sql = "delete from `warehouse`.`ods_radar_anchor_contract_archive` where dt = %s"
-val=(datetime.now().strftime("%Y-%m-%d"))
+val=(begin_dt)
 etl_cursor.execute(delete_sql, val)
 
 insert_sql = "INSERT INTO `warehouse`.`ods_radar_anchor_contract_archive`\
@@ -163,7 +171,7 @@ VALUES (%s,\
         %s);"
 vals = []
 for row in data:
-	val = (datetime.now().strftime("%Y-%m-%d"),
+	val = (begin_dt,
 	row['id'],
 	row['upload_id'],
 	row['create_type'],
@@ -234,7 +242,7 @@ data = source_cursor.fetchall()
 
 etl_cursor = etl_db.cursor(cursor=pymysql.cursors.DictCursor)  # 返回字典数据类型
 delete_sql = "delete from `warehouse`.`ods_radar_anchor_contract` where dt = %s"
-val=(datetime.now().strftime("%Y-%m-%d"))
+val=(begin_dt)
 etl_cursor.execute(delete_sql, val)
 
 insert_sql = "INSERT INTO `warehouse`.`ods_radar_anchor_contract`\
@@ -269,7 +277,7 @@ VALUES (%s,\
         );"
 vals = []
 for row in data:
-  val = (datetime.now().strftime("%Y-%m-%d"),
+  val = (begin_dt,
   row['id'],
   row['contract_no'],
   row['real_name'],
