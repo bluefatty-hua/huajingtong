@@ -3,7 +3,7 @@
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'bilibili'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
@@ -29,7 +29,7 @@ SELECT dt,
        anchor_income
 FROM bireport.rpt_day_bb_guild
 WHERE remark = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 ;
 
 
@@ -37,7 +37,7 @@ WHERE remark = 'all'
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'DouYin'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
@@ -63,7 +63,7 @@ SELECT dt,
        IFNULL(anchor_income, 0) AS anchor_income
 FROM bireport.rpt_day_dy_guild
 WHERE backend_account_id = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 ;
 
 
@@ -71,7 +71,7 @@ WHERE backend_account_id = 'all'
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'FanXing'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
@@ -97,7 +97,7 @@ SELECT dt,
        anchor_income
 FROM bireport.rpt_day_fx_guild
 WHERE backend_account_id = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 ;
 
 
@@ -105,7 +105,7 @@ WHERE backend_account_id = 'all'
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'HUYA'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
@@ -132,7 +132,7 @@ SELECT dt,
 FROM bireport.rpt_day_hy_guild
 WHERE channel_type = 'all'
   AND channel_num = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 ;
 
 
@@ -140,7 +140,7 @@ WHERE channel_type = 'all'
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'NOW'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
@@ -167,7 +167,7 @@ SELECT dt,
 FROM bireport.rpt_day_now_guild
 WHERE backend_account_id = 'all'
   AND city = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 ;
 
 
@@ -175,7 +175,7 @@ WHERE backend_account_id = 'all'
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'YY'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 (dt,
  platform,
@@ -201,14 +201,14 @@ SELECT dt,
        anchor_income
 FROM bireport.rpt_day_yy_guild
 WHERE channel_num = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 ;
 
 
 DELETE
 FROM bireport.rpt_day_all
 WHERE platform = 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}';
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all
 SELECT dt,
        'all'              AS platform,
@@ -223,7 +223,7 @@ SELECT dt,
        SUM(anchor_income) AS anchor_income
 FROM bireport.rpt_day_all
 WHERE platform != 'all'
-  AND dt BETWEEN '{start_date}' AND '{end_date}'
+  AND dt  >='{month}' and dt <= LAST_DAY('{month}')
 GROUP BY dt, revenue_level, newold_state, active_state
 ;
 
@@ -231,7 +231,7 @@ GROUP BY dt, revenue_level, newold_state, active_state
 -- 报表用，计算上周、上月同期数据---
 DELETE
 FROM bireport.rpt_day_all_view
-WHERE dt BETWEEN '{start_date}' AND '{end_date}';
+WHERE dt  >='{month}' and dt <= LAST_DAY('{month}');
 INSERT INTO bireport.rpt_day_all_view
 SELECT t1.dt,
        t1.platform,
@@ -269,6 +269,6 @@ FROM bireport.rpt_day_all t1
                        AND t1.revenue_level = t3.revenue_level
                        AND t1.newold_state = t3.newold_state
                        AND t1.active_state = t3.active_state
-WHERE t1.dt BETWEEN '{start_date}' AND '{end_date}'
+WHERE t1.dt  >='{month}' and t1.dt <= LAST_DAY('{month}')
 ;
 

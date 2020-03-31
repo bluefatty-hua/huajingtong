@@ -14,7 +14,7 @@ cd /services/xjl_etl
 
 
 
-/usr/bin/python script/py_script/run_sql.py -f ods/ods_bb.sql
+/usr/bin/python script/py_script/run_sql.py -f ods/ods_bb.sql -m $this_month
 
 # /usr/bin/python /services/xjl_etl/script/py_script/run_sql.py -f dw/delete_dw_bb_anchor_tags.sql
 /usr/bin/python script/py_script/run_sql.py -f dw/bb/dw_bb_day.sql -m $this_month
